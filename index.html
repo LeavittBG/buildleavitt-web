@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leavitt Building Group | Custom Homes in MD & PA</title>
+    
+    <!-- SEO & Social Media Meta Tags -->
+    <meta name="description" content="Leavitt Building Group delivers premier custom and semi-custom home construction and large-scale renovations throughout the Greater Baltimore Metro area.">
+    
+    <!-- Open Graph / Facebook / LinkedIn / iMessage -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://buildleavitt.com/">
+    <meta property="og:title" content="Leavitt Building Group | Custom Homes in MD & PA">
+    <meta property="og:description" content="Delivering premier custom home construction and large-scale renovations throughout the Greater Baltimore Metro area.">
+    <meta property="og:image" content="https://buildleavitt.com/project3.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://buildleavitt.com/">
+    <meta property="twitter:title" content="Leavitt Building Group | Custom Homes in MD & PA">
+    <meta property="twitter:description" content="Delivering premier custom home construction and large-scale renovations throughout the Greater Baltimore Metro area.">
+    <meta property="twitter:image" content="https://buildleavitt.com/project3.jpg">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    
+    <!-- Tailwind CSS for Styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Custom Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        ::selection { background-color: #0f172a; color: white; }
+
+        /* Custom Branded Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a; /* Navy track */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c2a67a; /* Gold thumb */
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d4b88c; /* Lighter gold on hover */
+        }
+        /* Firefox support */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #c2a67a #0f172a;
+        }
+        
+        /* Scroll Reveal Animation Classes */
+        .reveal-element {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal-element.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Ken Burns Animation */
+        @keyframes ken-burns {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.15); }
+        }
+        .animate-ken-burns {
+            animation: ken-burns 40s ease-out forwards;
+        }
+
+        /* Preloader Styles */
+        #preloader {
+            transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+        #preloader.slide-up {
+            transform: translateY(-100%);
+        }
+        .preloader-logo {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 1.2s ease-out;
+        }
+        .preloader-logo.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Cinematic Text Reveal Styles */
+        .overflow-hidden-mask {
+            overflow: hidden;
+            display: inline-flex;
+            vertical-align: bottom;
+            padding-top: 0.25em; /* Prevents top clipping for tall letters */
+            margin-top: -0.25em;
+            padding-bottom: 0.15em; 
+            margin-bottom: -0.15em;
+            padding-right: 0.2em; /* Prevents right clipping for italic letters */
+            margin-right: -0.15em; /* Pulls the next word backward to tighten spacing */
+        }
+        .cinematic-text-word {
+            display: inline-block;
+            transform: translateY(120%);
+            opacity: 0;
+            transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1), opacity 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+            will-change: transform, opacity;
+            padding-right: 0.15em; /* Widens the framing to prevent italic letters from clipping */
+        }
+        .cinematic-text-word.revealed {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .cinematic-fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+            will-change: transform, opacity;
+        }
+        .cinematic-fade-up.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom Luxury Cursor Styles */
+        @media (min-width: 768px) {
+            body, a, button, .cursor-pointer, input, select, textarea, .gallery-img, #ba-slider {
+                cursor: none !important;
+            }
+        }
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #c2a67a;
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+        }
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(194, 166, 122, 0.6);
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s ease-out, height 0.2s ease-out, background-color 0.2s ease-out;
+        }
+        .cursor-outline.hovering {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(194, 166, 122, 0.1);
+            border-color: #c2a67a;
+        }
+
+        /* Floating Action Button (FAB) */
+        @keyframes pop-in {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .fab-container {
+            animation: pop-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 3s backwards;
+        }
+        .fab {
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 9999px;
+            background-color: #c2a67a;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease, color 0.3s ease;
+            overflow: hidden;
+            white-space: nowrap;
+            text-decoration: none;
+        }
+        .fab:hover {
+            width: 14.5rem;
+            background-color: #0f172a;
+            color: #ffffff;
+        }
+        .fab-icon {
+            min-width: 3.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .fab-text {
+            opacity: 0;
+            transition: opacity 0.3s ease 0.1s;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-size: 0.75rem;
+        }
+        .fab:hover .fab-text {
+            opacity: 1;
+        }
+
+        /* Magnetic Button Effect */
+        .magnetic {
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.3s ease, color 0.3s ease, width 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            will-change: transform;
+        }
+
+        /* Before/After Slider */
+        .ba-slider {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+        }
+        .ba-handle {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 4px;
+            background-color: #c2a67a;
+            transform: translateX(-50%);
+            pointer-events: none;
+            z-index: 20;
+        }
+        .ba-handle-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 48px;
+            height: 48px;
+            background-color: #0f172a;
+            border: 2px solid #c2a67a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #c2a67a;
+            pointer-events: auto;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-[#fcfcfc] text-gray-900 font-sans overflow-x-hidden">
+
+    <!-- Scroll Progress Line -->
+    <div id="scroll-progress" class="fixed top-0 left-0 h-[3px] bg-[#c2a67a] z-[1000] w-0 pointer-events-none"></div>
+
+    <!-- Custom Cursor Elements -->
+    <div id="cursor-dot" class="cursor-dot hidden md:block"></div>
+    <div id="cursor-outline" class="cursor-outline hidden md:block"></div>
+
+    <!-- Cinematic Pre-Loader -->
+    <div id="preloader" class="fixed inset-0 z-[100] bg-[#0f172a] flex items-center justify-center">
+        <div id="preloader-logo" class="preloader-logo">
+            <img src="Gold.png" alt="Leavitt Building Group" class="h-20 md:h-28 w-auto object-contain drop-shadow-2xl" onerror="this.src='https://placehold.co/400x200/0f172a/c2a67a?text=Leavitt+Building+Group'">
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="main-nav" class="fixed w-full z-50 bg-transparent border-b border-transparent transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex items-center justify-between h-24">
+                <!-- Logo Area -->
+                <div class="flex-shrink-0 flex items-center cursor-pointer">
+                    <img src="Gold.png" alt="Leavitt Building Group Logo" class="h-16 md:h-20 w-auto object-contain" onerror="this.src='https://placehold.co/200x80/0f172a/c2a67a?text=LBG'">
+                </div>
+
+                <!-- Desktop Nav -->
+                <div class="hidden md:flex items-center space-x-10 lg:space-x-12">
+                    <a href="#services" class="text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors">Services</a>
+                    <a href="#about" class="text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors">About</a>
+                    <a href="#process" class="text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors">Process</a>
+                    <a href="#gallery" class="text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors">Gallery</a>
+                    <a href="#contact" class="bg-[#c2a67a] text-[#0f172a] px-6 py-3 text-xs lg:text-sm uppercase tracking-widest font-bold hover:bg-white transition-colors magnetic">
+                        Get a Quote
+                    </a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-white hover:text-[#c2a67a]">
+                        <i data-lucide="menu" id="menu-icon" class="w-7 h-7"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Nav (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-[#0f172a] border-t border-white/10 px-6 py-8 space-y-6">
+            <a href="#services" class="mobile-link block text-gray-300 hover:text-white uppercase tracking-widest font-semibold">Services</a>
+            <a href="#about" class="mobile-link block text-gray-300 hover:text-white uppercase tracking-widest font-semibold">About Us</a>
+            <a href="#process" class="mobile-link block text-gray-300 hover:text-white uppercase tracking-widest font-semibold">Process</a>
+            <a href="#gallery" class="mobile-link block text-gray-300 hover:text-white uppercase tracking-widest font-semibold">Gallery</a>
+            <a href="#contact" class="mobile-link block w-full text-center bg-[#c2a67a] text-[#0f172a] px-6 py-4 uppercase tracking-widest font-bold magnetic">
+                Get a Quote
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden bg-[#0f172a]">
+        <div class="absolute inset-0 z-0">
+            <!-- Background Image -->
+            <img 
+                src="Gemini_Generated_Image_ka316gka316gka31.jpg" 
+                alt="Luxury Custom Home at Twilight" 
+                class="w-full h-full object-cover opacity-40 mix-blend-overlay animate-ken-burns"
+                onerror="this.src='https://placehold.co/1920x1080/0f172a/ffffff?text=Luxury+Home+Background'"
+            />
+            <div class="absolute inset-0 bg-gradient-to-r from-[#0f172a] via-[#0f172a]/80 to-transparent"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-6">
+            <div class="max-w-3xl">
+                <!-- Cinematic Fade-Up for Sub-headline -->
+                <h2 class="text-[#c2a67a] text-sm md:text-base font-bold uppercase tracking-[0.3em] mb-6 border-l-2 border-[#c2a67a] pl-4 cinematic-fade-up" style="transition-delay: 0.1s;">
+                    Maryland & Pennsylvania
+                </h2>
+                
+                <!-- Cinematic Cascading Text Reveal for Headline -->
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-light text-white leading-[1.1] mb-8">
+                    <span class="overflow-hidden-mask"><span class="cinematic-text-word" style="transition-delay: 0.2s;">Crafting</span></span>
+                    <span class="overflow-hidden-mask"><span class="cinematic-text-word" style="transition-delay: 0.3s;">Custom</span></span>
+                    <span class="overflow-hidden-mask"><span class="cinematic-text-word" style="transition-delay: 0.4s;">Homes</span></span> <br />
+                    <span class="overflow-hidden-mask"><span class="cinematic-text-word font-serif italic text-gray-300" style="transition-delay: 0.5s;">Across</span></span>
+                    <span class="overflow-hidden-mask"><span class="cinematic-text-word font-serif italic text-gray-300" style="transition-delay: 0.6s;">the</span></span>
+                    <span class="overflow-hidden-mask"><span class="cinematic-text-word font-serif italic text-gray-300" style="transition-delay: 0.7s;">Region.</span></span>
+                </h1>
+                
+                <!-- Cinematic Fade-Up for Paragraph -->
+                <p class="text-lg md:text-xl text-gray-400 mb-12 max-w-2xl leading-relaxed cinematic-fade-up" style="transition-delay: 0.8s;">
+                    Leavitt Building Group delivers premier custom and semi-custom home construction and large-scale renovations throughout the Greater Baltimore Metro area.
+                </p>
+                
+                <!-- Cinematic Fade-Up for Button -->
+                <div class="flex flex-col sm:flex-row gap-4 cinematic-fade-up" style="transition-delay: 1.0s;">
+                    <a href="#services" class="bg-[#c2a67a] text-[#0f172a] px-8 py-4 uppercase tracking-widest font-bold hover:bg-white transition-colors text-center flex items-center justify-center gap-2 inline-flex magnetic">
+                        Explore Services <i data-lucide="chevron-right" class="w-[18px] h-[18px]"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 md:py-32 px-6 bg-white overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-20 reveal-element">
+                <h2 class="text-sm font-bold uppercase tracking-[0.3em] text-[#c2a67a] mb-4">Our Expertise</h2>
+                <h3 class="text-3xl md:text-5xl font-light text-[#0f172a]">Built for your lifestyle.</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
+                <!-- Service 1 -->
+                <div class="group cursor-pointer service-card reveal-element" data-service="1">
+                    <div class="w-16 h-16 bg-[#0f172a] flex items-center justify-center text-[#c2a67a] mb-8 group-hover:bg-[#c2a67a] group-hover:text-[#0f172a] transition-colors duration-300">
+                        <i data-lucide="home" class="w-7 h-7"></i>
+                    </div>
+                    <h4 class="text-xl font-bold uppercase tracking-wider text-[#0f172a] mb-4">Custom Ground-Up</h4>
+                    <p class="text-gray-600 leading-relaxed">
+                        Your dream, built from the foundation up. We collaborate with you from the initial architectural blueprints to the final walkthrough, ensuring every square foot is tailored to your family.
+                    </p>
+                    <span class="inline-block mt-4 text-[#c2a67a] text-[10px] font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all duration-300">Read More &rarr;</span>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="group cursor-pointer service-card reveal-element" data-service="2" style="transition-delay: 150ms;">
+                    <div class="w-16 h-16 bg-[#0f172a] flex items-center justify-center text-[#c2a67a] mb-8 group-hover:bg-[#c2a67a] group-hover:text-[#0f172a] transition-colors duration-300">
+                        <i data-lucide="ruler" class="w-7 h-7"></i>
+                    </div>
+                    <h4 class="text-xl font-bold uppercase tracking-wider text-[#0f172a] mb-4">Semi-Custom Homes</h4>
+                    <p class="text-gray-600 leading-relaxed">
+                        The perfect balance of luxury and efficiency. Choose from a curated selection of premium floor plans, then work with our team to personalize the finishes, fixtures, and layouts.
+                    </p>
+                    <span class="inline-block mt-4 text-[#c2a67a] text-[10px] font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all duration-300">Read More &rarr;</span>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="group cursor-pointer service-card reveal-element" data-service="3" style="transition-delay: 300ms;">
+                    <div class="w-16 h-16 bg-[#0f172a] flex items-center justify-center text-[#c2a67a] mb-8 group-hover:bg-[#c2a67a] group-hover:text-[#0f172a] transition-colors duration-300">
+                        <i data-lucide="hammer" class="w-7 h-7"></i>
+                    </div>
+                    <h4 class="text-xl font-bold uppercase tracking-wider text-[#0f172a] mb-4">Large-Scale Renovations</h4>
+                    <p class="text-gray-600 leading-relaxed">
+                        Breathe new life into the home you already love. From whole-house transformations and structural remodels to expansive multi-room additions, we bring rigorous craftsmanship to your renovation.
+                    </p>
+                    <span class="inline-block mt-4 text-[#c2a67a] text-[10px] font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all duration-300">Read More &rarr;</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service Area Banner -->
+    <section class="bg-[#0f172a] py-16 px-6 border-y border-[#1e293b] overflow-hidden">
+        <div class="max-w-7xl mx-auto text-center reveal-element">
+            <h3 class="text-white text-xl md:text-2xl font-light mb-6">
+                Serving the Greater Baltimore Metro Area & Beyond
+            </h3>
+            <p class="text-[#c2a67a] text-sm md:text-base font-semibold tracking-widest uppercase leading-loose">
+                Harford County <span class="text-gray-600 mx-2">|</span> 
+                Baltimore County <span class="text-gray-600 mx-2">|</span> 
+                Carroll County <span class="text-gray-600 mx-2">|</span> 
+                Cecil County <span class="text-gray-600 mx-2">|</span> 
+                Anne Arundel County <span class="text-gray-600 mx-2">|</span> 
+                Southern PA
+            </p>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about" class="py-24 md:py-32 px-6 bg-white overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="reveal-element">
+                    <h2 class="text-sm font-bold uppercase tracking-[0.3em] text-[#c2a67a] mb-4">About Us</h2>
+                    <h3 class="text-3xl md:text-5xl font-light text-[#0f172a] mb-8">Building legacies, <br/><span class="font-serif italic">not just homes.</span></h3>
+                    <p class="text-gray-600 leading-relaxed mb-6">
+                        At Leavitt Building Group, we believe that your home should be a perfect reflection of your life, crafted with uncompromising quality and attention to detail. With deep roots in Maryland and Pennsylvania, we bring rigorous craftsmanship to every project.
+                    </p>
+                    <p class="text-gray-600 leading-relaxed">
+                        Our process is built on transparency and a genuine partnership with our clients. From the first architectural sketch to the final walkthrough, we are dedicated to making the custom building experience as seamless and exciting as the day you move in.
+                    </p>
+                </div>
+                <div class="relative mt-8 lg:mt-0 reveal-element" style="transition-delay: 200ms;">
+                    <img src="kyle.jpg" alt="Kyle Leavitt owner Leavitt building group" class="aspect-square w-full object-cover border border-gray-200 relative z-10" onerror="this.src='https://placehold.co/800x800/e2e8f0/64748b?text=Kyle+Leavitt'">
+                    
+                    <!-- Added Nameplate Overlay -->
+                    <div class="absolute bottom-0 right-0 bg-[#0f172a] p-5 md:p-6 shadow-xl border-t-2 border-l-2 border-[#c2a67a] z-20">
+                        <h4 class="text-white font-serif text-xl md:text-2xl mb-1">Kyle Leavitt</h4>
+                        <p class="text-[#c2a67a] text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em]">President <span class="text-gray-600 mx-1">|</span> Leavitt Building Group</p>
+                    </div>
+
+                    <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-[#0f172a] z-0 hidden md:block"></div>
+                    <div class="absolute -top-6 -right-6 w-32 h-32 border-2 border-[#c2a67a] z-0 hidden md:block"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Animated Trust Counters -->
+    <section class="py-16 md:py-24 bg-[#0f172a] border-t border-[#1e293b] overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center divide-y md:divide-y-0 md:divide-x divide-white/10">
+                <!-- Counter 1 -->
+                <div class="reveal-element">
+                    <div class="font-serif text-5xl md:text-7xl text-[#c2a67a] mb-4 flex justify-center items-baseline gap-1">
+                        <span class="counter" data-target="20">0</span><span class="text-3xl md:text-5xl">+</span>
+                    </div>
+                    <p class="text-white text-xs md:text-sm font-bold uppercase tracking-[0.2em]">Years of Excellence</p>
+                </div>
+                <!-- Counter 2 -->
+                <div class="reveal-element pt-12 md:pt-0" style="transition-delay: 150ms;">
+                    <div class="font-serif text-5xl md:text-7xl text-[#c2a67a] mb-4 flex justify-center items-baseline gap-1">
+                        <span class="counter" data-target="100">0</span><span class="text-3xl md:text-5xl">+</span>
+                    </div>
+                    <p class="text-white text-xs md:text-sm font-bold uppercase tracking-[0.2em]">Custom Homes Built</p>
+                </div>
+                <!-- Counter 3 -->
+                <div class="reveal-element pt-12 md:pt-0" style="transition-delay: 300ms;">
+                    <div class="font-serif text-5xl md:text-7xl text-[#c2a67a] mb-4 flex justify-center items-baseline gap-1">
+                        <span class="counter" data-target="1">0</span>
+                    </div>
+                    <p class="text-white text-xs md:text-sm font-bold uppercase tracking-[0.2em]">Uncompromising Standard</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section id="process" class="py-24 md:py-32 px-6 bg-[#0f172a] border-t border-[#1e293b] overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-20 reveal-element">
+                <h2 class="text-sm font-bold uppercase tracking-[0.3em] text-[#c2a67a] mb-4">Our Process</h2>
+                <h3 class="text-3xl md:text-5xl font-light text-white">From concept to keys.</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 relative">
+                <!-- Decorative line connecting steps (desktop only) -->
+                <div class="hidden lg:block absolute top-12 left-[12.5%] right-[12.5%] h-[1px] bg-[#1e293b] z-0"></div>
+
+                <!-- Step 1 -->
+                <div class="relative z-10 text-center group cursor-pointer process-card reveal-element" data-step="1">
+                    <div class="w-24 h-24 mx-auto bg-[#0f172a] border-2 border-[#c2a67a] flex items-center justify-center text-3xl font-serif text-[#c2a67a] mb-8 group-hover:bg-[#c2a67a] group-hover:text-[#0f172a] transition-colors duration-500">
+                        01
+                    </div>
+                    <h4 class="text-lg font-bold uppercase tracking-widest text-white mb-4">Consultation <br/> & Vision</h4>
+                    <p class="text-gray-400 leading-relaxed text-sm px-4">
+                        We begin by understanding your lifestyle, goals, and the unique vision you have for your future home.
+                    </p>
+                    <span class="inline-block mt-4 text-[#c2a67a] text-[10px] font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all duration-300">Read More &rarr;</span>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative z-10 text-center group cursor-pointer process-card reveal-element" data-step="2" style="transition-delay: 150ms;">
+                    <div class="w-24 h-24 mx-auto bg-[#0f172a] border-2 border-[#c2a67a] flex items-center justify-center text-3xl font-serif text-[#c2a67a] mb-8 group-hover:bg-[#c2a67a] group-hover:text-[#0f172a] transition-colors duration-500">
+                        02
+                    </div>
+                    <h4 class="text-lg font-bold uppercase tracking-widest text-white mb-4">Architectural <br/> Design</h4>
+                    <p class="text-gray-400 leading-relaxed text-sm px-4">
+                        Our team translates your vision into comprehensive blueprints, refining every detail before breaking ground.
+                    </p>
+                    <span class="inline-block mt-4 text-[#c2a67a] text-[10px] font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all duration-300">Read More &rarr;</span>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative z-10 text-center group cursor-pointer process-card reveal-element" data-step="3" style="transition-delay: 300ms;">
+                    <div class="w-24 h-24 mx-auto bg-[#0f172a] border-2 border-[#c2a67a] flex items-center justify-center text-3xl font-serif text-[#c2a67a] mb-8 group-hover:bg-[#c2a67a] group-hover:text-[#0f172a] transition-colors duration-500">
+                        03
+                    </div>
+                    <h4 class="text-lg font-bold uppercase tracking-widest text-white mb-4">Construction <br/> & Craftsmanship</h4>
+                    <p class="text-gray-400 leading-relaxed text-sm px-4">
+                        Rigorous project management and master craftsmanship bring your blueprints to life with uncompromising quality.
+                    </p>
+                    <span class="inline-block mt-4 text-[#c2a67a] text-[10px] font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all duration-300">Read More &rarr;</span>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="relative z-10 text-center group cursor-pointer process-card reveal-element" data-step="4" style="transition-delay: 450ms;">
+                    <div class="w-24 h-24 mx-auto bg-[#0f172a] border-2 border-[#c2a67a] flex items-center justify-center text-3xl font-serif text-[#c2a67a] mb-8 group-hover:bg-[#c2a67a] group-hover:text-[#0f172a] transition-colors duration-500">
+                        04
+                    </div>
+                    <h4 class="text-lg font-bold uppercase tracking-widest text-white mb-4">The <br/> Handover</h4>
+                    <p class="text-gray-400 leading-relaxed text-sm px-4">
+                        A final walkthrough ensures perfection before we hand over the keys to your legacy-defining custom home.
+                    </p>
+                    <span class="inline-block mt-4 text-[#c2a67a] text-[10px] font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all duration-300">Read More &rarr;</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Before & After Section -->
+    <section class="py-24 md:py-32 px-6 bg-white overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 reveal-element">
+                <h2 class="text-sm font-bold uppercase tracking-[0.3em] text-[#c2a67a] mb-4">Transformations</h2>
+                <h3 class="text-3xl md:text-5xl font-light text-[#0f172a]">The Art of Renovation.</h3>
+                <p class="mt-6 text-gray-500 max-w-2xl mx-auto text-lg">Slide to experience the uncompromising standard of a Leavitt Building Group transformation.</p>
+            </div>
+            
+            <div class="ba-slider aspect-[4/3] md:aspect-[21/9] w-full bg-gray-200 reveal-element group shadow-2xl" id="ba-slider" style="transition-delay: 200ms;">
+                <!-- Before Image (Background) -->
+                <img src="Before.jpg" alt="Before Renovation" class="absolute inset-0 w-full h-full object-cover" draggable="false" onerror="this.src='https://placehold.co/1200x600/333333/ffffff?text=Before+Renovation'">
+                <div class="absolute top-6 right-6 bg-[#0f172a]/80 backdrop-blur-md text-white px-4 py-2 text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] z-0 pointer-events-none">Before</div>
+                
+                <!-- After Image (Foreground/Clipped) -->
+                <div class="absolute inset-0 z-10 w-full h-full" id="ba-after-wrapper" style="clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);">
+                    <img src="After.jpg" alt="After Renovation" class="absolute inset-0 w-full h-full object-cover" draggable="false" onerror="this.src='https://placehold.co/1200x600/e2e8f0/64748b?text=After+Renovation'">
+                    <div class="absolute top-6 left-6 bg-[#c2a67a]/90 backdrop-blur-md text-[#0f172a] px-4 py-2 text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] pointer-events-none">After</div>
+                </div>
+
+                <!-- Handle -->
+                <div class="ba-handle" id="ba-handle">
+                    <div class="ba-handle-button transition-transform group-hover:scale-110">
+                        <i data-lucide="chevrons-left-right" class="w-6 h-6"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-24 md:py-32 px-6 bg-[#f8f9fa] border-t border-gray-200 overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 reveal-element">
+                <h2 class="text-sm font-bold uppercase tracking-[0.3em] text-[#c2a67a] mb-4">Our Portfolio</h2>
+                <h3 class="text-3xl md:text-5xl font-light text-[#0f172a]">Recent Masterpieces</h3>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Gallery Item 1 -->
+                <img src="project1.jpg" alt="Leavitt Building Group Custom Home Project" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 transition-all duration-300 reveal-element" onerror="this.src='https://placehold.co/600x450/e2e8f0/64748b?text=Project+1'">
+                
+                <!-- Gallery Item 2 -->
+                <img src="project2.jpg" alt="Leavitt Building Group Custom Home Project" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 transition-all duration-300 reveal-element" style="transition-delay: 100ms;" onerror="this.src='https://placehold.co/600x450/e2e8f0/64748b?text=Project+2'">
+                
+                <!-- Gallery Item 3 -->
+                <img src="project3.jpg" alt="Leavitt Building Group Custom Home Project" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 transition-all duration-300 reveal-element" style="transition-delay: 200ms;" onerror="this.src='https://placehold.co/600x450/e2e8f0/64748b?text=Project+3'">
+                
+                <!-- Gallery Item 4 -->
+                <img src="project4.jpg" alt="Leavitt Building Group Custom Home Project" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 transition-all duration-300 hidden md:block reveal-element" style="transition-delay: 300ms;" onerror="this.src='https://placehold.co/600x450/e2e8f0/64748b?text=Project+4'">
+                
+                <!-- Gallery Item 5 -->
+                <img src="project5.jpg" alt="Leavitt Building Group Custom Home Project" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 transition-all duration-300 hidden md:block reveal-element" style="transition-delay: 400ms;" onerror="this.src='https://placehold.co/600x450/e2e8f0/64748b?text=Project+5'">
+                
+                <!-- Gallery Item 6 -->
+                <img src="project6.jpg" alt="Leavitt Building Group Custom Home Project" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 transition-all duration-300 hidden md:block reveal-element" style="transition-delay: 500ms;" onerror="this.src='https://placehold.co/600x450/e2e8f0/64748b?text=Project+6'">
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-24 md:py-32 px-6 bg-[#0f172a] border-t border-[#1e293b] relative overflow-hidden">
+        <!-- Background watermark with Parallax ID -->
+        <i id="parallax-quote" data-lucide="quote" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[20rem] h-[20rem] md:w-[35rem] md:h-[35rem] text-white/5 z-0 pointer-events-none transition-transform duration-75 ease-out"></i>
+        
+        <div class="max-w-5xl mx-auto relative z-10 reveal-element">
+            <div class="text-center mb-12 md:mb-20">
+                <h2 class="text-sm font-bold uppercase tracking-[0.3em] text-[#c2a67a] mb-4">Client Stories</h2>
+                <h3 class="text-3xl md:text-5xl font-light text-white">Words of <span class="font-serif italic">trust.</span></h3>
+            </div>
+
+            <!-- CSS Grid overlapping trick to automatically match the height of the tallest review -->
+            <div class="grid grid-cols-1 grid-rows-1">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-slide col-start-1 row-start-1 transition-opacity duration-1000 opacity-100 z-10 flex flex-col items-center text-center">
+                    <i data-lucide="quote" class="w-8 h-8 md:w-10 md:h-10 text-[#c2a67a] mb-6 md:mb-8"></i>
+                    <p class="font-serif italic text-lg md:text-2xl lg:text-3xl text-gray-300 leading-relaxed md:leading-relaxed mb-8">
+                        "Working with Leavitt Building Group was truly a fantastic experience from start to finish. Nearly two years ago, I embarked on the journey of turning a rundown, overgrown property into the home of my dreams, and they were right by my side every step of the way. From the very beginning, they understood my vision and helped bring it to life. They didn’t just build a house – they created a home that truly reflects who I am. Leavitt Building Group took a house plan I loved and made thoughtful modifications that fit perfectly with the land and layout. When the framing began, they even allowed for adjustments that made a huge difference."
+                    </p>
+                    <div class="w-12 h-[1px] bg-[#c2a67a] mb-4"></div>
+                    <span class="text-white font-bold uppercase tracking-widest text-sm">Lorrie S.</span>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="testimonial-slide col-start-1 row-start-1 transition-opacity duration-1000 opacity-0 pointer-events-none z-0 flex flex-col items-center text-center">
+                    <i data-lucide="quote" class="w-8 h-8 md:w-10 md:h-10 text-[#c2a67a] mb-6 md:mb-8"></i>
+                    <p class="font-serif italic text-lg md:text-2xl lg:text-3xl text-gray-300 leading-relaxed md:leading-relaxed mb-8">
+                        "We can’t say enough wonderful things about Leavitt Building Group. They did an amazing job on our renovation. They were attentive, responsive, cleaned up every day and treated our home as if it was their own. The end result is amazing and much better than what we anticipated. We’ve had a number of friends over and all were floored at the transition. All of the trades involved were fantastic and had excellent suggestions. We can’t recommend them enough."
+                    </p>
+                    <div class="w-12 h-[1px] bg-[#c2a67a] mb-4"></div>
+                    <span class="text-white font-bold uppercase tracking-widest text-sm">John W.</span>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="testimonial-slide col-start-1 row-start-1 transition-opacity duration-1000 opacity-0 pointer-events-none z-0 flex flex-col items-center text-center">
+                    <i data-lucide="quote" class="w-8 h-8 md:w-10 md:h-10 text-[#c2a67a] mb-6 md:mb-8"></i>
+                    <p class="font-serif italic text-lg md:text-2xl lg:text-3xl text-gray-300 leading-relaxed md:leading-relaxed mb-8">
+                        "We had a wonderful experience with the team at Leavitt Building Group! Very professional, great communication and they went above and beyond to make sure we had exactly what we wanted! Would highly recommend!"
+                    </p>
+                    <div class="w-12 h-[1px] bg-[#c2a67a] mb-4"></div>
+                    <span class="text-white font-bold uppercase tracking-widest text-sm">Kimberly O.</span>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="flex justify-center items-center gap-6 mt-12 md:mt-16">
+                <button id="prev-testimonial" class="w-10 h-10 md:w-12 md:h-12 border border-white/20 flex items-center justify-center text-white hover:bg-[#c2a67a] hover:border-[#c2a67a] hover:text-[#0f172a] transition-colors rounded-full z-20 cursor-pointer">
+                    <i data-lucide="chevron-left" class="w-5 h-5 md:w-6 md:h-6 pointer-events-none"></i>
+                </button>
+                <div id="testimonial-dots" class="flex gap-3 z-20">
+                    <span class="w-2.5 h-2.5 rounded-full bg-[#c2a67a] transition-all cursor-pointer hover:bg-white"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-white/20 transition-all cursor-pointer hover:bg-white"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-white/20 transition-all cursor-pointer hover:bg-white"></span>
+                </div>
+                <button id="next-testimonial" class="w-10 h-10 md:w-12 md:h-12 border border-white/20 flex items-center justify-center text-white hover:bg-[#c2a67a] hover:border-[#c2a67a] hover:text-[#0f172a] transition-colors rounded-full z-20 cursor-pointer">
+                    <i data-lucide="chevron-right" class="w-5 h-5 md:w-6 md:h-6 pointer-events-none"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 md:py-32 px-6 bg-white overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
+                
+                <!-- Left Side: Contact Info -->
+                <div class="reveal-element">
+                    <div class="mb-12">
+                        <h2 class="text-sm font-bold uppercase tracking-[0.3em] text-[#c2a67a] mb-4">Get In Touch</h2>
+                        <h3 class="text-4xl md:text-6xl font-light text-[#0f172a] mb-8 leading-tight">
+                            Let's start the <br />
+                            <span class="font-serif italic">conversation.</span>
+                        </h3>
+                        <p class="text-gray-600 max-w-md text-lg">
+                            Whether you are looking to initiate a custom build or refine a large-scale renovation project, our team is ready to discuss your vision.
+                        </p>
+                    </div>
+
+                    <div class="space-y-8">
+                        <div class="flex items-start gap-6 group">
+                            <div class="w-14 h-14 bg-white flex items-center justify-center shadow-sm border border-gray-100 group-hover:bg-[#0f172a] group-hover:text-[#c2a67a] transition-colors duration-300">
+                                <i data-lucide="mail" class="w-5 h-5"></i>
+                            </div>
+                            <div class="pt-1">
+                                <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-[#c2a67a] mb-1">Inquiries</p>
+                                <p class="text-lg text-[#0f172a] font-medium">discover@buildleavitt.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start gap-6 group">
+                            <div class="w-14 h-14 bg-white flex items-center justify-center shadow-sm border border-gray-100 group-hover:bg-[#0f172a] group-hover:text-[#c2a67a] transition-colors duration-300">
+                                <i data-lucide="phone" class="w-5 h-5"></i>
+                            </div>
+                            <div class="pt-1">
+                                <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-[#c2a67a] mb-1">Call Us</p>
+                                <p class="text-lg text-[#0f172a] font-medium">(866) TeamLBG</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-6 group">
+                            <div class="w-14 h-14 bg-white flex items-center justify-center shadow-sm border border-gray-100 group-hover:bg-[#0f172a] group-hover:text-[#c2a67a] transition-colors duration-300">
+                                <i data-lucide="map-pin" class="w-5 h-5"></i>
+                            </div>
+                            <div class="pt-1">
+                                <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-[#c2a67a] mb-1">Office</p>
+                                <p class="text-lg text-[#0f172a] font-medium max-w-[250px] leading-relaxed">
+                                    217 E. Jarrettsville Rd.<br/>Suite 3, Forest Hill, MD 21050
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Side: The Form -->
+            <div class="bg-white p-8 md:p-12 shadow-xl shadow-gray-200/50 border border-gray-100 reveal-element" style="transition-delay: 200ms;">
+              <form class="space-y-8" name="contact" method="POST" data-netlify="true">
+              <input type="hidden" name="form-name" value="contact" />
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-2">
+                                <label class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500">Full Name</label>
+                                <input type="text" name="Name" class="w-full border-b border-gray-300 py-3 text-[#0f172a] focus:outline-none focus:border-[#c2a67a] transition-colors bg-transparent placeholder-gray-300" required>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500">Email Address</label>
+                                <input type="email" name="Email" class="w-full border-b border-gray-300 py-3 text-[#0f172a] focus:outline-none focus:border-[#c2a67a] transition-colors bg-transparent placeholder-gray-300" required>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-2">
+                            <label class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500">Project Interest</label>
+                            <select name="Interest" class="w-full border-b border-gray-300 py-3 text-[#0f172a] focus:outline-none focus:border-[#c2a67a] bg-transparent transition-colors appearance-none cursor-pointer">
+                                <option>Custom Home Build</option>
+                                <option>Semi-Custom Home</option>
+                                <option>Large-Scale Renovation</option>
+                                <option>Other / Unsure</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500">Brief Project Details</label>
+                            <textarea rows="4" name="Details" class="w-full border-b border-gray-300 py-3 text-[#0f172a] focus:outline-none focus:border-[#c2a67a] transition-colors bg-transparent resize-none placeholder-gray-300" placeholder="Tell us about your location, timeline, or vision..."></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full bg-[#0f172a] text-white py-5 font-bold uppercase tracking-[0.2em] text-sm flex items-center justify-center gap-3 hover:bg-[#c2a67a] hover:text-[#0f172a] transition-colors duration-300 group mt-4 magnetic cursor-pointer">
+                            Submit Inquiry
+                            <i data-lucide="send" class="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform pointer-events-none"></i>
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Instagram / Social Grid -->
+    <section class="py-12 md:py-16 bg-[#f8f9fa] overflow-hidden reveal-element">
+        <div class="max-w-7xl mx-auto px-6 mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="text-center md:text-left">
+                <h3 class="text-2xl md:text-3xl font-serif text-[#0f172a]">Follow Our Builds</h3>
+                <p class="text-gray-500 mt-2 text-sm md:text-base">Behind the scenes and latest projects on social media.</p>
+            </div>
+            <div class="flex items-center justify-center gap-6 flex-wrap">
+                <a href="https://www.facebook.com/LeavittBuildingGroup" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-[#c2a67a] font-bold uppercase tracking-widest text-xs md:text-sm hover:text-[#0f172a] transition-colors">
+                    <i data-lucide="facebook" class="w-4 h-4"></i> Leavitt Building Group
+                </a>
+                <a href="https://www.instagram.com/buildLeavitt" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-[#c2a67a] font-bold uppercase tracking-widest text-xs md:text-sm hover:text-[#0f172a] transition-colors">
+                    <i data-lucide="instagram" class="w-4 h-4"></i> @buildLeavitt
+                </a>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-1 md:gap-2">
+            <!-- Insta Items -->
+            <a href="https://www.instagram.com/buildLeavitt" target="_blank" rel="noopener noreferrer" class="relative group aspect-square block overflow-hidden">
+                <img src="project1.jpg" alt="Instagram Post" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/400x400/e2e8f0/64748b?text=Insta'">
+                <div class="absolute inset-0 bg-[#0f172a]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <i data-lucide="instagram" class="w-8 h-8 text-white"></i>
+                </div>
+            </a>
+            <a href="https://www.instagram.com/buildLeavitt" target="_blank" rel="noopener noreferrer" class="relative group aspect-square block overflow-hidden">
+                <img src="project2.jpg" alt="Instagram Post" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/400x400/e2e8f0/64748b?text=Insta'">
+                <div class="absolute inset-0 bg-[#0f172a]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <i data-lucide="instagram" class="w-8 h-8 text-white"></i>
+                </div>
+            </a>
+            <a href="https://www.instagram.com/buildLeavitt" target="_blank" rel="noopener noreferrer" class="relative group aspect-square block overflow-hidden">
+                <img src="project3.jpg" alt="Instagram Post" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/400x400/e2e8f0/64748b?text=Insta'">
+                <div class="absolute inset-0 bg-[#0f172a]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <i data-lucide="instagram" class="w-8 h-8 text-white"></i>
+                </div>
+            </a>
+            <a href="https://www.instagram.com/buildLeavitt" target="_blank" rel="noopener noreferrer" class="relative group aspect-square block overflow-hidden">
+                <img src="project4.jpg" alt="Instagram Post" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/400x400/e2e8f0/64748b?text=Insta'">
+                <div class="absolute inset-0 bg-[#0f172a]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <i data-lucide="instagram" class="w-8 h-8 text-white"></i>
+                </div>
+            </a>
+            <a href="https://www.instagram.com/buildLeavitt" target="_blank" rel="noopener noreferrer" class="relative group aspect-square block overflow-hidden hidden md:block">
+                <img src="project5.jpg" alt="Instagram Post" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/400x400/e2e8f0/64748b?text=Insta'">
+                <div class="absolute inset-0 bg-[#0f172a]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <i data-lucide="instagram" class="w-8 h-8 text-white"></i>
+                </div>
+            </a>
+            <a href="https://www.instagram.com/buildLeavitt" target="_blank" rel="noopener noreferrer" class="relative group aspect-square block overflow-hidden hidden md:block">
+                <img src="project6.jpg" alt="Instagram Post" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://placehold.co/400x400/e2e8f0/64748b?text=Insta'">
+                <div class="absolute inset-0 bg-[#0f172a]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <i data-lucide="instagram" class="w-8 h-8 text-white"></i>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#0f172a] text-gray-400 py-12 px-6 border-t border-[#1e293b] text-center md:text-left">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 reveal-element">
+            <div>
+                <span class="text-white font-bold tracking-widest uppercase text-sm">Leavitt </span>
+                <span class="text-[#c2a67a] text-[10px] uppercase tracking-[0.3em] font-semibold">Building Group</span>
+                <p class="mt-2 text-sm">© <span id="year"></span> All Rights Reserved.</p>
+                <p class="mt-1 text-xs text-gray-500 tracking-wider">MHBR 9796 | MHIC 161316 | PAHIC 212160</p>
+            </div>
+            <div class="flex flex-col md:flex-row items-center gap-6">
+                <div class="flex items-center gap-4 text-white">
+                    <a href="https://www.facebook.com/LeavittBuildingGroup" target="_blank" rel="noopener noreferrer" class="hover:text-[#c2a67a] transition-colors">
+                        <i data-lucide="facebook" class="w-5 h-5"></i>
+                    </a>
+                    <a href="https://www.instagram.com/buildLeavitt" target="_blank" rel="noopener noreferrer" class="hover:text-[#c2a67a] transition-colors">
+                        <i data-lucide="instagram" class="w-5 h-5"></i>
+                    </a>
+                </div>
+                <div class="flex gap-6 text-sm uppercase tracking-wider font-semibold">
+                    <a href="#" class="hover:text-white transition-colors">Privacy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Service Details Modal -->
+    <div id="service-modal" class="fixed inset-0 z-[100] bg-[#0f172a]/95 backdrop-blur-sm hidden flex items-center justify-center opacity-0 transition-opacity duration-300 px-6">
+        <div class="bg-white max-w-2xl w-full p-8 md:p-12 relative shadow-2xl border-t-4 border-[#c2a67a]">
+            <button id="close-service-modal" class="absolute top-6 right-6 text-gray-400 hover:text-[#c2a67a] transition-colors cursor-pointer p-2">
+                <i data-lucide="x" class="w-8 h-8 pointer-events-none"></i>
+            </button>
+            <div class="mb-6 pr-8">
+                <span id="service-modal-subtitle" class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#c2a67a] mb-3 block">Expertise</span>
+                <h3 id="service-modal-title" class="text-3xl md:text-4xl font-serif text-[#0f172a] leading-tight">Service Name</h3>
+            </div>
+            <div id="service-modal-content" class="text-gray-600 leading-relaxed space-y-4 text-base md:text-lg">
+                <!-- Content gets injected here via Javascript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Process Details Modal -->
+    <div id="process-modal" class="fixed inset-0 z-[100] bg-[#0f172a]/95 backdrop-blur-sm hidden flex items-center justify-center opacity-0 transition-opacity duration-300 px-6">
+        <div class="bg-white max-w-2xl w-full p-8 md:p-12 relative shadow-2xl border-t-4 border-[#c2a67a]">
+            <button id="close-process-modal" class="absolute top-6 right-6 text-gray-400 hover:text-[#c2a67a] transition-colors cursor-pointer p-2">
+                <i data-lucide="x" class="w-8 h-8 pointer-events-none"></i>
+            </button>
+            <div class="mb-6 pr-8">
+                <span id="process-modal-step" class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#c2a67a] mb-3 block">Step 01</span>
+                <h3 id="process-modal-title" class="text-3xl md:text-4xl font-serif text-[#0f172a] leading-tight">Consultation & Vision</h3>
+            </div>
+            <div id="process-modal-content" class="text-gray-600 leading-relaxed space-y-4 text-base md:text-lg">
+                <!-- Content gets injected here via Javascript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Lightbox Modal -->
+    <div id="lightbox" class="fixed inset-0 z-[100] bg-[#0f172a]/95 backdrop-blur-sm hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
+        <button id="close-lightbox" class="absolute top-6 right-6 text-white hover:text-[#c2a67a] transition-colors cursor-pointer p-2 z-50">
+            <i data-lucide="x" class="w-10 h-10 pointer-events-none"></i>
+        </button>
+        <img id="lightbox-img" src="" alt="Enlarged Project View" class="max-w-[90vw] max-h-[90vh] object-contain border-2 border-[#c2a67a]/50 shadow-2xl z-40 relative">
+    </div>
+
+    <!-- Floating Action Button (Updated to trigger Chat) -->
+    <div class="fixed bottom-8 right-8 z-[90] hidden md:block fab-container cursor-pointer" id="chat-fab">
+        <div class="fab magnetic">
+            <div class="fab-icon">
+                <i data-lucide="message-square" class="w-5 h-5 pointer-events-none"></i>
+            </div>
+            <span class="fab-text pointer-events-none">Start Your Build</span>
+        </div>
+    </div>
+
+    <!-- AI Concierge Chat Window Modal -->
+    <div id="chat-window" class="fixed bottom-28 right-8 w-96 max-w-[calc(100vw-4rem)] bg-white shadow-2xl z-[100] border border-gray-200 flex flex-col overflow-hidden transition-all duration-300 transform scale-95 opacity-0 pointer-events-none origin-bottom-right" style="height: 500px;">
+        <!-- Header -->
+        <div class="bg-[#0f172a] text-white px-6 py-4 flex justify-between items-center border-b-[3px] border-[#c2a67a]">
+            <div>
+                <h4 class="font-serif text-lg tracking-wide text-[#c2a67a]">Leavitt Concierge</h4>
+                <p class="text-[10px] uppercase tracking-widest text-gray-300">Digital Assistant</p>
+            </div>
+            <button id="close-chat" class="text-gray-300 hover:text-white transition-colors cursor-pointer">
+                <i data-lucide="x" class="w-5 h-5 pointer-events-none"></i>
+            </button>
+        </div>
+        <!-- Messages Area -->
+        <div id="chat-messages" class="flex-1 overflow-y-auto p-6 space-y-4 bg-[#f8f9fa] flex flex-col">
+            <!-- Initial Greeting -->
+            <div class="flex flex-col items-start">
+                <div class="bg-gray-200 text-[#0f172a] text-sm px-4 py-3 rounded-tr-xl rounded-br-xl rounded-bl-xl max-w-[85%] leading-relaxed shadow-sm">
+                    Welcome to Leavitt Building Group. I'm your digital concierge. How can I help you build your legacy today?
+                </div>
+            </div>
+        </div>
+        <!-- Input Area -->
+        <div class="p-4 bg-white border-t border-gray-200">
+            <form id="chat-form" class="flex items-center gap-2">
+                <input type="text" id="chat-input" placeholder="Type your message..." class="flex-1 border border-gray-300 px-4 py-2 text-sm focus:outline-none focus:border-[#c2a67a] focus:ring-1 focus:ring-[#c2a67a] transition-all text-[#0f172a]" required autocomplete="off">
+                <button type="submit" class="bg-[#0f172a] text-[#c2a67a] p-2 flex items-center justify-center hover:bg-[#c2a67a] hover:text-[#0f172a] transition-colors cursor-pointer disabled:opacity-50">
+                    <i data-lucide="send" class="w-5 h-5 pointer-events-none"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Interactive Scripts -->
+    <script>
+        // --- Magnetic Button Effect Logic ---
+        document.addEventListener("DOMContentLoaded", () => {
+            if (window.matchMedia("(min-width: 768px)").matches) {
+                const magnetics = document.querySelectorAll('.magnetic');
+                
+                magnetics.forEach(btn => {
+                    btn.addEventListener('mousemove', (e) => {
+                        const rect = btn.getBoundingClientRect();
+                        const x = (e.clientX - rect.left - rect.width / 2) * 0.3;
+                        const y = (e.clientY - rect.top - rect.height / 2) * 0.3;
+                        btn.style.transform = `translate(${x}px, ${y}px)`;
+                    });
+
+                    btn.addEventListener('mouseleave', () => {
+                        btn.style.transform = `translate(0px, 0px)`;
+                    });
+                });
+            }
+        });
+
+        // --- AI Concierge Chat Logic ---
+        const chatFab = document.getElementById('chat-fab');
+        const chatWindow = document.getElementById('chat-window');
+        const closeChatBtn = document.getElementById('close-chat');
+        const chatForm = document.getElementById('chat-form');
+        const chatInput = document.getElementById('chat-input');
+        const chatMessages = document.getElementById('chat-messages');
+
+        let isChatOpen = false;
+
+        const toggleChat = () => {
+            isChatOpen = !isChatOpen;
+            if (isChatOpen) {
+                chatWindow.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+                chatWindow.classList.add('opacity-100', 'scale-100', 'pointer-events-auto');
+                chatInput.focus();
+            } else {
+                chatWindow.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+                chatWindow.classList.remove('opacity-100', 'scale-100', 'pointer-events-auto');
+            }
+        };
+
+        if(chatFab) chatFab.addEventListener('click', toggleChat);
+        if(closeChatBtn) closeChatBtn.addEventListener('click', toggleChat);
+
+        const apiKey = "AQ.Ab8RN6LkbgaU0PrrQELcOhZxE2HDpVjFqhkm2fhuiPg5QzKdnA"; 
+        const systemPrompt = `You are the exclusive digital concierge for Leavitt Building Group, a premier custom home builder and large-scale renovation firm serving the Greater Baltimore Metro area and Southern PA (Harford, Baltimore, Carroll, Cecil, Anne Arundel counties). 
+        Your Tone: Professional, sophisticated, warm, and concise. Think "white-glove" service.
+        Your Goal: Greet website visitors, answer basic questions about our services (Custom Ground-Up, Semi-Custom, Large-Scale Renovations), and gently qualify them as leads. 
+        Lead Qualification: Before telling them to contact us, politely try to gather three pieces of information naturally in conversation: 
+        1. Do they already own a lot/property?
+        2. What is their ideal timeline? 
+        3. What is their general budget range?
+        Rules:
+        - NEVER promise specific prices or guarantee timelines. 
+        - Keep your responses relatively short (1-3 sentences max). 
+        - If they ask something you don't know, politely let them know that Kyle Leavitt and the team will be happy to discuss those specifics during a consultation, and guide them to email discover@buildleavitt.com or call (866) TeamLBG.`;
+
+        let chatHistory = [];
+
+        async function fetchWithBackoff(url, options, retries = 5) {
+            const delays = [1000, 2000, 4000, 8000, 16000];
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    return await response.json();
+                } catch (e) {
+                    if (i === retries - 1) throw e;
+                    await new Promise(res => setTimeout(res, delays[i]));
+                }
+            }
+        }
+
+        const appendMessage = (text, sender) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = `flex flex-col ${sender === 'user' ? 'items-end' : 'items-start'}`;
+            
+            const bubble = document.createElement('div');
+            if (sender === 'user') {
+                bubble.className = "bg-[#0f172a] text-white text-sm px-4 py-3 rounded-tl-xl rounded-br-xl rounded-bl-xl max-w-[85%] leading-relaxed shadow-sm break-words";
+            } else {
+                bubble.className = "bg-gray-200 text-[#0f172a] text-sm px-4 py-3 rounded-tr-xl rounded-br-xl rounded-bl-xl max-w-[85%] leading-relaxed shadow-sm break-words whitespace-pre-line";
+            }
+            bubble.textContent = text;
+            
+            wrapper.appendChild(bubble);
+            chatMessages.appendChild(wrapper);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        };
+
+        const appendLoading = () => {
+            const wrapper = document.createElement('div');
+            wrapper.id = "chat-loading";
+            wrapper.className = "flex flex-col items-start";
+            wrapper.innerHTML = `
+                <div class="bg-gray-200 px-4 py-3 rounded-tr-xl rounded-br-xl rounded-bl-xl shadow-sm flex items-center gap-1.5 h-[44px]">
+                    <div class="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce" style="animation-delay: 0s"></div>
+                    <div class="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce" style="animation-delay: 0.15s"></div>
+                    <div class="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce" style="animation-delay: 0.3s"></div>
+                </div>
+            `;
+            chatMessages.appendChild(wrapper);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        };
+
+        const removeLoading = () => {
+            const loadingEl = document.getElementById('chat-loading');
+            if(loadingEl) loadingEl.remove();
+        };
+
+        if(chatForm) {
+            chatForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const text = chatInput.value.trim();
+                if(!text) return;
+
+                appendMessage(text, 'user');
+                chatInput.value = '';
+                chatHistory.push({ role: "user", parts: [{ text }] });
+                appendLoading();
+
+                try {
+                    const payload = {
+                        contents: chatHistory,
+                        systemInstruction: { parts: [{ text: systemPrompt }] }
+                    };
+                    
+                    const result = await fetchWithBackoff(
+                        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`,
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(payload)
+                        }
+                    );
+
+                    const replyText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                    removeLoading();
+                    
+                    if (replyText) {
+                        appendMessage(replyText, 'model');
+                        chatHistory.push({ role: "model", parts: [{ text: replyText }] });
+                    } else {
+                        throw new Error("No text returned from API");
+                    }
+
+                } catch (error) {
+                    console.error("Chat API Error:", error);
+                    removeLoading();
+                    appendMessage("I apologize, but I am having trouble connecting right now. Please email us at discover@buildleavitt.com.", 'model');
+                }
+            });
+        }
+
+        // --- Custom Luxury Cursor Logic ---
+        document.addEventListener("DOMContentLoaded", () => {
+            if (window.matchMedia("(min-width: 768px)").matches) {
+                const cursorDot = document.getElementById('cursor-dot');
+                const cursorOutline = document.getElementById('cursor-outline');
+
+                window.addEventListener('mousemove', (e) => {
+                    const posX = e.clientX;
+                    const posY = e.clientY;
+
+                    cursorDot.style.left = `${posX}px`;
+                    cursorDot.style.top = `${posY}px`;
+
+                    cursorOutline.animate({
+                        left: `${posX}px`,
+                        top: `${posY}px`
+                    }, { duration: 300, fill: "forwards", easing: "ease-out" });
+                });
+
+                const clickables = document.querySelectorAll('a, button, .cursor-pointer, input, select, textarea, .gallery-img, #mobile-menu-btn, .testimonial-dots span, #ba-slider');
+                clickables.forEach(el => {
+                    el.addEventListener('mouseenter', () => cursorOutline.classList.add('hovering'));
+                    el.addEventListener('mouseleave', () => cursorOutline.classList.remove('hovering'));
+                });
+            }
+        });
+
+        // --- Cinematic Preloader & Text Reveal Logic ---
+        document.addEventListener("DOMContentLoaded", () => {
+            const preloader = document.getElementById('preloader');
+            const preloaderLogo = document.getElementById('preloader-logo');
+            
+            setTimeout(() => {
+                if(preloaderLogo) preloaderLogo.classList.add('show');
+            }, 300);
+
+            setTimeout(() => {
+                if(preloader) preloader.classList.add('slide-up');
+                
+                setTimeout(() => {
+                    const cinematicWords = document.querySelectorAll('.cinematic-text-word');
+                    cinematicWords.forEach(word => word.classList.add('revealed'));
+                    
+                    const cinematicFades = document.querySelectorAll('.cinematic-fade-up');
+                    cinematicFades.forEach(fade => fade.classList.add('revealed'));
+                }, 300);
+                
+                setTimeout(() => {
+                    if(preloader) preloader.remove();
+                }, 1000);
+            }, 2400); 
+        });
+
+        lucide.createIcons();
+
+        // --- Before/After Slider Logic ---
+        const baSlider = document.getElementById('ba-slider');
+        const baAfterWrapper = document.getElementById('ba-after-wrapper');
+        const baHandle = document.getElementById('ba-handle');
+        
+        if (baSlider) {
+            let isDragging = false;
+
+            const updateSlider = (e) => {
+                const rect = baSlider.getBoundingClientRect();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                let xPos = clientX - rect.left;
+                
+                if (xPos < 0) xPos = 0;
+                if (xPos > rect.width) xPos = rect.width;
+                
+                const percentage = (xPos / rect.width) * 100;
+                
+                baAfterWrapper.style.clipPath = `polygon(0 0, ${percentage}% 0, ${percentage}% 100%, 0 100%)`;
+                baHandle.style.left = `${percentage}%`;
+            };
+
+            baSlider.addEventListener('mousedown', () => isDragging = true);
+            baSlider.addEventListener('touchstart', (e) => {
+                isDragging = true;
+                updateSlider(e);
+            }, {passive: true});
+            
+            window.addEventListener('mouseup', () => isDragging = false);
+            window.addEventListener('touchend', () => isDragging = false);
+            
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                updateSlider(e);
+            });
+            window.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                updateSlider(e);
+            }, {passive: true});
+        }
+
+        // --- Animated Trust Counters Logic ---
+        const counters = document.querySelectorAll('.counter');
+        let hasCounted = false;
+
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !hasCounted) {
+                    hasCounted = true;
+                    counters.forEach(counter => {
+                        const target = +counter.getAttribute('data-target');
+                        const duration = 2000;
+                        const increment = target / (duration / 16); 
+
+                        let current = 0;
+                        const updateCounter = () => {
+                            current += increment;
+                            if (current < target) {
+                                counter.innerText = Math.ceil(current);
+                                requestAnimationFrame(updateCounter);
+                            } else {
+                                counter.innerText = target;
+                            }
+                        };
+                        updateCounter();
+                    });
+                }
+            });
+        }, { threshold: 0.5 }); 
+
+        const counterSection = document.querySelector('.counter') ? document.querySelector('.counter').closest('section') : null;
+        if(counterSection) {
+            counterObserver.observe(counterSection);
+        }
+
+        // --- Dynamic Navigation, Parallax & Scroll Progress Logic ---
+        const mainNav = document.getElementById('main-nav');
+        const parallaxQuote = document.getElementById('parallax-quote');
+        const scrollProgress = document.getElementById('scroll-progress');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                mainNav.classList.remove('bg-transparent', 'border-transparent');
+                mainNav.classList.add('bg-[#0f172a]/95', 'backdrop-blur-md', 'border-white/10', 'shadow-lg');
+            } else {
+                mainNav.classList.add('bg-transparent', 'border-transparent');
+                mainNav.classList.remove('bg-[#0f172a]/95', 'backdrop-blur-md', 'border-white/10', 'shadow-lg');
+            }
+
+            if (parallaxQuote) {
+                const section = document.getElementById('testimonials');
+                if (section) {
+                    const rect = section.getBoundingClientRect();
+                    const distFromCenter = (window.innerHeight / 2) - (rect.top + rect.height / 2);
+                    parallaxQuote.style.transform = `translate(-50%, calc(-50% + ${distFromCenter * 0.15}px))`;
+                }
+            }
+
+            if (scrollProgress) {
+                const totalScroll = document.documentElement.scrollTop || document.body.scrollTop;
+                const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrollPercentage = (totalScroll / windowHeight) * 100;
+                scrollProgress.style.width = scrollPercentage + '%';
+            }
+        });
+
+        // --- Scroll Reveal Animation Logic ---
+        const revealElements = document.querySelectorAll('.reveal-element');
+        
+        const revealOptions = {
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('active');
+                observer.unobserve(entry.target);
+            });
+        }, revealOptions);
+
+        revealElements.forEach(el => {
+            revealOnScroll.observe(el);
+        });
+
+        // Mobile Menu Toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        const icon = document.getElementById('menu-icon');
+        const links = document.querySelectorAll('.mobile-link');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+            if(menu.classList.contains('hidden')) {
+                icon.setAttribute('data-lucide', 'menu');
+            } else {
+                icon.setAttribute('data-lucide', 'x');
+            }
+            lucide.createIcons();
+        });
+
+        links.forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.add('hidden');
+                icon.setAttribute('data-lucide', 'menu');
+                lucide.createIcons();
+            });
+        });
+
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // --- Service Details Content & Logic ---
+        const serviceData = {
+            "1": {
+                title: "Custom Ground-Up",
+                content: "<p>Building a custom home from the ground up is the ultimate expression of your personal style and lifestyle needs. We guide you through every step, from lot selection and architectural design to material sourcing and final construction.</p><p>Our dedicated team ensures that your completely bespoke home is built to the highest standards of quality, matching your exact specifications and budget.</p>"
+            },
+            "2": {
+                title: "Semi-Custom Homes",
+                content: "<p>If you want a luxurious new home without the timeline of a fully custom build, our semi-custom options offer the perfect balance. Select from our portfolio of proven, high-end floor plans and personalize them to your taste.</p><p>You'll have the freedom to choose your finishes, fixtures, cabinetry, and flooring, ensuring the home feels distinctly yours while benefiting from a streamlined construction process.</p>"
+            },
+            "3": {
+                title: "Large-Scale Renovations",
+                content: "<p>Transform your current property into your dream home. Our large-scale renovation services cover everything from whole-house remodels and structural changes to adding second stories or expansive new wings.</p><p>We bring the same rigorous craftsmanship and project management to our renovations as we do to our new builds, seamlessly integrating the new spaces with your home's existing charm.</p>"
+            }
+        };
+
+        const serviceModal = document.getElementById('service-modal');
+        const serviceModalTitle = document.getElementById('service-modal-title');
+        const serviceModalContent = document.getElementById('service-modal-content');
+        const closeServiceBtn = document.getElementById('close-service-modal');
+        const serviceCards = document.querySelectorAll('.service-card');
+
+        serviceCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const service = card.getAttribute('data-service');
+                const data = serviceData[service];
+                
+                serviceModalTitle.textContent = data.title;
+                serviceModalContent.innerHTML = data.content;
+                
+                serviceModal.classList.remove('hidden');
+                setTimeout(() => serviceModal.classList.remove('opacity-0'), 10);
+            });
+        });
+
+        const hideServiceModal = () => {
+            serviceModal.classList.add('opacity-0');
+            setTimeout(() => serviceModal.classList.add('hidden'), 300);
+        };
+        closeServiceBtn.addEventListener('click', hideServiceModal);
+        serviceModal.addEventListener('click', (e) => {
+            if (e.target === serviceModal) hideServiceModal();
+        });
+
+
+        // --- Process Details Content & Logic ---
+        const processData = {
+            "1": {
+                step: "Step 01",
+                title: "Consultation & Vision",
+                content: "<p>We start with an in-depth conversation about your lifestyle, aesthetic preferences, and practical needs. Our team will visit your lot (or help you evaluate potential sites) to assess feasibility, topography, and orientation.</p><p>We establish clear budget parameters and a realistic timeline to ensure your vision perfectly aligns with your investment from day one.</p>"
+            },
+            "2": {
+                step: "Step 02",
+                title: "Architectural Design",
+                content: "<p>Working alongside premier architects and designers, we translate your ideas into detailed conceptual drawings and 3D renderings.</p><p>Once the layout is perfected, we guide you through material selections—from exterior stone to interior fixtures. Finally, we handle all engineering and local permitting, ensuring a seamless start to your build.</p>"
+            },
+            "3": {
+                step: "Step 03",
+                title: "Construction & Craftsmanship",
+                content: "<p>With permits in hand, your home begins to rise. You will have a dedicated project manager overseeing every phase, from foundation pouring to precision framing and bespoke interior finishing.</p><p>We maintain rigorous quality control, keep a clean job site, and provide you with regular progress updates so you are always informed and involved.</p>"
+            },
+            "4": {
+                step: "Step 04",
+                title: "The Handover",
+                content: "<p>As construction concludes, we conduct an exhaustive quality assurance walkthrough. We test every system, inspect every finish, and refine the final details.</p><p>You will be introduced to your new home's features and provided with a comprehensive warranty package. Our relationship doesn't end at move-in; we remain available to ensure your absolute satisfaction for years to come.</p>"
+            }
+        };
+
+        const processModal = document.getElementById('process-modal');
+        const processModalStep = document.getElementById('process-modal-step');
+        const processModalTitle = document.getElementById('process-modal-title');
+        const processModalContent = document.getElementById('process-modal-content');
+        const closeProcessBtn = document.getElementById('close-process-modal');
+        const processCards = document.querySelectorAll('.process-card');
+
+        processCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const step = card.getAttribute('data-step');
+                const data = processData[step];
+                
+                processModalStep.textContent = data.step;
+                processModalTitle.textContent = data.title;
+                processModalContent.innerHTML = data.content;
+                
+                processModal.classList.remove('hidden');
+                setTimeout(() => processModal.classList.remove('opacity-0'), 10);
+            });
+        });
+
+        const hideProcessModal = () => {
+            processModal.classList.add('opacity-0');
+            setTimeout(() => processModal.classList.add('hidden'), 300);
+        };
+        closeProcessBtn.addEventListener('click', hideProcessModal);
+        processModal.addEventListener('click', (e) => {
+            if (e.target === processModal) hideProcessModal();
+        });
+
+
+        // --- Testimonial Slider Logic ---
+        const testimonialSlides = document.querySelectorAll('.testimonial-slide');
+        const testimonialDots = document.querySelectorAll('#testimonial-dots span');
+        const prevTestimonialBtn = document.getElementById('prev-testimonial');
+        const nextTestimonialBtn = document.getElementById('next-testimonial');
+        let currentTestimonial = 0;
+        let testimonialInterval;
+
+        const showTestimonial = (index) => {
+            testimonialSlides.forEach(slide => {
+                slide.classList.remove('opacity-100', 'z-10');
+                slide.classList.add('opacity-0', 'pointer-events-none', 'z-0');
+            });
+            testimonialDots.forEach(dot => {
+                dot.classList.remove('bg-[#c2a67a]');
+                dot.classList.add('bg-white/20');
+            });
+
+            testimonialSlides[index].classList.remove('opacity-0', 'pointer-events-none', 'z-0');
+            testimonialSlides[index].classList.add('opacity-100', 'z-10');
+            testimonialDots[index].classList.remove('bg-white/20');
+            testimonialDots[index].classList.add('bg-[#c2a67a]');
+        };
+
+        const nextTestimonial = () => {
+            currentTestimonial = (currentTestimonial + 1) % testimonialSlides.length;
+            showTestimonial(currentTestimonial);
+        };
+
+        const prevTestimonial = () => {
+            currentTestimonial = (currentTestimonial - 1 + testimonialSlides.length) % testimonialSlides.length;
+            showTestimonial(currentTestimonial);
+        };
+
+        const startTestimonialSlideshow = () => {
+            testimonialInterval = setInterval(nextTestimonial, 7000); 
+        };
+
+        const resetTestimonialInterval = () => {
+            clearInterval(testimonialInterval);
+            startTestimonialSlideshow();
+        };
+
+        nextTestimonialBtn.addEventListener('click', () => { nextTestimonial(); resetTestimonialInterval(); });
+        prevTestimonialBtn.addEventListener('click', () => { prevTestimonial(); resetTestimonialInterval(); });
+        
+        testimonialDots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentTestimonial = index;
+                showTestimonial(currentTestimonial);
+                resetTestimonialInterval();
+            });
+        });
+
+        startTestimonialSlideshow();
+
+        // --- Lightbox Functionality ---
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const closeLightbox = document.getElementById('close-lightbox');
+        const galleryImages = document.querySelectorAll('.gallery-img');
+
+        galleryImages.forEach(img => {
+            img.addEventListener('click', () => {
+                lightboxImg.src = img.src; 
+                lightbox.classList.remove('hidden');
+                setTimeout(() => lightbox.classList.remove('opacity-0'), 10);
+            });
+        });
+
+        const hideLightbox = () => {
+            lightbox.classList.add('opacity-0');
+            setTimeout(() => lightbox.classList.add('hidden'), 300); 
+        };
+
+        closeLightbox.addEventListener('click', hideLightbox);
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                hideLightbox();
+            }
+        });
+    </script>
+</body>
+</html>
