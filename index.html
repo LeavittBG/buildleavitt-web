@@ -973,7 +973,7 @@
         if(chatFab) chatFab.addEventListener('click', toggleChat);
         if(closeChatBtn) closeChatBtn.addEventListener('click', toggleChat);
 
-        const apiKey = "AQ.Ab8RN6LkbgaU0PrrQELcOhZxE2HDpVjFqhkm2fhuiPg5QzKdnA"; 
+        // System Prompt Configuration
         const systemPrompt = `You are the exclusive digital concierge for Leavitt Building Group, a premier custom home builder and large-scale renovation firm serving the Greater Baltimore Metro area and Southern PA (Harford, Baltimore, Carroll, Cecil, Anne Arundel counties). 
         Your Tone: Professional, sophisticated, warm, and concise. Think "white-glove" service.
         Your Goal: Greet website visitors, answer basic questions about our services (Custom Ground-Up, Semi-Custom, Large-Scale Renovations), and gently qualify them as leads. 
@@ -1045,9 +1045,13 @@
                 const text = chatInput.value.trim();
                 if(!text) return;
 
+                // Add to UI
                 appendMessage(text, 'user');
                 chatInput.value = '';
+                
+                // Add to history
                 chatHistory.push({ role: "user", parts: [{ text }] });
+                
                 appendLoading();
 
                 try {
@@ -1056,8 +1060,9 @@
                         systemInstruction: { parts: [{ text: systemPrompt }] }
                     };
                     
+                    // Route the request to our secure Netlify Function instead of Google directly
                     const result = await fetchWithBackoff(
-                        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`,
+                        `/.netlify/functions/chat`,
                         {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
@@ -1066,6 +1071,7 @@
                     );
 
                     const replyText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                    
                     removeLoading();
                     
                     if (replyText) {
