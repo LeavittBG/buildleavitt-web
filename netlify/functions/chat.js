@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+
 
 exports.handler = async function(event, context) {
     // 1. Ensure it's a POST request
