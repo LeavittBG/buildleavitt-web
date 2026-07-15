@@ -1062,7 +1062,7 @@
                     
                     // Route the request to our secure Netlify Function instead of Google directly
                     const result = await fetchWithBackoff(
-                        `/.netlify/functions/chat`,
+                        `/.netlify/functions/chat?key=auth`,
                         {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
