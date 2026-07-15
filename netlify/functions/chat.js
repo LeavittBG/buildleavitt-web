@@ -12,19 +12,18 @@ exports.handler = async function(event, context) {
             return { statusCode: 500, body: JSON.stringify({ error: "Server configuration error." }) };
         }
 
-        // Add proper CORS headers for the frontend to accept the response
         const headers = {
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Headers": "Content-Type",
             "Access-Control-Allow-Methods": "POST, OPTION"
         };
         
-        // Handle Preflight requests if the browser sends one
         if (event.httpMethod === "OPTIONS") {
              return { statusCode: 200, headers, body: "OK" };
         }
 
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${API_KEY}`, {
+        // Connecting to the highly stable gemini-1.5-flash model
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body)
