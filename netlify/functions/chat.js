@@ -22,8 +22,21 @@ exports.handler = async function(event, context) {
              return { statusCode: 200, headers, body: "OK" };
         }
 
+        // --- THE FIX: Bulletproof System Prompt Injection ---
+        // Google rejects the standalone "systemInstruction" field. We intercept and inject it directly.
+        if (body.systemInstruction) {
+            const sysPrompt = body.systemInstruction.parts[0].text;
+            if (body.contents && body.contents.length > 0) {
+                const originalText = body.contents[0].parts[0].text;
+                // Stitch the rulebook seamlessly into the first message
+                body.contents[0].parts[0].text = `[System Directive: ${sysPrompt}]\n\nUser Message: ${originalText}`;
+            }
+            // Delete the field that trips the breaker
+            delete body.systemInstruction; 
+        }
+
         // Connecting to the highly stable gemini-1.5-flash model
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body)
