@@ -102,12 +102,13 @@
             overflow: hidden;
             display: inline-flex;
             vertical-align: bottom;
-            padding-top: 0.25em; /* Prevents top clipping for tall letters */
+            padding-top: 0.25em; 
             margin-top: -0.25em;
             padding-bottom: 0.15em; 
             margin-bottom: -0.15em;
-            padding-right: 0.2em; /* Prevents right clipping for italic letters */
-            margin-right: -0.15em; /* Pulls the next word backward to tighten spacing */
+            padding-right: 0.2em; 
+            /* THE FIX: Increased negative margin to pull the physical words closer together */
+            margin-right: -0.35em; 
         }
         .cinematic-text-word {
             display: inline-block;
@@ -115,7 +116,7 @@
             opacity: 0;
             transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1), opacity 1.2s cubic-bezier(0.19, 1, 0.22, 1);
             will-change: transform, opacity;
-            padding-right: 0.15em; /* Widens the framing to prevent italic letters from clipping */
+            padding-right: 0.15em; 
         }
         .cinematic-text-word.revealed {
             transform: translateY(0);
@@ -289,8 +290,8 @@
                     Maryland & Pennsylvania
                 </h2>
                 
-                <!-- Cinematic Cascading Text Reveal for Headline -->
-                <h1 class="text-4xl md:text-6xl lg:text-7xl font-light text-white leading-[1.1] mb-8">
+                <!-- Cinematic Cascading Text Reveal for Headline (Tracking tightened here) -->
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-light text-white leading-[1.1] mb-8 tracking-tighter">
                     <span class="overflow-hidden-mask"><span class="cinematic-text-word" style="transition-delay: 0.2s;">Crafting</span></span>
                     <span class="overflow-hidden-mask"><span class="cinematic-text-word" style="transition-delay: 0.3s;">Custom</span></span>
                     <span class="overflow-hidden-mask"><span class="cinematic-text-word" style="transition-delay: 0.4s;">Homes</span></span> <br />
