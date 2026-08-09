@@ -107,8 +107,7 @@
             padding-bottom: 0.15em; 
             margin-bottom: -0.15em;
             padding-right: 0.2em; 
-            /* THE FIX: Increased negative margin to pull the physical words closer together */
-            margin-right: -0.35em; 
+            margin-right: -0.35em; /* Pulls the physical words closer together */
         }
         .cinematic-text-word {
             display: inline-block;
@@ -135,7 +134,7 @@
 
         /* Custom Luxury Cursor Styles */
         @media (min-width: 768px) {
-            body, a, button, .cursor-pointer, input, select, textarea, .gallery-img, #ba-slider {
+            body, a, button, .cursor-pointer, input, select, textarea, .gallery-img, #ba-slider, .filter-btn {
                 cursor: none !important;
             }
         }
@@ -210,6 +209,11 @@
             color: #c2a67a;
             pointer-events: auto;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Gallery Filter Transitions */
+        .gallery-item-wrapper {
+            transition: transform 0.4s ease-out, opacity 0.4s ease-out;
         }
     </style>
 </head>
@@ -296,8 +300,8 @@
                     Maryland & Pennsylvania
                 </h2>
                 
-                <!-- Cinematic Cascading Text Reveal for Headline (Tracking tightened here) -->
-                <h1 class="text-4xl md:text-6xl lg:text-7xl font-light text-white leading-[1.1] mb-8 tracking-tighter">
+                <!-- Cinematic Cascading Text Reveal for Headline -->
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-light text-white leading-[1.1] mb-8 tracking-tight">
                     <span class="overflow-hidden-mask"><span class="cinematic-text-word" style="transition-delay: 0.2s;">Crafting</span></span>
                     <span class="overflow-hidden-mask"><span class="cinematic-text-word" style="transition-delay: 0.3s;">Custom</span></span>
                     <span class="overflow-hidden-mask"><span class="cinematic-text-word" style="transition-delay: 0.4s;">Homes</span></span> <br />
@@ -538,32 +542,63 @@
         </div>
     </section>
 
-    <!-- Gallery Section -->
+    <!-- Filterable Gallery Section -->
     <section id="gallery" class="py-24 md:py-32 px-6 bg-[#f8f9fa] border-t border-gray-200 overflow-hidden">
         <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16 reveal-element">
+            <div class="text-center mb-12 reveal-element">
                 <h2 class="text-sm font-bold uppercase tracking-[0.3em] text-[#c2a67a] mb-4">Our Portfolio</h2>
                 <h3 class="text-3xl md:text-5xl font-light text-[#0f172a]">Recent Masterpieces</h3>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Gallery Item 1 -->
-                <img src="project1.jpg" alt="Leavitt Building Group Custom Home Project" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 transition-all duration-300 reveal-element" onerror="this.src='https://placehold.co/600x450/e2e8f0/64748b?text=Project+1'">
+            <!-- Gallery Filters -->
+            <div class="flex flex-wrap justify-center gap-4 md:gap-8 mb-12 reveal-element" style="transition-delay: 100ms;">
+                <button class="filter-btn active-filter px-4 py-2 text-xs md:text-sm font-bold uppercase tracking-widest text-[#0f172a] border-b-2 border-[#c2a67a] transition-all cursor-pointer hover:text-[#0f172a]" data-filter="all">All</button>
+                <button class="filter-btn px-4 py-2 text-xs md:text-sm font-bold uppercase tracking-widest text-gray-400 border-b-2 border-transparent hover:text-[#0f172a] hover:border-[#c2a67a] transition-all cursor-pointer" data-filter="exteriors">Exteriors</button>
+                <button class="filter-btn px-4 py-2 text-xs md:text-sm font-bold uppercase tracking-widest text-gray-400 border-b-2 border-transparent hover:text-[#0f172a] hover:border-[#c2a67a] transition-all cursor-pointer" data-filter="kitchens">Kitchens</button>
+                <button class="filter-btn px-4 py-2 text-xs md:text-sm font-bold uppercase tracking-widest text-gray-400 border-b-2 border-transparent hover:text-[#0f172a] hover:border-[#c2a67a] transition-all cursor-pointer" data-filter="details">Details</button>
+            </div>
+
+            <!-- Gallery Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="gallery-grid">
                 
-                <!-- Gallery Item 2 -->
-                <img src="project2.jpg" alt="Leavitt Building Group Custom Home Project" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 transition-all duration-300 reveal-element" style="transition-delay: 100ms;" onerror="this.src='https://placehold.co/600x450/e2e8f0/64748b?text=Project+2'">
+                <!-- Exteriors (Using your existing photos) -->
+                <div class="gallery-item-wrapper reveal-element" data-category="exteriors" style="transition-delay: 100ms;">
+                    <img src="project1.jpg" alt="Custom Home Exterior" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 transition-all duration-300" onerror="this.src='https://placehold.co/800x600/e2e8f0/64748b?text=Exterior+1'">
+                </div>
                 
-                <!-- Gallery Item 3 -->
-                <img src="project3.jpg" alt="Leavitt Building Group Custom Home Project" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 transition-all duration-300 reveal-element" style="transition-delay: 200ms;" onerror="this.src='https://placehold.co/600x450/e2e8f0/64748b?text=Project+3'">
+                <div class="gallery-item-wrapper reveal-element" data-category="exteriors" style="transition-delay: 150ms;">
+                    <img src="project2.jpg" alt="Custom Home Exterior" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 transition-all duration-300" onerror="this.src='https://placehold.co/800x600/e2e8f0/64748b?text=Exterior+2'">
+                </div>
                 
-                <!-- Gallery Item 4 -->
-                <img src="project4.jpg" alt="Leavitt Building Group Custom Home Project" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 transition-all duration-300 hidden md:block reveal-element" style="transition-delay: 300ms;" onerror="this.src='https://placehold.co/600x450/e2e8f0/64748b?text=Project+4'">
+                <div class="gallery-item-wrapper reveal-element" data-category="exteriors" style="transition-delay: 200ms;">
+                    <img src="project3.jpg" alt="Custom Home Exterior" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 transition-all duration-300" onerror="this.src='https://placehold.co/800x600/e2e8f0/64748b?text=Exterior+3'">
+                </div>
+
+                <!-- Kitchens (NOW USING HIGH-END STOCK PHOTOS AS FALLBACKS) -->
+                <div class="gallery-item-wrapper reveal-element" data-category="kitchens" style="transition-delay: 250ms;">
+                    <img src="kitchen1.jpg" alt="Luxury Kitchen Concept" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 transition-all duration-300" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1556910103-1c02745a8728?q=80&w=800&h=600&auto=format&fit=crop'">
+                </div>
+
+                <div class="gallery-item-wrapper reveal-element" data-category="kitchens" style="transition-delay: 300ms;">
+                    <img src="kitchen2.jpg" alt="Modern Farmhouse Kitchen" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 transition-all duration-300" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&h=600&auto=format&fit=crop'">
+                </div>
                 
-                <!-- Gallery Item 5 -->
-                <img src="project5.jpg" alt="Leavitt Building Group Custom Home Project" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 transition-all duration-300 hidden md:block reveal-element" style="transition-delay: 400ms;" onerror="this.src='https://placehold.co/600x450/e2e8f0/64748b?text=Project+5'">
+                <div class="gallery-item-wrapper reveal-element" data-category="kitchens" style="transition-delay: 350ms;">
+                    <img src="kitchen3.jpg" alt="Chef's Kitchen Renovation" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 transition-all duration-300" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=800&h=600&auto=format&fit=crop'">
+                </div>
+
+                <!-- Details & Renovations (USING HIGH-END STOCK PHOTOS AS FALLBACKS) -->
+                <div class="gallery-item-wrapper reveal-element" data-category="details" style="transition-delay: 400ms;">
+                    <img src="project4.jpg" alt="Custom Architectural Detail" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 transition-all duration-300" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1600607687920-4e2a09c15468?q=80&w=800&h=600&auto=format&fit=crop'">
+                </div>
                 
-                <!-- Gallery Item 6 -->
-                <img src="project6.jpg" alt="Leavitt Building Group Custom Home Project" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 transition-all duration-300 hidden md:block reveal-element" style="transition-delay: 500ms;" onerror="this.src='https://placehold.co/600x450/e2e8f0/64748b?text=Project+6'">
+                <div class="gallery-item-wrapper reveal-element" data-category="details" style="transition-delay: 450ms;">
+                    <img src="project5.jpg" alt="Custom Bathroom Renovation" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 transition-all duration-300" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1620626011761-996317b8d101?q=80&w=800&h=600&auto=format&fit=crop'">
+                </div>
+
+                <div class="gallery-item-wrapper reveal-element" data-category="details" style="transition-delay: 500ms;">
+                    <img src="detail1.jpg" alt="Custom Finishes" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 transition-all duration-300" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=800&h=600&auto=format&fit=crop'">
+                </div>
             </div>
         </div>
     </section>
@@ -848,6 +883,47 @@
 
     <!-- Interactive Scripts -->
     <script>
+        // --- Filterable Gallery Logic ---
+        document.addEventListener("DOMContentLoaded", () => {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const galleryItems = document.querySelectorAll('.gallery-item-wrapper');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Remove active styling from all buttons
+                    filterBtns.forEach(b => {
+                        b.classList.remove('active-filter', 'text-[#0f172a]', 'border-[#c2a67a]');
+                        b.classList.add('text-gray-400', 'border-transparent');
+                    });
+                    
+                    // Add active styling to clicked button
+                    btn.classList.add('active-filter', 'text-[#0f172a]', 'border-[#c2a67a]');
+                    btn.classList.remove('text-gray-400', 'border-transparent');
+
+                    const filterValue = btn.getAttribute('data-filter');
+
+                    // Filter logic with smooth transitions
+                    galleryItems.forEach(item => {
+                        if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
+                            item.style.display = 'block';
+                            // Small delay to allow display:block to render before transitioning opacity
+                            setTimeout(() => {
+                                item.style.opacity = '1';
+                                item.style.transform = 'scale(1)';
+                            }, 50);
+                        } else {
+                            item.style.opacity = '0';
+                            item.style.transform = 'scale(0.95)';
+                            // Wait for fade out animation before hiding completely
+                            setTimeout(() => {
+                                item.style.display = 'none';
+                            }, 400); 
+                        }
+                    });
+                });
+            });
+        });
+
         // --- Magnetic Button Effect Logic ---
         document.addEventListener("DOMContentLoaded", () => {
             if (window.matchMedia("(min-width: 768px)").matches) {
@@ -887,7 +963,7 @@
                     }, { duration: 300, fill: "forwards", easing: "ease-out" });
                 });
 
-                const clickables = document.querySelectorAll('a, button, .cursor-pointer, input, select, textarea, .gallery-img, #mobile-menu-btn, .testimonial-dots span, #ba-slider');
+                const clickables = document.querySelectorAll('a, button, .cursor-pointer, input, select, textarea, .gallery-img, #mobile-menu-btn, .testimonial-dots span, #ba-slider, .filter-btn');
                 clickables.forEach(el => {
                     el.addEventListener('mouseenter', () => cursorOutline.classList.add('hovering'));
                     el.addEventListener('mouseleave', () => cursorOutline.classList.remove('hovering'));
