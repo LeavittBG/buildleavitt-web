@@ -1,0 +1,237 @@
+/*
+ * Source stylesheet for buildleavitt.com.
+ *
+ * Build with:  npm run build      (one-off)
+ *              npm run dev        (watch)
+ *
+ * Output goes to dist/styles.css, which is what the pages link to.
+ * Do not edit dist/styles.css by hand - it is generated.
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Images are served via <picture class="contents"> so the <img> keeps acting as
+   the grid/flex item and all its layout classes still apply. But display:contents
+   promotes EVERY child of <picture> - and <source> has no UA display:none of its
+   own - so without this each <source> would claim a grid cell, pushing the
+   gallery from 2 rows of 3 into 4 ragged rows. */
+source { display: none; }
+
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', sans-serif; }
+/* Keep anchor targets clear of the fixed 96px navigation bar */
+section[id] { scroll-margin-top: 6rem; }
+.font-serif { font-family: 'Playfair Display', serif; }
+::selection { background-color: #0f172a; color: white; }
+
+/* Custom Branded Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #0f172a; /* Navy track */
+}
+::-webkit-scrollbar-thumb {
+    background: #c2a67a; /* Gold thumb */
+    border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #d4b88c; /* Lighter gold on hover */
+}
+/* Firefox support */
+html {
+    scrollbar-width: thin;
+    scrollbar-color: #c2a67a #0f172a;
+}
+
+/* Scroll Reveal Animation Classes */
+.reveal-element {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+}
+.reveal-element.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Ken Burns Animation */
+@keyframes ken-burns {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.15); }
+}
+.animate-ken-burns {
+    animation: ken-burns 40s ease-out forwards;
+}
+
+/* Preloader Styles */
+#preloader {
+    transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
+}
+#preloader.slide-up {
+    transform: translateY(-100%);
+}
+.preloader-logo {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: all 1.2s ease-out;
+}
+.preloader-logo.show {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Cinematic Text Reveal Styles */
+.overflow-hidden-mask {
+    overflow: hidden;
+    display: inline-flex;
+    vertical-align: bottom;
+    padding-top: 0.25em; 
+    margin-top: -0.25em;
+    padding-bottom: 0.15em; 
+    margin-bottom: -0.15em;
+    padding-right: 0.2em; 
+    /* THE FIX: Increased negative margin to pull the physical words closer together */
+    margin-right: -0.35em; 
+}
+.cinematic-text-word {
+    display: inline-block;
+    transform: translateY(120%);
+    opacity: 0;
+    transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1), opacity 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+    will-change: transform, opacity;
+    padding-right: 0.15em; 
+}
+.cinematic-text-word.revealed {
+    transform: translateY(0);
+    opacity: 1;
+}
+.cinematic-fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+    will-change: transform, opacity;
+}
+.cinematic-fade-up.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Custom Luxury Cursor Styles */
+/* Only hide the native cursor once JS has confirmed the replacement is live,
+   otherwise a script failure would leave the visitor with no cursor at all. */
+@media (min-width: 768px) {
+    html.custom-cursor :is(body, a, button, .cursor-pointer, input, select, textarea, .gallery-img, #ba-slider) {
+        cursor: none !important;
+    }
+}
+.cursor-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #c2a67a;
+    border-radius: 50%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+}
+.cursor-outline {
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(194, 166, 122, 0.6);
+    border-radius: 50%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s ease-out, height 0.2s ease-out, background-color 0.2s ease-out;
+}
+.cursor-outline.hovering {
+    width: 60px;
+    height: 60px;
+    background-color: rgba(194, 166, 122, 0.1);
+    border-color: #c2a67a;
+}
+
+/* Magnetic Button Effect */
+.magnetic {
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.3s ease, color 0.3s ease, width 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    will-change: transform;
+}
+
+/* Before/After Slider */
+.ba-slider {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    /* Stops the page from scrolling while the handle is being dragged on touch */
+    touch-action: none;
+    /* Dragging the knob would otherwise start a text selection that runs out
+       across the page; ::selection paints it navy, which reads as the section
+       "greying out". The mousedown handler also preventDefaults, but this also
+       covers touch long-press and any path where that handler doesn't run. */
+    -webkit-user-select: none;
+    user-select: none;
+}
+.ba-handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 4px;
+    background-color: #c2a67a;
+    transform: translateX(-50%);
+    pointer-events: none;
+    z-index: 20;
+}
+.ba-handle-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 48px;
+    height: 48px;
+    background-color: #0f172a;
+    border: 2px solid #c2a67a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #c2a67a;
+    pointer-events: auto;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s ease-out;
+}
+/* The hover grow lives here, not as Tailwind's group-hover:scale-110. Tailwind's
+   scale utilities emit a complete `transform`, which replaced the translate above
+   and dropped the knob 24px right and 24px down off the divider whenever the
+   pointer was over the slider - i.e. the whole time you are dragging it. */
+.ba-slider:hover .ba-handle-button {
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* Reduced Motion: show everything in its final state, skip the choreography */
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    #preloader { display: none !important; }
+    .animate-ken-burns { animation: none !important; }
+    .reveal-element,
+    .cinematic-fade-up,
+    .cinematic-text-word {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+    .cursor-dot, .cursor-outline { display: none !important; }
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

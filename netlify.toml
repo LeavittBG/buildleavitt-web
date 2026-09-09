@@ -1,5 +1,11 @@
 [build]
-  functions = "netlify/functions"
+  # assets-src/ holds the full-resolution originals. They are only inputs to
+  # `npm run images`, which is run locally and its outputs committed - so drop
+  # them from the deploy, otherwise publish = "." would upload and publicly
+  # serve ~12MB of source photos. This only touches Netlify's build clone.
+  command = "npm run build && rm -rf assets-src"
   publish = "."
+  # No serverless functions are in use. If you add some later, restore:
+  #   functions = "netlify/functions"
 [build.environment]
   NODE_VERSION = "20"
