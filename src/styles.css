@@ -12,6 +12,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Images are served via <picture class="contents"> so the <img> keeps acting as
+   the grid/flex item and all its layout classes still apply. But display:contents
+   promotes EVERY child of <picture> - and <source> has no UA display:none of its
+   own - so without this each <source> would claim a grid cell, pushing the
+   gallery from 2 rows of 3 into 4 ragged rows. */
+source { display: none; }
+
 html { scroll-behavior: smooth; }
 body { font-family: 'Inter', sans-serif; }
 /* Keep anchor targets clear of the fixed 96px navigation bar */
