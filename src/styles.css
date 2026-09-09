@@ -172,6 +172,12 @@ html {
     overflow: hidden;
     /* Stops the page from scrolling while the handle is being dragged on touch */
     touch-action: none;
+    /* Dragging the knob would otherwise start a text selection that runs out
+       across the page; ::selection paints it navy, which reads as the section
+       "greying out". The mousedown handler also preventDefaults, but this also
+       covers touch long-press and any path where that handler doesn't run. */
+    -webkit-user-select: none;
+    user-select: none;
 }
 .ba-handle {
     position: absolute;
@@ -200,6 +206,14 @@ html {
     color: #c2a67a;
     pointer-events: auto;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s ease-out;
+}
+/* The hover grow lives here, not as Tailwind's group-hover:scale-110. Tailwind's
+   scale utilities emit a complete `transform`, which replaced the translate above
+   and dropped the knob 24px right and 24px down off the divider whenever the
+   pointer was over the slider - i.e. the whole time you are dragging it. */
+.ba-slider:hover .ba-handle-button {
+    transform: translate(-50%, -50%) scale(1.1);
 }
 
 /* Reduced Motion: show everything in its final state, skip the choreography */
