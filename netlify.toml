@@ -1,6 +1,7 @@
 [build]
   command = "npm run build"
-  functions = "netlify/functions"
   publish = "."
+  # No serverless functions are in use. If you add some later, restore:
+  #   functions = "netlify/functions"
 [build.environment]
   NODE_VERSION = "20"
