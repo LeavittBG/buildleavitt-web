@@ -632,6 +632,26 @@
                         </div>
 
                         <div class="space-y-2">
+                            <label for="contact-budget" class="block text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500">Estimated Budget</label>
+                            <!-- REVIEW: these brackets are a starting point, not your actual numbers.
+                                 Where the lowest option sits is itself a qualifying signal - it tells a
+                                 visitor the smallest project you take on. Adjust to match reality. -->
+                            <select id="contact-budget" name="Budget" class="w-full border-b border-gray-300 py-3 text-[#0f172a] focus:outline-none focus:border-[#c2a67a] bg-transparent transition-colors appearance-none cursor-pointer" required>
+                                <option value="" selected disabled>Please select&hellip;</option>
+                                <option>Under $250,000</option>
+                                <option>$250,000 &ndash; $500,000</option>
+                                <option>$500,000 &ndash; $750,000</option>
+                                <option>$750,000 &ndash; $1 million</option>
+                                <option>Over $1 million</option>
+                                <option>Not sure yet</option>
+                            </select>
+                            <p class="text-xs text-gray-500 pt-1">
+                                A rough range is fine &mdash; it helps us point you to the right approach from the first
+                                conversation.
+                            </p>
+                        </div>
+
+                        <div class="space-y-2">
                             <label for="contact-details" class="block text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500">Brief Project Details</label>
                             <textarea id="contact-details" rows="4" name="Details" class="w-full border-b border-gray-300 py-3 text-[#0f172a] focus:outline-none focus:border-[#c2a67a] transition-colors bg-transparent resize-none placeholder-gray-500" placeholder="Tell us about your location, timeline, or vision..."></textarea>
                         </div>
