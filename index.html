@@ -572,8 +572,7 @@
                             </div>
                             <div class="pt-1">
                                 <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-[#c2a67a] mb-1">Call Us</p>
-                                <p class="text-lg text-[#0f172a] font-medium group-hover:text-[#c2a67a] transition-colors">(866) TeamLBG</p>
-                                <p class="text-sm text-gray-500 mt-0.5">(866) 832-6524</p>
+                                <p class="text-lg text-[#0f172a] font-medium group-hover:text-[#c2a67a] transition-colors">(866) 832-6524</p>
                             </div>
                         </a>
 
@@ -633,16 +632,15 @@
 
                         <div class="space-y-2">
                             <label for="contact-budget" class="block text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500">Estimated Budget</label>
-                            <!-- REVIEW: these brackets are a starting point, not your actual numbers.
-                                 Where the lowest option sits is itself a qualifying signal - it tells a
-                                 visitor the smallest project you take on. Adjust to match reality. -->
+                            <!-- The lowest bracket is deliberately $250k: projects below that are not
+                                 work we take on, so the list itself does the first round of qualifying. -->
                             <select id="contact-budget" name="Budget" class="w-full border-b border-gray-300 py-3 text-[#0f172a] focus:outline-none focus:border-[#c2a67a] bg-transparent transition-colors appearance-none cursor-pointer" required>
                                 <option value="" selected disabled>Please select&hellip;</option>
-                                <option>Under $250,000</option>
                                 <option>$250,000 &ndash; $500,000</option>
                                 <option>$500,000 &ndash; $750,000</option>
                                 <option>$750,000 &ndash; $1 million</option>
-                                <option>Over $1 million</option>
+                                <option>$1 million &ndash; $2 million</option>
+                                <option>$2 million and above</option>
                                 <option>Not sure yet</option>
                             </select>
                             <p class="text-xs text-gray-500 pt-1">
