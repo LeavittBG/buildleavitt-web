@@ -37,12 +37,62 @@ const TMP = join(ROOT, '.plan-render-tmp');
 
 // Vertical slice of each page to keep, as a fraction of page height.
 const BAND = {
-  elevation: [0.16, 0.71], // below the title banner, above the logo block
+  elevation: [null, 0.71], // top is measured per page (see findBannerBottom), above the logo block
   floor: [0.09, 0.83],     // keeps the optional-feature callouts alongside the plan
 };
 
+// How far down the page to look for the title banner, and how much of a row has
+// to be non-white before it counts as a solid rule rather than part of a drawing.
+const BANNER_SEARCH = 0.20;
+const RULE_COVERAGE = 0.9;
+const RULE_LUMA = 225;
+
+/**
+ * Finds the bottom of the title banner, as a pixel row.
+ *
+ * An elevation is cropped to start just under the banner. This used to be the
+ * fixed fraction 0.16, which worked but needed a per-model override: the navy
+ * banner ends at 0.130 on fifteen of the brochures, but the-visionary has a gold
+ * rule below it at 0.161, and a crop at 0.16 left that rule in the image.
+ * Measuring the banner per page gets both cases right with no tuning, and it
+ * will keep working on a brochure whose banner is a different height.
+ *
+ * Looks for rows that are almost entirely non-white across the full page width -
+ * that is a printed rule. A drawing never covers a whole row that densely.
+ *
+ * The crop only sets an upper bound; trim() below is what decides the final top
+ * edge, so a generous band costs nothing.
+ */
+async function findBannerBottom(file) {
+  const { data, info } = await sharp(file)
+    .flatten({ background: '#ffffff' })
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  const { width, height, channels } = info;
+
+  let last = -1;
+  for (let y = 0; y < Math.round(height * BANNER_SEARCH); y++) {
+    let ink = 0;
+    for (let x = 0; x < width; x++) {
+      const i = (y * width + x) * channels;
+      const luma = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+      if (luma < RULE_LUMA) ink++;
+    }
+    if (ink / width > RULE_COVERAGE) last = y;
+  }
+  // +2 so the rule's own antialiasing does not survive into the image.
+  return last < 0 ? 0 : last + 2;
+}
+
 const WEBP = { quality: 82, effort: 6 };
-const PNG = { compressionLevel: 9 };
+// These are line drawings - black linework, a little grey hatch, white paper -
+// so a palette costs nothing and saves ~44% over truecolour (9.0MB -> 5.1MB
+// across the set). Measured worst-case RMSE against the truecolour render is
+// 0.13/255, i.e. invisible; dropping to 16 colours saves another 2.3MB but
+// takes the worst case to 2.15, which is not worth it on a drawing someone may
+// open full size and zoom into. Dithering is off: it only adds noise to flat
+// paper and makes the file bigger.
+const PNG = { compressionLevel: 9, palette: true, colours: 64, dither: 0, effort: 10 };
 const MAX_WIDTH = 1600;
 const kb = (n) => (n / 1024).toFixed(0).padStart(5) + ' KB';
 
@@ -91,11 +141,18 @@ for (const model of models) {
     // the usual template - e.g. a title banner that sits lower than the rest.
     const [top, bottom] = band || (id.startsWith('elevation') ? BAND.elevation : BAND.floor);
     const meta = await sharp(rendered).metadata();
+
+    // A null top means "measure it": used for elevations, where a fixed fraction
+    // cut the roof off the taller houses.
+    const topPx = top === null
+      ? await findBannerBottom(rendered)
+      : Math.round(meta.height * top);
+
     const extract = {
       left: 0,
-      top: Math.round(meta.height * top),
+      top: topPx,
       width: meta.width,
-      height: Math.round(meta.height * (bottom - top)),
+      height: Math.round(meta.height * bottom) - topPx,
     };
 
     // Two passes on purpose: extract and trim in a single pipeline makes sharp

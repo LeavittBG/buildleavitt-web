@@ -35,25 +35,36 @@ The pages under `/plans/` are generated from data, not edited by hand.
 ```
 npm run plans      # both steps below, in order
 npm run plans:images   # PDFs  -> plans/img/*.{webp,png} + plans/pdf/*.pdf
-npm run plans:build    # data  -> plans/index.html + plans/<slug>.html
+npm run plans:build    # data  -> plans/index.html, plans/<slug>.html, sitemap.xml
 ```
+
+`plans:build` also writes `sitemap.xml` and `robots.txt`. If you add a new
+top-level page to the site, add it to the `STATIC` list in
+`scripts/build-plans.mjs` so it ends up in the sitemap.
+
+Models appear at `/plans/` in the order they are listed in `src/plans.json` —
+currently alphabetical by the name after "The".
 
 ### Adding a model
 
 1. Put the brochure at `assets-src/plans/<slug>.pdf` (lowercase, hyphenated —
    `the-visionary.pdf`). The slug becomes the page URL.
-2. Add an entry to `src/plans.json`. Copy an existing one and edit it.
-3. **Open the PDF and read each page's title off the page** to fill in `pages`.
-   Do not copy the labels from another model and do not trust text extracted
-   from the PDF: these brochures carry leftover hidden layers, so `pdftotext`
-   reports sheet names that are not the ones actually printed on the page. The
-   `_README` at the top of `src/plans.json` has the details.
+2. Run `npm run plans:scaffold`. It reads the PDF's built-in outline (the page
+   list Acrobat shows in the sidebar: "The Poet-Foundation", "The Poet-First
+   Floor") and prints a ready-made entry to paste into `src/plans.json`.
+3. Fill in the one thing the outline does not contain: the caption printed under
+   the front elevation, marked `TODO` in the scaffolded entry. **Read it off the
+   rendered page.** Do not trust text extracted from the PDF — these brochures
+   carry leftover hidden layers, so `pdftotext` reports sheet names that are not
+   the ones actually printed. The `_README` in `src/plans.json` has the details.
 4. Run `npm run plans`, then `npm run build`, then open `plans/index.html` and
-   the new model page and check the crops look right. If the drawing is cut off
-   or the title banner is still showing, give that page a `band` override — see
-   `src/plans.json`.
+   the new model page and check the drawings look right. If a page is cropped
+   badly, give it a `band` override — see `src/plans.json`.
 5. Commit the generated `plans/` files along with your edit. Netlify does not
    run these scripts.
+
+If a PDF has no outline, the scaffold says so and that model has to be filled in
+by hand, reading each page off the render.
 
 ### Specs
 

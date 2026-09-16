@@ -4,39 +4,33 @@
     "assets-src/plans/ into images using the `pages` list below, and",
     "scripts/build-plans.mjs generates plans/index.html and plans/<slug>.html.",
     "",
-    "Page labels are recorded here rather than read out of the PDF on purpose.",
-    "These brochures carry hidden/leftover content layers: pdftoppm renders only",
-    "the visible one, but pdftotext returns all of them, so extracted text names",
-    "the wrong sheet (the-daydreamer page 3 reads 'THE VISIONARY' and 'Basement",
-    "Floor Plan' when the sheet actually says 'First Floor Plan'). Every label",
-    "below was read off the rendered page.",
+    "Page roles come from each PDF's document outline ('The Poet-Foundation'),",
+    "read by scripts/scaffold-plans.mjs. That outline is the one machine-readable",
+    "label in these files that can be trusted. The printed sheet titles cannot:",
+    "the brochures carry leftover hidden content layers that pdftoppm does not",
+    "render but pdftotext still returns, so extracted text names the wrong sheet",
+    "(the-daydreamer page 3 reads 'THE VISIONARY' and 'Basement Floor Plan' when",
+    "the sheet actually says 'First Floor Plan'). The elevation captions are not",
+    "in the outline and were each read off the rendered page.",
     "",
     "`id` also names the output file: plans/img/<slug>-<id>.{webp,png}. An id",
     "starting with 'elevation' is cropped with the elevation band, anything else",
-    "with the floor-plan band (see extract-plans.mjs). An optional `band`",
-    "[top, bottom] as a fraction of page height overrides that for one page -",
-    "the-visionary's title banner sits lower than the rest, and the default band",
-    "left the gold rule under it in the image.",
+    "with the floor-plan band (see extract-plans.mjs). An elevation's top edge is",
+    "measured per page rather than fixed, so a tall roof is never sliced off. An",
+    "optional `band` [top, bottom] as a fraction of page height overrides the",
+    "whole thing for one page, if a future brochure needs it.",
+    "",
+    "Models are listed in the order they appear at /plans/: alphabetical by the",
+    "name after 'The'.",
     "",
     "Specs are null until Leavitt supplies them. NOTHING here may be guessed:",
     "the brochures carry no square footage, bedroom or bath counts. `stories` is",
-    "filled in only because it is directly observable from the sheets in the set.",
-    "The templates render an honest 'Available on request' for every null."
+    "filled in only because it is directly observable - a set with no second",
+    "floor sheet is a single-storey house. The templates render an honest",
+    "'On request' for every null."
   ],
 
   "models": [
-    {
-      "slug": "the-visionary",
-      "name": "The Visionary",
-      "summary": null,
-      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
-      "pages": [
-        { "page": 1, "id": "elevation", "label": "Elevation B w/ Stone and Siding", "band": [0.18, 0.71] },
-        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
-        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
-        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
-      ]
-    },
     {
       "slug": "the-craftsman",
       "name": "The Craftsman",
@@ -44,18 +38,6 @@
       "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
       "pages": [
         { "page": 1, "id": "elevation", "label": "Elevation D w/ Stone and Siding" },
-        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
-        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
-        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
-      ]
-    },
-    {
-      "slug": "the-draftsman",
-      "name": "The Draftsman",
-      "summary": null,
-      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
-      "pages": [
-        { "page": 1, "id": "elevation", "label": "Elevation B w/ Stone and Siding" },
         { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
         { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
         { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
@@ -74,6 +56,18 @@
       ]
     },
     {
+      "slug": "the-draftsman",
+      "name": "The Draftsman",
+      "summary": null,
+      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "pages": [
+        { "page": 1, "id": "elevation", "label": "Elevation B w/ Stone and Siding" },
+        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
+        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
+        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
+      ]
+    },
+    {
       "slug": "the-entrepreneur",
       "name": "The Entrepreneur",
       "summary": null,
@@ -83,6 +77,150 @@
         { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
         { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
         { "page": 4, "id": "elevation-2", "label": "Additional Elevations" }
+      ]
+    },
+    {
+      "slug": "the-expressionist-i",
+      "name": "The Expressionist I",
+      "summary": null,
+      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "pages": [
+        { "page": 1, "id": "elevation", "label": "Elevation B w/ Stone and Siding" },
+        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
+        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
+        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
+      ]
+    },
+    {
+      "slug": "the-expressionist-ii",
+      "name": "The Expressionist II",
+      "summary": null,
+      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "pages": [
+        { "page": 1, "id": "elevation", "label": "Elevation B w/ Stone and Siding" },
+        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
+        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
+        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
+      ]
+    },
+    {
+      "slug": "the-illustrator",
+      "name": "The Illustrator",
+      "summary": null,
+      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "pages": [
+        { "page": 1, "id": "elevation", "label": "Elevation C w/ Stone and Siding" },
+        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
+        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
+        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
+      ]
+    },
+    {
+      "slug": "the-impressionist",
+      "name": "The Impressionist",
+      "summary": null,
+      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "pages": [
+        { "page": 1, "id": "elevation", "label": "Elevation C w/ Stone and Siding" },
+        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
+        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
+        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
+      ]
+    },
+    {
+      "slug": "the-innovator",
+      "name": "The Innovator",
+      "summary": null,
+      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "pages": [
+        { "page": 1, "id": "elevation", "label": "Elevation A w/ Stone and Siding" },
+        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
+        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
+        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
+      ]
+    },
+    {
+      "slug": "the-maestro",
+      "name": "The Maestro",
+      "summary": null,
+      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "pages": [
+        { "page": 1, "id": "elevation", "label": "Elevation D w/ Stone and Siding (shown with the optional sitting room)" },
+        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
+        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
+        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
+      ]
+    },
+    {
+      "slug": "the-novel",
+      "name": "The Novel",
+      "summary": null,
+      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "pages": [
+        { "page": 1, "id": "elevation", "label": "Elevation B w/ Stone and Siding" },
+        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
+        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
+        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
+      ]
+    },
+    {
+      "slug": "the-pioneer-i",
+      "name": "The Pioneer I",
+      "summary": null,
+      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "pages": [
+        { "page": 1, "id": "elevation", "label": "Elevation C w/ Stone and Siding" },
+        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
+        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
+        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
+      ]
+    },
+    {
+      "slug": "the-pioneer-ii",
+      "name": "The Pioneer II",
+      "summary": null,
+      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "pages": [
+        { "page": 1, "id": "elevation", "label": "Elevation C w/ Stone and Siding" },
+        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
+        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
+        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
+      ]
+    },
+    {
+      "slug": "the-poet",
+      "name": "The Poet",
+      "summary": null,
+      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "pages": [
+        { "page": 1, "id": "elevation", "label": "Elevation C w/ Stone and Siding" },
+        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
+        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
+        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
+      ]
+    },
+    {
+      "slug": "the-romantic",
+      "name": "The Romantic",
+      "summary": null,
+      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "pages": [
+        { "page": 1, "id": "elevation", "label": "Elevation A w/ Stone and Siding" },
+        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
+        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
+        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
+      ]
+    },
+    {
+      "slug": "the-visionary",
+      "name": "The Visionary",
+      "summary": null,
+      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "pages": [
+        { "page": 1, "id": "elevation", "label": "Elevation B w/ Stone and Siding" },
+        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
+        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
+        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
       ]
     }
   ]

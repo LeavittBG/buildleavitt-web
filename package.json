@@ -9,7 +9,8 @@
     "images": "node scripts/optimize-images.mjs",
     "plans": "npm run plans:images && npm run plans:build",
     "plans:images": "node scripts/extract-plans.mjs",
-    "plans:build": "node scripts/build-plans.mjs"
+    "plans:build": "node scripts/build-plans.mjs",
+    "plans:scaffold": "node scripts/scaffold-plans.mjs"
   },
   "devDependencies": {
     "sharp": "^0.34.4",

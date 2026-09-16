@@ -361,3 +361,25 @@ ${cards}
 mkdirSync(OUT, { recursive: true });
 writeFileSync(join(OUT, 'index.html'), indexHtml);
 console.log(`plans/index.html  (${models.length} models)`);
+
+// -------------------------------------------------------------- sitemap
+// Generated here because this script already knows every plan URL. The static
+// pages are listed explicitly; success.html is left out on purpose, it is
+// noindex. If a new top-level page is added to the site, add it to STATIC.
+const STATIC = ['/', '/plans/', '/privacy.html', '/terms.html'];
+const urls = [...STATIC, ...models.map((m) => `/plans/${m.slug}.html`)];
+
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.map((u) => `  <url><loc>${SITE}${u}</loc></url>`).join('\n')}
+</urlset>
+`;
+writeFileSync(join(ROOT, 'sitemap.xml'), sitemap);
+console.log(`sitemap.xml  (${urls.length} URLs)`);
+
+writeFileSync(join(ROOT, 'robots.txt'), `User-agent: *
+Allow: /
+
+Sitemap: ${SITE}/sitemap.xml
+`);
+console.log('robots.txt');
