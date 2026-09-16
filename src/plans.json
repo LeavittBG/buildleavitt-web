@@ -8,220 +8,606 @@
     "read by scripts/scaffold-plans.mjs. That outline is the one machine-readable",
     "label in these files that can be trusted. The printed sheet titles cannot:",
     "the brochures carry leftover hidden content layers that pdftoppm does not",
-    "render but pdftotext still returns, so extracted text names the wrong sheet",
-    "(the-daydreamer page 3 reads 'THE VISIONARY' and 'Basement Floor Plan' when",
-    "the sheet actually says 'First Floor Plan'). The elevation captions are not",
-    "in the outline and were each read off the rendered page.",
+    "render but pdftotext still returns, so extracted text names the wrong sheet.",
+    "the-maestro and the-visionary have no outline at all, so their page order was",
+    "read off the rendered pages. So were all sixteen elevation captions, which are",
+    "not in the outline either.",
     "",
-    "`id` also names the output file: plans/img/<slug>-<id>.{webp,png}. An id",
-    "starting with 'elevation' is cropped with the elevation band, anything else",
-    "with the floor-plan band (see extract-plans.mjs). An elevation's top edge is",
-    "measured per page rather than fixed, so a tall roof is never sliced off. An",
-    "optional `band` [top, bottom] as a fraction of page height overrides the",
-    "whole thing for one page, if a future brochure needs it.",
+    "`id` also names the output file: plans/img/<slug>-<id>.{webp,png}. The crop is",
+    "measured per page - extract-plans.mjs keeps the tallest block of ink, which is",
+    "always the drawing - so no band needs tuning. An optional `band` [top, bottom]",
+    "as a fraction of page height overrides that for one page if it is ever needed.",
+    "",
+    "An elevation's `label` is the caption printed under the rendering. That caption",
+    "is deliberately cropped OUT of the image (Leavitt asked for it off the site),",
+    "so the label survives only as the image's alt text.",
     "",
     "Models are listed in the order they appear at /plans/: alphabetical by the",
     "name after 'The'.",
     "",
-    "Specs are null until Leavitt supplies them. NOTHING here may be guessed:",
-    "the brochures carry no square footage, bedroom or bath counts. `stories` is",
-    "filled in only because it is directly observable - a set with no second",
-    "floor sheet is a single-storey house. The templates render an honest",
-    "'On request' for every null."
+    "Specs come from Leavitt's own figures and NOTHING here may be guessed.",
+    "`sqft` is living square footage; `sqftFrom` true means their sheet said",
+    "'starting at', which the page renders as 'From 2,626'. `baths` is null because",
+    "no bath counts were supplied, and the pages render an honest 'On request' for",
+    "it. `stories` is observable from the plan set - no second-floor sheet means a",
+    "single-story house."
   ],
-
   "models": [
     {
       "slug": "the-craftsman",
       "name": "The Craftsman",
       "summary": null,
-      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "specs": {
+        "beds": "4",
+        "baths": null,
+        "sqft": 2626,
+        "sqftFrom": true,
+        "stories": 2,
+        "garage": "2 car"
+      },
       "pages": [
-        { "page": 1, "id": "elevation", "label": "Elevation D w/ Stone and Siding" },
-        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
-        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
-        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
-      ]
+        {
+          "page": 1,
+          "id": "elevation",
+          "label": "Elevation D – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+        },
+        {
+          "page": 2,
+          "id": "floor-1",
+          "label": "Basement Floor Plan"
+        },
+        {
+          "page": 3,
+          "id": "floor-2",
+          "label": "First Floor Plan"
+        },
+        {
+          "page": 4,
+          "id": "floor-3",
+          "label": "Second Floor Plan"
+        }
+      ],
+      "style": "Modern Farmhouse"
     },
     {
       "slug": "the-daydreamer",
       "name": "The Daydreamer",
       "summary": null,
-      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "specs": {
+        "beds": "4-5",
+        "baths": null,
+        "sqft": 2884,
+        "sqftFrom": true,
+        "stories": 2,
+        "garage": "2 or 3 car"
+      },
       "pages": [
-        { "page": 1, "id": "elevation", "label": "Elevation C w/ Stone and Siding" },
-        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
-        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
-        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
-      ]
+        {
+          "page": 1,
+          "id": "elevation",
+          "label": "Elevation C – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+        },
+        {
+          "page": 2,
+          "id": "floor-1",
+          "label": "Basement Floor Plan"
+        },
+        {
+          "page": 3,
+          "id": "floor-2",
+          "label": "First Floor Plan"
+        },
+        {
+          "page": 4,
+          "id": "floor-3",
+          "label": "Second Floor Plan"
+        }
+      ],
+      "style": "Modern Farmhouse"
     },
     {
       "slug": "the-draftsman",
       "name": "The Draftsman",
       "summary": null,
-      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "specs": {
+        "beds": "4-5",
+        "baths": null,
+        "sqft": 3204,
+        "sqftFrom": true,
+        "stories": 2,
+        "garage": "2 or 3 car"
+      },
       "pages": [
-        { "page": 1, "id": "elevation", "label": "Elevation B w/ Stone and Siding" },
-        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
-        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
-        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
-      ]
+        {
+          "page": 1,
+          "id": "elevation",
+          "label": "Elevation B – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+        },
+        {
+          "page": 2,
+          "id": "floor-1",
+          "label": "Basement Floor Plan"
+        },
+        {
+          "page": 3,
+          "id": "floor-2",
+          "label": "First Floor Plan"
+        },
+        {
+          "page": 4,
+          "id": "floor-3",
+          "label": "Second Floor Plan"
+        }
+      ],
+      "style": "Modern Farmhouse"
     },
     {
       "slug": "the-entrepreneur",
       "name": "The Entrepreneur",
       "summary": null,
-      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 1, "garage": null },
+      "specs": {
+        "beds": "3",
+        "baths": null,
+        "sqft": 2795,
+        "sqftFrom": false,
+        "stories": 1,
+        "garage": "2 or 3 car"
+      },
       "pages": [
-        { "page": 1, "id": "elevation", "label": "Elevation B w/ Stone and Siding" },
-        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
-        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
-        { "page": 4, "id": "elevation-2", "label": "Additional Elevations" }
-      ]
+        {
+          "page": 1,
+          "id": "elevation",
+          "label": "Elevation B – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+        },
+        {
+          "page": 2,
+          "id": "floor-1",
+          "label": "Basement Floor Plan"
+        },
+        {
+          "page": 3,
+          "id": "floor-2",
+          "label": "First Floor Plan"
+        },
+        {
+          "page": 4,
+          "id": "elevation-2",
+          "label": "Additional Elevations"
+        }
+      ],
+      "style": "Modern Farmhouse"
     },
     {
       "slug": "the-expressionist-i",
       "name": "The Expressionist I",
       "summary": null,
-      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "specs": {
+        "beds": "3-7",
+        "baths": null,
+        "sqft": 4422,
+        "sqftFrom": true,
+        "stories": 2,
+        "garage": "3 car"
+      },
       "pages": [
-        { "page": 1, "id": "elevation", "label": "Elevation B w/ Stone and Siding" },
-        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
-        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
-        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
-      ]
+        {
+          "page": 1,
+          "id": "elevation",
+          "label": "Elevation B – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+        },
+        {
+          "page": 2,
+          "id": "floor-1",
+          "label": "Basement Floor Plan"
+        },
+        {
+          "page": 3,
+          "id": "floor-2",
+          "label": "First Floor Plan"
+        },
+        {
+          "page": 4,
+          "id": "floor-3",
+          "label": "Second Floor Plan"
+        }
+      ],
+      "style": "Modern Farmhouse"
     },
     {
       "slug": "the-expressionist-ii",
       "name": "The Expressionist II",
       "summary": null,
-      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "specs": {
+        "beds": "3-7",
+        "baths": null,
+        "sqft": 4288,
+        "sqftFrom": true,
+        "stories": 2,
+        "garage": "3 car"
+      },
       "pages": [
-        { "page": 1, "id": "elevation", "label": "Elevation B w/ Stone and Siding" },
-        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
-        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
-        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
-      ]
+        {
+          "page": 1,
+          "id": "elevation",
+          "label": "Elevation B – Modern Farmhouse w/ Stone and Board & Batten"
+        },
+        {
+          "page": 2,
+          "id": "floor-1",
+          "label": "Basement Floor Plan"
+        },
+        {
+          "page": 3,
+          "id": "floor-2",
+          "label": "First Floor Plan"
+        },
+        {
+          "page": 4,
+          "id": "floor-3",
+          "label": "Second Floor Plan"
+        }
+      ],
+      "style": "Modern Farmhouse"
     },
     {
       "slug": "the-illustrator",
       "name": "The Illustrator",
       "summary": null,
-      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "specs": {
+        "beds": "4-5",
+        "baths": null,
+        "sqft": 3791,
+        "sqftFrom": true,
+        "stories": 2,
+        "garage": "2 car"
+      },
       "pages": [
-        { "page": 1, "id": "elevation", "label": "Elevation C w/ Stone and Siding" },
-        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
-        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
-        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
-      ]
+        {
+          "page": 1,
+          "id": "elevation",
+          "label": "Elevation C – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+        },
+        {
+          "page": 2,
+          "id": "floor-1",
+          "label": "Basement Floor Plan"
+        },
+        {
+          "page": 3,
+          "id": "floor-2",
+          "label": "First Floor Plan"
+        },
+        {
+          "page": 4,
+          "id": "floor-3",
+          "label": "Second Floor Plan"
+        }
+      ],
+      "style": "Modern Farmhouse"
     },
     {
       "slug": "the-impressionist",
       "name": "The Impressionist",
       "summary": null,
-      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "specs": {
+        "beds": "4",
+        "baths": null,
+        "sqft": 3540,
+        "sqftFrom": true,
+        "stories": 2,
+        "garage": "2 car"
+      },
       "pages": [
-        { "page": 1, "id": "elevation", "label": "Elevation C w/ Stone and Siding" },
-        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
-        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
-        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
-      ]
+        {
+          "page": 1,
+          "id": "elevation",
+          "label": "Elevation C – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+        },
+        {
+          "page": 2,
+          "id": "floor-1",
+          "label": "Basement Floor Plan"
+        },
+        {
+          "page": 3,
+          "id": "floor-2",
+          "label": "First Floor Plan"
+        },
+        {
+          "page": 4,
+          "id": "floor-3",
+          "label": "Second Floor Plan"
+        }
+      ],
+      "style": "Modern Farmhouse"
     },
     {
       "slug": "the-innovator",
       "name": "The Innovator",
       "summary": null,
-      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "specs": {
+        "beds": "4",
+        "baths": null,
+        "sqft": 2330,
+        "sqftFrom": false,
+        "stories": 2,
+        "garage": "2 car"
+      },
       "pages": [
-        { "page": 1, "id": "elevation", "label": "Elevation A w/ Stone and Siding" },
-        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
-        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
-        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
-      ]
+        {
+          "page": 1,
+          "id": "elevation",
+          "label": "Elevation A – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+        },
+        {
+          "page": 2,
+          "id": "floor-1",
+          "label": "Basement Floor Plan"
+        },
+        {
+          "page": 3,
+          "id": "floor-2",
+          "label": "First Floor Plan"
+        },
+        {
+          "page": 4,
+          "id": "floor-3",
+          "label": "Second Floor Plan"
+        }
+      ],
+      "style": "Modern Farmhouse"
     },
     {
       "slug": "the-maestro",
       "name": "The Maestro",
       "summary": null,
-      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "specs": {
+        "beds": "4-5",
+        "baths": null,
+        "sqft": 2884,
+        "sqftFrom": true,
+        "stories": 2,
+        "garage": "2 car"
+      },
       "pages": [
-        { "page": 1, "id": "elevation", "label": "Elevation D w/ Stone and Siding (shown with the optional sitting room)" },
-        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
-        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
-        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
-      ]
+        {
+          "page": 1,
+          "id": "elevation",
+          "label": "Elevation D – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+        },
+        {
+          "page": 2,
+          "id": "floor-1",
+          "label": "Basement Floor Plan"
+        },
+        {
+          "page": 3,
+          "id": "floor-2",
+          "label": "First Floor Plan"
+        },
+        {
+          "page": 4,
+          "id": "floor-3",
+          "label": "Second Floor Plan"
+        }
+      ],
+      "style": "Modern Farmhouse"
     },
     {
       "slug": "the-novel",
       "name": "The Novel",
       "summary": null,
-      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "specs": {
+        "beds": "4-5",
+        "baths": null,
+        "sqft": 3900,
+        "sqftFrom": true,
+        "stories": 2,
+        "garage": "2 or 3 car"
+      },
       "pages": [
-        { "page": 1, "id": "elevation", "label": "Elevation B w/ Stone and Siding" },
-        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
-        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
-        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
-      ]
+        {
+          "page": 1,
+          "id": "elevation",
+          "label": "Elevation B – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+        },
+        {
+          "page": 2,
+          "id": "floor-1",
+          "label": "Basement Floor Plan"
+        },
+        {
+          "page": 3,
+          "id": "floor-2",
+          "label": "First Floor Plan"
+        },
+        {
+          "page": 4,
+          "id": "floor-3",
+          "label": "Second Floor Plan"
+        }
+      ],
+      "style": "Modern Farmhouse"
     },
     {
       "slug": "the-pioneer-i",
       "name": "The Pioneer I",
       "summary": null,
-      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "specs": {
+        "beds": "4-5",
+        "baths": null,
+        "sqft": 4024,
+        "sqftFrom": true,
+        "stories": 2,
+        "garage": "2 or 3 car"
+      },
       "pages": [
-        { "page": 1, "id": "elevation", "label": "Elevation C w/ Stone and Siding" },
-        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
-        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
-        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
-      ]
+        {
+          "page": 1,
+          "id": "elevation",
+          "label": "Elevation C – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+        },
+        {
+          "page": 2,
+          "id": "floor-1",
+          "label": "Basement Floor Plan"
+        },
+        {
+          "page": 3,
+          "id": "floor-2",
+          "label": "First Floor Plan"
+        },
+        {
+          "page": 4,
+          "id": "floor-3",
+          "label": "Second Floor Plan"
+        }
+      ],
+      "style": "Modern Farmhouse"
     },
     {
       "slug": "the-pioneer-ii",
       "name": "The Pioneer II",
       "summary": null,
-      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "specs": {
+        "beds": "4-5",
+        "baths": null,
+        "sqft": 4024,
+        "sqftFrom": true,
+        "stories": 2,
+        "garage": "2 or 3 car"
+      },
       "pages": [
-        { "page": 1, "id": "elevation", "label": "Elevation C w/ Stone and Siding" },
-        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
-        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
-        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
-      ]
+        {
+          "page": 1,
+          "id": "elevation",
+          "label": "Elevation C – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+        },
+        {
+          "page": 2,
+          "id": "floor-1",
+          "label": "Basement Floor Plan"
+        },
+        {
+          "page": 3,
+          "id": "floor-2",
+          "label": "First Floor Plan"
+        },
+        {
+          "page": 4,
+          "id": "floor-3",
+          "label": "Second Floor Plan"
+        }
+      ],
+      "style": "Modern Farmhouse"
     },
     {
       "slug": "the-poet",
       "name": "The Poet",
       "summary": null,
-      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "specs": {
+        "beds": "3-4",
+        "baths": null,
+        "sqft": 5321,
+        "sqftFrom": true,
+        "stories": 2,
+        "garage": "2 car"
+      },
       "pages": [
-        { "page": 1, "id": "elevation", "label": "Elevation C w/ Stone and Siding" },
-        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
-        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
-        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
-      ]
+        {
+          "page": 1,
+          "id": "elevation",
+          "label": "Elevation C – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+        },
+        {
+          "page": 2,
+          "id": "floor-1",
+          "label": "Basement Floor Plan"
+        },
+        {
+          "page": 3,
+          "id": "floor-2",
+          "label": "First Floor Plan"
+        },
+        {
+          "page": 4,
+          "id": "floor-3",
+          "label": "Second Floor Plan"
+        }
+      ],
+      "style": "Modern Farmhouse"
     },
     {
       "slug": "the-romantic",
       "name": "The Romantic",
       "summary": null,
-      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "specs": {
+        "beds": "4",
+        "baths": null,
+        "sqft": 2778,
+        "sqftFrom": true,
+        "stories": 2,
+        "garage": "2 car"
+      },
       "pages": [
-        { "page": 1, "id": "elevation", "label": "Elevation A w/ Stone and Siding" },
-        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
-        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
-        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
-      ]
+        {
+          "page": 1,
+          "id": "elevation",
+          "label": "Elevation A – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+        },
+        {
+          "page": 2,
+          "id": "floor-1",
+          "label": "Basement Floor Plan"
+        },
+        {
+          "page": 3,
+          "id": "floor-2",
+          "label": "First Floor Plan"
+        },
+        {
+          "page": 4,
+          "id": "floor-3",
+          "label": "Second Floor Plan"
+        }
+      ],
+      "style": "Modern Farmhouse"
     },
     {
       "slug": "the-visionary",
       "name": "The Visionary",
       "summary": null,
-      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "specs": {
+        "beds": "4-6",
+        "baths": null,
+        "sqft": 4282,
+        "sqftFrom": true,
+        "stories": 2,
+        "garage": "2 or 3 car"
+      },
       "pages": [
-        { "page": 1, "id": "elevation", "label": "Elevation B w/ Stone and Siding" },
-        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
-        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
-        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
-      ]
+        {
+          "page": 1,
+          "id": "elevation",
+          "label": "Elevation B – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+        },
+        {
+          "page": 2,
+          "id": "floor-1",
+          "label": "Basement Floor Plan"
+        },
+        {
+          "page": 3,
+          "id": "floor-2",
+          "label": "First Floor Plan"
+        },
+        {
+          "page": 4,
+          "id": "floor-3",
+          "label": "Second Floor Plan"
+        }
+      ],
+      "style": "Modern Farmhouse"
     }
   ]
 }

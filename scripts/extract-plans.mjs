@@ -8,15 +8,13 @@
  * layers that pdftoppm correctly does not render but pdftotext still returns,
  * so extracted text names the wrong sheet. See the _README in that file.
  *
- * Each brochure follows the same template: a title banner, the drawing, then a
- * logo block at the foot of the page. We render the page, crop away the banner
- * and the logo, then trim the remaining whitespace so the drawing fills the
- * frame. The bands below are fractions of page height and were read off the
- * rendered pages - if a future brochure uses a different template, its images
- * will look off and the band will need adjusting for it.
+ * Each page is furniture around one drawing: a title banner or box, the drawing,
+ * a caption under it on the elevation sheets, then a logo block and a
+ * disclaimer at the foot. We keep the drawing and drop the rest by measuring
+ * where the ink actually is - see findDrawing.
  *
- * The drawings are vector art in the PDF, so they are rendered at 200dpi and
- * downscaled, which keeps the linework crisp.
+ * The drawings are rendered at 200dpi and downscaled, which keeps the linework
+ * crisp on the floor plans and the rendering smooth on the elevations.
  *
  * Outputs to plans/img/ as WebP plus a PNG fallback, mirroring the site's
  * existing <picture> approach. Also copies the source PDF to plans/pdf/ for the
@@ -35,65 +33,112 @@ const IMG = join(ROOT, 'plans', 'img');
 const PDF = join(ROOT, 'plans', 'pdf');
 const TMP = join(ROOT, '.plan-render-tmp');
 
-// Vertical slice of each page to keep, as a fraction of page height.
-const BAND = {
-  elevation: [null, 0.71], // top is measured per page (see findBannerBottom), above the logo block
-  floor: [0.09, 0.83],     // keeps the optional-feature callouts alongside the plan
-};
-
-// How far down the page to look for the title banner, and how much of a row has
-// to be non-white before it counts as a solid rule rather than part of a drawing.
-const BANNER_SEARCH = 0.20;
-const RULE_COVERAGE = 0.9;
-const RULE_LUMA = 225;
+// A row counts as having ink if this fraction of its pixels are not paper-white.
+const INK_LUMA = 245;
+const INK_COVERAGE = 0.004;
+// Blocks closer together than this (as a fraction of page height) are one block.
+const BLOCK_GAP = 0.008;
+// Breathing room kept around the drawing before trim() tightens it.
+const PAD = 0.004;
 
 /**
- * Finds the bottom of the title banner, as a pixel row.
+ * Finds the drawing on a page and returns its {top, height} in pixels.
  *
- * An elevation is cropped to start just under the banner. This used to be the
- * fixed fraction 0.16, which worked but needed a per-model override: the navy
- * banner ends at 0.130 on fifteen of the brochures, but the-visionary has a gold
- * rule below it at 0.161, and a crop at 0.16 left that rule in the image.
- * Measuring the banner per page gets both cases right with no tuning, and it
- * will keep working on a brochure whose banner is a different height.
+ * Every sheet is furniture around one drawing. Measuring the rows that carry
+ * ink splits the page into blocks, and on all four page types the drawing is by
+ * far the tallest one:
  *
- * Looks for rows that are almost entirely non-white across the full page width -
- * that is a printed rule. A drawing never covers a whole row that densely.
+ *   elevation sheet   banner .041-.130 | RENDERING .25-.63 | caption .649-.678 | logo .811-.958
+ *   floor plan sheet  DRAWING .063-.845 | logo .857-.908 | disclaimer .918-.935
  *
- * The crop only sets an upper bound; trim() below is what decides the final top
- * edge, so a generous band costs nothing.
+ * So "keep the tallest block" drops the banner, the logo and the disclaimer on
+ * every sheet, and on the elevation sheets it also drops the caption naming the
+ * elevation and exterior style, which Leavitt asked to keep off the site.
+ *
+ * This replaced a pair of hand-tuned fractions. Those needed re-tuning whenever
+ * the brochure template changed - and it changed completely when the plans were
+ * re-rendered, moving the banner, the drawing and the foot of every page.
+ * Measuring costs one pass over the pixels and needs no tuning at all.
  */
-async function findBannerBottom(file) {
+async function findDrawing(file) {
   const { data, info } = await sharp(file)
     .flatten({ background: '#ffffff' })
     .raw()
     .toBuffer({ resolveWithObject: true });
   const { width, height, channels } = info;
 
-  let last = -1;
-  for (let y = 0; y < Math.round(height * BANNER_SEARCH); y++) {
-    let ink = 0;
+  const inked = [];
+  for (let y = 0; y < height; y++) {
+    let n = 0;
     for (let x = 0; x < width; x++) {
       const i = (y * width + x) * channels;
       const luma = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
-      if (luma < RULE_LUMA) ink++;
+      if (luma < INK_LUMA) n++;
     }
-    if (ink / width > RULE_COVERAGE) last = y;
+    inked.push(n / width > INK_COVERAGE);
   }
-  // +2 so the rule's own antialiasing does not survive into the image.
-  return last < 0 ? 0 : last + 2;
+
+  const blocks = [];
+  let start = null;
+  for (let y = 0; y < height; y++) {
+    if (inked[y] && start === null) start = y;
+    else if (!inked[y] && start !== null) { blocks.push([start, y - 1]); start = null; }
+  }
+  if (start !== null) blocks.push([start, height - 1]);
+
+  // A drawing has internal white gaps - between a callout and the main plan, or
+  // between the roof and the landscaping. Join anything separated by a hairline.
+  const gap = Math.round(height * BLOCK_GAP);
+  const merged = [];
+  for (const b of blocks) {
+    const last = merged[merged.length - 1];
+    if (last && b[0] - last[1] <= gap) last[1] = b[1];
+    else merged.push([...b]);
+  }
+  if (!merged.length) return { top: 0, height };
+
+  const [top, bottom] = merged.reduce((a, b) => (b[1] - b[0] > a[1] - a[0] ? b : a));
+  const pad = Math.round(height * PAD);
+  const t = Math.max(0, top - pad);
+  return { top: t, height: Math.min(height, bottom + pad) - t };
 }
 
 const WEBP = { quality: 82, effort: 6 };
-// These are line drawings - black linework, a little grey hatch, white paper -
-// so a palette costs nothing and saves ~44% over truecolour (9.0MB -> 5.1MB
-// across the set). Measured worst-case RMSE against the truecolour render is
-// 0.13/255, i.e. invisible; dropping to 16 colours saves another 2.3MB but
-// takes the worst case to 2.15, which is not worth it on a drawing someone may
-// open full size and zoom into. Dithering is off: it only adds noise to flat
-// paper and makes the file bigger.
-const PNG = { compressionLevel: 9, palette: true, colours: 64, dither: 0, effort: 10 };
+const PNG_TRUECOLOUR = { compressionLevel: 9 };
+const PNG_PALETTE = { compressionLevel: 9, palette: true, colours: 64, dither: 0, effort: 10 };
+// A palette is a big win on a line drawing and a bad trade on a photographic
+// one. This set now has both: the floor plans are still black linework on white,
+// but the elevations are full-colour renderings. So rather than assume, encode
+// both ways and keep the palette only when it is genuinely smaller and the error
+// against the truecolour version is imperceptible.
+//
+// The two kinds separate cleanly when measured: across the set the floor plans
+// score 1.07-1.48 and the renderings 2.80-3.69, with nothing in between. The
+// threshold sits in that gap. A floor plan at the top of its range was checked
+// by eye at zoom against its truecolour version and is indistinguishable, while
+// halving the file (230KB -> 105KB).
+const PALETTE_MAX_RMSE = 2.0;   // out of 255
 const MAX_WIDTH = 1600;
+
+/** Root-mean-square difference between two encoded images, in levels of 255. */
+async function rmse(a, b) {
+  const [A, B] = await Promise.all([
+    sharp(a).greyscale().raw().toBuffer(),
+    sharp(b).greyscale().raw().toBuffer(),
+  ]);
+  let sum = 0;
+  for (let i = 0; i < A.length; i++) { const d = A[i] - B[i]; sum += d * d; }
+  return Math.sqrt(sum / A.length);
+}
+
+async function encodePng(source) {
+  const full = await sharp(source).png(PNG_TRUECOLOUR).toBuffer();
+  const pal = await sharp(source).png(PNG_PALETTE).toBuffer();
+  if (pal.length >= full.length) return { buffer: full, note: 'truecolour (palette no smaller)' };
+  const err = await rmse(full, pal);
+  if (err > PALETTE_MAX_RMSE) return { buffer: full, note: `truecolour (palette RMSE ${err.toFixed(2)})` };
+  return { buffer: pal, note: `palette -${(100 - (pal.length / full.length) * 100).toFixed(0)}%` };
+}
 const kb = (n) => (n / 1024).toFixed(0).padStart(5) + ' KB';
 
 const { models } = JSON.parse(readFileSync(join(ROOT, 'src', 'plans.json'), 'utf8'));
@@ -137,23 +182,16 @@ for (const model of models) {
       continue;
     }
 
-    // A page may override the band in plans.json when its sheet does not follow
-    // the usual template - e.g. a title banner that sits lower than the rest.
-    const [top, bottom] = band || (id.startsWith('elevation') ? BAND.elevation : BAND.floor);
     const meta = await sharp(rendered).metadata();
 
-    // A null top means "measure it": used for elevations, where a fixed fraction
-    // cut the roof off the taller houses.
-    const topPx = top === null
-      ? await findBannerBottom(rendered)
-      : Math.round(meta.height * top);
+    // A page may override the measurement from plans.json, as [top, bottom]
+    // fractions of page height, if a future brochure ever defeats findDrawing.
+    const box = band
+      ? { top: Math.round(meta.height * band[0]),
+          height: Math.round(meta.height * (band[1] - band[0])) }
+      : await findDrawing(rendered);
 
-    const extract = {
-      left: 0,
-      top: topPx,
-      width: meta.width,
-      height: Math.round(meta.height * bottom) - topPx,
-    };
+    const extract = { left: 0, width: meta.width, ...box };
 
     // Two passes on purpose: extract and trim in a single pipeline makes sharp
     // evaluate the crop against the trimmed dimensions, which throws
@@ -167,7 +205,7 @@ for (const model of models) {
 
     const name = `${slug}-${id}`;
     const webp = await base.clone().webp(WEBP).toBuffer();
-    const png = await base.clone().png(PNG).toBuffer();
+    const { buffer: png, note } = await encodePng(await base.clone().png().toBuffer());
     const dims = await sharp(webp).metadata();
 
     writeFileSync(join(IMG, `${name}.webp`), webp);
@@ -176,7 +214,7 @@ for (const model of models) {
     manifest[slug][id] = { file: name, width: dims.width, height: dims.height, label };
 
     console.log(`   p${page} -> ${name}  ${dims.width}x${dims.height}  ` +
-      `webp ${kb(webp.length)} / png ${kb(png.length)}  "${label}"`);
+      `webp ${kb(webp.length)} / png ${kb(png.length)}  ${note}`);
   }
 
   copyFileSync(src, join(PDF, `${slug}.pdf`));
@@ -184,6 +222,17 @@ for (const model of models) {
 }
 
 rmSync(TMP, { recursive: true, force: true });
+
+// The Leavitt Standard sheet is not a plan, but it is offered for download from
+// the same place, so it rides along out of assets-src/ into the published folder.
+const STANDARD_PDF = join(ROOT, 'assets-src', 'leavitt-standard.pdf');
+if (existsSync(STANDARD_PDF)) {
+  copyFileSync(STANDARD_PDF, join(PDF, 'leavitt-standard.pdf'));
+  console.log(`\npdf -> plans/pdf/leavitt-standard.pdf  ${kb(statSync(STANDARD_PDF).size)}`);
+} else {
+  console.error('\n  ! assets-src/leavitt-standard.pdf missing - the download link on /plans/ will 404');
+  missing++;
+}
 
 writeFileSync(join(ROOT, 'src', 'plan-images.json'), JSON.stringify(manifest, null, 2) + '\n');
 console.log(`\nWrote src/plan-images.json for ${Object.keys(manifest).length} models.`);
