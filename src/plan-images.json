@@ -1,0 +1,418 @@
+{
+  "the-craftsman": {
+    "elevation": {
+      "file": "the-craftsman-elevation",
+      "width": 1383,
+      "height": 922,
+      "label": "Elevation D w/ Stone and Siding"
+    },
+    "floor-1": {
+      "file": "the-craftsman-floor-1",
+      "width": 1600,
+      "height": 1609,
+      "label": "Basement Floor Plan"
+    },
+    "floor-2": {
+      "file": "the-craftsman-floor-2",
+      "width": 1600,
+      "height": 1609,
+      "label": "First Floor Plan"
+    },
+    "floor-3": {
+      "file": "the-craftsman-floor-3",
+      "width": 1600,
+      "height": 1609,
+      "label": "Second Floor Plan"
+    }
+  },
+  "the-daydreamer": {
+    "elevation": {
+      "file": "the-daydreamer-elevation",
+      "width": 1312,
+      "height": 844,
+      "label": "Elevation C w/ Stone and Siding"
+    },
+    "floor-1": {
+      "file": "the-daydreamer-floor-1",
+      "width": 1600,
+      "height": 1609,
+      "label": "Basement Floor Plan"
+    },
+    "floor-2": {
+      "file": "the-daydreamer-floor-2",
+      "width": 1600,
+      "height": 1609,
+      "label": "First Floor Plan"
+    },
+    "floor-3": {
+      "file": "the-daydreamer-floor-3",
+      "width": 1600,
+      "height": 1609,
+      "label": "Second Floor Plan"
+    }
+  },
+  "the-draftsman": {
+    "elevation": {
+      "file": "the-draftsman-elevation",
+      "width": 1407,
+      "height": 835,
+      "label": "Elevation B w/ Stone and Siding"
+    },
+    "floor-1": {
+      "file": "the-draftsman-floor-1",
+      "width": 1600,
+      "height": 1609,
+      "label": "Basement Floor Plan"
+    },
+    "floor-2": {
+      "file": "the-draftsman-floor-2",
+      "width": 1600,
+      "height": 1609,
+      "label": "First Floor Plan"
+    },
+    "floor-3": {
+      "file": "the-draftsman-floor-3",
+      "width": 1600,
+      "height": 1609,
+      "label": "Second Floor Plan"
+    }
+  },
+  "the-entrepreneur": {
+    "elevation": {
+      "file": "the-entrepreneur-elevation",
+      "width": 1445,
+      "height": 770,
+      "label": "Elevation B w/ Stone and Siding"
+    },
+    "floor-1": {
+      "file": "the-entrepreneur-floor-1",
+      "width": 1600,
+      "height": 1609,
+      "label": "Basement Floor Plan"
+    },
+    "floor-2": {
+      "file": "the-entrepreneur-floor-2",
+      "width": 1600,
+      "height": 1609,
+      "label": "First Floor Plan"
+    },
+    "elevation-2": {
+      "file": "the-entrepreneur-elevation-2",
+      "width": 1600,
+      "height": 1401,
+      "label": "Additional Elevations"
+    }
+  },
+  "the-expressionist-i": {
+    "elevation": {
+      "file": "the-expressionist-i-elevation",
+      "width": 1420,
+      "height": 805,
+      "label": "Elevation B w/ Stone and Siding"
+    },
+    "floor-1": {
+      "file": "the-expressionist-i-floor-1",
+      "width": 1600,
+      "height": 1609,
+      "label": "Basement Floor Plan"
+    },
+    "floor-2": {
+      "file": "the-expressionist-i-floor-2",
+      "width": 1600,
+      "height": 1609,
+      "label": "First Floor Plan"
+    },
+    "floor-3": {
+      "file": "the-expressionist-i-floor-3",
+      "width": 1600,
+      "height": 1609,
+      "label": "Second Floor Plan"
+    }
+  },
+  "the-expressionist-ii": {
+    "elevation": {
+      "file": "the-expressionist-ii-elevation",
+      "width": 1420,
+      "height": 805,
+      "label": "Elevation B w/ Stone and Siding"
+    },
+    "floor-1": {
+      "file": "the-expressionist-ii-floor-1",
+      "width": 1600,
+      "height": 1609,
+      "label": "Basement Floor Plan"
+    },
+    "floor-2": {
+      "file": "the-expressionist-ii-floor-2",
+      "width": 1600,
+      "height": 1609,
+      "label": "First Floor Plan"
+    },
+    "floor-3": {
+      "file": "the-expressionist-ii-floor-3",
+      "width": 1600,
+      "height": 1609,
+      "label": "Second Floor Plan"
+    }
+  },
+  "the-illustrator": {
+    "elevation": {
+      "file": "the-illustrator-elevation",
+      "width": 1529,
+      "height": 946,
+      "label": "Elevation C w/ Stone and Siding"
+    },
+    "floor-1": {
+      "file": "the-illustrator-floor-1",
+      "width": 1600,
+      "height": 1609,
+      "label": "Basement Floor Plan"
+    },
+    "floor-2": {
+      "file": "the-illustrator-floor-2",
+      "width": 1600,
+      "height": 1609,
+      "label": "First Floor Plan"
+    },
+    "floor-3": {
+      "file": "the-illustrator-floor-3",
+      "width": 1600,
+      "height": 1609,
+      "label": "Second Floor Plan"
+    }
+  },
+  "the-impressionist": {
+    "elevation": {
+      "file": "the-impressionist-elevation",
+      "width": 1459,
+      "height": 909,
+      "label": "Elevation C w/ Stone and Siding"
+    },
+    "floor-1": {
+      "file": "the-impressionist-floor-1",
+      "width": 1600,
+      "height": 1609,
+      "label": "Basement Floor Plan"
+    },
+    "floor-2": {
+      "file": "the-impressionist-floor-2",
+      "width": 1600,
+      "height": 1609,
+      "label": "First Floor Plan"
+    },
+    "floor-3": {
+      "file": "the-impressionist-floor-3",
+      "width": 1600,
+      "height": 1609,
+      "label": "Second Floor Plan"
+    }
+  },
+  "the-innovator": {
+    "elevation": {
+      "file": "the-innovator-elevation",
+      "width": 1381,
+      "height": 909,
+      "label": "Elevation A w/ Stone and Siding"
+    },
+    "floor-1": {
+      "file": "the-innovator-floor-1",
+      "width": 1600,
+      "height": 1609,
+      "label": "Basement Floor Plan"
+    },
+    "floor-2": {
+      "file": "the-innovator-floor-2",
+      "width": 1600,
+      "height": 1609,
+      "label": "First Floor Plan"
+    },
+    "floor-3": {
+      "file": "the-innovator-floor-3",
+      "width": 1600,
+      "height": 1609,
+      "label": "Second Floor Plan"
+    }
+  },
+  "the-maestro": {
+    "elevation": {
+      "file": "the-maestro-elevation",
+      "width": 1359,
+      "height": 935,
+      "label": "Elevation D w/ Stone and Siding (shown with the optional sitting room)"
+    },
+    "floor-1": {
+      "file": "the-maestro-floor-1",
+      "width": 1600,
+      "height": 1609,
+      "label": "Basement Floor Plan"
+    },
+    "floor-2": {
+      "file": "the-maestro-floor-2",
+      "width": 1600,
+      "height": 1609,
+      "label": "First Floor Plan"
+    },
+    "floor-3": {
+      "file": "the-maestro-floor-3",
+      "width": 1600,
+      "height": 1609,
+      "label": "Second Floor Plan"
+    }
+  },
+  "the-novel": {
+    "elevation": {
+      "file": "the-novel-elevation",
+      "width": 1271,
+      "height": 854,
+      "label": "Elevation B w/ Stone and Siding"
+    },
+    "floor-1": {
+      "file": "the-novel-floor-1",
+      "width": 1600,
+      "height": 1609,
+      "label": "Basement Floor Plan"
+    },
+    "floor-2": {
+      "file": "the-novel-floor-2",
+      "width": 1600,
+      "height": 1609,
+      "label": "First Floor Plan"
+    },
+    "floor-3": {
+      "file": "the-novel-floor-3",
+      "width": 1600,
+      "height": 1609,
+      "label": "Second Floor Plan"
+    }
+  },
+  "the-pioneer-i": {
+    "elevation": {
+      "file": "the-pioneer-i-elevation",
+      "width": 1305,
+      "height": 862,
+      "label": "Elevation C w/ Stone and Siding"
+    },
+    "floor-1": {
+      "file": "the-pioneer-i-floor-1",
+      "width": 1600,
+      "height": 1609,
+      "label": "Basement Floor Plan"
+    },
+    "floor-2": {
+      "file": "the-pioneer-i-floor-2",
+      "width": 1600,
+      "height": 1609,
+      "label": "First Floor Plan"
+    },
+    "floor-3": {
+      "file": "the-pioneer-i-floor-3",
+      "width": 1600,
+      "height": 1609,
+      "label": "Second Floor Plan"
+    }
+  },
+  "the-pioneer-ii": {
+    "elevation": {
+      "file": "the-pioneer-ii-elevation",
+      "width": 1305,
+      "height": 862,
+      "label": "Elevation C w/ Stone and Siding"
+    },
+    "floor-1": {
+      "file": "the-pioneer-ii-floor-1",
+      "width": 1600,
+      "height": 1609,
+      "label": "Basement Floor Plan"
+    },
+    "floor-2": {
+      "file": "the-pioneer-ii-floor-2",
+      "width": 1600,
+      "height": 1609,
+      "label": "First Floor Plan"
+    },
+    "floor-3": {
+      "file": "the-pioneer-ii-floor-3",
+      "width": 1600,
+      "height": 1609,
+      "label": "Second Floor Plan"
+    }
+  },
+  "the-poet": {
+    "elevation": {
+      "file": "the-poet-elevation",
+      "width": 1517,
+      "height": 828,
+      "label": "Elevation C w/ Stone and Siding"
+    },
+    "floor-1": {
+      "file": "the-poet-floor-1",
+      "width": 1600,
+      "height": 1609,
+      "label": "Basement Floor Plan"
+    },
+    "floor-2": {
+      "file": "the-poet-floor-2",
+      "width": 1600,
+      "height": 1609,
+      "label": "First Floor Plan"
+    },
+    "floor-3": {
+      "file": "the-poet-floor-3",
+      "width": 1600,
+      "height": 1609,
+      "label": "Second Floor Plan"
+    }
+  },
+  "the-romantic": {
+    "elevation": {
+      "file": "the-romantic-elevation",
+      "width": 1334,
+      "height": 959,
+      "label": "Elevation A w/ Stone and Siding"
+    },
+    "floor-1": {
+      "file": "the-romantic-floor-1",
+      "width": 1600,
+      "height": 1609,
+      "label": "Basement Floor Plan"
+    },
+    "floor-2": {
+      "file": "the-romantic-floor-2",
+      "width": 1600,
+      "height": 1609,
+      "label": "First Floor Plan"
+    },
+    "floor-3": {
+      "file": "the-romantic-floor-3",
+      "width": 1600,
+      "height": 1609,
+      "label": "Second Floor Plan"
+    }
+  },
+  "the-visionary": {
+    "elevation": {
+      "file": "the-visionary-elevation",
+      "width": 1271,
+      "height": 808,
+      "label": "Elevation B w/ Stone and Siding"
+    },
+    "floor-1": {
+      "file": "the-visionary-floor-1",
+      "width": 1600,
+      "height": 1609,
+      "label": "Basement Floor Plan"
+    },
+    "floor-2": {
+      "file": "the-visionary-floor-2",
+      "width": 1600,
+      "height": 1609,
+      "label": "First Floor Plan"
+    },
+    "floor-3": {
+      "file": "the-visionary-floor-3",
+      "width": 1600,
+      "height": 1609,
+      "label": "Second Floor Plan"
+    }
+  }
+}

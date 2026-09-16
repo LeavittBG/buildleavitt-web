@@ -9,3 +9,18 @@
   #   functions = "netlify/functions"
 [build.environment]
   NODE_VERSION = "20"
+
+# The plan brochures carry invisible leftover text. Fifteen of the sixteen were
+# produced by batch-editing the branding onto copies of The Visionary, and each
+# one still contains the words "THE VISIONARY" five times in a hidden layer -
+# it does not render, but it is in the text of the file, and search engines read
+# PDF text. Keeping them out of the index stops "The Poet" being indexed as
+# though it were The Visionary. Nothing is lost by this: /plans/<model>.html is
+# the better search result anyway, since it has the drawings, the specs and a
+# way to get in touch, and those pages stay fully indexable.
+#
+# Remove this block once the brochures are re-exported without the hidden layer.
+[[headers]]
+  for = "/plans/pdf/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
