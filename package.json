@@ -6,7 +6,10 @@
   "scripts": {
     "build": "tailwindcss -i ./src/styles.css -o ./dist/styles.css --minify",
     "dev": "tailwindcss -i ./src/styles.css -o ./dist/styles.css --watch",
-    "images": "node scripts/optimize-images.mjs"
+    "images": "node scripts/optimize-images.mjs",
+    "plans": "npm run plans:images && npm run plans:build",
+    "plans:images": "node scripts/extract-plans.mjs",
+    "plans:build": "node scripts/build-plans.mjs"
   },
   "devDependencies": {
     "sharp": "^0.34.4",

@@ -135,18 +135,26 @@
     <!-- Navigation -->
     <nav id="main-nav" class="fixed w-full z-50 bg-transparent border-b border-transparent transition-all duration-300">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="flex items-center justify-between h-24">
+            <div class="flex items-center justify-between gap-6 h-24">
                 <!-- Logo Area -->
+                <!-- The wordmark is 1200x293, so every 10px of height costs 41px of width. At
+                     h-20 it is 328px wide, which is what used to shove the nav links off the
+                     right edge below 1280px. It steps up with the breakpoints instead. -->
                 <div class="flex-shrink-0 flex items-center cursor-pointer">
-                    <picture class="contents"><source srcset="Gold.webp" type="image/webp"><img src="Gold.png" alt="Leavitt Building Group Logo" width="1200" height="293" class="h-16 md:h-20 w-auto object-contain" onerror="this.src='https://placehold.co/200x80/0f172a/c2a67a?text=LBG'"></picture>
+                    <picture class="contents"><source srcset="Gold.webp" type="image/webp"><img src="Gold.png" alt="Leavitt Building Group Logo" width="1200" height="293" class="h-12 sm:h-16 lg:h-16 xl:h-20 w-auto object-contain" onerror="this.src='https://placehold.co/200x80/0f172a/c2a67a?text=LBG'"></picture>
                 </div>
 
                 <!-- Desktop Nav -->
-                <div class="hidden md:flex items-center space-x-10 lg:space-x-12">
-                    <a href="#services" class="text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors">Services</a>
-                    <a href="#about" class="text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors">About</a>
-                    <a href="#process" class="text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors">Process</a>
-                    <a href="#gallery" class="text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors">Gallery</a>
+                <!-- Shown from lg, not md: seven items plus the wordmark do not fit in the 720px
+                     of usable width at the 768px breakpoint - they used to overlap the logo and
+                     clip "Get a Quote" clean off the page. Tablets get the mobile menu, which
+                     holds the same links. -->
+                <div class="hidden lg:flex items-center space-x-5 xl:space-x-10">
+                    <a href="#services" class="text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors whitespace-nowrap">Services</a>
+                    <a href="/plans/" class="text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors whitespace-nowrap">Plans</a>
+                    <a href="#about" class="text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors whitespace-nowrap">About</a>
+                    <a href="#process" class="text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors whitespace-nowrap">Process</a>
+                    <a href="#gallery" class="text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors whitespace-nowrap">Gallery</a>
                     <a href="https://builderpro.com/login" target="_blank" rel="noopener noreferrer" class="text-[#c2a67a] hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors flex items-center gap-1.5">
                         <i data-lucide="user" class="w-4 h-4"></i> Client Login
                     </a>
@@ -156,7 +164,7 @@
                 </div>
 
                 <!-- Mobile menu button -->
-                <div class="md:hidden flex items-center">
+                <div class="lg:hidden flex items-center">
                     <!-- Explicit size keeps this a 44x44 tap target even if the icon CDN
                          fails: an un-hydrated inline <i> would otherwise collapse to 0x0. -->
                     <button id="mobile-menu-btn" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-menu" class="w-11 h-11 -mr-2 flex items-center justify-center text-white hover:text-[#c2a67a]">
@@ -167,8 +175,9 @@
         </div>
 
         <!-- Mobile Nav (Hidden by default) -->
-        <div id="mobile-menu" class="hidden md:hidden bg-[#0f172a] border-t border-white/10 px-6 py-8 space-y-6">
+        <div id="mobile-menu" class="hidden lg:hidden bg-[#0f172a] border-t border-white/10 px-6 py-8 space-y-6">
             <a href="#services" class="mobile-link block text-gray-300 hover:text-white uppercase tracking-widest font-semibold">Services</a>
+            <a href="/plans/" class="mobile-link block text-gray-300 hover:text-white uppercase tracking-widest font-semibold">Home Plans</a>
             <a href="#about" class="mobile-link block text-gray-300 hover:text-white uppercase tracking-widest font-semibold">About Us</a>
             <a href="#process" class="mobile-link block text-gray-300 hover:text-white uppercase tracking-widest font-semibold">Process</a>
             <a href="#gallery" class="mobile-link block text-gray-300 hover:text-white uppercase tracking-widest font-semibold">Gallery</a>
@@ -476,6 +485,62 @@
         </div>
     </section>
 
+    <!-- Home Plans teaser -->
+    <!-- Three featured models only; the full set lives at /plans/, which is generated from
+         src/plans.json by `npm run plans`. If a featured model is renamed or removed there,
+         update the three cards below to match - they are hand-maintained. -->
+    <section id="plans" class="py-24 md:py-32 px-6 bg-white border-t border-gray-200 overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 reveal-element">
+                <p class="text-sm font-bold uppercase tracking-[0.3em] text-[#c2a67a] mb-4">Where to begin</p>
+                <h2 class="text-3xl md:text-5xl font-light text-[#0f172a] mb-6">Home <span class="font-serif italic">plans.</span></h2>
+                <p class="text-gray-600 max-w-2xl mx-auto text-lg">
+                    A starting point, not a catalogue. Each plan has been built before and can be adapted
+                    &mdash; elevation, room sizes, optional spaces &mdash; to your lot and the way you want to live.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <a href="/plans/the-visionary.html" class="group block border border-gray-200 hover:border-[#c2a67a] transition-colors reveal-element">
+                    <div class="aspect-[4/3] w-full flex items-center justify-center p-4 bg-white">
+                        <picture class="contents"><source srcset="plans/img/the-visionary-elevation.webp" type="image/webp"><img src="plans/img/the-visionary-elevation.png" alt="The Visionary front elevation" width="1271" height="808" loading="lazy" decoding="async" class="max-h-full w-auto object-contain"></picture>
+                    </div>
+                    <div class="border-t border-gray-200 p-6">
+                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">The Visionary</h3>
+                        <span class="inline-block mt-3 text-[11px] font-bold uppercase tracking-[0.2em] text-[#c2a67a]">View plan &rarr;</span>
+                    </div>
+                </a>
+
+                <a href="/plans/the-craftsman.html" class="group block border border-gray-200 hover:border-[#c2a67a] transition-colors reveal-element" style="transition-delay: 100ms;">
+                    <div class="aspect-[4/3] w-full flex items-center justify-center p-4 bg-white">
+                        <picture class="contents"><source srcset="plans/img/the-craftsman-elevation.webp" type="image/webp"><img src="plans/img/the-craftsman-elevation.png" alt="The Craftsman front elevation" width="1383" height="922" loading="lazy" decoding="async" class="max-h-full w-auto object-contain"></picture>
+                    </div>
+                    <div class="border-t border-gray-200 p-6">
+                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">The Craftsman</h3>
+                        <span class="inline-block mt-3 text-[11px] font-bold uppercase tracking-[0.2em] text-[#c2a67a]">View plan &rarr;</span>
+                    </div>
+                </a>
+
+                <a href="/plans/the-entrepreneur.html" class="group block border border-gray-200 hover:border-[#c2a67a] transition-colors reveal-element" style="transition-delay: 200ms;">
+                    <div class="aspect-[4/3] w-full flex items-center justify-center p-4 bg-white">
+                        <picture class="contents"><source srcset="plans/img/the-entrepreneur-elevation.webp" type="image/webp"><img src="plans/img/the-entrepreneur-elevation.png" alt="The Entrepreneur front elevation" width="1445" height="770" loading="lazy" decoding="async" class="max-h-full w-auto object-contain"></picture>
+                    </div>
+                    <div class="border-t border-gray-200 p-6">
+                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">The Entrepreneur</h3>
+                        <span class="inline-block mt-3 text-[11px] font-bold uppercase tracking-[0.2em] text-[#c2a67a]">View plan &rarr;</span>
+                    </div>
+                </a>
+            </div>
+
+            <div class="text-center mt-12 reveal-element">
+                <a href="/plans/" class="inline-flex items-center gap-2 bg-[#0f172a] text-white px-8 py-4 uppercase tracking-[0.2em] font-bold text-xs hover:bg-[#c2a67a] hover:text-[#0f172a] transition-colors magnetic">
+                    Browse all home plans
+                    <i data-lucide="arrow-right" class="w-4 h-4 pointer-events-none"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
     <!-- Testimonials Section -->
     <section id="testimonials" class="py-24 md:py-32 px-6 bg-[#0f172a] border-t border-[#1e293b] relative overflow-hidden">
         <!-- Background watermark with Parallax ID -->
@@ -599,6 +664,19 @@
                         <p class="hidden" aria-hidden="true">
                             <label>Don't fill this out if you're human: <input type="text" name="bot-field" tabindex="-1" autocomplete="off"></label>
                         </p>
+
+                        <!-- Set from ?plan=... when someone arrives from a page under /plans/. Netlify
+                             only records fields present in the deployed HTML, so this stays here empty
+                             rather than being injected by the script. -->
+                        <input type="hidden" id="contact-plan" name="Plan" value="">
+                        <div id="contact-plan-note" class="hidden items-center justify-between gap-4 bg-[#f8f9fa] border-l-2 border-[#c2a67a] px-5 py-4">
+                            <p class="text-sm text-gray-600">
+                                Starting from <strong id="contact-plan-name" class="text-[#0f172a] font-medium"></strong>
+                            </p>
+                            <button type="button" id="contact-plan-clear" class="text-xs uppercase tracking-widest font-bold text-gray-500 hover:text-[#c2a67a] transition-colors cursor-pointer shrink-0">
+                                Clear
+                            </button>
+                        </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div class="space-y-2">
@@ -1054,6 +1132,36 @@
         });
 
         document.getElementById('year').textContent = new Date().getFullYear();
+
+        // --- Plan hand-off: /plans/<model>.html links here as /?plan=The%20Visionary#contact ---
+        // The value is whatever is in the URL, so it is treated as untrusted: it is written with
+        // textContent (never innerHTML), restricted to the characters a model name can contain,
+        // and capped in length. A param that does not look like a model name is ignored.
+        (() => {
+            const field = document.getElementById('contact-plan');
+            const note = document.getElementById('contact-plan-note');
+            const name = document.getElementById('contact-plan-name');
+            const clear = document.getElementById('contact-plan-clear');
+            if (!field || !note || !name || !clear) return;
+
+            let plan = '';
+            try {
+                plan = (new URLSearchParams(window.location.search).get('plan') || '').trim();
+            } catch (e) { /* malformed query string - no plan */ }
+
+            if (!plan || plan.length > 60 || !/^[A-Za-z0-9 '&-]+$/.test(plan)) return;
+
+            field.value = plan;
+            name.textContent = plan;
+            note.classList.remove('hidden');
+            note.classList.add('flex');
+
+            clear.addEventListener('click', () => {
+                field.value = '';
+                note.classList.add('hidden');
+                note.classList.remove('flex');
+            });
+        })();
 
         // --- Shared Modal Behaviour (Escape to close, scroll lock, focus handling) ---
         let openModal = null;

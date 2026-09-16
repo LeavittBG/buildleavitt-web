@@ -1,0 +1,89 @@
+{
+  "_README": [
+    "Hand-authored model data. scripts/extract-plans.mjs turns the PDFs in",
+    "assets-src/plans/ into images using the `pages` list below, and",
+    "scripts/build-plans.mjs generates plans/index.html and plans/<slug>.html.",
+    "",
+    "Page labels are recorded here rather than read out of the PDF on purpose.",
+    "These brochures carry hidden/leftover content layers: pdftoppm renders only",
+    "the visible one, but pdftotext returns all of them, so extracted text names",
+    "the wrong sheet (the-daydreamer page 3 reads 'THE VISIONARY' and 'Basement",
+    "Floor Plan' when the sheet actually says 'First Floor Plan'). Every label",
+    "below was read off the rendered page.",
+    "",
+    "`id` also names the output file: plans/img/<slug>-<id>.{webp,png}. An id",
+    "starting with 'elevation' is cropped with the elevation band, anything else",
+    "with the floor-plan band (see extract-plans.mjs). An optional `band`",
+    "[top, bottom] as a fraction of page height overrides that for one page -",
+    "the-visionary's title banner sits lower than the rest, and the default band",
+    "left the gold rule under it in the image.",
+    "",
+    "Specs are null until Leavitt supplies them. NOTHING here may be guessed:",
+    "the brochures carry no square footage, bedroom or bath counts. `stories` is",
+    "filled in only because it is directly observable from the sheets in the set.",
+    "The templates render an honest 'Available on request' for every null."
+  ],
+
+  "models": [
+    {
+      "slug": "the-visionary",
+      "name": "The Visionary",
+      "summary": null,
+      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "pages": [
+        { "page": 1, "id": "elevation", "label": "Elevation B w/ Stone and Siding", "band": [0.18, 0.71] },
+        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
+        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
+        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
+      ]
+    },
+    {
+      "slug": "the-craftsman",
+      "name": "The Craftsman",
+      "summary": null,
+      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "pages": [
+        { "page": 1, "id": "elevation", "label": "Elevation D w/ Stone and Siding" },
+        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
+        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
+        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
+      ]
+    },
+    {
+      "slug": "the-draftsman",
+      "name": "The Draftsman",
+      "summary": null,
+      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "pages": [
+        { "page": 1, "id": "elevation", "label": "Elevation B w/ Stone and Siding" },
+        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
+        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
+        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
+      ]
+    },
+    {
+      "slug": "the-daydreamer",
+      "name": "The Daydreamer",
+      "summary": null,
+      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 2, "garage": null },
+      "pages": [
+        { "page": 1, "id": "elevation", "label": "Elevation C w/ Stone and Siding" },
+        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
+        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
+        { "page": 4, "id": "floor-3", "label": "Second Floor Plan" }
+      ]
+    },
+    {
+      "slug": "the-entrepreneur",
+      "name": "The Entrepreneur",
+      "summary": null,
+      "specs": { "beds": null, "baths": null, "sqft": null, "stories": 1, "garage": null },
+      "pages": [
+        { "page": 1, "id": "elevation", "label": "Elevation B w/ Stone and Siding" },
+        { "page": 2, "id": "floor-1", "label": "Basement Floor Plan" },
+        { "page": 3, "id": "floor-2", "label": "First Floor Plan" },
+        { "page": 4, "id": "elevation-2", "label": "Additional Elevations" }
+      ]
+    }
+  ]
+}
