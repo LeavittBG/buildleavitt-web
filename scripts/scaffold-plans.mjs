@@ -72,7 +72,7 @@ for (const file of readdirSync(SRC).filter((f) => f.toLowerCase().endsWith('.pdf
     pages.push({ page, id, label: label ?? `TODO read the caption off page ${page}` });
   }
 
-  // A plan set with no second-floor sheet is a single-storey house. That is
+  // A plan set with no second-floor sheet is a single-story house. That is
   // read off the set itself; nothing else about the house is guessed.
   const stories = pages.some((p) => p.id === 'floor-3') ? 2 : 1;
 

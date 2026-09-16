@@ -36,11 +36,83 @@ const images = JSON.parse(readFileSync(join(ROOT, 'src', 'plan-images.json'), 'u
 const esc = (s) => String(s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-/** A spec we do not have is shown as "On request" - never guessed. */
+/**
+ * "The Leavitt Standard" - what every home includes, from Leavitt's own sheet.
+ *
+ * Built as real HTML rather than linking the PDF: this is the answer to "what
+ * do I actually get for the money", which is the question a buyer comparing
+ * builders is asking, and a PDF is invisible to search, awkward on a phone and
+ * a dead end once opened. The PDF is still offered underneath for printing.
+ *
+ * Wording is Leavitt's, trimmed only of the decorative capitals. Brand names
+ * carry their trademark symbols exactly as the sheet does.
+ */
+const STANDARD = [
+  ['Premium interior', [
+    ['9&rsquo; ceilings', 'basement and first floor'],
+    ['Custom hardwood or luxury vinyl plank flooring', 'entire first floor'],
+    ['Level 5 drywall finish', 'throughout'],
+    ['Gourmet kitchen', 'quartz countertops, tile backsplash, premium GE &ldquo;Caf&eacute;&rdquo; series appliance allowance'],
+    ['Owner&rsquo;s retreat', 'quartz countertops, custom tiled shower walls, tiled to the ceiling'],
+    ['Full cased windows and openings', 'throughout'],
+    ['Stain grade stairs and handrail', 'first to second floor'],
+    ['Insulated bedroom, bathroom and laundry walls', 'for sound dampening'],
+  ]],
+  ['Exterior &amp; infrastructure', [
+    ['High-performance Andersen&reg; windows', null],
+    ['Zip System&reg; wall sheathing', 'for moisture protection'],
+    ['Upgraded siding &amp; 40-year architectural shingles', null],
+    ['Stone to grade', 'front and side elevations'],
+    ['Finished &amp; painted garage', 'insulated walls and service door'],
+    ['Customer-owned propane tank', 'topped off at move-in'],
+    ['75&rsquo; &times; 10&rsquo; asphalt drive', 'includes 30&rsquo; &times; 30&rsquo; parking pad and 10&rsquo; &times; 10&rsquo; turnaround'],
+    ['Structural integrity', 'TGI floor joists and Advantech&reg; subflooring, glued and screwed'],
+  ]],
+];
+
+const standardSection = () => `
+        <section id="included" class="mt-20 scroll-mt-24">
+            <div class="border-t border-gray-200 pt-16">
+                <p class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#c2a67a] mb-4">Included, not upgraded</p>
+                <h2 class="text-3xl md:text-5xl font-light text-[#0f172a] mb-6">
+                    The Leavitt <span class="font-serif italic">Standard.</span>
+                </h2>
+                <p class="text-gray-600 text-lg max-w-2xl mb-14">
+                    Much of what other builders sell as an upgrade is simply how we build. Every home
+                    on this page includes all of the following as standard.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12">
+${STANDARD.map(([heading, items]) => `                    <div>
+                        <h3 class="text-[11px] font-bold uppercase tracking-[0.2em] text-[#c2a67a] mb-6">${heading}</h3>
+                        <ul class="space-y-4">
+${items.map(([title, detail]) => `                            <li class="flex gap-3">
+                                <span aria-hidden="true" class="text-[#c2a67a] shrink-0 mt-1">&#10003;</span>
+                                <span class="text-gray-700 leading-relaxed"><strong class="text-[#0f172a] font-medium">${title}</strong>${detail ? ` &mdash; ${detail}` : ''}</span>
+                            </li>`).join('\n')}
+                        </ul>
+                    </div>`).join('\n')}
+                </div>
+
+                <p class="mt-12 text-sm text-gray-500">
+                    <a href="/plans/pdf/leavitt-standard.pdf" target="_blank" rel="noopener" class="text-[#c2a67a] font-medium hover:underline">Download the Leavitt Standard (PDF)</a>
+                    &mdash; handy for comparing against another builder&rsquo;s quote.
+                </p>
+            </div>
+        </section>`;
+
+/**
+ * A spec we do not have is shown as "On request" - never guessed.
+ *
+ * Each formatter takes the value and the whole specs object, because square
+ * footage needs `sqftFrom`: Leavitt's figures say "starting at" for fourteen of
+ * the sixteen models and give an exact number for the other two, and the page
+ * has to keep that distinction rather than flatten it into one claim.
+ */
 const SPECS = [
-  ['beds', 'Bedrooms', (v) => v],
+  ['beds', 'Bedrooms', (v) => String(v).replace('-', '–')],
   ['baths', 'Bathrooms', (v) => v],
-  ['sqft', 'Finished Sq Ft', (v) => v.toLocaleString('en-US')],
+  ['sqft', 'Living Sq Ft', (v, s) => (s.sqftFrom ? 'From ' : '') + v.toLocaleString('en-US')],
   ['stories', 'Stories', (v) => (v === 1 ? '1 (ranch)' : v)],
   ['garage', 'Garage', (v) => v],
 ];
@@ -135,13 +207,25 @@ const sheets = (model) => model.pages.map((p) => ({ ...p, img: images[model.slug
 
 const floorsOf = (model) => sheets(model).filter((s) => !s.id.startsWith('elevation'));
 
-/** Neutral one-liner built only from what the data actually says. */
+/**
+ * One factual sentence assembled from the data - no adjectives we cannot stand
+ * behind. Doubles as the page's meta description, so it has to read like prose
+ * rather than a spec dump.
+ */
 const blurb = (model) => {
-  const floors = floorsOf(model).map((f) => f.label.replace(/ Floor Plan$/i, '').toLowerCase());
-  const levels = floors.length
-    ? `Floor plans included: ${floors.join(', ')}.`
+  if (model.summary) return model.summary;
+  const s = model.specs || {};
+  const beds = s.beds ? `${String(s.beds).replace('-', '–')} bedrooms` : '';
+  const shape = s.stories === 1 ? 'single-story' : 'two-story';
+  const style = model.style ? `${model.style} ` : '';
+  const sqft = s.sqft
+    ? `${s.sqftFrom ? 'from ' : ''}${s.sqft.toLocaleString('en-US')} living square feet`
     : '';
-  return model.summary || levels;
+  const garage = s.garage ? `a ${s.garage} garage` : '';
+
+  const head = [`A ${shape} ${style}plan`, beds && `with ${beds}`].filter(Boolean).join(' ');
+  const tail = [sqft, garage].filter(Boolean).join(' and ');
+  return tail ? `${head}, ${tail}.` : `${head}.`;
 };
 
 // ---------------------------------------------------------------- model pages
@@ -162,7 +246,7 @@ for (const [i, model] of models.entries()) {
     const known = v !== null && v !== undefined && v !== '';
     return `                    <div class="border-t border-gray-200 py-4">
                         <dt class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-1">${esc(label)}</dt>
-                        <dd class="text-lg ${known ? 'text-[#0f172a] font-medium' : 'text-gray-400'}">${known ? esc(fmt(v)) : 'On request'}</dd>
+                        <dd class="text-lg ${known ? 'text-[#0f172a] font-medium' : 'text-gray-400'}">${known ? esc(fmt(v, model.specs)) : 'On request'}</dd>
                     </div>`;
   }).join('\n');
 
@@ -252,6 +336,11 @@ ${specRows}
                 </a>
                 <p class="text-xs text-gray-500 mt-4">Opens the full brochure for ${esc(model.name)} in a new tab.</p>
                 <p class="text-sm text-gray-600 mt-6 pt-6 border-t border-gray-200">
+                    Every Leavitt home includes
+                    <a href="/plans/#included" class="text-[#c2a67a] font-medium hover:underline">the Leavitt Standard</a>
+                    &mdash; quartz, Andersen&reg; windows, 9&rsquo; ceilings and more, at no upgrade cost.
+                </p>
+                <p class="text-sm text-gray-600 mt-4">
                     Prefer to talk it through?
                     <a href="tel:+18668326524" class="text-[#c2a67a] font-medium hover:underline">(866) 832-6524</a>
                 </p>
@@ -337,6 +426,8 @@ const indexHtml = head({
 ${cards}
         </div>
 
+${standardSection()}
+
         <section class="mt-20 bg-[#0f172a] text-white p-10 md:p-14">
             <h2 class="text-3xl md:text-4xl font-light mb-4">
                 Don&rsquo;t see the one? <span class="font-serif italic text-gray-300">We draw from scratch too.</span>
@@ -361,6 +452,38 @@ ${cards}
 mkdirSync(OUT, { recursive: true });
 writeFileSync(join(OUT, 'index.html'), indexHtml);
 console.log(`plans/index.html  (${models.length} models)`);
+
+// ------------------------------------------------- homepage teaser dimensions
+// index.html is hand-maintained, but the three teaser cards point at generated
+// images whose size changes whenever a crop does. Typing those numbers by hand
+// went stale the first time a crop moved, so they are synced from the manifest
+// instead. Only width/height on plans/img/* are touched; nothing else in the
+// file is rewritten, and re-running with no change is a no-op.
+{
+  const indexPath = join(ROOT, 'index.html');
+  const before = readFileSync(indexPath, 'utf8');
+  const byFile = Object.fromEntries(
+    Object.values(images).flatMap((m) => Object.values(m).map((i) => [i.file, i])));
+
+  let patched = 0;
+  const after = before.replace(
+    /(<img\s[^>]*?src="plans\/img\/([^".]+)\.png"[^>]*?)width="(\d+)" height="(\d+)"/g,
+    (whole, lead, file, w, h) => {
+      const real = byFile[file];
+      if (!real) {
+        console.error(`  ! index.html references plans/img/${file}.png, which is not generated`);
+        return whole;
+      }
+      if (+w === real.width && +h === real.height) return whole;
+      patched++;
+      return `${lead}width="${real.width}" height="${real.height}"`;
+    });
+
+  if (after !== before) writeFileSync(indexPath, after);
+  console.log(patched
+    ? `index.html  (${patched} teaser image size${patched === 1 ? '' : 's'} synced)`
+    : 'index.html  (teaser image sizes already correct)');
+}
 
 // -------------------------------------------------------------- sitemap
 // Generated here because this script already knows every plan URL. The static

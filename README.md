@@ -68,14 +68,32 @@ by hand, reading each page off the render.
 
 ### Specs
 
-`beds`, `baths`, `sqft` and `garage` are `null` for every model because the
-brochures do not state them. The pages render "On request" wherever a value is
-missing. Fill them in only from real numbers — a wrong square footage on a
-builder's website is a problem, and a blank is not.
+Specs live in `src/plans.json` and come from Leavitt's own figures. `baths` is
+`null` for every model because no bath counts have been supplied, and the pages
+render "On request" wherever a value is missing. Fill anything in only from real
+numbers — a wrong square footage on a builder's website is a problem, and a
+blank is not. A test fails the build if a page ever shows a square footage that
+is not the one in the data.
 
-The three cards in the "Home plans" section of `index.html` are hand-written
-and point at three specific models. If you rename or remove one of those, update
-that section too.
+`sqft` is living square footage. `sqftFrom: true` means Leavitt's sheet said
+"starting at", and the page renders "From 2,626" rather than a flat figure;
+two models are exact and have it `false`. Keep that distinction — it is the
+difference between a starting price and a promise.
+
+### The Leavitt Standard
+
+The "what's included in every home" list at `/plans/#included` is built from the
+`STANDARD` array in `scripts/build-plans.mjs`, not from a PDF, so it is
+searchable and readable on a phone. The printable sheet lives at
+`assets-src/leavitt-standard.pdf` and is copied to `plans/pdf/` by
+`npm run plans:images`; the section links to it. Edit the array and the PDF
+together so they do not drift.
+
+The three cards in the "Home plans" section of `index.html` are hand-written and
+point at three specific models. If you rename or remove one of those, update that
+section too. Their `width`/`height` attributes are not hand-maintained —
+`npm run plans:build` rewrites them from the generated images, so a changed crop
+cannot leave them stale.
 
 ## Forms
 
