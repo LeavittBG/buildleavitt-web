@@ -66,11 +66,28 @@ currently alphabetical by the name after "The".
 If a PDF has no outline, the scaffold says so and that model has to be filled in
 by hand, reading each page off the render.
 
+### A model with no brochure
+
+A model can supply its pages as image files instead of a PDF: put `image` on each
+page in `src/plans.json`, relative to `assets-src/`. The Storyteller works this
+way — it is a house that has actually been built, so its "elevation" is the
+photograph from the home page and its floor plans came as separate images.
+
+Such a page usually also wants `crop: false`, which takes the image whole.
+The automatic crop keeps the largest block of ink and drops everything else,
+which is right for a brochure sheet and wrong for a photograph — and it would
+strip the third-party disclaimer printed along the bottom of The Storyteller's
+floor plans, which has to stay with the drawing it belongs to.
+
+The download button changes to "See it built", linking to the photographs,
+since there is no brochure to offer.
+
 ### Specs
 
 Specs live in `src/plans.json` and come from Leavitt's own figures. `baths` is
-`null` for every model because no bath counts have been supplied, and the pages
-render "On request" wherever a value is missing. Fill anything in only from real
+`null` for every model except The Storyteller, because no bath counts have been
+supplied for the other sixteen, and the pages render "On request" wherever a
+value is missing. Fill anything in only from real
 numbers — a wrong square footage on a builder's website is a problem, and a
 blank is not. A test fails the build if a page ever shows a square footage that
 is not the one in the data.
@@ -78,7 +95,9 @@ is not the one in the data.
 `sqft` is living square footage. `sqftFrom: true` means Leavitt's sheet said
 "starting at", and the page renders "From 2,626" rather than a flat figure;
 two models are exact and have it `false`. Keep that distinction — it is the
-difference between a starting price and a promise.
+difference between a starting price and a promise. An optional `sqftNote` prints
+a qualifier under the figure; The Storyteller uses it for the seventy square feet
+the three-car garage option adds.
 
 ### The Leavitt Standard
 

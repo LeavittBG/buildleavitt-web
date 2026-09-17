@@ -198,7 +198,7 @@ const foot = () => `
 const picture = (img, { alt, cls, lazy = true }) => {
   const a = lazy ? ' loading="lazy" decoding="async"' : ' decoding="async"';
   return `<picture class="contents"><source srcset="/plans/img/${img.file}.webp" type="image/webp">` +
-    `<img src="/plans/img/${img.file}.png" alt="${esc(alt)}" width="${img.width}" height="${img.height}"${a} class="${cls}"></picture>`;
+    `<img src="/plans/img/${img.file}.${img.ext || 'png'}" alt="${esc(alt)}" width="${img.width}" height="${img.height}"${a} class="${cls}"></picture>`;
 };
 
 /** Every sheet this model has, in the order they are shown. */
@@ -236,6 +236,9 @@ for (const [i, model] of models.entries()) {
   const rest = all.filter((s) => s !== elevation);
   const prev = models[(i - 1 + models.length) % models.length];
   const next = models[(i + 1) % models.length];
+  // A model built from images has no brochure to download - The Storyteller
+  // offers its photographs instead.
+  const hasBrochure = !model.pages.every((p) => p.image);
 
   const description =
     `${model.name} floor plans and front elevation from Leavitt Building Group, ` +
@@ -246,7 +249,8 @@ for (const [i, model] of models.entries()) {
     const known = v !== null && v !== undefined && v !== '';
     return `                    <div class="border-t border-gray-200 py-4">
                         <dt class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-1">${esc(label)}</dt>
-                        <dd class="text-lg ${known ? 'text-[#0f172a] font-medium' : 'text-gray-400'}">${known ? esc(fmt(v, model.specs)) : 'On request'}</dd>
+                        <dd class="text-lg ${known ? 'text-[#0f172a] font-medium' : 'text-gray-400'}">${known ? esc(fmt(v, model.specs)) : 'On request'}</dd>${key === 'sqft' && model.specs?.sqftNote ? `
+                        <dd class="text-xs text-gray-500 mt-1">${esc(model.specs.sqftNote)}</dd>` : ''}
                     </div>`;
   }).join('\n');
 
@@ -262,7 +266,7 @@ for (const [i, model] of models.entries()) {
                     <!-- At phone width the drawing is ~360px wide and the room labels are
                          unreadable. Opening the image itself is the zero-JavaScript way to
                          let someone pinch and zoom it. -->
-                    <a href="/plans/img/${s.img.file}.png" target="_blank" rel="noopener"
+                    <a href="/plans/img/${s.img.file}.${s.img.ext || 'png'}" target="_blank" rel="noopener"
                        class="text-[#c2a67a] font-medium hover:underline whitespace-nowrap">
                         Open full size<span class="sr-only"> image of the ${esc(model.name)} ${esc(s.label.toLowerCase())}</span>
                     </a>
@@ -330,11 +334,15 @@ ${specRows}
                    class="block w-full text-center bg-[#0f172a] text-white px-6 py-4 uppercase tracking-[0.2em] font-bold text-xs hover:bg-[#c2a67a] hover:text-[#0f172a] transition-colors mb-4">
                     Start with this plan
                 </a>
-                <a href="/plans/pdf/${model.slug}.pdf" target="_blank" rel="noopener"
+                ${hasBrochure ? `<a href="/plans/pdf/${model.slug}.pdf" target="_blank" rel="noopener"
                    class="block w-full text-center border border-gray-300 px-6 py-4 uppercase tracking-[0.2em] font-bold text-xs text-[#0f172a] hover:border-[#c2a67a] hover:text-[#c2a67a] transition-colors">
                     Download the PDF
                 </a>
-                <p class="text-xs text-gray-500 mt-4">Opens the full brochure for ${esc(model.name)} in a new tab.</p>
+                <p class="text-xs text-gray-500 mt-4">Opens the full brochure for ${esc(model.name)} in a new tab.</p>` : `<a href="/#gallery"
+                   class="block w-full text-center border border-gray-300 px-6 py-4 uppercase tracking-[0.2em] font-bold text-xs text-[#0f172a] hover:border-[#c2a67a] hover:text-[#c2a67a] transition-colors">
+                    See it built
+                </a>
+                <p class="text-xs text-gray-500 mt-4">Photographs of this home, inside and out.</p>`}
                 <p class="text-sm text-gray-600 mt-6 pt-6 border-t border-gray-200">
                     Every Leavitt home includes
                     <a href="/plans/#included" class="text-[#c2a67a] font-medium hover:underline">the Leavitt Standard</a>
@@ -386,7 +394,8 @@ const cards = models.map((model) => {
                     </div>
                     <div class="border-t border-gray-200 p-6">
                         <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">${esc(model.name)}</h3>
-                        <p class="text-sm text-gray-500 mt-2">${floors} floor plan${floors === 1 ? '' : 's'}${model.specs?.stories === 1 ? ' &middot; Ranch' : ''}</p>
+                        <p class="text-sm text-gray-500 mt-2">${floors} floor plan${floors === 1 ? '' : 's'}${model.specs?.stories === 1 ? ' &middot; Ranch' : ''}</p>${model.built ? `
+                        <p class="mt-2 inline-block bg-[#0f172a] text-white text-[10px] font-bold uppercase tracking-[0.2em] px-3 py-1">Built &mdash; photographed</p>` : ''}
                         <span class="inline-block mt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#c2a67a]">View plan &rarr;</span>
                     </div>
                 </a>`;

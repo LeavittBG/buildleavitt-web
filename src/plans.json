@@ -574,6 +574,52 @@
       "style": "Modern Farmhouse"
     },
     {
+      "slug": "the-storyteller",
+      "name": "The Storyteller",
+      "summary": "A two-story Modern Farmhouse with 4 bedrooms, a first-floor in-law suite and a two-car garage, at 3,770 living square feet. This one is built — the photographs on the home page are this house.",
+      "specs": {
+        "beds": "4",
+        "baths": "4.5",
+        "sqft": 3770,
+        "sqftFrom": false,
+        "sqftNote": "3,840 with the three-car garage option",
+        "stories": 2,
+        "garage": "2 or 3 car"
+      },
+      "style": "Modern Farmhouse",
+      "built": true,
+      "pages": [
+        {
+          "page": 1,
+          "id": "elevation",
+          "label": "The Storyteller as built",
+          "image": "storyteller-exterior.jpg",
+          "crop": false
+        },
+        {
+          "page": 2,
+          "id": "floor-1",
+          "label": "Basement Floor Plan",
+          "image": "plans/the-storyteller-basement.jpg",
+          "crop": false
+        },
+        {
+          "page": 3,
+          "id": "floor-2",
+          "label": "First Floor Plan",
+          "image": "plans/the-storyteller-first.jpg",
+          "crop": false
+        },
+        {
+          "page": 4,
+          "id": "floor-3",
+          "label": "Second Floor Plan",
+          "image": "plans/the-storyteller-second.jpg",
+          "crop": false
+        }
+      ]
+    },
+    {
       "slug": "the-visionary",
       "name": "The Visionary",
       "summary": null,
