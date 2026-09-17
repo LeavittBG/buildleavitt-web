@@ -84,10 +84,8 @@ since there is no brochure to offer.
 
 ### Specs
 
-Specs live in `src/plans.json` and come from Leavitt's own figures. `baths` is
-`null` for every model except The Storyteller, because no bath counts have been
-supplied for the other sixteen, and the pages render "On request" wherever a
-value is missing. Fill anything in only from real
+Specs live in `src/plans.json` and come from Leavitt's own figures. The pages
+render "On request" wherever a value is missing. Fill anything in only from real
 numbers — a wrong square footage on a builder's website is a problem, and a
 blank is not. A test fails the build if a page ever shows a square footage that
 is not the one in the data.
@@ -95,9 +93,18 @@ is not the one in the data.
 `sqft` is living square footage. `sqftFrom: true` means Leavitt's sheet said
 "starting at", and the page renders "From 2,626" rather than a flat figure;
 two models are exact and have it `false`. Keep that distinction — it is the
-difference between a starting price and a promise. An optional `sqftNote` prints
-a qualifier under the figure; The Storyteller uses it for the seventy square feet
-the three-car garage option adds.
+difference between a starting price and a promise.
+
+`price` works the same way, with `priceFrom`. Leavitt's note on the price sheet —
+*"starting at means without additional options"* — is not decoration:
+`build-plans.mjs` prints it beside every price on the site, and it has to keep
+travelling with them. `pricesAsOf` dates the list and is printed with it. A test
+fails if any dollar figure on a page is not the one in the data, or if the
+qualifier goes missing.
+
+`sqftNote`, `bathsNote` and `priceNote` print a qualifying line under a figure,
+for cases one number cannot carry honestly — The Storyteller gains 70 sq ft with
+the three-car garage, and has an optional basement full bath on top of its 4.5.
 
 ### The Leavitt Standard
 

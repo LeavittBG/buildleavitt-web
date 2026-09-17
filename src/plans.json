@@ -1,6 +1,6 @@
 {
   "_README": [
-    "Hand-authored model data. scripts/extract-plans.mjs turns the PDFs in",
+    "Hand-authored model data. scripts/extract-plans.mjs turns the sources in",
     "assets-src/plans/ into images using the `pages` list below, and",
     "scripts/build-plans.mjs generates plans/index.html and plans/<slug>.html.",
     "",
@@ -13,10 +13,14 @@
     "read off the rendered pages. So were all sixteen elevation captions, which are",
     "not in the outline either.",
     "",
-    "`id` also names the output file: plans/img/<slug>-<id>.{webp,png}. The crop is",
-    "measured per page - extract-plans.mjs keeps the tallest block of ink, which is",
-    "always the drawing - so no band needs tuning. An optional `band` [top, bottom]",
-    "as a fraction of page height overrides that for one page if it is ever needed.",
+    "`id` also names the output file: plans/img/<slug>-<id>.{webp,png,jpg}. The crop",
+    "is measured per page - extract-plans.mjs keeps the tallest block of ink, which",
+    "is always the drawing - so no band needs tuning. `band` [top, bottom] overrides",
+    "that for one page; `crop: false` takes the page whole.",
+    "",
+    "A page can name an `image` under assets-src/ instead of coming from a brochure",
+    "PDF. the-storyteller works that way: it is a house that has been built, so its",
+    "'elevation' is the photograph from the home page.",
     "",
     "An elevation's `label` is the caption printed under the rendering. That caption",
     "is deliberately cropped OUT of the image (Leavitt asked for it off the site),",
@@ -25,12 +29,25 @@
     "Models are listed in the order they appear at /plans/: alphabetical by the",
     "name after 'The'.",
     "",
-    "Specs come from Leavitt's own figures and NOTHING here may be guessed.",
-    "`sqft` is living square footage; `sqftFrom` true means their sheet said",
-    "'starting at', which the page renders as 'From 2,626'. `baths` is null because",
-    "no bath counts were supplied, and the pages render an honest 'On request' for",
-    "it. `stories` is observable from the plan set - no second-floor sheet means a",
-    "single-story house."
+    "SPECS COME FROM LEAVITT'S OWN FIGURES AND NOTHING HERE MAY BE GUESSED.",
+    "",
+    "`sqft` is living square footage. `sqftFrom` true means their sheet said",
+    "'starting at', rendered as 'From 2,626'; false means the figure is exact.",
+    "`price` is the starting price and `priceFrom` marks it the same way. Leavitt's",
+    "note on that sheet - 'starting at means without additional options' - is not",
+    "decoration: build-plans.mjs prints it alongside every price on the site, and it",
+    "must keep travelling with them.",
+    "",
+    "`sqftNote`, `bathsNote` and `priceNote` print a qualifying line under a figure,",
+    "for the cases one number cannot carry honestly: the-storyteller gains 70 sq ft",
+    "with the three-car garage, and its bath count has an optional basement full",
+    "bath on top.",
+    "",
+    "`stories` is observable from the plan set - no second-floor sheet means a",
+    "single-story house. A missing value renders 'On request'; it is never filled",
+    "in with a guess.",
+    "",
+    "`pricesAsOf` dates the whole price list, and is printed with the prices."
   ],
   "models": [
     {
@@ -39,11 +56,13 @@
       "summary": null,
       "specs": {
         "beds": "4",
-        "baths": null,
+        "baths": "3-4",
         "sqft": 2626,
         "sqftFrom": true,
         "stories": 2,
-        "garage": "2 car"
+        "garage": "2 car",
+        "price": 773777,
+        "priceFrom": true
       },
       "pages": [
         {
@@ -75,11 +94,13 @@
       "summary": null,
       "specs": {
         "beds": "4-5",
-        "baths": null,
+        "baths": "3-6",
         "sqft": 2884,
         "sqftFrom": true,
         "stories": 2,
-        "garage": "2 or 3 car"
+        "garage": "2 or 3 car",
+        "price": 840777,
+        "priceFrom": true
       },
       "pages": [
         {
@@ -111,11 +132,13 @@
       "summary": null,
       "specs": {
         "beds": "4-5",
-        "baths": null,
+        "baths": "3-6",
         "sqft": 3204,
         "sqftFrom": true,
         "stories": 2,
-        "garage": "2 or 3 car"
+        "garage": "2 or 3 car",
+        "price": 944777,
+        "priceFrom": true
       },
       "pages": [
         {
@@ -147,11 +170,13 @@
       "summary": null,
       "specs": {
         "beds": "3",
-        "baths": null,
+        "baths": "3-4",
         "sqft": 2795,
         "sqftFrom": false,
         "stories": 1,
-        "garage": "2 or 3 car"
+        "garage": "2 or 3 car",
+        "price": 994777,
+        "priceFrom": true
       },
       "pages": [
         {
@@ -183,11 +208,13 @@
       "summary": null,
       "specs": {
         "beds": "3-7",
-        "baths": null,
+        "baths": "3-7",
         "sqft": 4422,
         "sqftFrom": true,
         "stories": 2,
-        "garage": "3 car"
+        "garage": "3 car",
+        "price": 1303777,
+        "priceFrom": true
       },
       "pages": [
         {
@@ -219,11 +246,13 @@
       "summary": null,
       "specs": {
         "beds": "3-7",
-        "baths": null,
+        "baths": "4-7",
         "sqft": 4288,
         "sqftFrom": true,
         "stories": 2,
-        "garage": "3 car"
+        "garage": "3 car",
+        "price": 1568777,
+        "priceFrom": true
       },
       "pages": [
         {
@@ -255,11 +284,13 @@
       "summary": null,
       "specs": {
         "beds": "4-5",
-        "baths": null,
+        "baths": "3-5",
         "sqft": 3791,
         "sqftFrom": true,
         "stories": 2,
-        "garage": "2 car"
+        "garage": "2 car",
+        "price": 1117777,
+        "priceFrom": true
       },
       "pages": [
         {
@@ -291,11 +322,13 @@
       "summary": null,
       "specs": {
         "beds": "4",
-        "baths": null,
+        "baths": "3-4",
         "sqft": 3540,
         "sqftFrom": true,
         "stories": 2,
-        "garage": "2 car"
+        "garage": "2 car",
+        "price": 1259777,
+        "priceFrom": true
       },
       "pages": [
         {
@@ -327,11 +360,13 @@
       "summary": null,
       "specs": {
         "beds": "4",
-        "baths": null,
+        "baths": "3-4",
         "sqft": 2330,
         "sqftFrom": false,
         "stories": 2,
-        "garage": "2 car"
+        "garage": "2 car",
+        "price": 829777,
+        "priceFrom": true
       },
       "pages": [
         {
@@ -363,11 +398,13 @@
       "summary": null,
       "specs": {
         "beds": "4-5",
-        "baths": null,
+        "baths": "4-6",
         "sqft": 2884,
         "sqftFrom": true,
         "stories": 2,
-        "garage": "2 car"
+        "garage": "2 car",
+        "price": 850777,
+        "priceFrom": true
       },
       "pages": [
         {
@@ -399,11 +436,13 @@
       "summary": null,
       "specs": {
         "beds": "4-5",
-        "baths": null,
+        "baths": "3-6",
         "sqft": 3900,
         "sqftFrom": true,
         "stories": 2,
-        "garage": "2 or 3 car"
+        "garage": "2 or 3 car",
+        "price": 1149777,
+        "priceFrom": true
       },
       "pages": [
         {
@@ -435,11 +474,13 @@
       "summary": null,
       "specs": {
         "beds": "4-5",
-        "baths": null,
+        "baths": "4-6",
         "sqft": 4024,
         "sqftFrom": true,
         "stories": 2,
-        "garage": "2 or 3 car"
+        "garage": "2 or 3 car",
+        "price": 1186777,
+        "priceFrom": true
       },
       "pages": [
         {
@@ -471,11 +512,13 @@
       "summary": null,
       "specs": {
         "beds": "4-5",
-        "baths": null,
+        "baths": "4-6",
         "sqft": 4024,
         "sqftFrom": true,
         "stories": 2,
-        "garage": "2 or 3 car"
+        "garage": "2 or 3 car",
+        "price": 1186777,
+        "priceFrom": true
       },
       "pages": [
         {
@@ -507,11 +550,13 @@
       "summary": null,
       "specs": {
         "beds": "3-4",
-        "baths": null,
+        "baths": "3-5",
         "sqft": 5321,
         "sqftFrom": true,
         "stories": 2,
-        "garage": "2 car"
+        "garage": "2 car",
+        "price": 1264777,
+        "priceFrom": true
       },
       "pages": [
         {
@@ -543,11 +588,13 @@
       "summary": null,
       "specs": {
         "beds": "4",
-        "baths": null,
+        "baths": "4-5",
         "sqft": 2778,
         "sqftFrom": true,
         "stories": 2,
-        "garage": "2 car"
+        "garage": "2 car",
+        "price": 818777,
+        "priceFrom": true
       },
       "pages": [
         {
@@ -584,7 +631,10 @@
         "sqftFrom": false,
         "sqftNote": "3,840 with the three-car garage option",
         "stories": 2,
-        "garage": "2 or 3 car"
+        "garage": "2 or 3 car",
+        "bathsNote": "plus an optional full bath in the basement",
+        "price": null,
+        "priceFrom": true
       },
       "style": "Modern Farmhouse",
       "built": true,
@@ -625,11 +675,13 @@
       "summary": null,
       "specs": {
         "beds": "4-6",
-        "baths": null,
+        "baths": "3-6",
         "sqft": 4282,
         "sqftFrom": true,
         "stories": 2,
-        "garage": "2 or 3 car"
+        "garage": "2 or 3 car",
+        "price": 1262777,
+        "priceFrom": true
       },
       "pages": [
         {
@@ -655,5 +707,6 @@
       ],
       "style": "Modern Farmhouse"
     }
-  ]
+  ],
+  "pricesAsOf": "September 2026"
 }

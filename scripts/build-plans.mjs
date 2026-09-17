@@ -30,7 +30,23 @@ const OUT = join(ROOT, 'plans');
 const SITE = 'https://buildleavitt.com';
 const GTM = 'GTM-K9ND8BDT';
 
-const { models } = JSON.parse(readFileSync(join(ROOT, 'src', 'plans.json'), 'utf8'));
+const plansData = JSON.parse(readFileSync(join(ROOT, 'src', 'plans.json'), 'utf8'));
+const { models } = plansData;
+const PRICES_AS_OF = plansData.pricesAsOf || '';
+
+/** A starting price, or null where Leavitt has not given one. */
+const money = (n) => '$' + n.toLocaleString('en-US');
+
+/**
+ * The one sentence that has to travel with every price on the site.
+ *
+ * Leavitt's sheet says: *"Starting at" means without additional options*. That
+ * qualifier is the difference between a headline number and a misleading one,
+ * so it is printed wherever prices are, not buried once at the foot of a page.
+ */
+const priceNote = (extra = '') =>
+  `Starting prices are for the home without any optional features added` +
+  (PRICES_AS_OF ? `, and are current as of ${PRICES_AS_OF}` : '') + `.${extra}`;
 const images = JSON.parse(readFileSync(join(ROOT, 'src', 'plan-images.json'), 'utf8'));
 
 const esc = (s) => String(s)
@@ -51,10 +67,10 @@ const STANDARD = [
   ['Premium interior', [
     ['9&rsquo; ceilings', 'basement and first floor'],
     ['Custom hardwood or luxury vinyl plank flooring', 'entire first floor'],
-    ['Level 5 drywall finish', 'throughout'],
+    ['Level 5 drywall finish', 'in the main living areas, for smooth, flawless walls'],
     ['Gourmet kitchen', 'quartz countertops, tile backsplash, premium GE &ldquo;Caf&eacute;&rdquo; series appliance allowance'],
     ['Owner&rsquo;s retreat', 'quartz countertops, custom tiled shower walls, tiled to the ceiling'],
-    ['Full cased windows and openings', 'throughout'],
+    ['Solid core interior doors', 'with fully cased windows and openings throughout'],
     ['Stain grade stairs and handrail', 'first to second floor'],
     ['Insulated bedroom, bathroom and laundry walls', 'for sound dampening'],
   ]],
@@ -115,7 +131,11 @@ const SPECS = [
   ['sqft', 'Living Sq Ft', (v, s) => (s.sqftFrom ? 'From ' : '') + v.toLocaleString('en-US')],
   ['stories', 'Stories', (v) => (v === 1 ? '1 (ranch)' : v)],
   ['garage', 'Garage', (v) => v],
+  ['price', 'Starting Price', (v, s) => (s.priceFrom ? 'From ' : '') + money(v)],
 ];
+
+/** Specs whose value can carry a qualifying line underneath it. */
+const NOTE_FOR = { sqft: 'sqftNote', baths: 'bathsNote', price: 'priceNote' };
 
 const head = ({ title, description, canonical }) => `<!DOCTYPE html>
 <html lang="en">
@@ -249,8 +269,8 @@ for (const [i, model] of models.entries()) {
     const known = v !== null && v !== undefined && v !== '';
     return `                    <div class="border-t border-gray-200 py-4">
                         <dt class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-1">${esc(label)}</dt>
-                        <dd class="text-lg ${known ? 'text-[#0f172a] font-medium' : 'text-gray-400'}">${known ? esc(fmt(v, model.specs)) : 'On request'}</dd>${key === 'sqft' && model.specs?.sqftNote ? `
-                        <dd class="text-xs text-gray-500 mt-1">${esc(model.specs.sqftNote)}</dd>` : ''}
+                        <dd class="text-lg ${known ? 'text-[#0f172a] font-medium' : 'text-gray-400'}">${known ? esc(fmt(v, model.specs)) : 'On request'}</dd>${NOTE_FOR[key] && model.specs?.[NOTE_FOR[key]] ? `
+                        <dd class="text-xs text-gray-500 mt-1">${esc(model.specs[NOTE_FOR[key]])}</dd>` : ''}
                     </div>`;
   }).join('\n');
 
@@ -302,7 +322,13 @@ for (const [i, model] of models.entries()) {
         <h1 class="text-4xl md:text-6xl font-light text-[#0f172a] mb-6">
             The <span class="font-serif italic">${esc(model.name.replace(/^The\s+/i, ''))}</span>
         </h1>
-        <p class="text-gray-600 text-lg max-w-2xl mb-12">${esc(blurb(model))}</p>
+        <p class="text-gray-600 text-lg max-w-2xl mb-6">${esc(blurb(model))}</p>
+        ${model.specs?.price ? `<p class="mb-3">
+            <span class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 block mb-1">Starting price</span>
+            <span class="text-3xl md:text-4xl font-light text-[#0f172a]">${model.specs.priceFrom ? 'From ' : ''}${money(model.specs.price)}</span>
+        </p>
+        <p class="text-sm text-gray-500 max-w-2xl mb-12">${priceNote()}</p>` : `
+        <p class="text-sm text-gray-500 max-w-2xl mb-12">Pricing for this plan is available on request.</p>`}
 
         ${elevation ? `
         <!-- The drawing carries its own caption, so no figcaption repeating it here.
@@ -394,7 +420,8 @@ const cards = models.map((model) => {
                     </div>
                     <div class="border-t border-gray-200 p-6">
                         <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">${esc(model.name)}</h3>
-                        <p class="text-sm text-gray-500 mt-2">${floors} floor plan${floors === 1 ? '' : 's'}${model.specs?.stories === 1 ? ' &middot; Ranch' : ''}</p>${model.built ? `
+                        <p class="text-sm text-gray-500 mt-2">${floors} floor plan${floors === 1 ? '' : 's'}${model.specs?.stories === 1 ? ' &middot; Ranch' : ''}</p>
+                        ${model.specs?.price ? `<p class="mt-3 text-lg text-[#0f172a]">${model.specs.priceFrom ? '<span class="text-sm text-gray-500">From</span> ' : ''}${money(model.specs.price)}</p>` : ''}${model.built ? `
                         <p class="mt-2 inline-block bg-[#0f172a] text-white text-[10px] font-bold uppercase tracking-[0.2em] px-3 py-1">Built &mdash; photographed</p>` : ''}
                         <span class="inline-block mt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#c2a67a]">View plan &rarr;</span>
                     </div>
@@ -425,10 +452,14 @@ const indexHtml = head({
             adapted &mdash; elevation, room sizes, optional spaces &mdash; to your lot and the way you
             want to live.
         </p>
-        <p class="text-gray-600 max-w-2xl mb-14">
+        <p class="text-gray-600 max-w-2xl mb-6">
             Every sheet shows the optional features available for that model in dashed outline:
             in-law suites, conservatories, sunrooms, extended garages and finished lower levels.
         </p>
+        <!-- REVIEW: confirm whether these starting prices include the homesite. It is the
+             first question a buyer asks, and the sheet they came from does not say, so the
+             wording below deliberately claims neither. -->
+        <p class="text-sm text-gray-500 max-w-2xl mb-14">${priceNote(' Talk to us about your homesite and we will price the version you actually want to build.')}</p>
 
         <h2 class="sr-only">Available plans</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
