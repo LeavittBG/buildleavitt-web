@@ -633,7 +633,7 @@
         "stories": 2,
         "garage": "2 or 3 car",
         "bathsNote": "plus an optional full bath in the basement",
-        "price": null,
+        "price": 1112777,
         "priceFrom": true
       },
       "style": "Modern Farmhouse",
@@ -664,7 +664,8 @@
           "label": "Second Floor Plan",
           "image": "plans/the-storyteller-second.jpg"
         }
-      ]
+      ],
+      "_note": "Bath count is 4.5. The second-floor plan appears to show more because one bathroom is split into two labelled zones on the drawing - confirmed by Leavitt."
     },
     {
       "slug": "the-visionary",
