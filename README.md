@@ -66,10 +66,25 @@ currently alphabetical by the name after "The".
 If a PDF has no outline, the scaffold says so and that model has to be filled in
 by hand, reading each page off the render.
 
+### A model with no brochure
+
+A model can supply its pages as image files instead of a PDF: put `image` on each
+page in `src/plans.json`, relative to `assets-src/`. The Storyteller works this
+way — it is a house that has actually been built, so its "elevation" is the
+photograph from the home page and its floor plans came as separate images.
+
+A photograph also wants `crop: false`, which takes the image whole — the
+automatic crop keeps the largest block of ink and drops everything else, which
+is right for a sheet and wrong for a photograph. Plan images coming from a
+listing sheet should be left to crop normally: that strips the photographer's
+footer along with the rest of the furniture.
+
+The download button changes to "See it built", linking to the photographs,
+since there is no brochure to offer.
+
 ### Specs
 
-Specs live in `src/plans.json` and come from Leavitt's own figures. `baths` is
-`null` for every model because no bath counts have been supplied, and the pages
+Specs live in `src/plans.json` and come from Leavitt's own figures. The pages
 render "On request" wherever a value is missing. Fill anything in only from real
 numbers — a wrong square footage on a builder's website is a problem, and a
 blank is not. A test fails the build if a page ever shows a square footage that
@@ -79,6 +94,17 @@ is not the one in the data.
 "starting at", and the page renders "From 2,626" rather than a flat figure;
 two models are exact and have it `false`. Keep that distinction — it is the
 difference between a starting price and a promise.
+
+`price` works the same way, with `priceFrom`. Leavitt's note on the price sheet —
+*"starting at means without additional options"* — is not decoration:
+`build-plans.mjs` prints it beside every price on the site, and it has to keep
+travelling with them. `pricesAsOf` dates the list and is printed with it. A test
+fails if any dollar figure on a page is not the one in the data, or if the
+qualifier goes missing.
+
+`sqftNote`, `bathsNote` and `priceNote` print a qualifying line under a figure,
+for cases one number cannot carry honestly — The Storyteller gains 70 sq ft with
+the three-car garage, and has an optional basement full bath on top of its 4.5.
 
 ### The Leavitt Standard
 

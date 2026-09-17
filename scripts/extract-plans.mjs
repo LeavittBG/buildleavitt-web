@@ -131,13 +131,30 @@ async function rmse(a, b) {
   return Math.sqrt(sum / A.length);
 }
 
-async function encodePng(source) {
+const JPEG = { quality: 82, mozjpeg: true, progressive: true };
+// A photograph encoded as PNG is enormous - The Storyteller's exterior came out
+// at 1.2MB as PNG against 120KB as JPEG - while line art is the other way round.
+// So the fallback format is measured too: JPEG only wins when it wins big, which
+// is exactly the photographic case and never the line-art one.
+const JPEG_WINS_BELOW = 0.5;
+
+async function encodeFallback(source) {
   const full = await sharp(source).png(PNG_TRUECOLOUR).toBuffer();
   const pal = await sharp(source).png(PNG_PALETTE).toBuffer();
-  if (pal.length >= full.length) return { buffer: full, note: 'truecolour (palette no smaller)' };
-  const err = await rmse(full, pal);
-  if (err > PALETTE_MAX_RMSE) return { buffer: full, note: `truecolour (palette RMSE ${err.toFixed(2)})` };
-  return { buffer: pal, note: `palette -${(100 - (pal.length / full.length) * 100).toFixed(0)}%` };
+
+  let png = full;
+  let note = 'truecolour (palette no smaller)';
+  if (pal.length < full.length) {
+    const err = await rmse(full, pal);
+    if (err > PALETTE_MAX_RMSE) note = `truecolour (palette RMSE ${err.toFixed(2)})`;
+    else { png = pal; note = `palette -${(100 - (pal.length / full.length) * 100).toFixed(0)}%`; }
+  }
+
+  const jpeg = await sharp(source).jpeg(JPEG).toBuffer();
+  if (jpeg.length < png.length * JPEG_WINS_BELOW) {
+    return { buffer: jpeg, ext: 'jpg', note: `jpeg (png would be ${(png.length / jpeg.length).toFixed(1)}x)` };
+  }
+  return { buffer: png, ext: 'png', note };
 }
 const kb = (n) => (n / 1024).toFixed(0).padStart(5) + ' KB';
 
@@ -150,75 +167,105 @@ let missing = 0;
 
 for (const model of models) {
   const { slug } = model;
+
+  // Most models are a four-page brochure PDF. A model can instead supply each
+  // page as an image file (`image` on the page), which is how The Storyteller
+  // works: it is a finished house, so its "elevation" is a photograph and its
+  // floor plans came as separate images rather than a brochure.
+  const fromImages = model.pages.every((p) => p.image);
   const src = join(SRC, `${slug}.pdf`);
-  if (!existsSync(src)) {
-    console.error(`  ! ${slug}: no assets-src/plans/${slug}.pdf`);
-    missing++;
-    continue;
-  }
 
-  const info = execFileSync('pdfinfo', [src], { encoding: 'utf8' });
-  const pageCount = Number(/^Pages:\s*(\d+)/m.exec(info)?.[1] || 0);
-
-  console.log(`\n${model.name}  (${pageCount} pages in PDF, ${model.pages.length} used)`);
-  manifest[slug] = {};
-
-  execFileSync('pdftoppm', ['-r', '200', '-png', src, join(TMP, slug)]);
-
-  for (const { page, id, label, band } of model.pages) {
-    if (page > pageCount) {
-      console.error(`  ! ${slug} page ${page}: PDF only has ${pageCount} pages`);
+  let pageCount = 0;
+  if (!fromImages) {
+    if (!existsSync(src)) {
+      console.error(`  ! ${slug}: no assets-src/plans/${slug}.pdf`);
       missing++;
       continue;
     }
+    const info = execFileSync('pdfinfo', [src], { encoding: 'utf8' });
+    pageCount = Number(/^Pages:\s*(\d+)/m.exec(info)?.[1] || 0);
+    console.log(`\n${model.name}  (${pageCount} pages in PDF, ${model.pages.length} used)`);
+    execFileSync('pdftoppm', ['-r', '200', '-png', src, join(TMP, slug)]);
+  } else {
+    console.log(`\n${model.name}  (${model.pages.length} images)`);
+  }
 
-    // pdftoppm zero-pads the page number to the width of the page count
-    const padded = String(page).padStart(String(pageCount).length, '0');
-    const rendered = [join(TMP, `${slug}-${padded}.png`), join(TMP, `${slug}-${page}.png`)]
-      .find((f) => existsSync(f));
-    if (!rendered) {
-      console.error(`  ! ${slug} page ${page}: render missing`);
-      missing++;
-      continue;
+  manifest[slug] = {};
+
+  for (const { page, id, label, band, image, crop } of model.pages) {
+    let rendered;
+    if (image) {
+      // `image` is relative to assets-src/, so a page can point at a photo in
+      // the site's own image folder as easily as at a plan in assets-src/plans/.
+      rendered = resolve(ROOT, 'assets-src', image);
+      if (!existsSync(rendered)) {
+        console.error(`  ! ${slug} ${id}: missing assets-src/${image}`);
+        missing++;
+        continue;
+      }
+    } else {
+      if (page > pageCount) {
+        console.error(`  ! ${slug} page ${page}: PDF only has ${pageCount} pages`);
+        missing++;
+        continue;
+      }
+      // pdftoppm zero-pads the page number to the width of the page count
+      const padded = String(page).padStart(String(pageCount).length, '0');
+      rendered = [join(TMP, `${slug}-${padded}.png`), join(TMP, `${slug}-${page}.png`)]
+        .find((f) => existsSync(f));
+      if (!rendered) {
+        console.error(`  ! ${slug} page ${page}: render missing`);
+        missing++;
+        continue;
+      }
     }
 
     const meta = await sharp(rendered).metadata();
 
-    // A page may override the measurement from plans.json, as [top, bottom]
-    // fractions of page height, if a future brochure ever defeats findDrawing.
-    const box = band
-      ? { top: Math.round(meta.height * band[0]),
-          height: Math.round(meta.height * (band[1] - band[0])) }
-      : await findDrawing(rendered);
+    // `crop: false` takes the page whole, for a source with no furniture to
+    // strip - The Storyteller's "elevation" is a photograph, not a sheet.
+    let base;
+    if (crop === false) {
+      base = sharp(rendered).resize({ width: MAX_WIDTH, withoutEnlargement: true });
+    } else {
+      // A page may override the measurement from plans.json, as [top, bottom]
+      // fractions of page height, if a future brochure ever defeats findDrawing.
+      const box = band
+        ? { top: Math.round(meta.height * band[0]),
+            height: Math.round(meta.height * (band[1] - band[0])) }
+        : await findDrawing(rendered);
 
-    const extract = { left: 0, width: meta.width, ...box };
+      const extract = { left: 0, width: meta.width, ...box };
 
-    // Two passes on purpose: extract and trim in a single pipeline makes sharp
-    // evaluate the crop against the trimmed dimensions, which throws
-    // "bad extract area". Crop to a buffer first, then trim that.
-    const cropped = await sharp(rendered).extract(extract).png().toBuffer();
+      // Two passes on purpose: extract and trim in a single pipeline makes sharp
+      // evaluate the crop against the trimmed dimensions, which throws
+      // "bad extract area". Crop to a buffer first, then trim that.
+      const cropped = await sharp(rendered).extract(extract).png().toBuffer();
 
-    const base = sharp(cropped)
-      .trim({ threshold: 12 })                 // tighten onto the linework
-      .resize({ width: MAX_WIDTH, withoutEnlargement: true })
-      .flatten({ background: '#ffffff' });
+      base = sharp(cropped)
+        .trim({ threshold: 12 })               // tighten onto the linework
+        .resize({ width: MAX_WIDTH, withoutEnlargement: true })
+        .flatten({ background: '#ffffff' });
+    }
 
     const name = `${slug}-${id}`;
     const webp = await base.clone().webp(WEBP).toBuffer();
-    const { buffer: png, note } = await encodePng(await base.clone().png().toBuffer());
+    const { buffer: fallback, ext, note } = await encodeFallback(await base.clone().png().toBuffer());
     const dims = await sharp(webp).metadata();
 
     writeFileSync(join(IMG, `${name}.webp`), webp);
-    writeFileSync(join(IMG, `${name}.png`), png);
+    writeFileSync(join(IMG, `${name}.${ext}`), fallback);
 
-    manifest[slug][id] = { file: name, width: dims.width, height: dims.height, label };
+    manifest[slug][id] = { file: name, ext, width: dims.width, height: dims.height, label };
 
     console.log(`   p${page} -> ${name}  ${dims.width}x${dims.height}  ` +
-      `webp ${kb(webp.length)} / png ${kb(png.length)}  ${note}`);
+      `webp ${kb(webp.length)} / ${ext} ${kb(fallback.length)}  ${note}`);
   }
 
-  copyFileSync(src, join(PDF, `${slug}.pdf`));
-  console.log(`   pdf -> plans/pdf/${slug}.pdf  ${kb(statSync(src).size)}`);
+  if (!fromImages) {
+    copyFileSync(src, join(PDF, `${slug}.pdf`));
+    console.log(`   pdf -> plans/pdf/${slug}.pdf  ${kb(statSync(src).size)}`);
+  }
 }
 
 rmSync(TMP, { recursive: true, force: true });

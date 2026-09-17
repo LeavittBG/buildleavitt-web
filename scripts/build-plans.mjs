@@ -30,7 +30,29 @@ const OUT = join(ROOT, 'plans');
 const SITE = 'https://buildleavitt.com';
 const GTM = 'GTM-K9ND8BDT';
 
-const { models } = JSON.parse(readFileSync(join(ROOT, 'src', 'plans.json'), 'utf8'));
+const plansData = JSON.parse(readFileSync(join(ROOT, 'src', 'plans.json'), 'utf8'));
+const { models } = plansData;
+const PRICES_AS_OF = plansData.pricesAsOf || '';
+
+/** A starting price, or null where Leavitt has not given one. */
+const money = (n) => '$' + n.toLocaleString('en-US');
+
+/**
+ * The one sentence that has to travel with every price on the site.
+ *
+ * Leavitt's sheet says: *"Starting at" means without additional options*. That
+ * qualifier is the difference between a headline number and a misleading one,
+ * so it is printed wherever prices are, not buried once at the foot of a page.
+ *
+ * The homesite exclusion matters even more: it is the first thing a buyer
+ * assumes either way, and assuming wrong is the difference between these
+ * figures and the real cost of the house. Leavitt confirmed the lot is not
+ * included, so the page says so rather than leaving it to be inferred.
+ */
+const priceNote = (extra = '') =>
+  `Starting prices are for the home without any optional features added, and do ` +
+  `not include the homesite` +
+  (PRICES_AS_OF ? `. Current as of ${PRICES_AS_OF}` : '') + `.${extra}`;
 const images = JSON.parse(readFileSync(join(ROOT, 'src', 'plan-images.json'), 'utf8'));
 
 const esc = (s) => String(s)
@@ -51,10 +73,10 @@ const STANDARD = [
   ['Premium interior', [
     ['9&rsquo; ceilings', 'basement and first floor'],
     ['Custom hardwood or luxury vinyl plank flooring', 'entire first floor'],
-    ['Level 5 drywall finish', 'throughout'],
+    ['Level 5 drywall finish', 'in the main living areas, for smooth, flawless walls'],
     ['Gourmet kitchen', 'quartz countertops, tile backsplash, premium GE &ldquo;Caf&eacute;&rdquo; series appliance allowance'],
     ['Owner&rsquo;s retreat', 'quartz countertops, custom tiled shower walls, tiled to the ceiling'],
-    ['Full cased windows and openings', 'throughout'],
+    ['Solid core interior doors', 'with fully cased windows and openings throughout'],
     ['Stain grade stairs and handrail', 'first to second floor'],
     ['Insulated bedroom, bathroom and laundry walls', 'for sound dampening'],
   ]],
@@ -115,7 +137,11 @@ const SPECS = [
   ['sqft', 'Living Sq Ft', (v, s) => (s.sqftFrom ? 'From ' : '') + v.toLocaleString('en-US')],
   ['stories', 'Stories', (v) => (v === 1 ? '1 (ranch)' : v)],
   ['garage', 'Garage', (v) => v],
+  ['price', 'Starting Price', (v, s) => (s.priceFrom ? 'From ' : '') + money(v)],
 ];
+
+/** Specs whose value can carry a qualifying line underneath it. */
+const NOTE_FOR = { sqft: 'sqftNote', baths: 'bathsNote', price: 'priceNote' };
 
 const head = ({ title, description, canonical }) => `<!DOCTYPE html>
 <html lang="en">
@@ -198,7 +224,7 @@ const foot = () => `
 const picture = (img, { alt, cls, lazy = true }) => {
   const a = lazy ? ' loading="lazy" decoding="async"' : ' decoding="async"';
   return `<picture class="contents"><source srcset="/plans/img/${img.file}.webp" type="image/webp">` +
-    `<img src="/plans/img/${img.file}.png" alt="${esc(alt)}" width="${img.width}" height="${img.height}"${a} class="${cls}"></picture>`;
+    `<img src="/plans/img/${img.file}.${img.ext || 'png'}" alt="${esc(alt)}" width="${img.width}" height="${img.height}"${a} class="${cls}"></picture>`;
 };
 
 /** Every sheet this model has, in the order they are shown. */
@@ -236,6 +262,9 @@ for (const [i, model] of models.entries()) {
   const rest = all.filter((s) => s !== elevation);
   const prev = models[(i - 1 + models.length) % models.length];
   const next = models[(i + 1) % models.length];
+  // A model built from images has no brochure to download - The Storyteller
+  // offers its photographs instead.
+  const hasBrochure = !model.pages.every((p) => p.image);
 
   const description =
     `${model.name} floor plans and front elevation from Leavitt Building Group, ` +
@@ -246,7 +275,8 @@ for (const [i, model] of models.entries()) {
     const known = v !== null && v !== undefined && v !== '';
     return `                    <div class="border-t border-gray-200 py-4">
                         <dt class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-1">${esc(label)}</dt>
-                        <dd class="text-lg ${known ? 'text-[#0f172a] font-medium' : 'text-gray-400'}">${known ? esc(fmt(v, model.specs)) : 'On request'}</dd>
+                        <dd class="text-lg ${known ? 'text-[#0f172a] font-medium' : 'text-gray-400'}">${known ? esc(fmt(v, model.specs)) : 'On request'}</dd>${NOTE_FOR[key] && model.specs?.[NOTE_FOR[key]] ? `
+                        <dd class="text-xs text-gray-500 mt-1">${esc(model.specs[NOTE_FOR[key]])}</dd>` : ''}
                     </div>`;
   }).join('\n');
 
@@ -262,7 +292,7 @@ for (const [i, model] of models.entries()) {
                     <!-- At phone width the drawing is ~360px wide and the room labels are
                          unreadable. Opening the image itself is the zero-JavaScript way to
                          let someone pinch and zoom it. -->
-                    <a href="/plans/img/${s.img.file}.png" target="_blank" rel="noopener"
+                    <a href="/plans/img/${s.img.file}.${s.img.ext || 'png'}" target="_blank" rel="noopener"
                        class="text-[#c2a67a] font-medium hover:underline whitespace-nowrap">
                         Open full size<span class="sr-only"> image of the ${esc(model.name)} ${esc(s.label.toLowerCase())}</span>
                     </a>
@@ -298,7 +328,13 @@ for (const [i, model] of models.entries()) {
         <h1 class="text-4xl md:text-6xl font-light text-[#0f172a] mb-6">
             The <span class="font-serif italic">${esc(model.name.replace(/^The\s+/i, ''))}</span>
         </h1>
-        <p class="text-gray-600 text-lg max-w-2xl mb-12">${esc(blurb(model))}</p>
+        <p class="text-gray-600 text-lg max-w-2xl mb-6">${esc(blurb(model))}</p>
+        ${model.specs?.price ? `<p class="mb-3">
+            <span class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 block mb-1">Starting price</span>
+            <span class="text-3xl md:text-4xl font-light text-[#0f172a]">${model.specs.priceFrom ? 'From ' : ''}${money(model.specs.price)}</span>
+        </p>
+        <p class="text-sm text-gray-500 max-w-2xl mb-12">${priceNote()}</p>` : `
+        <p class="text-sm text-gray-500 max-w-2xl mb-12">Pricing for this plan is available on request.</p>`}
 
         ${elevation ? `
         <!-- The drawing carries its own caption, so no figcaption repeating it here.
@@ -330,11 +366,15 @@ ${specRows}
                    class="block w-full text-center bg-[#0f172a] text-white px-6 py-4 uppercase tracking-[0.2em] font-bold text-xs hover:bg-[#c2a67a] hover:text-[#0f172a] transition-colors mb-4">
                     Start with this plan
                 </a>
-                <a href="/plans/pdf/${model.slug}.pdf" target="_blank" rel="noopener"
+                ${hasBrochure ? `<a href="/plans/pdf/${model.slug}.pdf" target="_blank" rel="noopener"
                    class="block w-full text-center border border-gray-300 px-6 py-4 uppercase tracking-[0.2em] font-bold text-xs text-[#0f172a] hover:border-[#c2a67a] hover:text-[#c2a67a] transition-colors">
                     Download the PDF
                 </a>
-                <p class="text-xs text-gray-500 mt-4">Opens the full brochure for ${esc(model.name)} in a new tab.</p>
+                <p class="text-xs text-gray-500 mt-4">Opens the full brochure for ${esc(model.name)} in a new tab.</p>` : `<a href="/#gallery"
+                   class="block w-full text-center border border-gray-300 px-6 py-4 uppercase tracking-[0.2em] font-bold text-xs text-[#0f172a] hover:border-[#c2a67a] hover:text-[#c2a67a] transition-colors">
+                    See it built
+                </a>
+                <p class="text-xs text-gray-500 mt-4">Photographs of this home, inside and out.</p>`}
                 <p class="text-sm text-gray-600 mt-6 pt-6 border-t border-gray-200">
                     Every Leavitt home includes
                     <a href="/plans/#included" class="text-[#c2a67a] font-medium hover:underline">the Leavitt Standard</a>
@@ -387,6 +427,8 @@ const cards = models.map((model) => {
                     <div class="border-t border-gray-200 p-6">
                         <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">${esc(model.name)}</h3>
                         <p class="text-sm text-gray-500 mt-2">${floors} floor plan${floors === 1 ? '' : 's'}${model.specs?.stories === 1 ? ' &middot; Ranch' : ''}</p>
+                        ${model.specs?.price ? `<p class="mt-3 text-lg text-[#0f172a]">${model.specs.priceFrom ? '<span class="text-sm text-gray-500">From</span> ' : ''}${money(model.specs.price)}</p>` : ''}${model.built ? `
+                        <p class="mt-2 inline-block bg-[#0f172a] text-white text-[10px] font-bold uppercase tracking-[0.2em] px-3 py-1">Built &mdash; photographed</p>` : ''}
                         <span class="inline-block mt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#c2a67a]">View plan &rarr;</span>
                     </div>
                 </a>`;
@@ -416,10 +458,11 @@ const indexHtml = head({
             adapted &mdash; elevation, room sizes, optional spaces &mdash; to your lot and the way you
             want to live.
         </p>
-        <p class="text-gray-600 max-w-2xl mb-14">
+        <p class="text-gray-600 max-w-2xl mb-6">
             Every sheet shows the optional features available for that model in dashed outline:
             in-law suites, conservatories, sunrooms, extended garages and finished lower levels.
         </p>
+        <p class="text-sm text-gray-500 max-w-2xl mb-14">${priceNote(' Talk to us about your homesite and we will price the version you actually want to build.')}</p>
 
         <h2 class="sr-only">Available plans</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
