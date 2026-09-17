@@ -222,10 +222,8 @@ for (const model of models) {
 
     const meta = await sharp(rendered).metadata();
 
-    // `crop: false` takes the page whole. Used where trimming would destroy
-    // something: a photograph has no furniture to strip, and The Storyteller's
-    // floor plans carry a third-party disclaimer along the bottom edge that
-    // stays with the drawing it belongs to.
+    // `crop: false` takes the page whole, for a source with no furniture to
+    // strip - The Storyteller's "elevation" is a photograph, not a sheet.
     let base;
     if (crop === false) {
       base = sharp(rendered).resize({ width: MAX_WIDTH, withoutEnlargement: true });

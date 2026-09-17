@@ -650,22 +650,19 @@
           "page": 2,
           "id": "floor-1",
           "label": "Basement Floor Plan",
-          "image": "plans/the-storyteller-basement.jpg",
-          "crop": false
+          "image": "plans/the-storyteller-basement.jpg"
         },
         {
           "page": 3,
           "id": "floor-2",
           "label": "First Floor Plan",
-          "image": "plans/the-storyteller-first.jpg",
-          "crop": false
+          "image": "plans/the-storyteller-first.jpg"
         },
         {
           "page": 4,
           "id": "floor-3",
           "label": "Second Floor Plan",
-          "image": "plans/the-storyteller-second.jpg",
-          "crop": false
+          "image": "plans/the-storyteller-second.jpg"
         }
       ]
     },

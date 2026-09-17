@@ -43,10 +43,16 @@ const money = (n) => '$' + n.toLocaleString('en-US');
  * Leavitt's sheet says: *"Starting at" means without additional options*. That
  * qualifier is the difference between a headline number and a misleading one,
  * so it is printed wherever prices are, not buried once at the foot of a page.
+ *
+ * The homesite exclusion matters even more: it is the first thing a buyer
+ * assumes either way, and assuming wrong is the difference between these
+ * figures and the real cost of the house. Leavitt confirmed the lot is not
+ * included, so the page says so rather than leaving it to be inferred.
  */
 const priceNote = (extra = '') =>
-  `Starting prices are for the home without any optional features added` +
-  (PRICES_AS_OF ? `, and are current as of ${PRICES_AS_OF}` : '') + `.${extra}`;
+  `Starting prices are for the home without any optional features added, and do ` +
+  `not include the homesite` +
+  (PRICES_AS_OF ? `. Current as of ${PRICES_AS_OF}` : '') + `.${extra}`;
 const images = JSON.parse(readFileSync(join(ROOT, 'src', 'plan-images.json'), 'utf8'));
 
 const esc = (s) => String(s)
@@ -456,9 +462,6 @@ const indexHtml = head({
             Every sheet shows the optional features available for that model in dashed outline:
             in-law suites, conservatories, sunrooms, extended garages and finished lower levels.
         </p>
-        <!-- REVIEW: confirm whether these starting prices include the homesite. It is the
-             first question a buyer asks, and the sheet they came from does not say, so the
-             wording below deliberately claims neither. -->
         <p class="text-sm text-gray-500 max-w-2xl mb-14">${priceNote(' Talk to us about your homesite and we will price the version you actually want to build.')}</p>
 
         <h2 class="sr-only">Available plans</h2>

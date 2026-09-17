@@ -73,11 +73,11 @@ page in `src/plans.json`, relative to `assets-src/`. The Storyteller works this
 way — it is a house that has actually been built, so its "elevation" is the
 photograph from the home page and its floor plans came as separate images.
 
-Such a page usually also wants `crop: false`, which takes the image whole.
-The automatic crop keeps the largest block of ink and drops everything else,
-which is right for a brochure sheet and wrong for a photograph — and it would
-strip the third-party disclaimer printed along the bottom of The Storyteller's
-floor plans, which has to stay with the drawing it belongs to.
+A photograph also wants `crop: false`, which takes the image whole — the
+automatic crop keeps the largest block of ink and drops everything else, which
+is right for a sheet and wrong for a photograph. Plan images coming from a
+listing sheet should be left to crop normally: that strips the photographer's
+footer along with the rest of the furniture.
 
 The download button changes to "See it built", linking to the photographs,
 since there is no brochure to offer.

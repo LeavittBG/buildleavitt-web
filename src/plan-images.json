@@ -461,21 +461,21 @@
       "file": "the-storyteller-floor-1",
       "ext": "png",
       "width": 1600,
-      "height": 1200,
+      "height": 1101,
       "label": "Basement Floor Plan"
     },
     "floor-2": {
       "file": "the-storyteller-floor-2",
       "ext": "png",
       "width": 1600,
-      "height": 1200,
+      "height": 1222,
       "label": "First Floor Plan"
     },
     "floor-3": {
       "file": "the-storyteller-floor-3",
       "ext": "png",
       "width": 1600,
-      "height": 1200,
+      "height": 1233,
       "label": "Second Floor Plan"
     }
   },
