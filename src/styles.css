@@ -68,7 +68,7 @@ html {
 
 /* Preloader Styles */
 #preloader {
-    transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
+    transition: transform 0.7s cubic-bezier(0.77, 0, 0.175, 1);
 }
 #preloader.slide-up {
     transform: translateY(-100%);
@@ -76,7 +76,7 @@ html {
 .preloader-logo {
     opacity: 0;
     transform: scale(0.9);
-    transition: all 1.2s ease-out;
+    transition: all 0.5s ease-out;
 }
 .preloader-logo.show {
     opacity: 1;
@@ -124,7 +124,7 @@ html {
     display: inline-block;
     transform: translateY(120%);
     opacity: 0;
-    transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1), opacity 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+    transition: transform 0.9s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.9s cubic-bezier(0.19, 1, 0.22, 1);
     will-change: transform, opacity;
     padding-right: 0.15em; 
 }
@@ -140,10 +140,11 @@ html {
    the visitor is left looking at an empty hero with no way to know there is
    text there. This animation does nothing during the intended reveal (it is
    still waiting out its delay) and simply settles anything still hidden into
-   its final state afterwards. */
+   its final state afterwards. 4s leaves comfortable room over the intended
+   reveal, whose last element settles at about 2.6s. */
 .cinematic-text-word,
 .cinematic-fade-up {
-    animation: reveal-failsafe 0s linear 6s forwards;
+    animation: reveal-failsafe 0s linear 4s forwards;
 }
 @keyframes reveal-failsafe {
     to {
@@ -154,7 +155,7 @@ html {
 .cinematic-fade-up {
     opacity: 0;
     transform: translateY(30px);
-    transition: all 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+    transition: all 0.9s cubic-bezier(0.19, 1, 0.22, 1);
     will-change: transform, opacity;
 }
 .cinematic-fade-up.revealed {
