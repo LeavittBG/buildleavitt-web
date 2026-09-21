@@ -38,19 +38,29 @@ const PRICES_AS_OF = plansData.pricesAsOf || '';
 const money = (n) => '$' + n.toLocaleString('en-US');
 
 /**
- * The one sentence that has to travel with every price on the site.
+ * The lowest starting price across the models, for the one figure the site shows.
  *
- * Leavitt's sheet says: *"Starting at" means without additional options*. That
- * qualifier is the difference between a headline number and a misleading one,
- * so it is printed wherever prices are, not buried once at the foot of a page.
+ * Per-model prices are deliberately NOT published. Leavitt's reasoning: the
+ * business is fully custom, and a menu of prices beside each plan reads like a
+ * production builder's price list rather than a starting point. One anchor at
+ * the top of the collection still does the useful half of the job - it tells
+ * someone whether they are in the right place before they fill in a form.
  *
- * The homesite exclusion matters even more: it is the first thing a buyer
- * assumes either way, and assuming wrong is the difference between these
- * figures and the real cost of the house. Leavitt confirmed the lot is not
- * included, so the page says so rather than leaving it to be inferred.
+ * Derived rather than typed, so it stays true to the data. `price` stays in
+ * plans.json as Leavitt's own record and as the source of this number.
+ */
+const fromPrice = Math.min(...models.map((m) => m.specs?.price).filter(Boolean));
+
+/**
+ * The qualifiers that have to travel with that figure.
+ *
+ * Leavitt's sheet says: *"Starting at" means without additional options*. And
+ * the homesite exclusion matters more still - it is the first thing a buyer
+ * assumes either way, and assuming wrong is the difference between this figure
+ * and the real cost of a house.
  */
 const priceNote = (extra = '') =>
-  `Starting prices are for the home without any optional features added, and do ` +
+  `Starting price is for the home without any optional features added, and does ` +
   `not include the homesite` +
   (PRICES_AS_OF ? `. Current as of ${PRICES_AS_OF}` : '') + `.${extra}`;
 const images = JSON.parse(readFileSync(join(ROOT, 'src', 'plan-images.json'), 'utf8'));
@@ -137,7 +147,6 @@ const SPECS = [
   ['sqft', 'Living Sq Ft', (v, s) => (s.sqftFrom ? 'From ' : '') + v.toLocaleString('en-US')],
   ['stories', 'Stories', (v) => (v === 1 ? '1 (ranch)' : v)],
   ['garage', 'Garage', (v) => v],
-  ['price', 'Starting Price', (v, s) => (s.priceFrom ? 'From ' : '') + money(v)],
 ];
 
 /** Specs whose value can carry a qualifying line underneath it. */
@@ -328,13 +337,7 @@ for (const [i, model] of models.entries()) {
         <h1 class="text-4xl md:text-6xl font-light text-[#0f172a] mb-6">
             The <span class="font-serif italic">${esc(model.name.replace(/^The\s+/i, ''))}</span>
         </h1>
-        <p class="text-gray-600 text-lg max-w-2xl mb-6">${esc(blurb(model))}</p>
-        ${model.specs?.price ? `<p class="mb-3">
-            <span class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 block mb-1">Starting price</span>
-            <span class="text-3xl md:text-4xl font-light text-[#0f172a]">${model.specs.priceFrom ? 'From ' : ''}${money(model.specs.price)}</span>
-        </p>
-        <p class="text-sm text-gray-500 max-w-2xl mb-12">${priceNote()}</p>` : `
-        <p class="text-sm text-gray-500 max-w-2xl mb-12">Pricing for this plan is available on request.</p>`}
+        <p class="text-gray-600 text-lg max-w-2xl mb-12">${esc(blurb(model))}</p>
 
         ${elevation ? `
         <!-- The drawing carries its own caption, so no figcaption repeating it here.
@@ -427,7 +430,7 @@ const cards = models.map((model) => {
                     <div class="border-t border-gray-200 p-6">
                         <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">${esc(model.name)}</h3>
                         <p class="text-sm text-gray-500 mt-2">${floors} floor plan${floors === 1 ? '' : 's'}${model.specs?.stories === 1 ? ' &middot; Ranch' : ''}</p>
-                        ${model.specs?.price ? `<p class="mt-3 text-lg text-[#0f172a]">${model.specs.priceFrom ? '<span class="text-sm text-gray-500">From</span> ' : ''}${money(model.specs.price)}</p>` : ''}${model.built ? `
+                        ${model.built ? `
                         <p class="mt-2 inline-block bg-[#0f172a] text-white text-[10px] font-bold uppercase tracking-[0.2em] px-3 py-1">Built &mdash; photographed</p>` : ''}
                         <span class="inline-block mt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#c2a67a]">View plan &rarr;</span>
                     </div>
@@ -454,15 +457,24 @@ const indexHtml = head({
             Home <span class="font-serif italic">plans.</span>
         </h1>
         <p class="text-gray-600 text-lg max-w-2xl mb-4">
-            A starting point, not a catalogue. Each of these plans has been built before and can be
-            adapted &mdash; elevation, room sizes, optional spaces &mdash; to your lot and the way you
-            want to live.
+            We build fully custom. But a blank page is a difficult place to begin, so here is
+            somewhere to start &mdash; plans we have built before, each one adapted to your lot and
+            the way you want to live. Change the elevation, the room sizes, the optional spaces;
+            or bring us something else entirely.
         </p>
-        <p class="text-gray-600 max-w-2xl mb-6">
+        <p class="text-gray-600 max-w-2xl mb-8">
             Every sheet shows the optional features available for that model in dashed outline:
             in-law suites, conservatories, sunrooms, extended garages and finished lower levels.
         </p>
-        <p class="text-sm text-gray-500 max-w-2xl mb-14">${priceNote(' Talk to us about your homesite and we will price the version you actually want to build.')}</p>
+
+        <!-- One anchor for the whole collection rather than a price beside each plan: enough for
+             a visitor to know whether they are in the right place, without reading as a price
+             list. ${'$'}{fromPrice} is the lowest figure in plans.json, so it cannot drift. -->
+        <p class="border-l-2 border-[#c2a67a] pl-6 mb-4">
+            <span class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 block mb-1">The collection</span>
+            <span class="text-2xl md:text-3xl font-light text-[#0f172a]">Pricing starts at ${money(fromPrice)}</span>
+        </p>
+        <p class="text-sm text-gray-500 max-w-2xl mb-14">${priceNote(' A fully custom home is priced to its own drawings &mdash; talk to us about your homesite and what you have in mind.')}</p>
 
         <h2 class="sr-only">Available plans</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
