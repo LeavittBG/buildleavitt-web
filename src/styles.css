@@ -84,17 +84,27 @@ html {
 }
 
 /* Cinematic Text Reveal Styles */
+/* Each headline word sits in this box so it can slide up from below without
+   showing outside the line. The box has to clip vertically for that to work,
+   but anything it clips horizontally is just lost.
+   Padding widens the clip box and an equal negative margin takes the width back
+   out of the layout, so the glyph gains room without moving. */
 .overflow-hidden-mask {
     overflow: hidden;
     display: inline-flex;
     vertical-align: bottom;
-    padding-top: 0.25em; 
+    padding-top: 0.25em;
     margin-top: -0.25em;
-    padding-bottom: 0.15em; 
+    padding-bottom: 0.15em;
     margin-bottom: -0.15em;
-    padding-right: 0.2em; 
-    /* THE FIX: Increased negative margin to pull the physical words closer together */
-    margin-right: -0.35em; 
+    /* An italic serif leans left at the baseline and overhangs its own box: the
+       "A" of "Across" in the hero reached 4px past this edge at 72px and was
+       being sliced off flat. Without a left pad there is nowhere for that to go. */
+    padding-left: 0.25em;
+    margin-left: -0.25em;
+    padding-right: 0.2em;
+    /* Negative margin pulls the physical words closer together */
+    margin-right: -0.35em;
 }
 .cinematic-text-word {
     display: inline-block;
