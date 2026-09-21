@@ -84,6 +84,20 @@ html {
 }
 
 /* Cinematic Text Reveal Styles */
+/* Each headline line is its own block.
+   The words are inline-flex masks separated by source whitespace, so a single
+   run of them is at the mercy of the line breaker: "Crafting Custom Homes"
+   measured 784px against a 768px container and the browser, quite correctly,
+   put "Homes" on a line of its own. A <br> did not prevent that - it only says
+   where a break MUST happen, never where one may not.
+   As blocks the two lines can never merge or borrow words from each other, and
+   the sizes above them are chosen so each line fits its container at every
+   width. If a line ever does outgrow its box it simply wraps, as it does now,
+   rather than spilling out of the page. */
+.hero-line {
+    display: block;
+}
+
 /* Each headline word sits in this box so it can slide up from below without
    showing outside the line. The box has to clip vertically for that to work,
    but anything it clips horizontally is just lost.
@@ -117,6 +131,25 @@ html {
 .cinematic-text-word.revealed {
     transform: translateY(0);
     opacity: 1;
+}
+
+/* Safety net for the hero copy.
+   Everything with these classes starts at opacity 0 and only becomes visible
+   when script adds .revealed. That makes the headline, the strapline and the
+   button depend on script finishing - and if it is slow, blocked or throws,
+   the visitor is left looking at an empty hero with no way to know there is
+   text there. This animation does nothing during the intended reveal (it is
+   still waiting out its delay) and simply settles anything still hidden into
+   its final state afterwards. */
+.cinematic-text-word,
+.cinematic-fade-up {
+    animation: reveal-failsafe 0s linear 6s forwards;
+}
+@keyframes reveal-failsafe {
+    to {
+        opacity: 1;
+        transform: none;
+    }
 }
 .cinematic-fade-up {
     opacity: 0;

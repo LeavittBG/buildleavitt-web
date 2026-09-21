@@ -42,8 +42,15 @@
     <!-- Compiled Tailwind + custom styles (source: src/styles.css, build: npm run build) -->
     <link rel="stylesheet" href="dist/styles.css">
 
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Lucide Icons.
+         async, and deliberately not defer. A plain <script src> in <head> stops
+         the browser parsing the rest of the page until the third party answers;
+         defer fixes that but DOMContentLoaded still waits for deferred scripts,
+         and the hero reveal is timed from DOMContentLoaded - so a slow or
+         filtered corporate network still held the headline back (measured: 8.4s
+         to a readable headline when this request stalled 5s). async waits for
+         nothing. The icons are drawn whenever it lands; see renderIcons() below. -->
+    <script src="https://unpkg.com/lucide@latest" async></script>
 
     <!-- Custom Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -205,20 +212,24 @@
         </div>
 
         <div class="relative z-10 max-w-7xl mx-auto px-6">
-            <div class="max-w-3xl">
+            <div class="max-w-4xl">
                 <!-- Cinematic Fade-Up for Sub-headline -->
                 <p class="text-[#c2a67a] text-sm md:text-base font-bold uppercase tracking-[0.3em] mb-6 border-l-2 border-[#c2a67a] pl-4 cinematic-fade-up tracking-tight" style="transition-delay: 0.1s;">
                     Maryland &amp; Pennsylvania
                 </p>
                 
                 <!-- Cinematic Cascading Text Reveal for Headline (Tracking tightened here) -->
-                <h1 class="text-4xl md:text-6xl lg:text-7xl font-light text-white leading-[1.1] mb-8 tracking-tighter">
-                    <span class="overflow-hidden-mask"><span class="cinematic-text-word" style="transition-delay: 0.2s;">Crafting</span></span>
-                    <span class="overflow-hidden-mask"><span class="cinematic-text-word" style="transition-delay: 0.3s;">Custom</span></span>
-                    <span class="overflow-hidden-mask"><span class="cinematic-text-word" style="transition-delay: 0.4s;">Homes</span></span> <br />
-                    <span class="overflow-hidden-mask"><span class="cinematic-text-word font-serif italic text-gray-300" style="transition-delay: 0.5s;">Across</span></span>
-                    <span class="overflow-hidden-mask"><span class="cinematic-text-word font-serif italic text-gray-300" style="transition-delay: 0.6s;">the</span></span>
-                    <span class="overflow-hidden-mask"><span class="cinematic-text-word font-serif italic text-gray-300" style="transition-delay: 0.7s;">Region.</span></span>
+                <h1 class="text-[7.4vw] sm:text-5xl md:text-6xl lg:text-7xl font-light text-white leading-[1.1] mb-8 tracking-tighter">
+                    <span class="hero-line">
+                        <span class="overflow-hidden-mask"><span class="cinematic-text-word" style="transition-delay: 0.2s;">Crafting</span></span>
+                        <span class="overflow-hidden-mask"><span class="cinematic-text-word" style="transition-delay: 0.3s;">Custom</span></span>
+                        <span class="overflow-hidden-mask"><span class="cinematic-text-word" style="transition-delay: 0.4s;">Homes</span></span>
+                    </span>
+                    <span class="hero-line">
+                        <span class="overflow-hidden-mask"><span class="cinematic-text-word font-serif italic text-gray-300" style="transition-delay: 0.5s;">Across</span></span>
+                        <span class="overflow-hidden-mask"><span class="cinematic-text-word font-serif italic text-gray-300" style="transition-delay: 0.6s;">the</span></span>
+                        <span class="overflow-hidden-mask"><span class="cinematic-text-word font-serif italic text-gray-300" style="transition-delay: 0.7s;">Region.</span></span>
+                    </span>
                 </h1>
                 
                 <!-- Cinematic Fade-Up for Paragraph -->
@@ -988,7 +999,16 @@
             }, 2400);
         });
 
-        renderIcons();
+        // The icon library loads async, so it may arrive before or after this
+        // point - and on a network that blocks it, never. Cover every case
+        // without letting any of them hold up the page.
+        if (typeof lucide !== 'undefined') {
+            renderIcons();
+        } else {
+            const iconScript = document.querySelector('script[src*="lucide"]');
+            if (iconScript) iconScript.addEventListener('load', renderIcons, { once: true });
+            document.addEventListener('DOMContentLoaded', renderIcons, { once: true });
+        }
 
         // --- Before/After Slider Logic ---
         const baSlider = document.getElementById('ba-slider');
