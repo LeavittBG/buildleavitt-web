@@ -10,6 +10,19 @@ module.exports = {
   content: ['./*.html', './plans/*.html'],
   theme: {
     extend: {
+      // The site's two typefaces are defined here rather than as plain CSS
+      // rules, because this is the only place that actually wins.
+      // Every <body> carries Tailwind's own font-sans class, and a class beats
+      // a `body { font-family: ... }` rule on specificity no matter what order
+      // they appear in - so the stylesheet asked for Inter, the class quietly
+      // overruled it, and the whole site rendered in whatever sans-serif the
+      // visitor's system happened to supply. Setting the theme makes font-sans
+      // and font-serif mean these, which also sets Tailwind's own html default.
+      fontFamily: {
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif',
+               '"Apple Color Emoji"', '"Segoe UI Emoji"', '"Segoe UI Symbol"', '"Noto Color Emoji"'],
+        serif: ['"Playfair Display"', 'ui-serif', 'Georgia', 'Cambria', '"Times New Roman"', 'Times', 'serif'],
+      },
       colors: {
         navy: '#0f172a',
         gold: '#c2a67a',

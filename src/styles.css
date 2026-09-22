@@ -20,10 +20,12 @@
 source { display: none; }
 
 html { scroll-behavior: smooth; }
-body { font-family: 'Inter', sans-serif; }
 /* Keep anchor targets clear of the fixed 96px navigation bar */
 section[id] { scroll-margin-top: 6rem; }
-.font-serif { font-family: 'Playfair Display', serif; }
+/* Inter and Playfair Display are set in tailwind.config.js, not here. A
+   `body { font-family }` rule used to live at this spot and never took effect:
+   every <body> also carries the font-sans class, and a class outranks an
+   element selector. See the note in that file before moving them back. */
 ::selection { background-color: #0f172a; color: white; }
 
 /* Custom Branded Scrollbar */
@@ -68,7 +70,7 @@ html {
 
 /* Preloader Styles */
 #preloader {
-    transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
+    transition: transform 0.7s cubic-bezier(0.77, 0, 0.175, 1);
 }
 #preloader.slide-up {
     transform: translateY(-100%);
@@ -76,31 +78,66 @@ html {
 .preloader-logo {
     opacity: 0;
     transform: scale(0.9);
-    transition: all 1.2s ease-out;
+    transition: all 0.5s ease-out;
 }
 .preloader-logo.show {
     opacity: 1;
     transform: scale(1);
 }
 
+/* Playfair Display's weight axis starts at 400, so there is no 300 to download.
+   The italic spans in the headings carry no weight of their own and inherit
+   font-light's 300 from the heading around them, which the browser then quietly
+   resolves back to 400 - the face it does have. Asking for 400 outright changes
+   nothing on screen and stops the stylesheet requesting something that cannot
+   exist. :where() keeps this at zero specificity, so any span that does set its
+   own weight still wins. */
+:where(.font-serif.italic) {
+    font-weight: 400;
+}
+
 /* Cinematic Text Reveal Styles */
+/* Each headline line is its own block.
+   The words are inline-flex masks separated by source whitespace, so a single
+   run of them is at the mercy of the line breaker: "Crafting Custom Homes"
+   measured 784px against a 768px container and the browser, quite correctly,
+   put "Homes" on a line of its own. A <br> did not prevent that - it only says
+   where a break MUST happen, never where one may not.
+   As blocks the two lines can never merge or borrow words from each other, and
+   the sizes above them are chosen so each line fits its container at every
+   width. If a line ever does outgrow its box it simply wraps, as it does now,
+   rather than spilling out of the page. */
+.hero-line {
+    display: block;
+}
+
+/* Each headline word sits in this box so it can slide up from below without
+   showing outside the line. The box has to clip vertically for that to work,
+   but anything it clips horizontally is just lost.
+   Padding widens the clip box and an equal negative margin takes the width back
+   out of the layout, so the glyph gains room without moving. */
 .overflow-hidden-mask {
     overflow: hidden;
     display: inline-flex;
     vertical-align: bottom;
-    padding-top: 0.25em; 
+    padding-top: 0.25em;
     margin-top: -0.25em;
-    padding-bottom: 0.15em; 
+    padding-bottom: 0.15em;
     margin-bottom: -0.15em;
-    padding-right: 0.2em; 
-    /* THE FIX: Increased negative margin to pull the physical words closer together */
-    margin-right: -0.35em; 
+    /* An italic serif leans left at the baseline and overhangs its own box: the
+       "A" of "Across" in the hero reached 4px past this edge at 72px and was
+       being sliced off flat. Without a left pad there is nowhere for that to go. */
+    padding-left: 0.25em;
+    margin-left: -0.25em;
+    padding-right: 0.2em;
+    /* Negative margin pulls the physical words closer together */
+    margin-right: -0.35em;
 }
 .cinematic-text-word {
     display: inline-block;
     transform: translateY(120%);
     opacity: 0;
-    transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1), opacity 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+    transition: transform 0.9s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.9s cubic-bezier(0.19, 1, 0.22, 1);
     will-change: transform, opacity;
     padding-right: 0.15em; 
 }
@@ -108,10 +145,30 @@ html {
     transform: translateY(0);
     opacity: 1;
 }
+
+/* Safety net for the hero copy.
+   Everything with these classes starts at opacity 0 and only becomes visible
+   when script adds .revealed. That makes the headline, the strapline and the
+   button depend on script finishing - and if it is slow, blocked or throws,
+   the visitor is left looking at an empty hero with no way to know there is
+   text there. This animation does nothing during the intended reveal (it is
+   still waiting out its delay) and simply settles anything still hidden into
+   its final state afterwards. 4s leaves comfortable room over the intended
+   reveal, whose last element settles at about 2.6s. */
+.cinematic-text-word,
+.cinematic-fade-up {
+    animation: reveal-failsafe 0s linear 4s forwards;
+}
+@keyframes reveal-failsafe {
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
 .cinematic-fade-up {
     opacity: 0;
     transform: translateY(30px);
-    transition: all 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+    transition: all 0.9s cubic-bezier(0.19, 1, 0.22, 1);
     will-change: transform, opacity;
 }
 .cinematic-fade-up.revealed {

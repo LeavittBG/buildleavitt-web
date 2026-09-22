@@ -42,13 +42,20 @@
     <!-- Compiled Tailwind + custom styles (source: src/styles.css, build: npm run build) -->
     <link rel="stylesheet" href="dist/styles.css">
 
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Lucide Icons.
+         async, and deliberately not defer. A plain <script src> in <head> stops
+         the browser parsing the rest of the page until the third party answers;
+         defer fixes that but DOMContentLoaded still waits for deferred scripts,
+         and the hero reveal is timed from DOMContentLoaded - so a slow or
+         filtered corporate network still held the headline back (measured: 8.4s
+         to a readable headline when this request stalled 5s). async waits for
+         nothing. The icons are drawn whenever it lands; see renderIcons() below. -->
+    <script src="https://unpkg.com/lucide@latest" async></script>
 
     <!-- Custom Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
 
     <!-- No-JS fallback: without this the preloader and the opacity:0 reveal
@@ -205,29 +212,33 @@
         </div>
 
         <div class="relative z-10 max-w-7xl mx-auto px-6">
-            <div class="max-w-3xl">
+            <div class="max-w-4xl">
                 <!-- Cinematic Fade-Up for Sub-headline -->
-                <p class="text-[#c2a67a] text-sm md:text-base font-bold uppercase tracking-[0.3em] mb-6 border-l-2 border-[#c2a67a] pl-4 cinematic-fade-up tracking-tight" style="transition-delay: 0.1s;">
+                <p class="text-[#c2a67a] text-sm md:text-base font-bold uppercase tracking-[0.3em] mb-6 border-l-2 border-[#c2a67a] pl-4 cinematic-fade-up tracking-tight" style="transition-delay: 0.05s;">
                     Maryland &amp; Pennsylvania
                 </p>
                 
                 <!-- Cinematic Cascading Text Reveal for Headline (Tracking tightened here) -->
-                <h1 class="text-4xl md:text-6xl lg:text-7xl font-light text-white leading-[1.1] mb-8 tracking-tighter">
-                    <span class="overflow-hidden-mask"><span class="cinematic-text-word" style="transition-delay: 0.2s;">Crafting</span></span>
-                    <span class="overflow-hidden-mask"><span class="cinematic-text-word" style="transition-delay: 0.3s;">Custom</span></span>
-                    <span class="overflow-hidden-mask"><span class="cinematic-text-word" style="transition-delay: 0.4s;">Homes</span></span> <br />
-                    <span class="overflow-hidden-mask"><span class="cinematic-text-word font-serif italic text-gray-300" style="transition-delay: 0.5s;">Across</span></span>
-                    <span class="overflow-hidden-mask"><span class="cinematic-text-word font-serif italic text-gray-300" style="transition-delay: 0.6s;">the</span></span>
-                    <span class="overflow-hidden-mask"><span class="cinematic-text-word font-serif italic text-gray-300" style="transition-delay: 0.7s;">Region.</span></span>
+                <h1 class="text-[7.4vw] sm:text-5xl md:text-6xl lg:text-7xl font-light text-white leading-[1.1] mb-8 tracking-tighter">
+                    <span class="hero-line">
+                        <span class="overflow-hidden-mask"><span class="cinematic-text-word" style="transition-delay: 0.1s;">Crafting</span></span>
+                        <span class="overflow-hidden-mask"><span class="cinematic-text-word" style="transition-delay: 0.15s;">Custom</span></span>
+                        <span class="overflow-hidden-mask"><span class="cinematic-text-word" style="transition-delay: 0.2s;">Homes</span></span>
+                    </span>
+                    <span class="hero-line">
+                        <span class="overflow-hidden-mask"><span class="cinematic-text-word font-serif italic text-gray-300" style="transition-delay: 0.25s;">Across</span></span>
+                        <span class="overflow-hidden-mask"><span class="cinematic-text-word font-serif italic text-gray-300" style="transition-delay: 0.3s;">the</span></span>
+                        <span class="overflow-hidden-mask"><span class="cinematic-text-word font-serif italic text-gray-300" style="transition-delay: 0.35s;">Region.</span></span>
+                    </span>
                 </h1>
                 
                 <!-- Cinematic Fade-Up for Paragraph -->
-                <p class="text-lg md:text-xl text-gray-400 mb-12 max-w-2xl leading-relaxed cinematic-fade-up" style="transition-delay: 0.8s;">
+                <p class="text-lg md:text-xl text-gray-400 mb-12 max-w-2xl leading-relaxed cinematic-fade-up" style="transition-delay: 0.4s;">
                     Leavitt Building Group delivers premier custom and semi-custom home construction and large-scale renovations throughout the Greater Baltimore Metro area.
                 </p>
                 
                 <!-- Cinematic Fade-Up for Button -->
-                <div class="flex flex-col sm:flex-row gap-4 cinematic-fade-up" style="transition-delay: 1.0s;">
+                <div class="flex flex-col sm:flex-row gap-4 cinematic-fade-up" style="transition-delay: 0.5s;">
                     <a href="#services" class="bg-[#c2a67a] text-[#0f172a] px-8 py-4 uppercase tracking-widest font-bold hover:bg-white transition-colors text-center flex items-center justify-center gap-2 inline-flex magnetic">
                         Explore Services <i data-lucide="chevron-right" class="w-[18px] h-[18px]"></i>
                     </a>
@@ -973,22 +984,35 @@
                 return;
             }
 
+            // Timings are deliberately tight: the headline is the page's
+            // first impression and every beat here is time a visitor spends
+            // looking at a logo instead of it. Logo in, curtain up at 1s,
+            // headline starting as the curtain is still moving.
             setTimeout(() => {
                 if(preloaderLogo) preloaderLogo.classList.add('show');
-            }, 300);
+            }, 150);
 
             setTimeout(() => {
                 if(preloader) preloader.classList.add('slide-up');
 
-                setTimeout(revealHero, 300);
+                setTimeout(revealHero, 200);
 
                 setTimeout(() => {
                     if(preloader) preloader.remove();
-                }, 1000);
-            }, 2400);
+                }, 800);
+            }, 1000);
         });
 
-        renderIcons();
+        // The icon library loads async, so it may arrive before or after this
+        // point - and on a network that blocks it, never. Cover every case
+        // without letting any of them hold up the page.
+        if (typeof lucide !== 'undefined') {
+            renderIcons();
+        } else {
+            const iconScript = document.querySelector('script[src*="lucide"]');
+            if (iconScript) iconScript.addEventListener('load', renderIcons, { once: true });
+            document.addEventListener('DOMContentLoaded', renderIcons, { once: true });
+        }
 
         // --- Before/After Slider Logic ---
         const baSlider = document.getElementById('ba-slider');
