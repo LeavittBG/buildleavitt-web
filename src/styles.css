@@ -20,10 +20,12 @@
 source { display: none; }
 
 html { scroll-behavior: smooth; }
-body { font-family: 'Inter', sans-serif; }
 /* Keep anchor targets clear of the fixed 96px navigation bar */
 section[id] { scroll-margin-top: 6rem; }
-.font-serif { font-family: 'Playfair Display', serif; }
+/* Inter and Playfair Display are set in tailwind.config.js, not here. A
+   `body { font-family }` rule used to live at this spot and never took effect:
+   every <body> also carries the font-sans class, and a class outranks an
+   element selector. See the note in that file before moving them back. */
 ::selection { background-color: #0f172a; color: white; }
 
 /* Custom Branded Scrollbar */
@@ -81,6 +83,17 @@ html {
 .preloader-logo.show {
     opacity: 1;
     transform: scale(1);
+}
+
+/* Playfair Display's weight axis starts at 400, so there is no 300 to download.
+   The italic spans in the headings carry no weight of their own and inherit
+   font-light's 300 from the heading around them, which the browser then quietly
+   resolves back to 400 - the face it does have. Asking for 400 outright changes
+   nothing on screen and stops the stylesheet requesting something that cannot
+   exist. :where() keeps this at zero specificity, so any span that does set its
+   own weight still wins. */
+:where(.font-serif.italic) {
+    font-weight: 400;
 }
 
 /* Cinematic Text Reveal Styles */

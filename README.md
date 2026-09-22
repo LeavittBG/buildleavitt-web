@@ -18,6 +18,28 @@ listed under `content` in `tailwind.config.js` — currently `./*.html` and
 the stylesheet, so if something loses its styling, that list is the first place
 to look.
 
+## Fonts
+
+Inter and Playfair Display are declared in `tailwind.config.js` under
+`theme.extend.fontFamily`, not as plain CSS rules. That is deliberate: every
+`<body>` carries Tailwind's `font-sans` class, and a class outranks a
+`body { font-family: ... }` rule whatever order they appear in — so a rule
+written in `src/styles.css` is silently ignored and the site renders in the
+visitor's system font instead. Setting the theme makes `font-sans` and
+`font-serif` mean these two faces, and sets Tailwind's own `html` default too.
+
+The weights requested from Google Fonts have to cover every weight the markup
+uses. `font-medium` is 500 and is used heavily; it was missing from the URL for
+a while, and because Google serves these as discrete files rather than one
+variable font, the browser silently rendered those elements at 400. If you
+start using a new weight class, add it to the font URL — which appears in every
+page's `<head>` **and** in `scripts/build-plans.mjs`, so the generated plan
+pages get it too. Keep them identical.
+
+Playfair Display has no weight below 400, so a `font-light` heading cannot get
+a lighter italic; `src/styles.css` pins those spans to 400 so the stylesheet
+asks for what it actually receives.
+
 ## Images
 
 Full-resolution originals live in `assets-src/`. They are inputs only —
