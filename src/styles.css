@@ -133,28 +133,51 @@ html {
     /* Negative margin pulls the physical words closer together */
     margin-right: -0.35em;
 }
+/* NO will-change ON ANY OF THIS. It was here, and it is why words went missing
+   from the headline on a Windows desktop.
+   will-change: transform promotes an element to its own compositor layer and,
+   because it is a standing hint rather than one scoped to a running animation,
+   keeps it there for the life of the page. If a layer ever fails to rasterize -
+   a real hazard on Windows with fractional display scaling and some drivers -
+   the element keeps its layout space and paints nothing, and with the layer
+   pinned it never gets another chance. Correct spacing, invisible words, for as
+   long as the tab is open. A transform transition is composited while it runs
+   whether or not anything asks for it, so the hint bought nothing and cost
+   that. MDN says as much: a last resort, never applied broadly or permanently. */
 .cinematic-text-word {
     display: inline-block;
+    transition: transform 0.9s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.9s cubic-bezier(0.19, 1, 0.22, 1);
+    padding-right: 0.15em;
+}
+.cinematic-fade-up {
+    transition: all 0.9s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* The hero copy is visible by default and is hidden only once script has said,
+   before the first paint, that it is going to animate it. That ordering is the
+   point: the old rules hid this text in the base stylesheet and relied on
+   script to give it back, so every way script could fail - blocked, throwing,
+   still loading - ended in a hero with no words in it. Now the failure
+   direction is reversed. The worst case is text that appears without sliding.
+   .js-anim is set by a one-line script in <head>, so nothing flashes. */
+.js-anim .cinematic-text-word {
     transform: translateY(120%);
     opacity: 0;
-    transition: transform 0.9s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.9s cubic-bezier(0.19, 1, 0.22, 1);
-    will-change: transform, opacity;
-    padding-right: 0.15em; 
 }
-.cinematic-text-word.revealed {
+.js-anim .cinematic-fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+}
+.js-anim .cinematic-text-word.revealed,
+.js-anim .cinematic-fade-up.revealed {
     transform: translateY(0);
     opacity: 1;
 }
 
-/* Safety net for the hero copy.
-   Everything with these classes starts at opacity 0 and only becomes visible
-   when script adds .revealed. That makes the headline, the strapline and the
-   button depend on script finishing - and if it is slow, blocked or throws,
-   the visitor is left looking at an empty hero with no way to know there is
-   text there. This animation does nothing during the intended reveal (it is
-   still waiting out its delay) and simply settles anything still hidden into
-   its final state afterwards. 4s leaves comfortable room over the intended
-   reveal, whose last element settles at about 2.6s. */
+/* Second net, for the case where script starts the reveal and then stops
+   partway. Does nothing during the intended reveal - it is still waiting out
+   its delay - and settles anything still hidden at 4s, comfortably clear of
+   the 2.6s the reveal takes. */
 .cinematic-text-word,
 .cinematic-fade-up {
     animation: reveal-failsafe 0s linear 4s forwards;
@@ -165,15 +188,18 @@ html {
         transform: none;
     }
 }
-.cinematic-fade-up {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.9s cubic-bezier(0.19, 1, 0.22, 1);
-    will-change: transform, opacity;
+
+/* Third net, for the curtain itself. The preloader covers the entire page and
+   is removed by script; if script dies between painting it and removing it,
+   the visitor gets a blank navy screen and no way past it. */
+#preloader {
+    animation: preloader-failsafe 0s linear 6s forwards;
 }
-.cinematic-fade-up.revealed {
-    opacity: 1;
-    transform: translateY(0);
+@keyframes preloader-failsafe {
+    to {
+        transform: translateY(-100%);
+        visibility: hidden;
+    }
 }
 
 /* Custom Luxury Cursor Styles */
@@ -217,9 +243,11 @@ html {
 }
 
 /* Magnetic Button Effect */
+/* will-change deliberately absent - see the note on .cinematic-text-word. This
+   is the "Explore Services" button, which came back in one photograph as a gold
+   rectangle with no writing on it. */
 .magnetic {
     transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.3s ease, color 0.3s ease, width 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    will-change: transform;
 }
 
 /* Before/After Slider */

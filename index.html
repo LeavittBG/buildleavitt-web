@@ -42,6 +42,13 @@
     <!-- Compiled Tailwind + custom styles (source: src/styles.css, build: npm run build) -->
     <link rel="stylesheet" href="dist/styles.css">
 
+    <!-- Says "script is running, so the hero reveal is going to happen" - which is
+         what allows the stylesheet to hide the hero copy. Without this class the
+         copy is simply visible, so a blocked or broken script can no longer leave
+         the page with no words on it. It sits here, before the body is parsed, so
+         nothing is ever painted visible and then snatched away. -->
+    <script>document.documentElement.classList.add('js-anim');</script>
+
     <!-- Lucide Icons.
          async, and deliberately not defer. A plain <script src> in <head> stops
          the browser parsing the rest of the page until the third party answers;
@@ -58,8 +65,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
 
-    <!-- No-JS fallback: without this the preloader and the opacity:0 reveal
-         elements would leave a visitor with scripts disabled on a blank page. -->
+    <!-- No-JS fallback. The hero copy no longer needs rescuing here - it is
+         visible unless .js-anim says otherwise, and without script that class is
+         never set - but .reveal-element, which covers most of the page below the
+         fold, is still hidden until an observer reaches it, and the preloader
+         and cursor still need taking down. -->
     <noscript>
         <style>
             #preloader, .cursor-dot, .cursor-outline { display: none !important; }
