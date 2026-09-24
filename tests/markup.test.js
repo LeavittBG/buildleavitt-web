@@ -1,0 +1,110 @@
+const { ROOT, FILE_ROOT, OUT, launch, serveRepo } = require('./lib/env');
+const path = require('path');
+const fs = require('fs');
+const { JSDOM } = require('jsdom');
+let fail = 0;
+const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) fail++; };
+
+for (const file of ['index.html', 'success.html']) {
+  const html = fs.readFileSync(path.join(ROOT, file), 'utf8');
+  const dom = new JSDOM(html);
+  const d = dom.window.document;
+  console.log('\n== ' + file + ' ==');
+
+  // JSON-LD parses
+  d.querySelectorAll('script[type="application/ld+json"]').forEach((s, i) => {
+    try { const j = JSON.parse(s.textContent); ok(true, `JSON-LD #${i} parses (@type=${j['@type']})`); }
+    catch (e) { ok(false, `JSON-LD #${i} parse error: ${e.message}`); }
+  });
+
+  // every referenced local asset exists
+  const refs = new Set();
+  d.querySelectorAll('img[src], link[href]').forEach(el => {
+    const v = el.getAttribute('src') || el.getAttribute('href');
+    if (v && !/^(data:|https?:|mailto:|tel:|#|\/\/)/.test(v)) refs.add(v.replace(/^\//, ''));
+  });
+  for (const r of refs) ok(fs.existsSync(path.join(ROOT, r)), `asset exists: ${r}`);
+
+  // images have dimensions
+  const imgs = [...d.querySelectorAll('img')].filter(i => i.id !== 'lightbox-img');
+  const noDim = imgs.filter(i => !i.getAttribute('width') || !i.getAttribute('height'));
+  ok(noDim.length === 0, `all ${imgs.length} <img> have width+height` + (noDim.length ? ` (missing: ${noDim.map(i=>i.getAttribute('src')).join(', ')})` : ''));
+
+  // alt present on every img
+  ok(imgs.every(i => i.hasAttribute('alt')), 'every <img> has an alt attribute');
+}
+
+// index-specific checks
+const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+const d = new JSDOM(html).window.document;
+console.log('\n== index.html wiring ==');
+
+// every id the script reaches for actually exists
+const ids = [...html.matchAll(/getElementById\('([^']+)'\)/g)].map(m => m[1]);
+for (const id of [...new Set(ids)]) ok(!!d.getElementById(id), `getElementById('${id}') resolves`);
+
+// querySelectorAll selectors used by the script match something
+for (const sel of ['.magnetic','.reveal-element','.counter','.service-card','.process-card',
+                   '.testimonial-slide','#testimonial-dots button','.gallery-img','.mobile-link',
+                   '.cinematic-text-word','.cinematic-fade-up']) {
+  const n = d.querySelectorAll(sel).length;
+  ok(n > 0, `selector ${sel} matches ${n} element(s)`);
+}
+
+// counts line up between slides and dots
+ok(d.querySelectorAll('.testimonial-slide').length === d.querySelectorAll('#testimonial-dots button').length,
+   'testimonial slide count === dot count');
+
+// form labels all point at a real control
+const labels = [...d.querySelectorAll('form label[for]')];
+ok(labels.length > 0 && labels.every(l => d.getElementById(l.getAttribute('for'))),
+   `all ${labels.length} form labels resolve to a control`);
+const controls = [...d.querySelectorAll('form input:not([type=hidden]), form select, form textarea')]
+  .filter(c => c.name !== 'bot-field');
+ok(controls.every(c => c.id && d.querySelector(`label[for="${c.id}"]`)),
+   `all ${controls.length} visible form controls have a label`);
+
+// data-service / data-step keys exist in the JS data objects
+const svc = JSON.parse('{' + html.match(/const serviceData = \{([\s\S]*?)\n        \};/)[1].replace(/(\w+):/g,'"$1":') + '}');
+[...d.querySelectorAll('[data-service]')].forEach(c =>
+  ok(!!svc[c.getAttribute('data-service')], `serviceData has key "${c.getAttribute('data-service')}"`));
+
+// no leftover references to the removed image or old selectors
+ok(!html.includes('w9259kw9259'), 'no reference to the deleted 9.3MB PNG');
+ok(!html.includes('.testimonial-dots span'), 'stale .testimonial-dots span selector is gone');
+ok(!/(?<!\.)\blucide\.createIcons\(\)/.test(html.replace(/typeof lucide[^;]*;/,'')) || html.includes('renderIcons'), 'lucide calls go through the guard');
+
+
+// --- heading outline ---
+console.log("\n== index.html heading outline ==");
+{
+  const hs=[...d.querySelectorAll("h1,h2,h3,h4,h5,h6")].map(h=>+h.tagName[1]);
+  ok(d.querySelectorAll("h1").length===1, "exactly one <h1>");
+  ok(hs[0]===1, "the first heading on the page is the <h1>");
+  let skips=0; for(let i=1;i<hs.length;i++) if(hs[i]>hs[i-1]+1) skips++;
+  ok(skips===0, "no heading level is skipped (found "+skips+")");
+  // Every section that has a heading should lead with an h2.
+  let bad=[];
+  for(const sec of d.querySelectorAll("section")){
+    const h=sec.querySelector("h1,h2,h3,h4,h5,h6");
+    if(h && h.tagName!=="H2" && !sec.querySelector("h1")) bad.push((sec.id||"(unnamed)")+":"+h.tagName);
+  }
+  ok(bad.length===0, "every section leads with an <h2> "+(bad.length?"- offenders: "+bad.join(", "):""));
+}
+
+
+// --- no placeholder/example contact details anywhere ---
+console.log("\n== contact details are real ==");
+{
+  const all = ["index.html","success.html","privacy.html","terms.html"]
+    .map(n => fs.readFileSync(path.join(ROOT, n), "utf8")).join("\n");
+  // 555-01xx is the reserved fictional range; example.com/.org likewise.
+  const fake = all.match(/\(?\d{3}\)?[ -]?555-01\d\d|example\.(com|org|net)/g) || [];
+  ok(fake.length === 0, "no fictional 555 numbers or example.com addresses" + (fake.length ? ": " + [...new Set(fake)].join(", ") : ""));
+  const nums = [...new Set(all.match(/\(\d{3}\)\s?\d{3}-\d{4}/g) || [])];
+  ok(nums.every(x => x.replace(/\D/g, "") === "8668326524"),
+     "every displayed phone number is the real one: " + nums.join(", "));
+}
+
+console.log(fail === 0 ? '\nAll checks passed.' : `\n${fail} check(s) failed.`);
+process.exit(fail ? 1 : 0);

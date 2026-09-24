@@ -2,8 +2,10 @@
   # assets-src/ holds the full-resolution originals. They are only inputs to
   # `npm run images`, which is run locally and its outputs committed - so drop
   # them from the deploy, otherwise publish = "." would upload and publicly
-  # serve ~12MB of source photos. This only touches Netlify's build clone.
-  command = "npm run build && rm -rf assets-src"
+  # serve ~12MB of source photos. tests/ goes for the same reason: the test
+  # suite and its copy of the web fonts have no business being public pages.
+  # This only touches Netlify's build clone.
+  command = "npm run build && rm -rf assets-src tests"
   publish = "."
   # No serverless functions are in use. If you add some later, restore:
   #   functions = "netlify/functions"

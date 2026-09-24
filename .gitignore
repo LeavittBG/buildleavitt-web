@@ -1,3 +1,6 @@
 node_modules/
 .netlify/
 .DS_Store
+
+# Screenshots left behind by the test suite
+tests/.output/

@@ -18,6 +18,36 @@ listed under `content` in `tailwind.config.js` — currently `./*.html` and
 the stylesheet, so if something loses its styling, that list is the first place
 to look.
 
+## Tests
+
+```
+npx playwright install chromium   # once per machine
+npm test                          # everything, ~3 minutes
+npm test -- hero                  # only files with "hero" in the name
+node tests/hero-wrap.test.js      # any one file on its own
+```
+
+Each file in `tests/` loads the real pages in a headless Chrome and checks
+something that has actually gone wrong on this site before — the headline
+breaking onto the wrong lines, italic letters clipped at the edge, words not
+painting on one Windows machine, the site rendering in the wrong typeface,
+prices or square footage drifting from Leavitt's figures. The comment at the
+top of each file says what it guards against and why. Run `npm test` before
+merging anything that touches the markup, the stylesheet or the plans data.
+
+The tests serve the real web fonts from `tests/fixtures/fonts/` rather than
+fetching them, because text width decides several of the layout checks. If
+you change the Google Fonts URL in the pages, run `npm run test:fonts` to
+refresh that copy.
+
+One check in `plans.test.js` reads the brochure PDFs with `pdftotext`
+(`brew install poppler` on a Mac). Without it that check is skipped and says
+so; the rest still run.
+
+Screenshots the tests leave for a person to look at go to `tests/.output/`,
+which git ignores. `tests/` is removed from the Netlify deploy, the same as
+`assets-src/`.
+
 ## Fonts
 
 Inter and Playfair Display are declared in `tailwind.config.js` under
