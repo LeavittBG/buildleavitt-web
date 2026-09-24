@@ -1,0 +1,59 @@
+# Runs the test suite (tests/, `npm test`) on every pull request.
+#
+# To make a failing run block the merge button, add a branch protection rule
+# for main in the repository settings that requires the "test" check - see the
+# Tests section of README.md.
+
+name: Tests
+
+on:
+  pull_request:
+  # Lets the suite be run by hand from the Actions tab against any branch.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# A newer push to the same pull request makes an in-progress run pointless.
+concurrency:
+  group: tests-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      # Node 22, not the Node 20 that netlify.toml gives the deploy: jsdom,
+      # which only the tests use, requires 22. The deploy never loads it.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # Chromium for Playwright, plus the system libraries it needs.
+      - run: npx playwright install --with-deps chromium
+
+      # pdftotext, for the check in plans.test.js that reads the brochure PDFs.
+      # Without it that one check skips itself; here it should run.
+      - run: sudo apt-get install -y --no-install-recommends poppler-utils
+
+      # The tests read the compiled stylesheet, so build it from source first -
+      # a pull request that edits src/styles.css but forgets to rebuild would
+      # otherwise be tested against the stale dist/styles.css.
+      - run: npm run build
+
+      - run: npm test
+
+      # Screenshots the tests leave behind, kept for a week when anything fails.
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-screenshots
+          path: tests/.output/
+          retention-days: 7
+          if-no-files-found: ignore

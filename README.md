@@ -48,6 +48,18 @@ Screenshots the tests leave for a person to look at go to `tests/.output/`,
 which git ignores. `tests/` is removed from the Netlify deploy, the same as
 `assets-src/`.
 
+GitHub runs the whole suite on every pull request
+(`.github/workflows/test.yml`) and shows the result as a check named **test**
+on the PR. If it fails, the screenshots are attached to the run under
+Artifacts. To make a failing run block the merge button:
+
+1. On GitHub, open the repository → **Settings** → **Branches**
+2. **Add branch protection rule** (or **Add classic branch protection rule**)
+3. Branch name pattern: `main`
+4. Tick **Require status checks to pass before merging**, search for `test`
+   and select it
+5. **Create**
+
 ## Fonts
 
 Inter and Playfair Display are declared in `tailwind.config.js` under
