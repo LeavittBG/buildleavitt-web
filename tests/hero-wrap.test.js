@@ -3,8 +3,13 @@ const { chromium } = require('playwright');
 const { serveFonts } = require('./lib/fonts');
 const probe = () => {
   const byY = new Map();
+  // Measure the mask each word sits in, not the word. The words slide up into
+  // place when the page loads, and a word caught mid-slide reports a different
+  // height from its neighbours - which read as a line break that was not there
+  // and failed this test at random widths once the intro got shorter. The masks
+  // never move, so their position is the line the word is actually on.
   for (const w of document.querySelectorAll('.cinematic-text-word')) {
-    const y = Math.round(w.getBoundingClientRect().y);
+    const y = Math.round(w.closest('.overflow-hidden-mask').getBoundingClientRect().y);
     if (!byY.has(y)) byY.set(y, []);
     byY.get(y).push(w.textContent.trim());
   }
