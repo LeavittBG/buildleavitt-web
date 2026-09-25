@@ -12,6 +12,16 @@
 [build.environment]
   NODE_VERSION = "20"
 
+# Pretty URLs off. With it on, Netlify rewrote every link as it published -
+# /plans/the-poet.html became /plans/the-poet - while each page's canonical tag,
+# the sitemap, the link-preview tags and the breadcrumb data all still named the
+# .html address. Both addresses loaded, so search engines were told two
+# different things about which one was real. Off, the site publishes exactly
+# what is in this repository, which is also exactly what the test suite checks.
+# Set here rather than in the Netlify dashboard so it cannot quietly change.
+[build.processing.html]
+  pretty_urls = false
+
 # The brochures used to be served noindex, because the batch edit that branded
 # them had left "THE VISIONARY" in a hidden text layer in all fifteen derived
 # files - invisible on the page, but readable by a search engine. The

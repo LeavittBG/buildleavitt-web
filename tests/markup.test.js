@@ -75,6 +75,13 @@ ok(!html.includes('.testimonial-dots span'), 'stale .testimonial-dots span selec
 ok(!/<script[^>]+src="[^"]*lucide/i.test(html), 'no icon library is loaded from a CDN - icons are inline SVG');
 ok(!html.includes('data-lucide='), 'no icon is left for a library to draw');
 
+// Netlify must publish the pages as written. With Pretty URLs on it rewrote
+// every link to an address the canonical tags and sitemap did not name.
+{
+  const toml = fs.readFileSync(path.join(ROOT, 'netlify.toml'), 'utf8');
+  ok(/\[build\.processing\.html\][^\[]*pretty_urls\s*=\s*false/.test(toml), 'netlify.toml keeps Pretty URLs off');
+}
+
 // --- every link and button can be named ---
 // An <a> with no text, no aria-label and no described image is an empty link:
 // search engines get no anchor text and a screen reader announces "link". The
