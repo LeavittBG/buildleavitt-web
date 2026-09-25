@@ -138,5 +138,34 @@ console.log("\n== contact details are real ==");
      "every displayed phone number is the real one: " + nums.join(", "));
 }
 
+// --- opening hours ---
+// The footer shows the hours to people; the homepage's structured data gives
+// the same hours to Google for the map listing. They are written separately,
+// so check they still agree, and that every page shows the same line. The line
+// is read as a screen reader hears it: the dots are hidden from it and the
+// hidden commas are not.
+console.log("\n== opening hours agree, on every page ==");
+{
+  const HOURS = "Monday–Friday 8 a.m.–5 p.m., Saturday by appointment, Closed Sunday";
+  const spec = [...d.querySelectorAll('script[type="application/ld+json"]')]
+    .map((s) => JSON.parse(s.textContent)).find((j) => j.openingHoursSpecification)?.openingHoursSpecification || [];
+  ok(spec.length === 1 && spec[0].dayOfWeek.join() === "Monday,Tuesday,Wednesday,Thursday,Friday" &&
+     spec[0].opens === "08:00" && spec[0].closes === "17:00",
+     "structured data gives Monday-Friday 08:00-17:00 and nothing else - Saturday is by appointment, not open");
+  const pages = ["index.html", "privacy.html", "terms.html", "404.html",
+    ...fs.readdirSync(path.join(ROOT, "plans")).filter((f) => f.endsWith(".html")).map((f) => "plans/" + f)];
+  const wrong = [];
+  for (const f of pages) {
+    const doc = new JSDOM(fs.readFileSync(path.join(ROOT, f), "utf8")).window.document;
+    const line = [...doc.querySelectorAll("p")].find((p) => /Saturday by appointment/.test(p.textContent));
+    if (!line) { wrong.push(`${f}: no hours`); continue; }
+    const heard = line.cloneNode(true);
+    heard.querySelectorAll('[aria-hidden="true"]').forEach((el) => el.remove());
+    const text = heard.textContent.replace(/\s+/g, " ").trim();
+    if (text !== HOURS) wrong.push(`${f}: "${text}"`);
+  }
+  ok(wrong.length === 0, `all ${pages.length} pages show "${HOURS}"` + (wrong.length ? " - " + wrong.join(" | ") : ""));
+}
+
 console.log(fail === 0 ? '\nAll checks passed.' : `\n${fail} check(s) failed.`);
 process.exit(fail ? 1 : 0);
