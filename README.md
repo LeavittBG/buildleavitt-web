@@ -92,6 +92,30 @@ served. Everything the site actually loads is generated from them and committed.
 npm run images     # resize + WebP the photography in assets-src/
 ```
 
+## Icons
+
+The icons are inline SVG in the page, not a script. They came from
+[Lucide](https://lucide.dev) (ISC License), which the site used to load at
+runtime as `lucide@latest` — 444 KB of JavaScript for 17 icons, and whenever
+Lucide changed, so did the site. Lucide 1.0 dropped its Facebook and Instagram
+icons and every one of them on the site silently went blank; those two now come
+from Lucide 0.577.0, the last release that had them.
+
+To add an icon, open it on lucide.dev, **Copy SVG**, paste it in place and give
+it the size classes it needs (`class="w-5 h-5"`). Keep `aria-hidden="true"` on
+it when it sits beside text; a link or button that contains *only* an icon needs
+an `aria-label` saying where it goes. `markup.test.js` fails any link or button
+without a name, on every page.
+
+## Not-found page
+
+`404.html` is what Netlify shows, with a 404 status, for any address that has
+no page behind it. It is served *at* the broken address, so every link and
+asset in it must start with `/` — a relative `dist/styles.css` would load from
+`/plans/dist/styles.css` when the broken address is under `/plans/`, and the
+page would arrive unstyled. `not-found.test.js` requests it at several depths.
+It carries `noindex` and is not in the sitemap.
+
 ## Home plans
 
 The pages under `/plans/` are generated from data, not edited by hand.
@@ -105,6 +129,17 @@ npm run plans:build    # data  -> plans/index.html, plans/<slug>.html, sitemap.x
 `plans:build` also writes `sitemap.xml` and `robots.txt`. If you add a new
 top-level page to the site, add it to the `STATIC` list in
 `scripts/build-plans.mjs` so it ends up in the sitemap.
+
+Each sitemap entry carries `<lastmod>`: the date of the last git commit that
+changed that page, or today if the page has uncommitted changes. Google only
+uses `lastmod` while it stays accurate, so it is never simply the build date.
+Because the date comes from git, re-run `npm run plans:build` after editing a
+page by hand, before committing, so the sitemap picks up the change.
+
+Every plan page's meta description — the text under its title in Google — is
+built from the specs by `snippet()` in `build-plans.mjs` and held to 155
+characters by `plans.test.js`, since Google cuts off anything longer. Each page
+also names its front elevation as the image shown when it is shared.
 
 Models appear at `/plans/` in the order they are listed in `src/plans.json` —
 currently alphabetical by the name after "The".

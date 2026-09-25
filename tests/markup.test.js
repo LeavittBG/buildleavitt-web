@@ -72,7 +72,32 @@ const svc = JSON.parse('{' + html.match(/const serviceData = \{([\s\S]*?)\n     
 // no leftover references to the removed image or old selectors
 ok(!html.includes('w9259kw9259'), 'no reference to the deleted 9.3MB PNG');
 ok(!html.includes('.testimonial-dots span'), 'stale .testimonial-dots span selector is gone');
-ok(!/(?<!\.)\blucide\.createIcons\(\)/.test(html.replace(/typeof lucide[^;]*;/,'')) || html.includes('renderIcons'), 'lucide calls go through the guard');
+ok(!/<script[^>]+src="[^"]*lucide/i.test(html), 'no icon library is loaded from a CDN - icons are inline SVG');
+ok(!html.includes('data-lucide='), 'no icon is left for a library to draw');
+
+// --- every link and button can be named ---
+// An <a> with no text, no aria-label and no described image is an empty link:
+// search engines get no anchor text and a screen reader announces "link". The
+// footer's Facebook and Instagram links were exactly that once their icons
+// stopped drawing.
+console.log("\n== every link and button has a name, on every page ==");
+{
+  const pages = ['index.html', 'privacy.html', 'terms.html', 'success.html', '404.html',
+    ...fs.readdirSync(path.join(ROOT, 'plans')).filter((f) => f.endsWith('.html')).map((f) => 'plans/' + f)];
+  const named = (el) => (el.textContent || '').trim() || el.getAttribute('aria-label') || el.getAttribute('title') ||
+    [...el.querySelectorAll('img[alt]')].some((i) => i.getAttribute('alt').trim()) ||
+    (el.getAttribute('aria-labelledby') || '').split(/\s+/).some((id) => id && (el.ownerDocument.getElementById(id)?.textContent || '').trim());
+  let checked = 0;
+  for (const f of pages) {
+    if (!fs.existsSync(path.join(ROOT, f))) { ok(false, `${f} exists`); continue; }
+    const doc = new JSDOM(fs.readFileSync(path.join(ROOT, f), 'utf8')).window.document;
+    const nameless = [...doc.querySelectorAll('a[href], button')].filter((el) => !named(el));
+    checked += doc.querySelectorAll('a[href], button').length;
+    ok(nameless.length === 0, `${f}: every link and button has a name` +
+      (nameless.length ? ` - nameless: ${nameless.map((e) => e.outerHTML.slice(0, 90)).join(' | ')}` : ''));
+  }
+  console.log(`  ....  ${checked} links and buttons checked`);
+}
 
 
 // --- heading outline ---

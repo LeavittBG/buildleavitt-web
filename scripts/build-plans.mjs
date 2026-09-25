@@ -24,6 +24,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
+import { execFileSync } from 'node:child_process';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(ROOT, 'plans');
@@ -152,7 +153,12 @@ const SPECS = [
 /** Specs whose value can carry a qualifying line underneath it. */
 const NOTE_FOR = { sqft: 'sqftNote', baths: 'bathsNote', price: 'priceNote' };
 
-const head = ({ title, description, canonical }) => `<!DOCTYPE html>
+/*
+ * image: { url, width, height, alt } - the picture a link preview shows when a
+ * page is shared on Facebook, in a text message or anywhere else that reads
+ * Open Graph tags. JPEG or PNG, not WebP, which some of those still ignore.
+ */
+const head = ({ title, description, canonical, image }) => `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -170,9 +176,19 @@ const head = ({ title, description, canonical }) => `<!DOCTYPE html>
     <link rel="canonical" href="${SITE}${canonical}">
 
     <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Leavitt Building Group">
     <meta property="og:title" content="${esc(title)}">
     <meta property="og:description" content="${esc(description)}">
-    <meta property="og:url" content="${SITE}${canonical}">
+    <meta property="og:url" content="${SITE}${canonical}">${image ? `
+    <meta property="og:image" content="${image.url}">
+    <meta property="og:image:width" content="${image.width}">
+    <meta property="og:image:height" content="${image.height}">
+    <meta property="og:image:alt" content="${esc(image.alt)}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="${esc(title)}">
+    <meta name="twitter:description" content="${esc(description)}">
+    <meta name="twitter:image" content="${image.url}">
+    <meta name="twitter:image:alt" content="${esc(image.alt)}">` : ''}
 
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
     <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
@@ -216,7 +232,8 @@ const foot = () => `
                 <a href="/terms.html" class="hover:text-white transition-colors">Terms</a>
             </div>
         </div>
-        <p class="max-w-6xl mx-auto mt-6 text-xs text-gray-500 tracking-wider text-center md:text-left">MHBR 9796 | MHIC 161316 | PAHIC 212160</p>
+        <address class="max-w-6xl mx-auto mt-6 not-italic text-sm text-center md:text-left"><span class="whitespace-nowrap">217 E. Jarrettsville Rd., Suite 3,</span> <span class="whitespace-nowrap">Forest Hill, MD 21050</span><span class="mx-2" aria-hidden="true">&middot;</span><a href="tel:+18668326524" class="hover:text-white transition-colors">(866) 832-6524</a></address>
+        <p class="max-w-6xl mx-auto mt-2 text-xs text-gray-500 tracking-wider text-center md:text-left">MHBR 9796 | MHIC 161316 | PAHIC 212160</p>
     </footer>
 
     <script>
@@ -263,6 +280,40 @@ const blurb = (model) => {
   return tail ? `${head}, ${tail}.` : `${head}.`;
 };
 
+/**
+ * The meta description: what Google shows under the page's title in search
+ * results. It is cut off at roughly 155 characters, so the facts people choose
+ * a plan by - size, bedrooms, baths - come first and the credit comes last. The
+ * old wording led with "floor plans and front elevation from Leavitt Building
+ * Group, custom home builders in Forest Hill, Maryland", ran to 217-231
+ * characters, and lost exactly the specs to the cut. A test holds every plan to
+ * 155. "from" stays wherever Leavitt's figure is a starting point.
+ */
+const snippet = (model) => {
+  const s = model.specs || {};
+  const dash = (v) => String(v).replace('-', '–');
+  const facts = [
+    [s.stories === 1 ? 'single-story' : s.stories === 2 ? 'two-story' : '', model.style].filter(Boolean).join(' '),
+    s.beds && `${dash(s.beds)} bedrooms`,
+    s.baths && `${dash(s.baths)} baths`,
+    s.sqft && `${s.sqftFrom ? 'from ' : ''}${s.sqft.toLocaleString('en-US')} sq ft`,
+  ].filter(Boolean).join(', ');
+  const what = model.built ? 'Floor plans and photos' : 'Floor plans and elevation';
+  return `${model.name} home plan${facts ? `: ${facts}` : ''}. ${what} by Leavitt Building Group.`;
+};
+
+/** A plan's front elevation as a share image. */
+const shareImage = (model) => {
+  const e = images[model.slug]?.elevation;
+  if (!e) return undefined;
+  return {
+    url: `${SITE}/plans/img/${e.file}.${e.ext || 'png'}`,
+    width: e.width,
+    height: e.height,
+    alt: model.built ? `${model.name}, a home built by Leavitt Building Group` : `${model.name} front elevation`,
+  };
+};
+
 // ---------------------------------------------------------------- model pages
 
 for (const [i, model] of models.entries()) {
@@ -275,9 +326,7 @@ for (const [i, model] of models.entries()) {
   // offers its photographs instead.
   const hasBrochure = !model.pages.every((p) => p.image);
 
-  const description =
-    `${model.name} floor plans and front elevation from Leavitt Building Group, ` +
-    `custom home builders in Forest Hill, Maryland. ${blurb(model)}`.trim();
+  const description = snippet(model);
 
   const specRows = SPECS.map(([key, label, fmt]) => {
     const v = model.specs?.[key];
@@ -322,6 +371,7 @@ for (const [i, model] of models.entries()) {
     title: `${model.name} | Home Plans | Leavitt Building Group`,
     description,
     canonical: `/plans/${model.slug}.html`,
+    image: shareImage(model),
   }) + `
     <main class="max-w-6xl mx-auto px-6 py-14 md:py-20">
 
@@ -440,9 +490,11 @@ const cards = models.map((model) => {
 const indexHtml = head({
   title: 'Home Plans | Leavitt Building Group',
   description:
-    `Browse ${models.length} home plans from Leavitt Building Group, custom home builders in ` +
-    'Forest Hill, Maryland. Front elevations, floor plans and downloadable brochures for each model.',
+    `${models.length} home plans from Leavitt Building Group, a custom home builder serving Harford ` +
+    'and surrounding counties. Elevations, floor plans and brochures for each.',
   canonical: '/plans/',
+  // The Visionary leads the plans on the home page, so it leads the preview too.
+  image: shareImage(models.find((m) => m.slug === 'the-visionary')),
 }) + `
     <main class="max-w-6xl mx-auto px-6 py-14 md:py-20">
 
@@ -547,9 +599,29 @@ console.log(`plans/index.html  (${models.length} models)`);
 const STATIC = ['/', '/plans/', '/privacy.html', '/terms.html'];
 const urls = [...STATIC, ...models.map((m) => `/plans/${m.slug}.html`)];
 
+/*
+ * <lastmod>: the date each page last actually changed, so search engines know
+ * which pages to recrawl. Google uses it only while it keeps proving accurate -
+ * a sitemap that stamps every page with the day it was generated gets ignored -
+ * so this asks git: the last commit that touched the file, or today if the file
+ * has changes not committed yet (which is the case for a page this run has just
+ * rewritten). If git cannot say, the date is left off rather than guessed.
+ */
+const fileFor = (u) => (u.endsWith('/') ? `${u.slice(1)}index.html` : u.slice(1));
+const git = (...args) => execFileSync('git', args, { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+const today = () => new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD, local time
+const lastmod = (u) => {
+  try {
+    if (git('status', '--porcelain', '--', fileFor(u))) return today();
+    return git('log', '-1', '--format=%cs', '--', fileFor(u)) || undefined;
+  } catch {
+    return undefined;
+  }
+};
+
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls.map((u) => `  <url><loc>${SITE}${u}</loc></url>`).join('\n')}
+${urls.map((u) => { const d = lastmod(u); return `  <url><loc>${SITE}${u}</loc>${d ? `<lastmod>${d}</lastmod>` : ''}</url>`; }).join('\n')}
 </urlset>
 `;
 writeFileSync(join(ROOT, 'sitemap.xml'), sitemap);

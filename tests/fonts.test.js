@@ -52,7 +52,7 @@ const audit = () => {
   const base = `http://127.0.0.1:${server.address().port}`;
 
   const models = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plans.json'), 'utf8')).models;
-  const pages = ['/index.html', '/privacy.html', '/terms.html', '/success.html', '/plans/',
+  const pages = ['/index.html', '/privacy.html', '/terms.html', '/success.html', '/404.html', '/plans/',
                  ...models.map((m) => `/plans/${m.slug}.html`)];
 
   const b = await launch();
