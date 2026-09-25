@@ -4,28 +4,35 @@ const { serveFonts } = require('./lib/fonts');
 let fail = 0;
 const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) fail++; };
 
-const LUCIDE = `window.lucide={createIcons(){document.querySelectorAll('[data-lucide]').forEach(n=>{const s=document.createElementNS('http://www.w3.org/2000/svg','svg');s.setAttribute('data-rendered','1');n.replaceWith(s);});}};`;
-
 (async () => {
   const b = await launch();
 
-  console.log('\n== icons render however the library arrives ==');
-  for (const [label, stall, block] of [['immediately', 0, false], ['after 2s', 2000, false], ['never (blocked)', 0, true]]) {
+  console.log('\n== icons are part of the page, not fetched from anyone ==');
+  // The icons used to be drawn by lucide@latest from unpkg. Lucide 1.0 dropped
+  // its Facebook and Instagram icons and ten of them went blank on the live site
+  // without anything noticing. They are inline SVG now; these checks keep it so.
+  {
     const ctx = await b.newContext({ viewport: { width: 1280, height: 900 } });
     await serveFonts(ctx);
-    await ctx.route(/unpkg\.com/, async (r) => {
-      if (block) return r.abort();
-      if (stall) await new Promise((s) => setTimeout(s, stall));
-      r.fulfill({ status: 200, contentType: 'text/javascript', body: LUCIDE });
-    });
     const p = await ctx.newPage();
-    const errs = [];
-    p.on('pageerror', (e) => errs.push(e.message.split('\n')[0]));
-    await p.goto(FILE_ROOT + 'index.html', { waitUntil: 'domcontentloaded' });
-    await p.waitForTimeout(stall + 1500);
-    const n = await p.evaluate(() => document.querySelectorAll('svg[data-rendered]').length);
-    if (block) ok(errs.length === 0, `library ${label}: page still runs clean (${errs.length} JS errors)`);
-    else ok(n > 0, `library ${label}: icons drawn (${n})`);
+    const offsite = [];
+    p.on('request', (r) => {
+      const u = new URL(r.url());
+      if (/^https?:$/.test(u.protocol) && !/^(fonts\.(googleapis|gstatic)\.com|www\.googletagmanager\.com)$/.test(u.hostname) && r.resourceType() === 'script') offsite.push(u.hostname);
+    });
+    await p.goto(FILE_ROOT + 'index.html', { waitUntil: 'load' });
+    await p.waitForTimeout(3000);
+    ok(offsite.length === 0, `no third-party script is fetched to draw the page (${[...new Set(offsite)].join(', ') || 'none'})`);
+    const r = await p.evaluate(() => {
+      const social = [...document.querySelectorAll('a[href*="facebook.com"], a[href*="instagram.com"]')];
+      return {
+        leftover: document.querySelectorAll('[data-lucide]').length,
+        socialIcons: social.map((a) => { const s = a.querySelector('svg'); const b = s && s.getBoundingClientRect(); return b ? b.width * b.height : 0; }),
+      };
+    });
+    ok(r.leftover === 0, `no icon is left waiting for a library to draw it (${r.leftover})`);
+    ok(r.socialIcons.length >= 10 && r.socialIcons.every((a) => a > 0),
+      `every Facebook and Instagram link draws its icon (${r.socialIcons.filter((a) => a > 0).length} of ${r.socialIcons.length})`);
     await ctx.close();
   }
 

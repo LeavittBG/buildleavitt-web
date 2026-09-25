@@ -278,6 +278,57 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
       `${m.slug}: ${m.pages.length} images generated`);
   }
 
+  console.log('\n== search results and link previews ==');
+  // Google cuts a description off at about 155 characters. These used to run to
+  // 217-231 and lose the bedrooms and square footage - the part people choose a
+  // plan by. And with no preview image, a plan shared by text or on Facebook
+  // arrived as a bare link.
+  for (const p of pages) {
+    const doc = new JSDOM(fs.readFileSync(path.join(ROOT, p), 'utf8')).window.document;
+    const meta = (sel) => doc.querySelector(sel)?.getAttribute('content') || '';
+    const desc = meta('meta[name="description"]');
+    ok(desc.length > 0 && desc.length <= 155, `${p}: description fits in a search result (${desc.length} chars)`);
+    const img = meta('meta[property="og:image"]');
+    const file = img.replace('https://buildleavitt.com/', '');
+    const real = file && fs.existsSync(path.join(ROOT, file)) ? await sharp(path.join(ROOT, file)).metadata() : null;
+    ok(!!real && /\.(png|jpe?g)$/.test(file), `${p}: preview image is a JPEG or PNG that exists (${file || 'none'})`);
+    if (real) ok(+meta('meta[property="og:image:width"]') === real.width && +meta('meta[property="og:image:height"]') === real.height,
+      `${p}: preview image declares its real size (${real.width}x${real.height})`);
+    ok(meta('meta[name="twitter:card"]') === 'summary_large_image' && meta('meta[name="twitter:image"]') === img,
+      `${p}: large preview card, same image`);
+  }
+  for (const m of models) {
+    const doc = new JSDOM(fs.readFileSync(path.join(ROOT, `plans/${m.slug}.html`), 'utf8')).window.document;
+    const desc = doc.querySelector('meta[name="description"]').getAttribute('content');
+    const sq = m.specs?.sqft ? m.specs.sqft.toLocaleString('en-US') : null;
+    ok(desc.startsWith(m.name) && (!sq || desc.includes(`${m.specs.sqftFrom ? 'from ' : ''}${sq} sq ft`)),
+      `${m.slug}: description leads with the name and carries Leavitt's square footage`);
+  }
+
+  console.log('\n== sitemap.xml ==');
+  // What Search Console reads. Every address must be a real page whose own
+  // canonical names that exact address, and every entry carries the date the
+  // page last changed - a real date, never one in the future.
+  {
+    const xml = fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8');
+    const entries = [...xml.matchAll(/<url><loc>([^<]+)<\/loc>(?:<lastmod>([^<]+)<\/lastmod>)?<\/url>/g)];
+    ok(/^<\?xml version="1\.0" encoding="UTF-8"\?>\s*<urlset xmlns="http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9">/.test(xml),
+      'declares the sitemap schema');
+    ok(entries.length === (xml.match(/<url>/g) || []).length && entries.length >= 5, `every <url> entry is well formed (${entries.length})`);
+    const today = new Date().toLocaleDateString('en-CA');
+    let good = 0;
+    for (const [, loc, mod] of entries) {
+      const u = new URL(loc);
+      const file = u.pathname.endsWith('/') ? u.pathname.slice(1) + 'index.html' : u.pathname.slice(1);
+      const exists = u.origin === 'https://buildleavitt.com' && fs.existsSync(path.join(ROOT, file));
+      const canon = exists && new JSDOM(fs.readFileSync(path.join(ROOT, file), 'utf8')).window.document.querySelector('link[rel=canonical]')?.href;
+      const dated = /^\d{4}-\d{2}-\d{2}$/.test(mod || '') && mod <= today;
+      if (exists && canon === loc && dated) good++;
+      else ok(false, `${loc}: ${!exists ? 'no such page' : canon !== loc ? `canonical is ${canon}` : `lastmod "${mod}" is not a real past date`}`);
+    }
+    ok(good === entries.length, `all ${entries.length} addresses are real pages, match their canonical, and carry a real lastmod`);
+  }
+
   // ------------------------------------------------------------------ browser
   const browser = await launch();
 

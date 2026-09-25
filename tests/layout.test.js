@@ -15,7 +15,9 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
   await p.waitForTimeout(1500);
 
   const m = await p.evaluate(() => {
-    const insta = [...document.querySelectorAll('a[aria-label*="Instagram"]')];
+    // The strip's tiles are the grid's own links. Matching on the label alone
+    // would also count the footer's Instagram icon, which now has a label too.
+    const insta = [...document.querySelectorAll('.grid > a[href*="instagram.com"]')];
     const logo = document.querySelector('#main-nav img');
     const hero = document.querySelector('.animate-ken-burns');
     const kyle = document.querySelector('img[src="kyle.jpg"]');

@@ -55,7 +55,14 @@ function serveRepo(rewrite) {
     if (!p.startsWith(ROOT)) { res.writeHead(403); return res.end(); }
     if (p.endsWith('/')) p += 'index.html';
     fs.readFile(p, (e, buf) => {
-      if (e) { res.writeHead(404); return res.end('not found'); }
+      // As Netlify does: any address with no file behind it gets 404.html, with
+      // a 404 status, served at the address that was asked for.
+      if (e) {
+        const nf = path.join(ROOT, '404.html');
+        if (!fs.existsSync(nf)) { res.writeHead(404); return res.end('not found'); }
+        res.writeHead(404, { 'content-type': 'text/html' });
+        return res.end(fs.readFileSync(nf));
+      }
       if (rewrite) buf = rewrite(p, buf) || buf;
       res.writeHead(200, { 'content-type': TYPES[path.extname(p)] || 'application/octet-stream' });
       res.end(buf);

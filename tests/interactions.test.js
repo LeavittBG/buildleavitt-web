@@ -12,7 +12,7 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
   page.on('pageerror', e => errors.push(e.message));
 
   // Block the CDNs to prove the page survives a third-party failure.
-  if (process.env.OFFLINE) await page.route('**://{unpkg.com,cdn.tailwindcss.com,fonts.googleapis.com,fonts.gstatic.com}/**', r => r.abort());
+  if (process.env.OFFLINE) await page.route('**://{fonts.googleapis.com,fonts.gstatic.com}/**', r => r.abort());
 
   await page.goto(path, { waitUntil: 'load' });
   await page.waitForTimeout(4200); // let the 2.4s preloader finish
@@ -110,14 +110,24 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
   const mob = await ctx.newPage();
   await mob.setViewportSize({ width: 390, height: 844 });
   await mob.goto(path); await mob.waitForTimeout(4200);
+  // The button carries both icons and shows one at a time; exactly one must
+  // be visible in every state, and it must be the right one.
+  ok(await mob.locator('#menu-icon-open').isVisible() && !(await mob.locator('#menu-icon-close').isVisible()),
+    'menu button shows the menu icon before it is pressed');
   await mob.locator('#mobile-menu-btn').click();
   await mob.waitForTimeout(200);
   ok(await mob.locator('#mobile-menu-btn').getAttribute('aria-expanded') === 'true', 'menu button reports aria-expanded=true');
   ok(await mob.locator('#mobile-menu').isVisible(), 'mobile menu opens');
+  ok(await mob.locator('#menu-icon-close').isVisible() && !(await mob.locator('#menu-icon-open').isVisible()),
+    'menu button shows the close (X) icon while the menu is open');
+
   await mob.locator('#mobile-menu-btn').click();
   await mob.waitForTimeout(200);
   ok(await mob.locator('#mobile-menu-btn').getAttribute('aria-expanded') === 'false', 'menu button reports aria-expanded=false');
   ok(!(await mob.locator('#mobile-menu').isVisible()), 'mobile menu closes');
+  ok(await mob.locator('#menu-icon-open').isVisible() && !(await mob.locator('#menu-icon-close').isVisible()),
+    'menu button shows the menu icon again once it closes');
+
   await mob.locator('#mobile-menu-btn').click();
   await mob.waitForTimeout(200);
   ok(await mob.locator('#mobile-menu').isVisible(), 'mobile menu re-opens on a third toggle');
