@@ -59,15 +59,6 @@ html {
     transform: translateY(0);
 }
 
-/* Ken Burns Animation */
-@keyframes ken-burns {
-    0% { transform: scale(1); }
-    100% { transform: scale(1.15); }
-}
-.animate-ken-burns {
-    animation: ken-burns 40s ease-out forwards;
-}
-
 /* Preloader Styles */
 #preloader {
     transition: transform 0.7s cubic-bezier(0.77, 0, 0.175, 1);
@@ -202,46 +193,6 @@ html {
     }
 }
 
-/* Custom Luxury Cursor Styles */
-/* Only hide the native cursor once JS has confirmed the replacement is live,
-   otherwise a script failure would leave the visitor with no cursor at all. */
-@media (min-width: 768px) {
-    html.custom-cursor :is(body, a, button, .cursor-pointer, input, select, textarea, .gallery-img, #ba-slider) {
-        cursor: none !important;
-    }
-}
-.cursor-dot {
-    width: 8px;
-    height: 8px;
-    background-color: #c2a67a;
-    border-radius: 50%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%);
-}
-.cursor-outline {
-    width: 40px;
-    height: 40px;
-    border: 1px solid rgba(194, 166, 122, 0.6);
-    border-radius: 50%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    z-index: 9998;
-    transform: translate(-50%, -50%);
-    transition: width 0.2s ease-out, height 0.2s ease-out, background-color 0.2s ease-out;
-}
-.cursor-outline.hovering {
-    width: 60px;
-    height: 60px;
-    background-color: rgba(194, 166, 122, 0.1);
-    border-color: #c2a67a;
-}
-
 /* Magnetic Button Effect */
 /* will-change deliberately absent - see the note on .cinematic-text-word. This
    is the "Explore Services" button, which came back in one photograph as a gold
@@ -305,7 +256,6 @@ html {
 @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     #preloader { display: none !important; }
-    .animate-ken-burns { animation: none !important; }
     .reveal-element,
     .cinematic-fade-up,
     .cinematic-text-word {
@@ -313,7 +263,6 @@ html {
         transform: none !important;
         transition: none !important;
     }
-    .cursor-dot, .cursor-outline { display: none !important; }
     *, *::before, *::after {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
