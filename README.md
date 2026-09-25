@@ -220,6 +220,16 @@ section too. Their `width`/`height` attributes are not hand-maintained —
 `npm run plans:build` rewrites them from the generated images, so a changed crop
 cannot leave them stale.
 
+## Business details
+
+The address, phone number and opening hours are in the footer of every page,
+and again in the homepage's structured data (the `application/ld+json` block
+in `index.html`), which is what Google reads alongside the Business Profile.
+The plan pages get their footer from `scripts/build-plans.mjs`. If any of these
+change, change them in all of those places; `markup.test.js` fails if the hours
+on any page stop matching the structured data. Saturday is by appointment,
+which the structured data has no way to say, so it lists Monday–Friday only.
+
 ## Forms
 
 The contact form is a Netlify form. Netlify detects the fields from the
