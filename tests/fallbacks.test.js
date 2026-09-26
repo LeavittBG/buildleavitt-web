@@ -13,8 +13,6 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
   await p1.goto(path); await p1.waitForTimeout(700);
   ok(await p1.locator('#preloader').count() === 0, '[reduced-motion] preloader removed immediately, no intro wait');
   ok(await p1.locator('h1 .cinematic-text-word.revealed').count() === 6, '[reduced-motion] headline shown at once');
-  ok(!(await p1.evaluate(() => document.documentElement.classList.contains('custom-cursor'))), '[reduced-motion] native cursor kept');
-  ok(await p1.evaluate(() => getComputedStyle(document.querySelector('.animate-ken-burns')).animationName) === 'none', '[reduced-motion] ken burns disabled');
   await p1.screenshot({ path: OUT + '/shot-reduced.png' });
 
   // --- JavaScript disabled (no addStyleTag: that itself needs JS) ---
@@ -27,19 +25,21 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
   ok(heroOpacity === '1', `[no-JS] hero words visible (opacity=${heroOpacity})`);
   const svcOpacity = await p2.locator('#services .reveal-element').first().evaluate(el => getComputedStyle(el).opacity);
   ok(svcOpacity === '1', `[no-JS] section content visible (opacity=${svcOpacity})`);
-  const cursorAllowed = await p2.evaluate(() => document.documentElement.classList.contains('custom-cursor'));
-  ok(!cursorAllowed, '[no-JS] native cursor kept (cursor:none never applied)');
   ok(await p2.locator('#contact form').count() === 1, '[no-JS] contact form still present');
 
-  // --- desktop: custom cursor engages, and the ring no longer piles up animations ---
+  // --- desktop: the visitor keeps their own mouse pointer ---
+  // The site used to swap it for a gold dot and trailing ring - a stock
+  // template effect that was taken out. Nothing may hide the real pointer.
   const std = await b.newContext({ viewport: { width: 1280, height: 900 } });
   const p3 = await std.newPage();
   await p3.goto(path); await p3.waitForTimeout(4200);
-  ok(await p3.evaluate(() => document.documentElement.classList.contains('custom-cursor')), '[desktop] custom-cursor class applied once JS is live');
-  for (let i = 0; i < 40; i++) await p3.mouse.move(400 + i * 5, 300 + i * 3);
-  await p3.waitForTimeout(800);
-  const anims = await p3.evaluate(() => document.getElementById('cursor-outline').getAnimations().length);
-  ok(anims === 0, `[desktop] cursor ring uses rAF, no piled-up Web Animations (found ${anims})`);
+  await p3.mouse.move(640, 450);
+  const pointer = await p3.evaluate(() => ({
+    replaced: !!document.querySelector('#cursor-dot, #cursor-outline, .cursor-dot, .cursor-outline'),
+    hidden: [document.body, ...document.querySelectorAll('a, button, input, select, textarea')]
+      .filter((el) => getComputedStyle(el).cursor === 'none').length,
+  }));
+  ok(!pointer.replaced && pointer.hidden === 0, `[desktop] no custom cursor, native pointer never hidden (hidden on ${pointer.hidden} elements)`);
   await p3.screenshot({ path: OUT + '/shot-desktop.png' });
   await p3.locator('#contact').scrollIntoViewIfNeeded(); await p3.waitForTimeout(1500);
   await p3.screenshot({ path: OUT + '/shot-contact.png' });
