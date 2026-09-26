@@ -140,12 +140,13 @@ console.log("\n== contact details are real ==");
 
 // --- Facebook ---
 // The site pointed at facebook.com/LeavittBuildingGroup, which is not
-// Leavitt's page. The address below is the one Leavitt copied from the page's
-// own Share button. Every Facebook link on every page - the footer icon, the
+// Leavitt's page. The address below is the page's permanent one, as the
+// browser shows it once the page is open, minus Facebook's tracking
+// parameters. Every Facebook link on every page - the footer icon, the
 // "Follow Our Builds" link and the structured data Google reads - must be it.
 console.log("\n== Facebook links go to Leavitt's page ==");
 {
-  const FACEBOOK = "https://www.facebook.com/share/1ByhTbJYC6/";
+  const FACEBOOK = "https://www.facebook.com/profile.php?id=61591583276647";
   const pages = ["index.html", "privacy.html", "terms.html", "success.html", "404.html",
     ...fs.readdirSync(path.join(ROOT, "plans")).filter((f) => f.endsWith(".html")).map((f) => "plans/" + f)];
   const found = [];
