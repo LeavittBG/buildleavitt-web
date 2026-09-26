@@ -138,6 +138,26 @@ console.log("\n== contact details are real ==");
      "every displayed phone number is the real one: " + nums.join(", "));
 }
 
+// --- Facebook ---
+// The site pointed at facebook.com/LeavittBuildingGroup, which is not
+// Leavitt's page. The address below is the one Leavitt copied from the page's
+// own Share button. Every Facebook link on every page - the footer icon, the
+// "Follow Our Builds" link and the structured data Google reads - must be it.
+console.log("\n== Facebook links go to Leavitt's page ==");
+{
+  const FACEBOOK = "https://www.facebook.com/share/1ByhTbJYC6/";
+  const pages = ["index.html", "privacy.html", "terms.html", "success.html", "404.html",
+    ...fs.readdirSync(path.join(ROOT, "plans")).filter((f) => f.endsWith(".html")).map((f) => "plans/" + f)];
+  const found = [];
+  for (const f of pages) {
+    const src = fs.readFileSync(path.join(ROOT, f), "utf8");
+    for (const m of src.matchAll(/https?:\/\/(?:www\.|m\.)?facebook\.com[^"'\s<)]*/g)) found.push(`${f}: ${m[0]}`);
+  }
+  const wrong = found.filter((x) => !x.endsWith(": " + FACEBOOK));
+  ok(found.length >= 3 && wrong.length === 0,
+     `all ${found.length} Facebook links are ${FACEBOOK}` + (wrong.length ? " - wrong: " + wrong.join(" | ") : ""));
+}
+
 // --- opening hours ---
 // The footer shows the hours to people; the homepage's structured data gives
 // the same hours to Google for the map listing. They are written separately,
