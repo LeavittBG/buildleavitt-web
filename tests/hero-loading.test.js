@@ -51,7 +51,7 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
       // Effective opacity: an element is only as visible as its faintest ancestor.
       const seen = (el) => { let o = 1; for (let n = el; n && n.nodeType === 1; n = n.parentElement) o *= parseFloat(getComputedStyle(n).opacity); return o; };
       const hidden = [...document.querySelectorAll('section h1, section h2, section h3, section p, section a, section form')]
-        .filter((el) => !el.closest('[role="dialog"], .testimonial-slide, .group'))
+        .filter((el) => !el.closest('[role="dialog"], .group'))
         .filter((el) => seen(el) < 0.99)
         .map((el) => el.tagName + ' "' + el.textContent.trim().slice(0, 30) + '"');
       const cover = [...document.querySelectorAll('body > *')].filter((n) => {

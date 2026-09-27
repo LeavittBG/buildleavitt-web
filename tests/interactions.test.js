@@ -57,12 +57,14 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
   await page.waitForTimeout(400);
   ok(!(await page.locator('#lightbox').isVisible()), 'Escape closes the lightbox');
 
-  // Testimonial dots (the selector that was broken)
-  await page.locator('#testimonial-dots button').nth(2).scrollIntoViewIfNeeded();
-  await page.locator('#testimonial-dots button').nth(2).click();
-  await page.waitForTimeout(1200);
-  ok(await page.locator('.testimonial-slide').nth(2).evaluate(el => el.classList.contains('opacity-100')), 'third dot activates third testimonial');
-  ok(await page.locator('#testimonial-dots button').nth(2).evaluate(el => el.className.includes('bg-[#c2a67a]')), 'third dot marked active');
+  // All three testimonials are readable side by side, with nothing to click
+  await page.locator('#testimonials').scrollIntoViewIfNeeded();
+  const quotes = await page.locator('#testimonials figure').evaluateAll((figs) => figs.map((f) => {
+    const b = f.getBoundingClientRect(); let o = 1;
+    for (let n = f; n; n = n.parentElement) o *= parseFloat(getComputedStyle(n).opacity);
+    return { name: f.querySelector('figcaption').textContent.trim(), visible: o === 1 && b.width > 200 && b.height > 50 };
+  }));
+  ok(quotes.length === 3 && quotes.every((q) => q.visible), 'all three testimonials are visible at once (' + quotes.map((q) => q.name).join(', ') + ')');
 
   // Before/After slider responds to a drag
   const slider = page.locator('#ba-slider');

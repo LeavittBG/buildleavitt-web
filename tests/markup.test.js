@@ -44,8 +44,7 @@ const ids = [...html.matchAll(/getElementById\('([^']+)'\)/g)].map(m => m[1]);
 for (const id of [...new Set(ids)]) ok(!!d.getElementById(id), `getElementById('${id}') resolves`);
 
 // querySelectorAll selectors used by the script match something
-for (const sel of ['.service-card','.process-card','.testimonial-slide','#testimonial-dots button',
-                   '.gallery-img','.mobile-link']) {
+for (const sel of ['.service-card','.process-card','.gallery-img','.mobile-link']) {
   const n = d.querySelectorAll(sel).length;
   ok(n > 0, `selector ${sel} matches ${n} element(s)`);
 }
@@ -68,8 +67,16 @@ for (const sel of ['.service-card','.process-card','.testimonial-slide','#testim
 }
 
 // counts line up between slides and dots
-ok(d.querySelectorAll('.testimonial-slide').length === d.querySelectorAll('#testimonial-dots button').length,
-   'testimonial slide count === dot count');
+// All three reviews are on the page at once. A carousel showed one and hid
+// the other two behind dots that most visitors never press.
+{
+  const figs = [...d.querySelectorAll('#testimonials figure')];
+  const names = figs.map((f) => f.querySelector('figcaption')?.textContent.trim());
+  ok(figs.length === 3 && figs.every((f) => f.querySelector('blockquote')?.textContent.trim().length > 50),
+     `three full testimonials in #testimonials (${names.join(', ')})`);
+  ok(!d.querySelector('.testimonial-slide, #testimonial-dots, #prev-testimonial, #next-testimonial') && !/setInterval/.test(html),
+     'no carousel: no slides, dots, arrows or auto-advance timer');
+}
 
 // form labels all point at a real control
 const labels = [...d.querySelectorAll('form label[for]')];
