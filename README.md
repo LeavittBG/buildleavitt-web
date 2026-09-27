@@ -79,9 +79,11 @@ start using a new weight class, add it to the font URL — which appears in ever
 page's `<head>` **and** in `scripts/build-plans.mjs`, so the generated plan
 pages get it too. Keep them identical.
 
-Playfair Display has no weight below 400, so a `font-light` heading cannot get
-a lighter italic; `src/styles.css` pins those spans to 400 so the stylesheet
-asks for what it actually receives.
+Headings are set in one upright face throughout. They used to switch to
+Playfair Display italic for their last words ("Building legacies, *not just
+homes.*"), a stock template flourish that was taken out; the italic font is no
+longer downloaded at all. `markup.test.js` fails if an italic serif span comes
+back.
 
 ## Images
 

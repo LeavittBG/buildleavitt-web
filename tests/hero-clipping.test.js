@@ -16,9 +16,10 @@ const { serveFonts, assertLoaded } = require('./lib/fonts');
 const SITE = FILE_ROOT + 'index.html';
 const WIDTHS = [390, 768, 1024, 1280, 1440];
 
-// The headline is Playfair Display italic and the whole question is how far its
-// "A" overhangs, so ./fonts serves the real font rather than letting the page
-// fall back to a system serif. See the note there.
+// This began with the italic Playfair "A" of "Across", which overhung its mask
+// and was sliced off. The headline is upright Inter now, but the question -
+// does any glyph reach past its mask? - depends on the real font's shapes, so
+// ./fonts serves it rather than letting the page fall back to a system face.
 
 // Freeze the reveal animation in its finished state and drop the hero photo and
 // its overlays, so the only thing left in the frame is white text on black.
@@ -35,7 +36,7 @@ const SETTLE = `
   still.textContent = '*, *::before, *::after { transition: none !important; animation: none !important; }';
   document.head.appendChild(still);
   document.querySelectorAll('.cinematic-text-word, .cinematic-fade-up').forEach(w => w.classList.add('revealed'));
-  document.querySelectorAll('#home img, #home video, .animate-ken-burns').forEach(n => n.remove());
+  document.querySelectorAll('#hero img, #hero video, #hero .bg-gradient-to-t, #hero .bg-gradient-to-b, #hero .bg-gradient-to-r').forEach(n => n.remove());
   document.body.style.background = '#000';
 `;
 
@@ -73,7 +74,7 @@ async function diffPixels(a, b) {
     const page = await browser.newPage({ viewport: { width, height: 900 }, deviceScaleFactor: 2 });
     await serveFonts(page);
     await page.goto(SITE, { waitUntil: 'networkidle' });
-    await assertLoaded(page, 'Playfair');
+    await assertLoaded(page, 'Inter');
     await page.evaluate(SETTLE);
     await page.waitForTimeout(150);
 
@@ -111,7 +112,7 @@ async function diffPixels(a, b) {
   const page = await browser.newPage({ viewport: { width: 1280, height: 900 }, deviceScaleFactor: 2 });
   await serveFonts(page);
   await page.goto(SITE, { waitUntil: 'networkidle' });
-  await assertLoaded(page, 'Playfair');
+  await assertLoaded(page, 'Inter');
   await page.evaluate(SETTLE);
   const withPad = await wordRects_(page);
   await page.addStyleTag({

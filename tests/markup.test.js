@@ -149,6 +149,25 @@ console.log("\n== contact details are real ==");
      "every displayed phone number is the real one: " + nums.join(", "));
 }
 
+// --- no italic-serif flourishes ---
+// Headings used to end in Playfair Display italic - "Building legacies, *not
+// just homes.*" - on every section of every page, the most recognisable mark of
+// a template site. They were set upright, and the italic font is no longer
+// downloaded, so an italic span would now render as a browser-faked slant too.
+console.log("\n== no italic text or italic font ==");
+{
+  const pages = ["index.html", "privacy.html", "terms.html", "success.html", "404.html",
+    ...fs.readdirSync(path.join(ROOT, "plans")).filter((f) => f.endsWith(".html")).map((f) => "plans/" + f)];
+  const found = [];
+  for (const f of pages) {
+    const doc = new JSDOM(fs.readFileSync(path.join(ROOT, f), "utf8")).window.document;
+    for (const el of doc.querySelectorAll('[class~="italic"], em, i')) found.push(`${f}: "${el.textContent.trim().slice(0, 40)}"`);
+    const font = doc.querySelector('link[href*="fonts.googleapis.com"]')?.getAttribute("href") || "";
+    if (/ital/.test(font)) found.push(`${f}: font URL still requests italics`);
+  }
+  ok(found.length === 0, `no italic text on any of ${pages.length} pages` + (found.length ? " - " + found.slice(0, 8).join(" | ") : ""));
+}
+
 // --- Facebook ---
 // The site pointed at facebook.com/LeavittBuildingGroup, which is not
 // Leavitt's page. The address below is the page's permanent one, as the

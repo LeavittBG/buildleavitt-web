@@ -2,9 +2,8 @@
  * Serve the site's real webfonts to a test page, from tests/fixtures/fonts/.
  *
  * Any test that measures text has to call this. Without the real fonts the page
- * falls back to a system face with different widths - Playfair Display's italic
- * "A" overhangs far more than a system serif's - so a measurement could pass
- * while the live site clipped. Serving them from a committed copy also keeps
+ * falls back to a system face with different widths and glyph shapes, so a
+ * measurement could pass while the live site wrapped or clipped differently. Serving them from a committed copy also keeps
  * the suite independent of the network: headless Chromium is refused by Google
  * Fonts outright (a 400 for its default user-agent) and cannot always reach it
  * through a corporate or sandbox proxy.

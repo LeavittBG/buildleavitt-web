@@ -76,17 +76,6 @@ html {
     transform: scale(1);
 }
 
-/* Playfair Display's weight axis starts at 400, so there is no 300 to download.
-   The italic spans in the headings carry no weight of their own and inherit
-   font-light's 300 from the heading around them, which the browser then quietly
-   resolves back to 400 - the face it does have. Asking for 400 outright changes
-   nothing on screen and stops the stylesheet requesting something that cannot
-   exist. :where() keeps this at zero specificity, so any span that does set its
-   own weight still wins. */
-:where(.font-serif.italic) {
-    font-weight: 400;
-}
-
 /* Cinematic Text Reveal Styles */
 /* Each headline line is its own block.
    The words are inline-flex masks separated by source whitespace, so a single
@@ -115,9 +104,10 @@ html {
     margin-top: -0.25em;
     padding-bottom: 0.15em;
     margin-bottom: -0.15em;
-    /* An italic serif leans left at the baseline and overhangs its own box: the
-       "A" of "Across" in the hero reached 4px past this edge at 72px and was
-       being sliced off flat. Without a left pad there is nowhere for that to go. */
+    /* Room for glyphs that reach past their own box. The headline was once
+       half italic serif, whose "A" overhung this edge by 4px at 72px and was
+       sliced off flat; the headline is upright now, but a clip box this tight
+       has no business trusting every glyph to stay inside its advance width. */
     padding-left: 0.25em;
     margin-left: -0.25em;
     padding-right: 0.2em;
