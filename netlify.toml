@@ -1,11 +1,15 @@
 [build]
-  # assets-src/ holds the full-resolution originals. They are only inputs to
-  # `npm run images`, which is run locally and its outputs committed - so drop
-  # them from the deploy, otherwise publish = "." would upload and publicly
-  # serve ~12MB of source photos. tests/ goes for the same reason: the test
-  # suite and its copy of the web fonts have no business being public pages.
-  # This only touches Netlify's build clone.
-  command = "npm run build && rm -rf assets-src tests"
+  # publish = "." uploads the whole repository, so anything that is not part
+  # of the site is deleted from Netlify's build clone once the stylesheet is
+  # built, or it would be served publicly:
+  #   assets-src/  ~12MB of full-resolution source photos
+  #   tests/       the test suite and its copy of the web fonts
+  #   src/ scripts/ package*.json tailwind.config.js
+  #                build inputs, spent once dist/styles.css exists
+  #   README.md CLAUDE.md
+  #                notes for whoever works on the site
+  # markup.test.js checks this list. This only touches the build clone.
+  command = "npm run build && rm -rf assets-src tests src scripts package.json package-lock.json tailwind.config.js README.md CLAUDE.md"
   publish = "."
   # No serverless functions are in use. If you add some later, restore:
   #   functions = "netlify/functions"
