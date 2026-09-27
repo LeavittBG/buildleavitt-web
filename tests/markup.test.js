@@ -184,6 +184,28 @@ console.log("\n== no italic text or italic font ==");
   ok(found.length === 0, `no italic text on any of ${pages.length} pages` + (found.length ? " - " + found.slice(0, 8).join(" | ") : ""));
 }
 
+// --- no gold label stacked over each heading ---
+// Every section used to open with a small gold letter-spaced label over its
+// heading ("OUR EXPERTISE" / "Built for your lifestyle."), the most repeated
+// template pattern on the site. The headings stand on their own now. The
+// service and process pop-ups keep their small label ("Step 01"), which says
+// where you are rather than restating the heading.
+console.log("\n== no eyebrow labels over headings ==");
+{
+  const pages = ["index.html", "privacy.html", "terms.html", "success.html", "404.html",
+    ...fs.readdirSync(path.join(ROOT, "plans")).filter((f) => f.endsWith(".html")).map((f) => "plans/" + f)];
+  const found = [];
+  for (const f of pages) {
+    const doc = new JSDOM(fs.readFileSync(path.join(ROOT, f), "utf8")).window.document;
+    for (const h of doc.querySelectorAll("h1, h2")) {
+      const prev = h.previousElementSibling;
+      if (prev && /\buppercase\b/.test(prev.className) && /tracking-/.test(prev.className) && prev.textContent.trim().length < 40
+          && !prev.closest('#hero, [role="dialog"]')) found.push(`${f}: "${prev.textContent.trim()}"`);
+    }
+  }
+  ok(found.length === 0, `no small caps label sits over a heading on ${pages.length} pages` + (found.length ? " - " + found.slice(0, 6).join(" | ") : ""));
+}
+
 // --- Facebook ---
 // The site pointed at facebook.com/LeavittBuildingGroup, which is not
 // Leavitt's page. The address below is the page's permanent one, as the
