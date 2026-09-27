@@ -108,7 +108,7 @@ const standardSection = () => `
             <div class="border-t border-gray-200 pt-16">
                 <p class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#c2a67a] mb-4">Included, not upgraded</p>
                 <h2 class="text-3xl md:text-5xl font-light text-[#0f172a] mb-6">
-                    The Leavitt <span class="font-serif italic">Standard.</span>
+                    The Leavitt Standard.
                 </h2>
                 <p class="text-gray-600 text-lg max-w-2xl mb-14">
                     Much of what other builders sell as an upgrade is simply how we build. Every home
@@ -199,7 +199,7 @@ const head = ({ title, description, canonical, image }) => `<!DOCTYPE html>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="bg-[#fcfcfc] text-gray-900 font-sans">
     <!-- Google Tag Manager (noscript) -->
@@ -386,7 +386,7 @@ for (const [i, model] of models.entries()) {
 
         <p class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#c2a67a] mb-4">Home Plan</p>
         <h1 class="text-4xl md:text-6xl font-light text-[#0f172a] mb-6">
-            The <span class="font-serif italic">${esc(model.name.replace(/^The\s+/i, ''))}</span>
+            ${esc(model.name)}
         </h1>
         <p class="text-gray-600 text-lg max-w-2xl mb-12">${esc(blurb(model))}</p>
 
@@ -507,7 +507,7 @@ const indexHtml = head({
 
         <p class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#c2a67a] mb-4">Where to begin</p>
         <h1 class="text-4xl md:text-6xl font-light text-[#0f172a] mb-6">
-            Home <span class="font-serif italic">plans.</span>
+            Home plans.
         </h1>
         <p class="text-gray-600 text-lg max-w-2xl mb-4">
             We build fully custom. But a blank page is a difficult place to begin, so here is
@@ -538,7 +538,7 @@ ${standardSection()}
 
         <section class="mt-20 bg-[#0f172a] text-white p-10 md:p-14">
             <h2 class="text-3xl md:text-4xl font-light mb-4">
-                Don&rsquo;t see the one? <span class="font-serif italic text-gray-300">We draw from scratch too.</span>
+                Don&rsquo;t see the one? <span class="text-gray-300">We draw from scratch too.</span>
             </h2>
             <p class="text-gray-400 max-w-2xl mb-8">
                 These are the plans we have on the shelf. If none of them is quite right, bring us a
