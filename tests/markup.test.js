@@ -44,11 +44,27 @@ const ids = [...html.matchAll(/getElementById\('([^']+)'\)/g)].map(m => m[1]);
 for (const id of [...new Set(ids)]) ok(!!d.getElementById(id), `getElementById('${id}') resolves`);
 
 // querySelectorAll selectors used by the script match something
-for (const sel of ['.magnetic','.reveal-element','.counter','.service-card','.process-card',
-                   '.testimonial-slide','#testimonial-dots button','.gallery-img','.mobile-link',
-                   '.cinematic-text-word','.cinematic-fade-up']) {
+for (const sel of ['.service-card','.process-card','.testimonial-slide','#testimonial-dots button',
+                   '.gallery-img','.mobile-link']) {
   const n = d.querySelectorAll(sel).length;
   ok(n > 0, `selector ${sel} matches ${n} element(s)`);
+}
+
+// The stock template effects were taken out: a loading screen in front of
+// every visit, a gold scroll-progress bar, buttons that drifted toward the
+// pointer, figures that counted up, a headline that slid in word by word, a
+// parallax quote mark and 38 blocks that faded in as they were scrolled to.
+// Each also meant content that started hidden and depended on script to
+// appear. None of it may come back unnoticed.
+{
+  const leftovers = ['#preloader', '#scroll-progress', '#parallax-quote', '.magnetic', '.reveal-element',
+    '.counter', '[data-target]', '.cinematic-text-word', '.cinematic-fade-up', '.overflow-hidden-mask']
+    .filter((sel) => d.querySelector(sel));
+  const styles = fs.readFileSync(path.join(ROOT, 'src', 'styles.css'), 'utf8');
+  const cssLeft = ['::-webkit-scrollbar', 'scrollbar-color', '@keyframes'].filter((x) => styles.includes(x));
+  ok(leftovers.length === 0 && !/js-anim/.test(html) && cssLeft.length === 0,
+     'no template effects: no loading screen, scroll bar, drifting buttons, counters, reveals or custom scrollbar' +
+     (leftovers.length || cssLeft.length ? ' - found: ' + [...leftovers, ...cssLeft].join(', ') : ''));
 }
 
 // counts line up between slides and dots
@@ -166,6 +182,28 @@ console.log("\n== no italic text or italic font ==");
     if (/ital/.test(font)) found.push(`${f}: font URL still requests italics`);
   }
   ok(found.length === 0, `no italic text on any of ${pages.length} pages` + (found.length ? " - " + found.slice(0, 8).join(" | ") : ""));
+}
+
+// --- no gold label stacked over each heading ---
+// Every section used to open with a small gold letter-spaced label over its
+// heading ("OUR EXPERTISE" / "Built for your lifestyle."), the most repeated
+// template pattern on the site. The headings stand on their own now. The
+// service and process pop-ups keep their small label ("Step 01"), which says
+// where you are rather than restating the heading.
+console.log("\n== no eyebrow labels over headings ==");
+{
+  const pages = ["index.html", "privacy.html", "terms.html", "success.html", "404.html",
+    ...fs.readdirSync(path.join(ROOT, "plans")).filter((f) => f.endsWith(".html")).map((f) => "plans/" + f)];
+  const found = [];
+  for (const f of pages) {
+    const doc = new JSDOM(fs.readFileSync(path.join(ROOT, f), "utf8")).window.document;
+    for (const h of doc.querySelectorAll("h1, h2")) {
+      const prev = h.previousElementSibling;
+      if (prev && /\buppercase\b/.test(prev.className) && /tracking-/.test(prev.className) && prev.textContent.trim().length < 40
+          && !prev.closest('#hero, [role="dialog"]')) found.push(`${f}: "${prev.textContent.trim()}"`);
+    }
+  }
+  ok(found.length === 0, `no small caps label sits over a heading on ${pages.length} pages` + (found.length ? " - " + found.slice(0, 6).join(" | ") : ""));
 }
 
 // --- Facebook ---

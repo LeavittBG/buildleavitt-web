@@ -1,23 +1,25 @@
 const { ROOT, FILE_ROOT, OUT, launch, serveRepo } = require('./lib/env');
 const { chromium } = require('playwright');
 const { serveFonts } = require('./lib/fonts');
+/*
+ * The headline must read as two lines at every width - "Crafting Custom Homes"
+ * then "Across the Region." - never "Homes" stranded on a line of its own, and
+ * never wider than the page. Each .hero-line is measured as the browser laid
+ * it out: the text's own line boxes, one rect per line it occupies.
+ */
 const probe = () => {
-  const byY = new Map();
-  // Measure the mask each word sits in, not the word. The words slide up into
-  // place when the page loads, and a word caught mid-slide reports a different
-  // height from its neighbours - which read as a line break that was not there
-  // and failed this test at random widths once the intro got shorter. The masks
-  // never move, so their position is the line the word is actually on.
-  for (const w of document.querySelectorAll('.cinematic-text-word')) {
-    const y = Math.round(w.closest('.overflow-hidden-mask').getBoundingClientRect().y);
-    if (!byY.has(y)) byY.set(y, []);
-    byY.get(y).push(w.textContent.trim());
+  const lines = [];
+  for (const line of document.querySelectorAll('h1 .hero-line')) {
+    const range = document.createRange();
+    range.selectNodeContents(line);
+    const rows = new Set([...range.getClientRects()].filter((r) => r.width > 0).map((r) => Math.round(r.top)));
+    lines.push(line.textContent.trim() + (rows.size > 1 ? ` (in ${rows.size} lines)` : ''));
   }
   const de = document.documentElement;
   const h1 = document.querySelector('h1').getBoundingClientRect();
   const widest = Math.max(...[...document.querySelectorAll('.hero-line')].map(n => n.scrollWidth));
   return {
-    lines: [...byY.entries()].sort((a, b) => a[0] - b[0]).map(([, v]) => v.join(' ')),
+    lines,
     pageOverflow: Math.max(0, de.scrollWidth - de.clientWidth),
     lineFits: widest <= Math.ceil(h1.width),
     font: Math.round(parseFloat(getComputedStyle(document.querySelector('h1')).fontSize)),

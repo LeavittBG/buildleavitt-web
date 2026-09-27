@@ -38,7 +38,7 @@ The plan scripts need poppler (`pdftoppm`, `pdfinfo`, `pdftohtml`). One check in
 ## Homepage specifics
 
 - **Hero** (`#hero`): one block of markup, two layouts. From `lg` up the photo fills the screen behind the copy. Below `lg` the photo is a banner above the copy. `layout.test.js` checks both at six sizes, including that "What We Build" is on the first screen.
-- **Headline animation:** `<head>` adds a `js-anim` class before first paint. That class is the only thing that hides the words for the slide-up reveal, and CSS failsafe animations bring the words back if the script never runs. Don't put `will-change` on the headline: it left words blank on a Windows Chrome machine (`hero-layers.test.js`).
+- **No template effects:** there is no loading screen, scroll-progress bar, custom cursor or scrollbar, magnetic buttons, count-up figures, parallax, word-by-word headline or fade-in-on-scroll. They were removed as stock template tells, and because each one left content hidden until script ran. Content is visible from the first paint; `markup.test.js` and `hero-loading.test.js` fail if any of it comes back. Don't put `will-change` on anything either: it left the headline blank on a Windows Chrome machine (`hero-layers.test.js`).
 - **Business facts must stay consistent** across the footer on every page, the JSON-LD in `index.html` and the plan-page footer in `build-plans.mjs`. These are the address, phone (866) 832-6524, and opening hours (Mon–Fri 8–5, Saturday by appointment, closed Sunday). `markup.test.js` enforces that the hours match the JSON-LD. The Facebook link is `https://www.facebook.com/profile.php?id=61591583276647` in all three places, also enforced.
 
 ## Plans data rules (`src/plans.json`)
@@ -51,4 +51,4 @@ Specs, prices and square footage come only from Leavitt's own figures, never est
   - `env.js`: `ROOT`, `FILE_ROOT`, `launch()` and `serveRepo()`. `launch()` uses `CHROMIUM_PATH` or `/opt/pw-browsers/chromium` when present. `serveRepo()` is an HTTP server that mimics Netlify's 404 handling, which pages using root-absolute paths need.
   - `fonts.js`: serves the real web fonts from `tests/fixtures/fonts/`, because text width decides several layout checks.
 - **Structure of a test file:** each one starts with a comment saying what past bug it guards against. Keep that pattern for new tests, and confirm a new check fails against the old behavior before relying on it.
-- **Timing:** checks that measure the animated hero must not read positions mid-animation. Measure the static `.overflow-hidden-mask` rather than the moving word inside it.
+- **Timing:** nothing on the homepage animates on load any more, so tests can measure as soon as fonts are ready. `hero-wrap.test.js` reads each `.hero-line`'s line boxes with a Range to confirm the headline stays on two lines.

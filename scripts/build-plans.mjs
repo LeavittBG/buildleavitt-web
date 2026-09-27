@@ -14,9 +14,8 @@
  * Adding model 17 is one entry in src/plans.json plus its PDF; run
  * `npm run plans` and both the images and the pages regenerate.
  *
- * Everything here is static: no class on a generated page depends on
- * JavaScript to become visible (deliberately not using .reveal-element, which
- * starts at opacity 0), so the plans read fine with scripts blocked.
+ * Everything here is static: nothing on a generated page depends on
+ * JavaScript to become visible, so the plans read fine with scripts blocked.
  *
  * Pages live one directory down, so every asset path must be root-relative
  * (/dist/styles.css, not dist/styles.css).
@@ -106,7 +105,6 @@ const STANDARD = [
 const standardSection = () => `
         <section id="included" class="mt-20 scroll-mt-24">
             <div class="border-t border-gray-200 pt-16">
-                <p class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#c2a67a] mb-4">Included, not upgraded</p>
                 <h2 class="text-3xl md:text-5xl font-light text-[#0f172a] mb-6">
                     The Leavitt Standard.
                 </h2>
@@ -384,7 +382,6 @@ for (const [i, model] of models.entries()) {
             <span class="text-[#0f172a]">${esc(model.name)}</span>
         </nav>
 
-        <p class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#c2a67a] mb-4">Home Plan</p>
         <h1 class="text-4xl md:text-6xl font-light text-[#0f172a] mb-6">
             ${esc(model.name)}
         </h1>
@@ -505,7 +502,6 @@ const indexHtml = head({
             <span class="text-[#0f172a]">Home Plans</span>
         </nav>
 
-        <p class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#c2a67a] mb-4">Where to begin</p>
         <h1 class="text-4xl md:text-6xl font-light text-[#0f172a] mb-6">
             Home plans.
         </h1>

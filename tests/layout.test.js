@@ -10,7 +10,6 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
   await serveFonts(p);
   await p.goto(FILE_ROOT + 'index.html');
   await p.waitForTimeout(4200);
-  await p.evaluate(() => document.querySelectorAll('.reveal-element').forEach(e => e.classList.add('active')));
   await p.evaluate(async () => { for (let y=0; y<document.body.scrollHeight; y+=300){window.scrollTo(0,y); await new Promise(r=>setTimeout(r,60));} });
   await p.waitForTimeout(1500);
 

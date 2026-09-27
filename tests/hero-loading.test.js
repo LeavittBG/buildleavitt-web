@@ -36,55 +36,33 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
     await ctx.close();
   }
 
-  console.log('\n== hero copy appears even if the reveal never runs ==');
-  {
-    const ctx = await b.newContext({ viewport: { width: 1280, height: 900 } });
-    await serveFonts(ctx);
-    const p = await ctx.newPage();
-    // Neutralise the reveal entirely: whatever adds .revealed, it will not stick.
-    await p.addInitScript(() => {
-      const add = DOMTokenList.prototype.add;
-      DOMTokenList.prototype.add = function (...c) {
-        if (c.includes('revealed')) return;
-        return add.apply(this, c);
-      };
-    });
-    await p.goto(FILE_ROOT + 'index.html', { waitUntil: 'domcontentloaded' });
-    await p.waitForTimeout(2500);
-    const early = await p.evaluate(() => parseFloat(getComputedStyle(document.querySelector('.cinematic-text-word')).opacity));
-    ok(early < 0.1, `at 2.5s the reveal genuinely has not run (opacity ${early}) - the test is valid`);
-    await p.waitForTimeout(3000);
-    const late = await p.evaluate(() => {
-      const w = document.querySelector('.cinematic-text-word');
-      const btn = document.querySelector('a[href="#services"]').parentElement;
-      return { word: parseFloat(getComputedStyle(w).opacity), btn: parseFloat(getComputedStyle(btn).opacity),
-               revealed: w.classList.contains('revealed') };
-    });
-    ok(!late.revealed, 'the reveal class never arrived, as staged');
-    ok(late.word > 0.9, `headline is visible anyway (opacity ${late.word})`);
-    ok(late.btn > 0.9, `call-to-action is visible anyway (opacity ${late.btn})`);
-    await ctx.close();
-  }
-
-  console.log('\n== the safety net stays out of the way of the real reveal ==');
+  console.log('\n== the page is readable the moment it arrives ==');
+  // There used to be a loading screen in front of every visit, then a headline
+  // that slid in word by word, then sections that faded in as they were reached:
+  // about two and a half seconds before the first words, and a page that stayed
+  // hidden wherever script failed. It is all plain content now. Sample it as
+  // soon as the document is parsed, before any timer could have run.
   {
     const ctx = await b.newContext({ viewport: { width: 1280, height: 900 } });
     await serveFonts(ctx);
     const p = await ctx.newPage();
     await p.goto(FILE_ROOT + 'index.html', { waitUntil: 'domcontentloaded' });
-    // Curtain rises at 1.0s, headline starts 0.2s later, last element settles
-    // about 2.6s. Sample either side of that.
-    await p.waitForTimeout(800);
-    const mid = await p.evaluate(() => parseFloat(getComputedStyle(document.querySelector('.cinematic-text-word')).opacity));
-    ok(mid < 0.1, `still behind the preloader at 0.8s (opacity ${mid}) - choreography intact`);
-    await p.waitForTimeout(2200);
-    const done = await p.evaluate(() => {
-      const w = document.querySelector('.cinematic-text-word');
-      const btn = document.querySelector('a[href="#services"]').parentElement;
-      return { w: parseFloat(getComputedStyle(w).opacity), b: parseFloat(getComputedStyle(btn).opacity) };
+    const r = await p.evaluate(() => {
+      // Effective opacity: an element is only as visible as its faintest ancestor.
+      const seen = (el) => { let o = 1; for (let n = el; n && n.nodeType === 1; n = n.parentElement) o *= parseFloat(getComputedStyle(n).opacity); return o; };
+      const hidden = [...document.querySelectorAll('section h1, section h2, section h3, section p, section a, section form')]
+        .filter((el) => !el.closest('[role="dialog"], .testimonial-slide, .group'))
+        .filter((el) => seen(el) < 0.99)
+        .map((el) => el.tagName + ' "' + el.textContent.trim().slice(0, 30) + '"');
+      const cover = [...document.querySelectorAll('body > *')].filter((n) => {
+        const cs = getComputedStyle(n), b = n.getBoundingClientRect();
+        return cs.position === 'fixed' && b.width >= innerWidth && b.height >= innerHeight && cs.visibility !== 'hidden' && cs.display !== 'none';
+      }).map((n) => n.id || n.tagName);
+      return { hidden, cover, h1: seen(document.querySelector('h1')), cta: seen(document.querySelector('#hero a[href="#services"]')) };
     });
-    ok(done.w > 0.9, `headline revealed by 3s (opacity ${done.w})`);
-    ok(done.b > 0.9, `call-to-action revealed by 3s (opacity ${done.b})`);
+    ok(r.cover.length === 0, `nothing covers the page while it loads (${r.cover.join(', ') || 'none'})`);
+    ok(r.h1 === 1 && r.cta === 1, `headline and "What We Build" are fully visible at first paint (${r.h1}, ${r.cta})`);
+    ok(r.hidden.length === 0, `no heading, text, link or form anywhere starts hidden` + (r.hidden.length ? ' - ' + r.hidden.slice(0, 5).join(' | ') : ''));
     await ctx.close();
   }
 
