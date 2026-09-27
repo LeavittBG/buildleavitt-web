@@ -15,11 +15,11 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
   if (process.env.OFFLINE) await page.route('**://{fonts.googleapis.com,fonts.gstatic.com}/**', r => r.abort());
 
   await page.goto(path, { waitUntil: 'load' });
-  await page.waitForTimeout(4200); // let the 2.4s preloader finish
+  await page.waitForTimeout(500);
 
   ok(errors.length === 0, 'no uncaught JS errors' + (errors.length ? ': ' + errors.join(' | ') : ''));
-  ok(await page.locator('#preloader').count() === 0, 'preloader removed after load');
-  ok(await page.locator('h1 .cinematic-text-word.revealed').count() === 6, 'hero headline words revealed');
+  ok((await page.locator('h1').innerText()).replace(/\s+/g, ' ').trim() === 'Crafting Custom Homes Across the Region.',
+     'hero headline is on the page as plain text');
 
   // Service modal: open by keyboard, close with Escape, focus restored
   const card = page.locator('.service-card').first();
@@ -75,10 +75,9 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
   const clip = await page.locator('#ba-after-wrapper').evaluate(el => el.style.clipPath);
   ok(/7[0-9](\.\d+)?%/.test(clip), 'slider drag updates the clip path (' + clip.slice(0, 40) + ')');
 
-  // Counters ran
-  await page.locator('.counter').first().scrollIntoViewIfNeeded();
-  await page.waitForTimeout(2500);
-  ok(await page.locator('.counter').first().textContent() === '20', 'counter animated to its target');
+  // The trust figures are written into the page, not counted up by script
+  const figures = await page.locator('#about + section .font-serif').allInnerTexts();
+  ok(figures.map((t) => t.replace(/\s+/g, '')).join(' ') === '20+ 100+ 1', 'trust figures read 20+, 100+, 1 without scrolling to them (' + figures.join(' / ') + ')');
 
 
   // --- Before/After slider regressions ---

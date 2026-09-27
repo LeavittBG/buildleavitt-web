@@ -11,19 +11,17 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
   const rm = await b.newContext({ viewport: { width: 1280, height: 900 }, reducedMotion: 'reduce' });
   const p1 = await rm.newPage();
   await p1.goto(path); await p1.waitForTimeout(700);
-  ok(await p1.locator('#preloader').count() === 0, '[reduced-motion] preloader removed immediately, no intro wait');
-  ok(await p1.locator('h1 .cinematic-text-word.revealed').count() === 6, '[reduced-motion] headline shown at once');
+  ok(await p1.locator('h1').evaluate((h) => getComputedStyle(h).opacity === '1' && h.innerText.includes('Across the Region.')),
+     '[reduced-motion] headline shown at once');
   await p1.screenshot({ path: OUT + '/shot-reduced.png' });
 
   // --- JavaScript disabled (no addStyleTag: that itself needs JS) ---
   const nojs = await b.newContext({ viewport: { width: 1280, height: 900 }, javaScriptEnabled: false });
   const p2 = await nojs.newPage();
   await p2.goto(path); await p2.waitForTimeout(400);
-  const disp = await p2.locator('#preloader').evaluate(el => getComputedStyle(el).display);
-  ok(disp === 'none', `[no-JS] preloader hidden by the noscript fallback (display=${disp})`);
-  const heroOpacity = await p2.locator('h1 .cinematic-text-word').first().evaluate(el => getComputedStyle(el).opacity);
+  const heroOpacity = await p2.locator('h1').evaluate(el => getComputedStyle(el).opacity);
   ok(heroOpacity === '1', `[no-JS] hero words visible (opacity=${heroOpacity})`);
-  const svcOpacity = await p2.locator('#services .reveal-element').first().evaluate(el => getComputedStyle(el).opacity);
+  const svcOpacity = await p2.locator('#services h3').first().evaluate(el => getComputedStyle(el).opacity);
   ok(svcOpacity === '1', `[no-JS] section content visible (opacity=${svcOpacity})`);
   ok(await p2.locator('#contact form').count() === 1, '[no-JS] contact form still present');
 

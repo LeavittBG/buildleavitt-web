@@ -42,13 +42,6 @@
     <!-- Compiled Tailwind + custom styles (source: src/styles.css, build: npm run build) -->
     <link rel="stylesheet" href="dist/styles.css">
 
-    <!-- Says "script is running, so the hero reveal is going to happen" - which is
-         what allows the stylesheet to hide the hero copy. Without this class the
-         copy is simply visible, so a blocked or broken script can no longer leave
-         the page with no words on it. It sits here, before the body is parsed, so
-         nothing is ever painted visible and then snatched away. -->
-    <script>document.documentElement.classList.add('js-anim');</script>
-
     <!-- Icons are inline SVG from Lucide (https://lucide.dev, ISC License).
          They used to be drawn at runtime by loading lucide@latest from unpkg:
          444 KB of script for 17 icons, and "latest" meant the site changed
@@ -63,23 +56,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-
-    <!-- No-JS fallback. The hero copy no longer needs rescuing here - it is
-         visible unless .js-anim says otherwise, and without script that class is
-         never set - but .reveal-element, which covers most of the page below the
-         fold, is still hidden until an observer reaches it, and the preloader
-         still needs taking down. -->
-    <noscript>
-        <style>
-            #preloader { display: none !important; }
-            .reveal-element,
-            .cinematic-fade-up,
-            .cinematic-text-word {
-                opacity: 1 !important;
-                transform: none !important;
-            }
-        </style>
-    </noscript>
 
     <!-- Local business structured data for search engines -->
     <script type="application/ld+json">
@@ -149,16 +125,6 @@
     <!-- End Google Tag Manager (noscript) -->
 
 
-    <!-- Scroll Progress Line -->
-    <div id="scroll-progress" class="fixed top-0 left-0 h-[3px] bg-[#c2a67a] z-[1000] w-0 pointer-events-none"></div>
-
-    <!-- Cinematic Pre-Loader -->
-    <div id="preloader" class="fixed inset-0 z-[100] bg-[#0f172a] flex items-center justify-center">
-        <div id="preloader-logo" class="preloader-logo">
-            <picture class="contents"><source srcset="Gold.webp" type="image/webp"><img src="Gold.png" alt="Leavitt Building Group" width="1200" height="293" fetchpriority="high" class="h-20 md:h-28 w-auto object-contain drop-shadow-2xl" onerror="this.src='https://placehold.co/400x200/0f172a/c2a67a?text=Leavitt+Building+Group'"></picture>
-        </div>
-    </div>
-
     <!-- Navigation -->
     <nav id="main-nav" class="fixed w-full z-50 bg-transparent border-b border-transparent transition-all duration-300">
         <div class="max-w-7xl mx-auto px-6">
@@ -185,7 +151,7 @@
                     <a href="https://connect.buildleavitt.com" target="_blank" rel="noopener noreferrer" class="text-[#c2a67a] hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors flex items-center gap-1.5">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-4 h-4"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Client Login
                     </a>
-                    <a href="#contact" class="bg-[#c2a67a] text-[#0f172a] px-6 py-3 text-xs lg:text-sm uppercase tracking-widest font-bold hover:bg-white transition-colors magnetic">
+                    <a href="#contact" class="bg-[#c2a67a] text-[#0f172a] px-6 py-3 text-xs lg:text-sm uppercase tracking-widest font-bold hover:bg-white transition-colors">
                         Get a Quote
                     </a>
                 </div>
@@ -212,7 +178,7 @@
             <a href="https://connect.buildleavitt.com" target="_blank" rel="noopener noreferrer" class="mobile-link flex items-center gap-2 text-[#c2a67a] hover:text-white uppercase tracking-widest font-semibold">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-5 h-5"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Client Login
             </a>
-            <a href="#contact" class="mobile-link block w-full text-center bg-[#c2a67a] text-[#0f172a] px-6 py-4 uppercase tracking-widest font-bold magnetic">
+            <a href="#contact" class="mobile-link block w-full text-center bg-[#c2a67a] text-[#0f172a] px-6 py-4 uppercase tracking-widest font-bold">
                 Get a Quote
             </a>
         </div>
@@ -244,30 +210,22 @@
 
         <div class="relative z-10 w-full max-w-7xl mx-auto px-6 pt-4 pb-12 lg:pt-40 lg:pb-14">
             <div class="max-w-3xl">
-                <p class="text-[#c2a67a] text-xs md:text-sm font-semibold uppercase tracking-[0.2em] mb-6 cinematic-fade-up" style="transition-delay: 0.05s;">
+                <p class="text-[#c2a67a] text-xs md:text-sm font-semibold uppercase tracking-[0.2em] mb-6">
                     <!-- The &nbsp;s keep each phrase whole, so on a phone the line can only
                          break after "Serving" - never leaving "&" dangling at a line end. -->
                     Custom&nbsp;Home&nbsp;Builder Serving Harford&nbsp;&amp;&nbsp;Surrounding&nbsp;Counties
                 </p>
 
                 <h1 class="text-[7.4vw] sm:text-5xl md:text-6xl lg:text-7xl font-light text-white leading-[1.08] mb-8 tracking-tighter">
-                    <span class="hero-line">
-                        <span class="overflow-hidden-mask"><span class="cinematic-text-word" style="transition-delay: 0.1s;">Crafting</span></span>
-                        <span class="overflow-hidden-mask"><span class="cinematic-text-word" style="transition-delay: 0.15s;">Custom</span></span>
-                        <span class="overflow-hidden-mask"><span class="cinematic-text-word" style="transition-delay: 0.2s;">Homes</span></span>
-                    </span>
-                    <span class="hero-line">
-                        <span class="overflow-hidden-mask"><span class="cinematic-text-word" style="transition-delay: 0.25s;">Across</span></span>
-                        <span class="overflow-hidden-mask"><span class="cinematic-text-word" style="transition-delay: 0.3s;">the</span></span>
-                        <span class="overflow-hidden-mask"><span class="cinematic-text-word" style="transition-delay: 0.35s;">Region.</span></span>
-                    </span>
+                    <span class="hero-line">Crafting Custom Homes</span>
+                    <span class="hero-line">Across the Region.</span>
                 </h1>
 
-                <p class="text-base md:text-lg text-gray-300 mb-8 md:mb-10 max-w-xl leading-relaxed cinematic-fade-up" style="transition-delay: 0.4s;">
+                <p class="text-base md:text-lg text-gray-300 mb-8 md:mb-10 max-w-xl leading-relaxed">
                     Leavitt Building Group delivers premier custom and semi-custom home construction and large-scale renovations throughout the Greater Baltimore Metro area.
                 </p>
 
-                <div class="flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-8 cinematic-fade-up" style="transition-delay: 0.5s;">
+                <div class="flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-8">
                     <a href="#services" class="bg-[#c2a67a] text-[#0f172a] px-8 py-4 uppercase tracking-widest text-sm font-bold hover:bg-white transition-colors inline-flex items-center justify-center gap-2 whitespace-nowrap">
                         What We Build <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-[18px] h-[18px]"><path d="m9 18 6-6-6-6"/></svg>
                     </a>
@@ -275,7 +233,7 @@
                 </div>
             </div>
 
-            <div class="mt-10 md:mt-16 lg:mt-20 pt-5 md:pt-6 border-t border-white/15 flex flex-wrap gap-x-6 md:gap-x-8 gap-y-1 text-[10px] md:text-[11px] uppercase tracking-[0.15em] md:tracking-[0.2em] text-gray-400 cinematic-fade-up" style="transition-delay: 0.6s;">
+            <div class="mt-10 md:mt-16 lg:mt-20 pt-5 md:pt-6 border-t border-white/15 flex flex-wrap gap-x-6 md:gap-x-8 gap-y-1 text-[10px] md:text-[11px] uppercase tracking-[0.15em] md:tracking-[0.2em] text-gray-400">
                 <span>Forest Hill, Maryland</span>
                 <span>Licensed in MD &amp; PA</span>
                 <span>MHBR 9796</span>
@@ -286,14 +244,14 @@
     <!-- Services Section -->
     <section id="services" class="py-24 md:py-32 px-6 bg-white overflow-hidden">
         <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-20 reveal-element">
+            <div class="text-center mb-20">
                 <p class="text-sm font-bold uppercase tracking-[0.3em] text-[#c2a67a] mb-4">Our Expertise</p>
                 <h2 class="text-3xl md:text-5xl font-light text-[#0f172a]">Built for your lifestyle.</h2>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
                 <!-- Service 1 -->
-                <div class="group cursor-pointer service-card reveal-element" data-service="1">
+                <div class="group cursor-pointer service-card" data-service="1">
                     <div class="w-16 h-16 bg-[#0f172a] flex items-center justify-center text-[#c2a67a] mb-8 group-hover:bg-[#c2a67a] group-hover:text-[#0f172a] transition-colors duration-300">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-7 h-7"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
                     </div>
@@ -305,7 +263,7 @@
                 </div>
 
                 <!-- Service 2 -->
-                <div class="group cursor-pointer service-card reveal-element" data-service="2" style="transition-delay: 150ms;">
+                <div class="group cursor-pointer service-card" data-service="2">
                     <div class="w-16 h-16 bg-[#0f172a] flex items-center justify-center text-[#c2a67a] mb-8 group-hover:bg-[#c2a67a] group-hover:text-[#0f172a] transition-colors duration-300">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-7 h-7"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z"/><path d="m14.5 12.5 2-2"/><path d="m11.5 9.5 2-2"/><path d="m8.5 6.5 2-2"/><path d="m17.5 15.5 2-2"/></svg>
                     </div>
@@ -317,7 +275,7 @@
                 </div>
 
                 <!-- Service 3 -->
-                <div class="group cursor-pointer service-card reveal-element" data-service="3" style="transition-delay: 300ms;">
+                <div class="group cursor-pointer service-card" data-service="3">
                     <div class="w-16 h-16 bg-[#0f172a] flex items-center justify-center text-[#c2a67a] mb-8 group-hover:bg-[#c2a67a] group-hover:text-[#0f172a] transition-colors duration-300">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-7 h-7"><path d="m15 12-9.373 9.373a1 1 0 0 1-3.001-3L12 9"/><path d="m18 15 4-4"/><path d="m21.5 11.5-1.914-1.914A2 2 0 0 1 19 8.172v-.344a2 2 0 0 0-.586-1.414l-1.657-1.657A6 6 0 0 0 12.516 3H9l1.243 1.243A6 6 0 0 1 12 8.485V10l2 2h1.172a2 2 0 0 1 1.414.586L18.5 14.5"/></svg>
                     </div>
@@ -333,7 +291,7 @@
 
     <!-- Service Area Banner -->
     <section class="bg-[#0f172a] py-16 px-6 border-y border-[#1e293b] overflow-hidden">
-        <div class="max-w-7xl mx-auto text-center reveal-element">
+        <div class="max-w-7xl mx-auto text-center">
             <h2 class="text-white text-xl md:text-2xl font-light mb-6">
                 Serving the Greater Baltimore Metro Area &amp; Beyond
             </h2>
@@ -352,7 +310,7 @@
     <section id="about" class="py-24 md:py-32 px-6 bg-white overflow-hidden">
         <div class="max-w-7xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                <div class="reveal-element">
+                <div>
                     <p class="text-sm font-bold uppercase tracking-[0.3em] text-[#c2a67a] mb-4">About Us</p>
                     <h2 class="text-3xl md:text-5xl font-light text-[#0f172a] mb-8">Building legacies, <br/>not just homes.</h2>
                     <p class="text-gray-600 leading-relaxed mb-6">
@@ -362,7 +320,7 @@
                         Our process is built on transparency and a genuine partnership with our clients. From the first architectural sketch to the final walkthrough, we are dedicated to making the custom building experience as seamless and exciting as the day you move in.
                     </p>
                 </div>
-                <div class="relative mt-8 lg:mt-0 reveal-element" style="transition-delay: 200ms;">
+                <div class="relative mt-8 lg:mt-0">
                     <picture class="contents"><source srcset="kyle.webp" type="image/webp"><img src="kyle.jpg" alt="Kyle Leavitt, President of Leavitt Building Group" width="928" height="1152" loading="lazy" decoding="async" class="aspect-square w-full object-cover border border-gray-200 relative z-10" onerror="this.src='https://placehold.co/800x800/e2e8f0/64748b?text=Kyle+Leavitt'"></picture>
                     
                     <!-- Added Nameplate Overlay -->
@@ -383,23 +341,23 @@
         <div class="max-w-7xl mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center divide-y md:divide-y-0 md:divide-x divide-white/10">
                 <!-- Counter 1 -->
-                <div class="reveal-element">
+                <div>
                     <div class="font-serif text-5xl md:text-7xl text-[#c2a67a] mb-4 flex justify-center items-baseline gap-1">
-                        <span class="counter" data-target="20">0</span><span class="text-3xl md:text-5xl">+</span>
+                        <span>20</span><span class="text-3xl md:text-5xl">+</span>
                     </div>
                     <p class="text-white text-xs md:text-sm font-bold uppercase tracking-[0.2em]">Years of Excellence</p>
                 </div>
                 <!-- Counter 2 -->
-                <div class="reveal-element pt-12 md:pt-0" style="transition-delay: 150ms;">
+                <div class="pt-12 md:pt-0">
                     <div class="font-serif text-5xl md:text-7xl text-[#c2a67a] mb-4 flex justify-center items-baseline gap-1">
-                        <span class="counter" data-target="100">0</span><span class="text-3xl md:text-5xl">+</span>
+                        <span>100</span><span class="text-3xl md:text-5xl">+</span>
                     </div>
                     <p class="text-white text-xs md:text-sm font-bold uppercase tracking-[0.2em]">Custom Homes Built</p>
                 </div>
                 <!-- Counter 3 -->
-                <div class="reveal-element pt-12 md:pt-0" style="transition-delay: 300ms;">
+                <div class="pt-12 md:pt-0">
                     <div class="font-serif text-5xl md:text-7xl text-[#c2a67a] mb-4 flex justify-center items-baseline gap-1">
-                        <span class="counter" data-target="1">0</span>
+                        <span>1</span>
                     </div>
                     <p class="text-white text-xs md:text-sm font-bold uppercase tracking-[0.2em]">Uncompromising Standard</p>
                 </div>
@@ -410,7 +368,7 @@
     <!-- Process Section -->
     <section id="process" class="py-24 md:py-32 px-6 bg-[#0f172a] border-t border-[#1e293b] overflow-hidden">
         <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-20 reveal-element">
+            <div class="text-center mb-20">
                 <p class="text-sm font-bold uppercase tracking-[0.3em] text-[#c2a67a] mb-4">Our Process</p>
                 <h2 class="text-3xl md:text-5xl font-light text-white">From concept to keys.</h2>
             </div>
@@ -420,7 +378,7 @@
                 <div class="hidden lg:block absolute top-12 left-[12.5%] right-[12.5%] h-[1px] bg-[#1e293b] z-0"></div>
 
                 <!-- Step 1 -->
-                <div class="relative z-10 text-center group cursor-pointer process-card reveal-element" data-step="1">
+                <div class="relative z-10 text-center group cursor-pointer process-card" data-step="1">
                     <div class="w-24 h-24 mx-auto bg-[#0f172a] border-2 border-[#c2a67a] flex items-center justify-center text-3xl font-serif text-[#c2a67a] mb-8 group-hover:bg-[#c2a67a] group-hover:text-[#0f172a] transition-colors duration-500">
                         01
                     </div>
@@ -432,7 +390,7 @@
                 </div>
 
                 <!-- Step 2 -->
-                <div class="relative z-10 text-center group cursor-pointer process-card reveal-element" data-step="2" style="transition-delay: 150ms;">
+                <div class="relative z-10 text-center group cursor-pointer process-card" data-step="2">
                     <div class="w-24 h-24 mx-auto bg-[#0f172a] border-2 border-[#c2a67a] flex items-center justify-center text-3xl font-serif text-[#c2a67a] mb-8 group-hover:bg-[#c2a67a] group-hover:text-[#0f172a] transition-colors duration-500">
                         02
                     </div>
@@ -444,7 +402,7 @@
                 </div>
 
                 <!-- Step 3 -->
-                <div class="relative z-10 text-center group cursor-pointer process-card reveal-element" data-step="3" style="transition-delay: 300ms;">
+                <div class="relative z-10 text-center group cursor-pointer process-card" data-step="3">
                     <div class="w-24 h-24 mx-auto bg-[#0f172a] border-2 border-[#c2a67a] flex items-center justify-center text-3xl font-serif text-[#c2a67a] mb-8 group-hover:bg-[#c2a67a] group-hover:text-[#0f172a] transition-colors duration-500">
                         03
                     </div>
@@ -456,7 +414,7 @@
                 </div>
 
                 <!-- Step 4 -->
-                <div class="relative z-10 text-center group cursor-pointer process-card reveal-element" data-step="4" style="transition-delay: 450ms;">
+                <div class="relative z-10 text-center group cursor-pointer process-card" data-step="4">
                     <div class="w-24 h-24 mx-auto bg-[#0f172a] border-2 border-[#c2a67a] flex items-center justify-center text-3xl font-serif text-[#c2a67a] mb-8 group-hover:bg-[#c2a67a] group-hover:text-[#0f172a] transition-colors duration-500">
                         04
                     </div>
@@ -473,13 +431,13 @@
     <!-- Interactive Before & After Section -->
     <section class="py-24 md:py-32 px-6 bg-white overflow-hidden">
         <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16 reveal-element">
+            <div class="text-center mb-16">
                 <p class="text-sm font-bold uppercase tracking-[0.3em] text-[#c2a67a] mb-4">Transformations</p>
                 <h2 class="text-3xl md:text-5xl font-light text-[#0f172a]">The Art of Renovation.</h2>
                 <p class="mt-6 text-gray-500 max-w-2xl mx-auto text-lg">Slide to experience the uncompromising standard of a Leavitt Building Group transformation.</p>
             </div>
             
-            <div class="ba-slider aspect-[4/3] md:aspect-[21/9] w-full bg-gray-200 reveal-element group shadow-2xl" id="ba-slider" style="transition-delay: 200ms;">
+            <div class="ba-slider aspect-[4/3] md:aspect-[21/9] w-full bg-gray-200 group shadow-2xl" id="ba-slider">
                 <!-- Before Image (Background) -->
                 <picture class="contents"><source srcset="Before.webp" type="image/webp"><img src="Before.jpg" alt="A Leavitt Building Group project before renovation" width="1800" height="1165" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover" draggable="false" onerror="this.src='https://placehold.co/1200x600/333333/ffffff?text=Before+Renovation'"></picture>
                 <div class="absolute top-6 right-6 bg-[#0f172a]/80 backdrop-blur-md text-white px-4 py-2 text-[10px] md:text-xs font-bold uppercase tracking-[0.2em] z-0 pointer-events-none">Before</div>
@@ -506,7 +464,7 @@
          Sources live in assets-src/storyteller-*.jpg; run `npm run images` after changing one. -->
     <section id="gallery" class="py-24 md:py-32 px-6 bg-[#f8f9fa] border-t border-gray-200 overflow-hidden">
         <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16 reveal-element">
+            <div class="text-center mb-16">
                 <p class="text-sm font-bold uppercase tracking-[0.3em] text-[#c2a67a] mb-4">A Home We Built</p>
                 <h2 class="text-3xl md:text-5xl font-light text-[#0f172a] mb-6">Inside a Leavitt home.</h2>
                 <p class="text-gray-600 max-w-2xl mx-auto text-lg">
@@ -517,26 +475,26 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- 1. exterior -->
-                <picture class="contents"><source srcset="storyteller-exterior.webp" type="image/webp"><img src="storyteller-exterior.jpg" alt="The Storyteller by Leavitt Building Group — a Modern Farmhouse elevation in stone, grey lap siding and red board-and-batten gables, with a covered front porch under a standing-seam roof" width="1024" height="695" loading="lazy" decoding="async" tabindex="0" role="button" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2a67a] transition-all duration-300 reveal-element"></picture>
+                <picture class="contents"><source srcset="storyteller-exterior.webp" type="image/webp"><img src="storyteller-exterior.jpg" alt="The Storyteller by Leavitt Building Group — a Modern Farmhouse elevation in stone, grey lap siding and red board-and-batten gables, with a covered front porch under a standing-seam roof" width="1024" height="695" loading="lazy" decoding="async" tabindex="0" role="button" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2a67a] transition-all duration-300"></picture>
 
                 <!-- 2. living fireplace -->
-                <picture class="contents"><source srcset="storyteller-living-fireplace.webp" type="image/webp"><img src="storyteller-living-fireplace.jpg" alt="The Storyteller living room: a tiled fireplace flanked by windows, board-and-batten wainscoting and a wall of double-hung windows over the rear field" width="1600" height="1059" loading="lazy" decoding="async" tabindex="0" role="button" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2a67a] transition-all duration-300 reveal-element" style="transition-delay: 100ms;"></picture>
+                <picture class="contents"><source srcset="storyteller-living-fireplace.webp" type="image/webp"><img src="storyteller-living-fireplace.jpg" alt="The Storyteller living room: a tiled fireplace flanked by windows, board-and-batten wainscoting and a wall of double-hung windows over the rear field" width="1600" height="1059" loading="lazy" decoding="async" tabindex="0" role="button" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2a67a] transition-all duration-300"></picture>
 
                 <!-- 3. living kitchen -->
-                <picture class="contents"><source srcset="storyteller-living-kitchen.webp" type="image/webp"><img src="storyteller-living-kitchen.jpg" alt="The Storyteller living room looking through to the kitchen — an open plan with nine-foot ceilings, wide-plank flooring and a stone fireplace surround" width="1600" height="1059" loading="lazy" decoding="async" tabindex="0" role="button" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2a67a] transition-all duration-300 reveal-element" style="transition-delay: 200ms;"></picture>
+                <picture class="contents"><source srcset="storyteller-living-kitchen.webp" type="image/webp"><img src="storyteller-living-kitchen.jpg" alt="The Storyteller living room looking through to the kitchen — an open plan with nine-foot ceilings, wide-plank flooring and a stone fireplace surround" width="1600" height="1059" loading="lazy" decoding="async" tabindex="0" role="button" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2a67a] transition-all duration-300"></picture>
 
                 <!-- 4. kitchen -->
-                <picture class="contents"><source srcset="storyteller-kitchen.webp" type="image/webp"><img src="storyteller-kitchen.jpg" alt="The Storyteller kitchen: a granite-topped island under pewter pendants, white cabinetry, farmhouse sink, wall ovens and a built-in desk" width="1600" height="1059" loading="lazy" decoding="async" tabindex="0" role="button" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2a67a] transition-all duration-300 hidden md:block reveal-element" style="transition-delay: 300ms;"></picture>
+                <picture class="contents"><source srcset="storyteller-kitchen.webp" type="image/webp"><img src="storyteller-kitchen.jpg" alt="The Storyteller kitchen: a granite-topped island under pewter pendants, white cabinetry, farmhouse sink, wall ovens and a built-in desk" width="1600" height="1059" loading="lazy" decoding="async" tabindex="0" role="button" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2a67a] transition-all duration-300 hidden md:block"></picture>
 
                 <!-- 5. kitchen range -->
-                <picture class="contents"><source srcset="storyteller-kitchen-range.webp" type="image/webp"><img src="storyteller-kitchen-range.jpg" alt="The Storyteller kitchen detail — a six-burner gas cooktop, chimney hood, pot filler and stone tile backsplash" width="1600" height="1059" loading="lazy" decoding="async" tabindex="0" role="button" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2a67a] transition-all duration-300 hidden md:block reveal-element" style="transition-delay: 400ms;"></picture>
+                <picture class="contents"><source srcset="storyteller-kitchen-range.webp" type="image/webp"><img src="storyteller-kitchen-range.jpg" alt="The Storyteller kitchen detail — a six-burner gas cooktop, chimney hood, pot filler and stone tile backsplash" width="1600" height="1059" loading="lazy" decoding="async" tabindex="0" role="button" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2a67a] transition-all duration-300 hidden md:block"></picture>
 
                 <!-- 6. owners bath -->
-                <picture class="contents"><source srcset="storyteller-owners-bath.webp" type="image/webp"><img src="storyteller-owners-bath.jpg" alt="The Storyteller owner's bath: a glass walk-in shower tiled to the ceiling, twin vanities and a window over the tub deck" width="1600" height="1059" loading="lazy" decoding="async" tabindex="0" role="button" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2a67a] transition-all duration-300 hidden md:block reveal-element" style="transition-delay: 500ms;"></picture>
+                <picture class="contents"><source srcset="storyteller-owners-bath.webp" type="image/webp"><img src="storyteller-owners-bath.jpg" alt="The Storyteller owner's bath: a glass walk-in shower tiled to the ceiling, twin vanities and a window over the tub deck" width="1600" height="1059" loading="lazy" decoding="async" tabindex="0" role="button" class="gallery-img cursor-pointer aspect-[4/3] w-full object-cover border border-gray-300 hover:border-[#c2a67a] hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c2a67a] transition-all duration-300 hidden md:block"></picture>
             </div>
 
-            <div class="text-center mt-12 reveal-element">
-                <a href="/plans/the-storyteller.html" class="inline-flex items-center gap-2 border border-[#0f172a] text-[#0f172a] px-8 py-4 uppercase tracking-[0.2em] font-bold text-xs hover:bg-[#0f172a] hover:text-white transition-colors magnetic">
+            <div class="text-center mt-12">
+                <a href="/plans/the-storyteller.html" class="inline-flex items-center gap-2 border border-[#0f172a] text-[#0f172a] px-8 py-4 uppercase tracking-[0.2em] font-bold text-xs hover:bg-[#0f172a] hover:text-white transition-colors">
                     See the floor plan for this home
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-4 h-4 pointer-events-none"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                 </a>
@@ -550,7 +508,7 @@
          update the three cards below to match - they are hand-maintained. -->
     <section id="plans" class="py-24 md:py-32 px-6 bg-white border-t border-gray-200 overflow-hidden">
         <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16 reveal-element">
+            <div class="text-center mb-16">
                 <p class="text-sm font-bold uppercase tracking-[0.3em] text-[#c2a67a] mb-4">Where to begin</p>
                 <h2 class="text-3xl md:text-5xl font-light text-[#0f172a] mb-6">Home plans.</h2>
                 <p class="text-gray-600 max-w-2xl mx-auto text-lg">
@@ -560,7 +518,7 @@
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <a href="/plans/the-visionary.html" class="group block border border-gray-200 hover:border-[#c2a67a] transition-colors reveal-element">
+                <a href="/plans/the-visionary.html" class="group block border border-gray-200 hover:border-[#c2a67a] transition-colors">
                     <div class="aspect-[4/3] w-full flex items-center justify-center p-4 bg-white">
                         <picture class="contents"><source srcset="plans/img/the-visionary-elevation.webp" type="image/webp"><img src="plans/img/the-visionary-elevation.png" alt="The Visionary front elevation" width="1417" height="703" loading="lazy" decoding="async" class="max-h-full w-auto object-contain"></picture>
                     </div>
@@ -570,7 +528,7 @@
                     </div>
                 </a>
 
-                <a href="/plans/the-craftsman.html" class="group block border border-gray-200 hover:border-[#c2a67a] transition-colors reveal-element" style="transition-delay: 100ms;">
+                <a href="/plans/the-craftsman.html" class="group block border border-gray-200 hover:border-[#c2a67a] transition-colors">
                     <div class="aspect-[4/3] w-full flex items-center justify-center p-4 bg-white">
                         <picture class="contents"><source srcset="plans/img/the-craftsman-elevation.webp" type="image/webp"><img src="plans/img/the-craftsman-elevation.png" alt="The Craftsman front elevation" width="1445" height="833" loading="lazy" decoding="async" class="max-h-full w-auto object-contain"></picture>
                     </div>
@@ -580,7 +538,7 @@
                     </div>
                 </a>
 
-                <a href="/plans/the-entrepreneur.html" class="group block border border-gray-200 hover:border-[#c2a67a] transition-colors reveal-element" style="transition-delay: 200ms;">
+                <a href="/plans/the-entrepreneur.html" class="group block border border-gray-200 hover:border-[#c2a67a] transition-colors">
                     <div class="aspect-[4/3] w-full flex items-center justify-center p-4 bg-white">
                         <picture class="contents"><source srcset="plans/img/the-entrepreneur-elevation.webp" type="image/webp"><img src="plans/img/the-entrepreneur-elevation.png" alt="The Entrepreneur front elevation" width="1458" height="578" loading="lazy" decoding="async" class="max-h-full w-auto object-contain"></picture>
                     </div>
@@ -591,8 +549,8 @@
                 </a>
             </div>
 
-            <div class="text-center mt-12 reveal-element">
-                <a href="/plans/" class="inline-flex items-center gap-2 bg-[#0f172a] text-white px-8 py-4 uppercase tracking-[0.2em] font-bold text-xs hover:bg-[#c2a67a] hover:text-[#0f172a] transition-colors magnetic">
+            <div class="text-center mt-12">
+                <a href="/plans/" class="inline-flex items-center gap-2 bg-[#0f172a] text-white px-8 py-4 uppercase tracking-[0.2em] font-bold text-xs hover:bg-[#c2a67a] hover:text-[#0f172a] transition-colors">
                     Browse all home plans
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-4 h-4 pointer-events-none"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                 </a>
@@ -602,10 +560,8 @@
 
     <!-- Testimonials Section -->
     <section id="testimonials" class="py-24 md:py-32 px-6 bg-[#0f172a] border-t border-[#1e293b] relative overflow-hidden">
-        <!-- Background watermark with Parallax ID -->
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" id="parallax-quote" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[20rem] h-[20rem] md:w-[35rem] md:h-[35rem] text-white/5 z-0 pointer-events-none transition-transform duration-75 ease-out"><path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/><path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/></svg>
         
-        <div class="max-w-5xl mx-auto relative z-10 reveal-element">
+        <div class="max-w-5xl mx-auto relative z-10">
             <div class="text-center mb-12 md:mb-20">
                 <p class="text-sm font-bold uppercase tracking-[0.3em] text-[#c2a67a] mb-4">Client Stories</p>
                 <h2 class="text-3xl md:text-5xl font-light text-white">Words of trust.</h2>
@@ -667,7 +623,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
                 
                 <!-- Left Side: Contact Info -->
-                <div class="reveal-element">
+                <div>
                     <div class="mb-12">
                         <p class="text-sm font-bold uppercase tracking-[0.3em] text-[#c2a67a] mb-4">Get In Touch</p>
                         <h2 class="text-4xl md:text-6xl font-light text-[#0f172a] mb-8 leading-tight">
@@ -715,7 +671,7 @@
                 </div>
 
                 <!-- Right Side: The Form -->
-            <div class="bg-white p-8 md:p-12 shadow-xl shadow-gray-200/50 border border-gray-100 reveal-element" style="transition-delay: 200ms;">
+            <div class="bg-white p-8 md:p-12 shadow-xl shadow-gray-200/50 border border-gray-100">
                     <form class="space-y-8" name="contact" method="POST" action="/success.html" data-netlify="true" netlify-honeypot="bot-field">
                         <input type="hidden" name="form-name" value="contact" />
 
@@ -791,7 +747,7 @@
                             <textarea id="contact-details" rows="4" name="Details" class="w-full border-b border-gray-300 py-3 text-[#0f172a] focus:outline-none focus:border-[#c2a67a] transition-colors bg-transparent resize-none placeholder-gray-500" placeholder="Tell us about your location, timeline, or vision..."></textarea>
                         </div>
 
-                        <button type="submit" class="w-full bg-[#0f172a] text-white py-5 font-bold uppercase tracking-[0.2em] text-sm flex items-center justify-center gap-3 hover:bg-[#c2a67a] hover:text-[#0f172a] transition-colors duration-300 group mt-4 magnetic cursor-pointer">
+                        <button type="submit" class="w-full bg-[#0f172a] text-white py-5 font-bold uppercase tracking-[0.2em] text-sm flex items-center justify-center gap-3 hover:bg-[#c2a67a] hover:text-[#0f172a] transition-colors duration-300 group mt-4 cursor-pointer">
                             Submit Inquiry
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform pointer-events-none"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg>
                         </button>
@@ -808,7 +764,7 @@
     </section>
 
     <!-- Instagram / Social Grid -->
-    <section class="py-12 md:py-16 bg-[#f8f9fa] overflow-hidden reveal-element">
+    <section class="py-12 md:py-16 bg-[#f8f9fa] overflow-hidden">
         <div class="max-w-7xl mx-auto px-6 mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="text-center md:text-left">
                 <h2 class="text-2xl md:text-3xl font-serif text-[#0f172a]">Follow Our Builds</h2>
@@ -866,7 +822,7 @@
 
     <!-- Footer -->
     <footer class="bg-[#0f172a] text-gray-400 py-12 px-6 border-t border-[#1e293b] text-center md:text-left">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 reveal-element">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
             <div>
                 <span class="text-white font-bold tracking-widest uppercase text-sm">Leavitt </span>
                 <span class="text-[#c2a67a] text-[10px] uppercase tracking-[0.3em] font-semibold">Building Group</span>
@@ -938,65 +894,6 @@
 
     <!-- Interactive Scripts -->
     <script>
-        // Honour the OS "reduce motion" setting throughout.
-        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        const isDesktop = window.matchMedia("(min-width: 768px)").matches;
-
-        // --- Magnetic Button Effect Logic ---
-        document.addEventListener("DOMContentLoaded", () => {
-            if (isDesktop && !prefersReducedMotion) {
-                const magnetics = document.querySelectorAll('.magnetic');
-
-                magnetics.forEach(btn => {
-                    btn.addEventListener('mousemove', (e) => {
-                        const rect = btn.getBoundingClientRect();
-                        const x = (e.clientX - rect.left - rect.width / 2) * 0.3;
-                        const y = (e.clientY - rect.top - rect.height / 2) * 0.3;
-                        btn.style.transform = `translate(${x}px, ${y}px)`;
-                    });
-
-                    btn.addEventListener('mouseleave', () => {
-                        btn.style.transform = `translate(0px, 0px)`;
-                    });
-                });
-            }
-        });
-
-        // --- Cinematic Preloader & Text Reveal Logic ---
-        document.addEventListener("DOMContentLoaded", () => {
-            const preloader = document.getElementById('preloader');
-            const preloaderLogo = document.getElementById('preloader-logo');
-
-            const revealHero = () => {
-                document.querySelectorAll('.cinematic-text-word, .cinematic-fade-up')
-                    .forEach(el => el.classList.add('revealed'));
-            };
-
-            if (prefersReducedMotion) {
-                if (preloader) preloader.remove();
-                revealHero();
-                return;
-            }
-
-            // Timings are deliberately tight: the headline is the page's
-            // first impression and every beat here is time a visitor spends
-            // looking at a logo instead of it. Logo in, curtain up at 1s,
-            // headline starting as the curtain is still moving.
-            setTimeout(() => {
-                if(preloaderLogo) preloaderLogo.classList.add('show');
-            }, 150);
-
-            setTimeout(() => {
-                if(preloader) preloader.classList.add('slide-up');
-
-                setTimeout(revealHero, 200);
-
-                setTimeout(() => {
-                    if(preloader) preloader.remove();
-                }, 800);
-            }, 1000);
-        });
-
         // --- Before/After Slider Logic ---
         const baSlider = document.getElementById('ba-slider');
         const baAfterWrapper = document.getElementById('ba-after-wrapper');
@@ -1043,44 +940,8 @@
             }, {passive: true});
         }
 
-        // --- Animated Trust Counters Logic ---
-        const counters = document.querySelectorAll('.counter');
-        let hasCounted = false;
-
-        const counterObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting && !hasCounted) {
-                    hasCounted = true;
-                    counters.forEach(counter => {
-                        const target = +counter.getAttribute('data-target');
-                        const duration = 2000;
-                        const increment = target / (duration / 16); 
-
-                        let current = 0;
-                        const updateCounter = () => {
-                            current += increment;
-                            if (current < target) {
-                                counter.innerText = Math.ceil(current);
-                                requestAnimationFrame(updateCounter);
-                            } else {
-                                counter.innerText = target;
-                            }
-                        };
-                        updateCounter();
-                    });
-                }
-            });
-        }, { threshold: 0.5 }); 
-
-        const counterSection = document.querySelector('.counter') ? document.querySelector('.counter').closest('section') : null;
-        if(counterSection) {
-            counterObserver.observe(counterSection);
-        }
-
-        // --- Dynamic Navigation, Parallax & Scroll Progress Logic ---
+        // --- Navigation: transparent over the hero, solid once the page scrolls ---
         const mainNav = document.getElementById('main-nav');
-        const parallaxQuote = document.getElementById('parallax-quote');
-        const scrollProgress = document.getElementById('scroll-progress');
 
         window.addEventListener('scroll', () => {
             if (window.scrollY > 50) {
@@ -1090,42 +951,6 @@
                 mainNav.classList.add('bg-transparent', 'border-transparent');
                 mainNav.classList.remove('bg-[#0f172a]/95', 'backdrop-blur-md', 'border-white/10', 'shadow-lg');
             }
-
-            if (parallaxQuote && !prefersReducedMotion) {
-                const section = document.getElementById('testimonials');
-                if (section) {
-                    const rect = section.getBoundingClientRect();
-                    const distFromCenter = (window.innerHeight / 2) - (rect.top + rect.height / 2);
-                    parallaxQuote.style.transform = `translate(-50%, calc(-50% + ${distFromCenter * 0.15}px))`;
-                }
-            }
-
-            if (scrollProgress) {
-                const totalScroll = document.documentElement.scrollTop || document.body.scrollTop;
-                const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-                const scrollPercentage = (totalScroll / windowHeight) * 100;
-                scrollProgress.style.width = scrollPercentage + '%';
-            }
-        });
-
-        // --- Scroll Reveal Animation Logic ---
-        const revealElements = document.querySelectorAll('.reveal-element');
-        
-        const revealOptions = {
-            threshold: 0.15,
-            rootMargin: "0px 0px -50px 0px"
-        };
-
-        const revealOnScroll = new IntersectionObserver(function(entries, observer) {
-            entries.forEach(entry => {
-                if (!entry.isIntersecting) return;
-                entry.target.classList.add('active');
-                observer.unobserve(entry.target);
-            });
-        }, revealOptions);
-
-        revealElements.forEach(el => {
-            revealOnScroll.observe(el);
         });
 
         // Mobile Menu Toggle

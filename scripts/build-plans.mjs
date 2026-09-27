@@ -14,9 +14,8 @@
  * Adding model 17 is one entry in src/plans.json plus its PDF; run
  * `npm run plans` and both the images and the pages regenerate.
  *
- * Everything here is static: no class on a generated page depends on
- * JavaScript to become visible (deliberately not using .reveal-element, which
- * starts at opacity 0), so the plans read fine with scripts blocked.
+ * Everything here is static: nothing on a generated page depends on
+ * JavaScript to become visible, so the plans read fine with scripts blocked.
  *
  * Pages live one directory down, so every asset path must be root-relative
  * (/dist/styles.css, not dist/styles.css).

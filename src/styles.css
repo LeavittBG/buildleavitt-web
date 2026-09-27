@@ -28,167 +28,21 @@ section[id] { scroll-margin-top: 6rem; }
    element selector. See the note in that file before moving them back. */
 ::selection { background-color: #0f172a; color: white; }
 
-/* Custom Branded Scrollbar */
-::-webkit-scrollbar {
-    width: 10px;
-}
-::-webkit-scrollbar-track {
-    background: #0f172a; /* Navy track */
-}
-::-webkit-scrollbar-thumb {
-    background: #c2a67a; /* Gold thumb */
-    border-radius: 5px;
-}
-::-webkit-scrollbar-thumb:hover {
-    background: #d4b88c; /* Lighter gold on hover */
-}
-/* Firefox support */
-html {
-    scrollbar-width: thin;
-    scrollbar-color: #c2a67a #0f172a;
-}
-
-/* Scroll Reveal Animation Classes */
-.reveal-element {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
-}
-.reveal-element.active {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* Preloader Styles */
-#preloader {
-    transition: transform 0.7s cubic-bezier(0.77, 0, 0.175, 1);
-}
-#preloader.slide-up {
-    transform: translateY(-100%);
-}
-.preloader-logo {
-    opacity: 0;
-    transform: scale(0.9);
-    transition: all 0.5s ease-out;
-}
-.preloader-logo.show {
-    opacity: 1;
-    transform: scale(1);
-}
-
-/* Cinematic Text Reveal Styles */
+/* The hero headline is plain text: the word-by-word slide-in, the loading
+   screen before it and the fades on every section were stock template effects
+   and were taken out. What stays is the one layout rule the headline needs. */
 /* Each headline line is its own block.
-   The words are inline-flex masks separated by source whitespace, so a single
-   run of them is at the mercy of the line breaker: "Crafting Custom Homes"
-   measured 784px against a 768px container and the browser, quite correctly,
-   put "Homes" on a line of its own. A <br> did not prevent that - it only says
-   where a break MUST happen, never where one may not.
+   As one run of text the headline is at the mercy of the line breaker:
+   "Crafting Custom Homes" once measured 784px against a 768px container and
+   the browser, quite correctly, put "Homes" on a line of its own. A <br> does
+   not prevent that - it only says where a break MUST happen, never where one
+   may not.
    As blocks the two lines can never merge or borrow words from each other, and
    the sizes above them are chosen so each line fits its container at every
    width. If a line ever does outgrow its box it simply wraps, as it does now,
    rather than spilling out of the page. */
 .hero-line {
     display: block;
-}
-
-/* Each headline word sits in this box so it can slide up from below without
-   showing outside the line. The box has to clip vertically for that to work,
-   but anything it clips horizontally is just lost.
-   Padding widens the clip box and an equal negative margin takes the width back
-   out of the layout, so the glyph gains room without moving. */
-.overflow-hidden-mask {
-    overflow: hidden;
-    display: inline-flex;
-    vertical-align: bottom;
-    padding-top: 0.25em;
-    margin-top: -0.25em;
-    padding-bottom: 0.15em;
-    margin-bottom: -0.15em;
-    /* Room for glyphs that reach past their own box. The headline was once
-       half italic serif, whose "A" overhung this edge by 4px at 72px and was
-       sliced off flat; the headline is upright now, but a clip box this tight
-       has no business trusting every glyph to stay inside its advance width. */
-    padding-left: 0.25em;
-    margin-left: -0.25em;
-    padding-right: 0.2em;
-    /* Negative margin pulls the physical words closer together */
-    margin-right: -0.35em;
-}
-/* NO will-change ON ANY OF THIS. It was here, and it is why words went missing
-   from the headline on a Windows desktop.
-   will-change: transform promotes an element to its own compositor layer and,
-   because it is a standing hint rather than one scoped to a running animation,
-   keeps it there for the life of the page. If a layer ever fails to rasterize -
-   a real hazard on Windows with fractional display scaling and some drivers -
-   the element keeps its layout space and paints nothing, and with the layer
-   pinned it never gets another chance. Correct spacing, invisible words, for as
-   long as the tab is open. A transform transition is composited while it runs
-   whether or not anything asks for it, so the hint bought nothing and cost
-   that. MDN says as much: a last resort, never applied broadly or permanently. */
-.cinematic-text-word {
-    display: inline-block;
-    transition: transform 0.9s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.9s cubic-bezier(0.19, 1, 0.22, 1);
-    padding-right: 0.15em;
-}
-.cinematic-fade-up {
-    transition: all 0.9s cubic-bezier(0.19, 1, 0.22, 1);
-}
-
-/* The hero copy is visible by default and is hidden only once script has said,
-   before the first paint, that it is going to animate it. That ordering is the
-   point: the old rules hid this text in the base stylesheet and relied on
-   script to give it back, so every way script could fail - blocked, throwing,
-   still loading - ended in a hero with no words in it. Now the failure
-   direction is reversed. The worst case is text that appears without sliding.
-   .js-anim is set by a one-line script in <head>, so nothing flashes. */
-.js-anim .cinematic-text-word {
-    transform: translateY(120%);
-    opacity: 0;
-}
-.js-anim .cinematic-fade-up {
-    opacity: 0;
-    transform: translateY(30px);
-}
-.js-anim .cinematic-text-word.revealed,
-.js-anim .cinematic-fade-up.revealed {
-    transform: translateY(0);
-    opacity: 1;
-}
-
-/* Second net, for the case where script starts the reveal and then stops
-   partway. Does nothing during the intended reveal - it is still waiting out
-   its delay - and settles anything still hidden at 4s, comfortably clear of
-   the 2.6s the reveal takes. */
-.cinematic-text-word,
-.cinematic-fade-up {
-    animation: reveal-failsafe 0s linear 4s forwards;
-}
-@keyframes reveal-failsafe {
-    to {
-        opacity: 1;
-        transform: none;
-    }
-}
-
-/* Third net, for the curtain itself. The preloader covers the entire page and
-   is removed by script; if script dies between painting it and removing it,
-   the visitor gets a blank navy screen and no way past it. */
-#preloader {
-    animation: preloader-failsafe 0s linear 6s forwards;
-}
-@keyframes preloader-failsafe {
-    to {
-        transform: translateY(-100%);
-        visibility: hidden;
-    }
-}
-
-/* Magnetic Button Effect */
-/* will-change deliberately absent - see the note on .cinematic-text-word. This
-   is the "Explore Services" button, which came back in one photograph as a gold
-   rectangle with no writing on it. */
-.magnetic {
-    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.3s ease, color 0.3s ease, width 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 /* Before/After Slider */
@@ -242,17 +96,9 @@ html {
     transform: translate(-50%, -50%) scale(1.1);
 }
 
-/* Reduced Motion: show everything in its final state, skip the choreography */
+/* Reduced Motion: no smooth scrolling, and hover transitions finish at once */
 @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    #preloader { display: none !important; }
-    .reveal-element,
-    .cinematic-fade-up,
-    .cinematic-text-word {
-        opacity: 1 !important;
-        transform: none !important;
-        transition: none !important;
-    }
     *, *::before, *::after {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;

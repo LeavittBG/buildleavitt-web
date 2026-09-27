@@ -12,8 +12,7 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
   await p.goto(FILE_ROOT + 'index.html');
   await p.waitForTimeout(4200);
 
-  // Scroll through so lazy images load and reveal animations settle; without this
-  // currentSrc is empty and unrevealed .reveal-elements are still offset 30px.
+  // Scroll through so lazy images load; without this currentSrc is empty.
   await p.evaluate(async () => {
     for (let y = 0; y < document.body.scrollHeight; y += 300) {
       window.scrollTo(0, y);

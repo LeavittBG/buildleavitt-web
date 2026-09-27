@@ -29,8 +29,8 @@ node tests/hero-wrap.test.js      # any one file on its own
 
 Each file in `tests/` loads the real pages in a headless Chrome and checks
 something that has actually gone wrong on this site before — the headline
-breaking onto the wrong lines, italic letters clipped at the edge, words not
-painting on one Windows machine, the site rendering in the wrong typeface,
+breaking onto the wrong lines, words not painting on one Windows machine,
+content left hidden when a script failed, the site rendering in the wrong typeface,
 prices or square footage drifting from Leavitt's figures. The comment at the
 top of each file says what it guards against and why. Run `npm test` before
 merging anything that touches the markup, the stylesheet or the plans data.

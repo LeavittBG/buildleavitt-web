@@ -44,11 +44,27 @@ const ids = [...html.matchAll(/getElementById\('([^']+)'\)/g)].map(m => m[1]);
 for (const id of [...new Set(ids)]) ok(!!d.getElementById(id), `getElementById('${id}') resolves`);
 
 // querySelectorAll selectors used by the script match something
-for (const sel of ['.magnetic','.reveal-element','.counter','.service-card','.process-card',
-                   '.testimonial-slide','#testimonial-dots button','.gallery-img','.mobile-link',
-                   '.cinematic-text-word','.cinematic-fade-up']) {
+for (const sel of ['.service-card','.process-card','.testimonial-slide','#testimonial-dots button',
+                   '.gallery-img','.mobile-link']) {
   const n = d.querySelectorAll(sel).length;
   ok(n > 0, `selector ${sel} matches ${n} element(s)`);
+}
+
+// The stock template effects were taken out: a loading screen in front of
+// every visit, a gold scroll-progress bar, buttons that drifted toward the
+// pointer, figures that counted up, a headline that slid in word by word, a
+// parallax quote mark and 38 blocks that faded in as they were scrolled to.
+// Each also meant content that started hidden and depended on script to
+// appear. None of it may come back unnoticed.
+{
+  const leftovers = ['#preloader', '#scroll-progress', '#parallax-quote', '.magnetic', '.reveal-element',
+    '.counter', '[data-target]', '.cinematic-text-word', '.cinematic-fade-up', '.overflow-hidden-mask']
+    .filter((sel) => d.querySelector(sel));
+  const styles = fs.readFileSync(path.join(ROOT, 'src', 'styles.css'), 'utf8');
+  const cssLeft = ['::-webkit-scrollbar', 'scrollbar-color', '@keyframes'].filter((x) => styles.includes(x));
+  ok(leftovers.length === 0 && !/js-anim/.test(html) && cssLeft.length === 0,
+     'no template effects: no loading screen, scroll bar, drifting buttons, counters, reveals or custom scrollbar' +
+     (leftovers.length || cssLeft.length ? ' - found: ' + [...leftovers, ...cssLeft].join(', ') : ''));
 }
 
 // counts line up between slides and dots
