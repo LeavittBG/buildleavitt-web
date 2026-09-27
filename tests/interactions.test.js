@@ -77,7 +77,8 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
 
   // The trust figures are written into the page, not counted up by script
   const figures = await page.locator('#about + section .font-serif').allInnerTexts();
-  ok(figures.map((t) => t.replace(/\s+/g, '')).join(' ') === '20+ 100+ 1', 'trust figures read 20+, 100+, 1 without scrolling to them (' + figures.join(' / ') + ')');
+  ok(figures.map((t) => t.replace(/\s+/g, '')).join(' ') === '20+ 100+', 'trust figures read 20+ and 100+ without scrolling to them (' + figures.join(' / ') + ')');
+  ok(!(await page.locator('#about + section').innerText()).includes('Uncompromising Standard'), 'the filler "1 Uncompromising Standard" figure is gone');
 
 
   // --- Before/After slider regressions ---
