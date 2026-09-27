@@ -70,6 +70,35 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
     ok(r.btnBottom <= h, `${label}: "What We Build" is on the first screen (bottom at ${r.btnBottom}px)`);
     await page.close();
   }
+  // The desktop menu bar must sit on one line. Between 1024 and ~1100px wide
+  // "Client Login" and "Get a Quote" used to wrap onto two lines each; Client
+  // Login moved to the footer and the phone menu, which cleared the room. It
+  // is only for existing clients, so it no longer takes space from new ones.
+  for (const w of [1024, 1060, 1100, 1180, 1280, 1440, 1920]) {
+    const page = await b.newPage({ viewport: { width: w, height: 800 } });
+    await serveFonts(page);
+    await page.goto(FILE_ROOT + 'index.html');
+    await page.evaluate(() => document.fonts.ready);
+    const wrapped = await page.evaluate(() => [...document.querySelectorAll('#main-nav .lg\\:flex > a')].filter((a) => {
+      const t = [...a.childNodes].find((n) => n.nodeType === 3 && n.textContent.trim());
+      const r = document.createRange(); r.selectNodeContents(t);
+      return new Set([...r.getClientRects()].filter((x) => x.width > 0).map((x) => Math.round(x.top))).size > 1;
+    }).map((a) => a.textContent.trim()));
+    ok(wrapped.length === 0, `${w}px: every menu bar link fits on one line` + (wrapped.length ? ' - wrapped: ' + wrapped.join(', ') : ''));
+    await page.close();
+  }
+  {
+    const page = await b.newPage({ viewport: { width: 1280, height: 800 } });
+    await page.goto(FILE_ROOT + 'index.html');
+    const where = await page.evaluate(() => ({
+      bar: !!document.querySelector('#main-nav .lg\\:flex a[href*="connect.buildleavitt.com"]'),
+      phone: !!document.querySelector('#mobile-menu a[href*="connect.buildleavitt.com"]'),
+      footer: !!document.querySelector('footer a[href*="connect.buildleavitt.com"]'),
+    }));
+    ok(!where.bar && where.phone && where.footer, `Client Login is in the phone menu and footer, not the desktop bar (${JSON.stringify(where)})`);
+    await page.close();
+  }
+
   await b.close();
   console.log(fail === 0 ? '\nAll layout checks passed.' : `\n${fail} failed.`);
   process.exit(fail ? 1 : 0);
