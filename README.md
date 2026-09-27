@@ -45,8 +45,9 @@ One check in `plans.test.js` reads the brochure PDFs with `pdftotext`
 so; the rest still run.
 
 Screenshots the tests leave for a person to look at go to `tests/.output/`,
-which git ignores. `tests/` is removed from the Netlify deploy, the same as
-`assets-src/`.
+which git ignores. `tests/` is removed from the Netlify deploy, along with
+every other file that is not part of the site - see the comment in
+`netlify.toml`.
 
 GitHub runs the whole suite on every pull request
 (`.github/workflows/test.yml`) and shows the result as a check named **test**
