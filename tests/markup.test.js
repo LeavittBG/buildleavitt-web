@@ -213,6 +213,17 @@ console.log("\n== no eyebrow labels over headings ==");
   ok(found.length === 0, `no small caps label sits over a heading on ${pages.length} pages` + (found.length ? " - " + found.slice(0, 6).join(" | ") : ""));
 }
 
+// --- claims Leavitt has not made ---
+// The Architectural Design pop-up promised "premier architects and designers"
+// and "3D renderings". Leavitt asked for both to come out; don't put either
+// back without checking with him. Anything on the site has to be true.
+console.log("\n== no claims Leavitt has not made ==");
+{
+  const claims = [/premier architects/i, /3D render/i];
+  const found = claims.filter((re) => re.test(html)).map(String);
+  ok(found.length === 0, 'no "premier architects" or "3D renderings" on the homepage' + (found.length ? ' - found: ' + found.join(', ') : ''));
+}
+
 // --- Facebook ---
 // The site pointed at facebook.com/LeavittBuildingGroup, which is not
 // Leavitt's page. The address below is the page's permanent one, as the
