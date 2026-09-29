@@ -28,7 +28,7 @@ import { execFileSync } from 'node:child_process';
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(ROOT, 'plans');
 const SITE = 'https://buildleavitt.com';
-const GTM = 'GTM-K9ND8BDT';
+const GTM = 'GTM-PHGFM247';
 
 const plansData = JSON.parse(readFileSync(join(ROOT, 'src', 'plans.json'), 'utf8'));
 const { models } = plansData;

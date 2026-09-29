@@ -33,6 +33,7 @@ The plan scripts need poppler (`pdftoppm`, `pdfinfo`, `pdftohtml`). One check in
 - **Icons** are inline SVG copied from Lucide, not a script. Icon-only links and buttons need an `aria-label`; `markup.test.js` fails any unnamed link or button on any page.
 - **404.html** is served by Netlify at the broken address, at any depth. Every asset and link in it must be root-absolute (`/dist/styles.css`).
 - **`netlify.toml`** keeps `pretty_urls = false`, so published links match the canonical tags and sitemap. A test checks it.
+- **Google Tag Manager** container `GTM-PHGFM247` belongs to kyle@buildleavitt.com; the marketing agency is a user on it. It is in every page's `<head>` and `<body>` and in `build-plans.mjs`; `markup.test.js` fails if any page loads a different container. Analytics (`G-RT4JHER039`) is added inside the container, not in the site's code.
 - **Contact form** is a Netlify form. Every field it records, including the hidden `Plan` field, must exist in the deployed `index.html`.
 
 ## Homepage specifics

@@ -245,6 +245,25 @@ console.log("\n== Facebook links go to Leavitt's page ==");
      `all ${found.length} Facebook links are ${FACEBOOK}` + (wrong.length ? " - wrong: " + wrong.join(" | ") : ""));
 }
 
+// The first Tag Manager container, GTM-K9ND8BDT, was created under the
+// marketing agency's Google login, so Leavitt could not see or change what it
+// ran. GTM-PHGFM247 is Leavitt's own; the agency is a user on it. Every page
+// must load that container, in both the <head> script and the <noscript>
+// iframe, and no other.
+console.log("\n== every page loads Leavitt's own Tag Manager container ==");
+{
+  const GTM = "GTM-PHGFM247";
+  const pages = ["index.html", "privacy.html", "terms.html", "success.html", "404.html",
+    ...fs.readdirSync(path.join(ROOT, "plans")).filter((f) => f.endsWith(".html")).map((f) => "plans/" + f)];
+  const bad = [];
+  for (const f of pages) {
+    const src = fs.readFileSync(path.join(ROOT, f), "utf8");
+    const ids = [...src.matchAll(/GTM-[A-Z0-9]+/g)].map((m) => m[0]);
+    if (ids.length !== 2 || ids.some((id) => id !== GTM)) bad.push(`${f}: ${ids.join(", ") || "none"}`);
+  }
+  ok(bad.length === 0, `all ${pages.length} pages load ${GTM} and no other container` + (bad.length ? " - " + bad.join(" | ") : ""));
+}
+
 // --- opening hours ---
 // The footer shows the hours to people; the homepage's structured data gives
 // the same hours to Google for the map listing. They are written separately,
