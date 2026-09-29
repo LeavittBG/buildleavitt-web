@@ -66,7 +66,7 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
     ok(noDims.length === 0, `${label}: every <img> declares width/height`);
 
     ok(!!doc.querySelector('link[rel="canonical"]'), `${label}: has a canonical URL`);
-    ok(/GTM-K9ND8BDT/.test(doc.head.innerHTML), `${label}: carries the GTM container`);
+    ok(/GTM-PHGFM247/.test(doc.head.innerHTML), `${label}: carries the GTM container`);
   }
 
   console.log('\n== no drawing is duplicated onto another model ==');
