@@ -44,7 +44,7 @@
     <main class="max-w-3xl mx-auto px-6 py-16 md:py-24">
 
         <h1 class="text-4xl md:text-5xl font-light text-[#0f172a] mb-4">Privacy Policy</h1>
-        <p class="text-gray-500 mb-12 text-sm">Last updated: September 9, 2026</p>
+        <p class="text-gray-500 mb-12 text-sm">Last updated: September 29, 2026</p>
 
         <div class="space-y-10 text-gray-700 leading-relaxed">
 
@@ -79,36 +79,43 @@
             <section>
                 <h2 class="text-2xl font-serif text-[#0f172a] mb-4">Information collected automatically</h2>
                 <p class="mb-4">
-                    This site uses <strong class="text-[#0f172a]">Google Tag Manager</strong>, which loads the
-                    measurement and marketing tags our marketing team has configured &mdash; for example website
-                    analytics and advertising tags. These tags, and Google Tag Manager itself, may set cookies or
-                    similar identifiers in your browser and may collect information such as your IP address, device and
-                    browser type, the pages you view, how you arrived at the site, and how you interact with it.
+                    This site uses <strong class="text-[#0f172a]">Google Analytics</strong> to understand how visitors
+                    find and use it. Google Analytics sets cookies in your browser and records information such as the
+                    pages you view, how long you stay, how you arrived at the site (for example from a search engine or
+                    a link), your approximate location based on your IP address, and your device and browser type. It
+                    also records when a contact form has been sent, so we can see how many inquiries the site brings
+                    in. It does not receive what you type into the form. We use this information in aggregate, to
+                    improve the site and our marketing.
                 </p>
                 <p class="mb-4">
-                    Some of these tags may be used to measure the performance of our advertising or to show you our ads
-                    on other websites. Information collected this way is processed by Google and any other tag provider
-                    we use, under their own privacy policies.
+                    Google Analytics runs through <strong class="text-[#0f172a]">Google Tag Manager</strong>, which
+                    our marketing team also uses to manage other measurement and advertising tags. Some of those tags
+                    may be used to measure the performance of our advertising or to show you our ads on other websites.
+                    Information collected this way is processed by Google and any other tag provider we use, under
+                    their own privacy policies.
                 </p>
                 <p>
                     Separately, our web host keeps standard server logs, which typically include IP address, browser
                     type, the pages requested, and the time of the request. These logs are used to operate and secure
                     the site.
                 </p>
-                <!-- REVIEW: this describes Google Tag Manager generically because the specific tags are
-                     configured inside the GTM container by the marketing team, not in this codebase.
-                     Confirm with them exactly what is enabled (GA4? Google Ads remarketing? Meta pixel?)
-                     and name those tools here. If anything does cross-context behavioural advertising,
-                     have your attorney check the "we do not sell" wording below and whether you need to
-                     offer an opt-out under Maryland's Online Data Privacy Act. -->
-                <!-- To remove all of this, delete the two "Google Tag Manager" blocks from the <head>
-                     and <body> of index.html, success.html, privacy.html and terms.html, then restore
-                     the previous wording of this section. -->
+                <!-- REVIEW: as of September 29, 2026 the Tag Manager container loaded below (owned by
+                     kyle@buildleavitt.com) runs Google Analytics 4 (G-RT4JHER039) and nothing else, and
+                     contact-form sends are counted as a generate_lead event from the thank-you page view.
+                     The marketing agency has Publish access and may add more tags. If they add Google Ads
+                     remarketing, a Meta pixel or anything else, name it here, and if it does
+                     cross-context behavioural advertising, have your attorney check the "we do not sell"
+                     wording below and whether you need to offer an opt-out under Maryland's Online Data
+                     Privacy Act. -->
+                <!-- To remove Tag Manager entirely, delete its two blocks from the <head> and <body> of
+                     every page and from scripts/build-plans.mjs, re-run npm run plans:build, then rewrite
+                     this section. -->
                 <p class="mt-4">
                     <strong class="text-[#0f172a]">Your choices.</strong> You can block or delete cookies in your
                     browser settings, and most browsers offer a &ldquo;do not track&rdquo; or tracking-protection
-                    option. Google publishes its own opt-out tools for the analytics and advertising products it
-                    operates.
+                    option. To stop Google Analytics from recording your visits on any website, you can install
+                    Google&rsquo;s <a href="https://tools.google.com/dlpage/gaoptout" class="text-[#c2a67a] font-medium hover:underline">Google Analytics opt-out browser add-on</a>.
+                    Google publishes further opt-out tools for the advertising products it operates.
                 </p>
             </section>
 
@@ -126,12 +133,12 @@
                         request.
                     </li>
                     <li>
-                        <strong class="text-[#0f172a]">unpkg</strong> (unpkg.com) &mdash; serves the icon set used on
-                        this site, and likewise receives your IP address.
+                        <strong class="text-[#0f172a]">Google Tag Manager</strong> (googletagmanager.com) &mdash; loads
+                        Google Analytics and any other tags described above, and receives your IP address.
                     </li>
                     <li>
-                        <strong class="text-[#0f172a]">Google Tag Manager</strong> (googletagmanager.com) &mdash; loads
-                        the analytics and marketing tags described above, and receives your IP address.
+                        <strong class="text-[#0f172a]">Google Analytics</strong> (google-analytics.com) &mdash; receives
+                        the visit information described above.
                     </li>
                 </ul>
                 <p class="mt-4">
