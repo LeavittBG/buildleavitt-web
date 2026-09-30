@@ -54,14 +54,19 @@ const fromPrice = Math.min(...models.map((m) => m.specs?.price).filter(Boolean))
 /**
  * The qualifiers that have to travel with that figure.
  *
- * Leavitt's sheet says: *"Starting at" means without additional options*. And
- * the homesite exclusion matters more still - it is the first thing a buyer
- * assumes either way, and assuming wrong is the difference between this figure
- * and the real cost of a house.
+ * This used to say the price was "for the home without any optional features
+ * added", after Leavitt's price sheet ("starting at means without additional
+ * options"). Leavitt's realtor pointed out that it made the house sound bare,
+ * when the Leavitt Standard already includes what other builders sell as
+ * upgrades; it now says the standard features are included, and links to the
+ * list of them further down this page. The homesite exclusion matters more
+ * still - it is the first thing a buyer assumes either way, and assuming wrong
+ * is the difference between this figure and the real cost of a house.
  */
 const priceNote = (extra = '') =>
-  `Starting price is for the home without any optional features added, and does ` +
-  `not include the homesite` +
+  `Starting price is for the home with ` +
+  `<a href="#included" class="text-[#c2a67a] font-medium hover:underline">all standard features</a> ` +
+  `included, and does not include the homesite` +
   (PRICES_AS_OF ? `. Current as of ${PRICES_AS_OF}` : '') + `.${extra}`;
 const images = JSON.parse(readFileSync(join(ROOT, 'src', 'plan-images.json'), 'utf8'));
 
@@ -212,7 +217,6 @@ const head = ({ title, description, canonical, image }) => `<!DOCTYPE html>
             </a>
             <nav aria-label="Main" class="flex items-center gap-6 md:gap-8 text-xs md:text-sm uppercase tracking-widest font-semibold">
                 <a href="/plans/" class="text-gray-300 hover:text-white transition-colors">Plans</a>
-                <a href="/#gallery" class="hidden sm:inline text-gray-300 hover:text-white transition-colors">Gallery</a>
                 <a href="/#contact" class="bg-[#c2a67a] text-[#0f172a] px-5 py-3 hover:bg-white transition-colors">Get a Quote</a>
             </nav>
         </div>
@@ -260,6 +264,21 @@ const sheets = (model) => model.pages.map((p) => ({ ...p, img: images[model.slug
 const floorsOf = (model) => sheets(model).filter((s) => !s.id.startsWith('elevation'));
 
 /**
+ * The drawing that stands for a plan on its card and in link previews: the
+ * front elevation, or, for a plan with no elevation drawing, its first-floor
+ * plan. The Storyteller is that case - its only elevation was a photograph of
+ * the finished house, taken off the site because it was the only home shown
+ * built, which read as though it were the only one Leavitt had built.
+ */
+const coverOf = (model) => {
+  const all = sheets(model);
+  return all.find((s) => s.id === 'elevation') ||
+    all.find((s) => s.label === 'First Floor Plan') || all[0];
+};
+const coverAlt = (model, cover) =>
+  cover.id === 'elevation' ? `${model.name} front elevation` : `${model.name} ${cover.label.toLowerCase()}`;
+
+/**
  * One factual sentence assembled from the data - no adjectives we cannot stand
  * behind. Doubles as the page's meta description, so it has to read like prose
  * rather than a spec dump.
@@ -298,19 +317,20 @@ const snippet = (model) => {
     s.baths && `${dash(s.baths)} baths`,
     s.sqft && `${s.sqftFrom ? 'from ' : ''}${s.sqft.toLocaleString('en-US')} sq ft`,
   ].filter(Boolean).join(', ');
-  const what = model.built ? 'Floor plans and photos' : 'Floor plans and elevation';
+  const what = coverOf(model)?.id === 'elevation' ? 'Floor plans and elevation' : 'Floor plans';
   return `${model.name} home plan${facts ? `: ${facts}` : ''}. ${what} by Leavitt Building Group.`;
 };
 
-/** A plan's front elevation as a share image. */
+/** A plan's cover drawing as a share image. */
 const shareImage = (model) => {
-  const e = images[model.slug]?.elevation;
-  if (!e) return undefined;
+  const cover = coverOf(model);
+  if (!cover) return undefined;
+  const e = cover.img;
   return {
     url: `${SITE}/plans/img/${e.file}.${e.ext || 'png'}`,
     width: e.width,
     height: e.height,
-    alt: model.built ? `${model.name}, a home built by Leavitt Building Group` : `${model.name} front elevation`,
+    alt: coverAlt(model, cover),
   };
 };
 
@@ -322,8 +342,7 @@ for (const [i, model] of models.entries()) {
   const rest = all.filter((s) => s !== elevation);
   const prev = models[(i - 1 + models.length) % models.length];
   const next = models[(i + 1) % models.length];
-  // A model built from images has no brochure to download - The Storyteller
-  // offers its photographs instead.
+  // A model built from images has no brochure to download, so it offers none.
   const hasBrochure = !model.pages.every((p) => p.image);
 
   const description = snippet(model);
@@ -422,11 +441,7 @@ ${specRows}
                    class="block w-full text-center border border-gray-300 px-6 py-4 uppercase tracking-[0.2em] font-bold text-xs text-[#0f172a] hover:border-[#c2a67a] hover:text-[#c2a67a] transition-colors">
                     Download the PDF
                 </a>
-                <p class="text-xs text-gray-500 mt-4">Opens the full brochure for ${esc(model.name)} in a new tab.</p>` : `<a href="/#gallery"
-                   class="block w-full text-center border border-gray-300 px-6 py-4 uppercase tracking-[0.2em] font-bold text-xs text-[#0f172a] hover:border-[#c2a67a] hover:text-[#c2a67a] transition-colors">
-                    See it built
-                </a>
-                <p class="text-xs text-gray-500 mt-4">Photographs of this home, inside and out.</p>`}
+                <p class="text-xs text-gray-500 mt-4">Opens the full brochure for ${esc(model.name)} in a new tab.</p>` : ''}
                 <p class="text-sm text-gray-600 mt-6 pt-6 border-t border-gray-200">
                     Every Leavitt home includes
                     <a href="/plans/#included" class="text-[#c2a67a] font-medium hover:underline">the Leavitt Standard</a>
@@ -466,21 +481,19 @@ ${sheetBlocks}
 // ----------------------------------------------------------------- index page
 
 const cards = models.map((model) => {
-  const elevation = sheets(model).find((s) => s.id === 'elevation');
+  const cover = coverOf(model);
   const floors = floorsOf(model).length;
   return `
                 <a href="/plans/${model.slug}.html" class="group block bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors">
                     <div class="aspect-[4/3] w-full overflow-hidden bg-white flex items-center justify-center p-4">
-                        ${elevation ? picture(elevation.img, {
-                          alt: `${model.name} front elevation`,
+                        ${cover ? picture(cover.img, {
+                          alt: coverAlt(model, cover),
                           cls: 'max-h-full w-auto object-contain',
-                        }) : '<span class="text-gray-400 text-sm">Elevation coming soon</span>'}
+                        }) : '<span class="text-gray-400 text-sm">Drawings coming soon</span>'}
                     </div>
                     <div class="border-t border-gray-200 p-6">
                         <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">${esc(model.name)}</h3>
                         <p class="text-sm text-gray-500 mt-2">${floors} floor plan${floors === 1 ? '' : 's'}${model.specs?.stories === 1 ? ' &middot; Ranch' : ''}</p>
-                        ${model.built ? `
-                        <p class="mt-2 inline-block bg-[#0f172a] text-white text-[10px] font-bold uppercase tracking-[0.2em] px-3 py-1">Built &mdash; photographed</p>` : ''}
                         <span class="inline-block mt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#c2a67a]">View plan &rarr;</span>
                     </div>
                 </a>`;

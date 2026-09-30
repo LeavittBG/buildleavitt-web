@@ -31,7 +31,10 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
       };
     });
     ok(r.leftover === 0, `no icon is left waiting for a library to draw it (${r.leftover})`);
-    ok(r.socialIcons.length >= 10 && r.socialIcons.every((a) => a > 0),
+    // Four since the photo strip under Follow Our Builds, whose six tiles each
+    // carried an Instagram icon, came off with The Storyteller's photographs:
+    // the Facebook and Instagram links in that section and in the footer.
+    ok(r.socialIcons.length >= 4 && r.socialIcons.every((a) => a > 0),
       `every Facebook and Instagram link draws its icon (${r.socialIcons.filter((a) => a > 0).length} of ${r.socialIcons.length})`);
     await ctx.close();
   }

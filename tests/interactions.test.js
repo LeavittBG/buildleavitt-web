@@ -42,21 +42,6 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
   await page.keyboard.press('Escape');
   await page.waitForTimeout(400);
 
-  // Lightbox carries alt text across
-  await page.locator('.gallery-img').first().scrollIntoViewIfNeeded();
-  const firstAlt = await page.locator('.gallery-img').first().getAttribute('alt');
-  await page.locator('.gallery-img').first().click();
-  await page.waitForTimeout(400);
-  ok(await page.locator('#lightbox').isVisible(), 'lightbox opens');
-  // Compare against the source image rather than a hard-coded string, so this
-  // keeps working when the gallery photos change.
-  ok((await page.locator('#lightbox-img').getAttribute('alt')) === firstAlt,
-     `lightbox carries the source alt text ("${(firstAlt || '').slice(0, 40)}...")`);
-  ok((firstAlt || '').length > 20, 'gallery alt text is descriptive, not a placeholder');
-  await page.keyboard.press('Escape');
-  await page.waitForTimeout(400);
-  ok(!(await page.locator('#lightbox').isVisible()), 'Escape closes the lightbox');
-
   // All three testimonials are readable side by side, with nothing to click
   await page.locator('#testimonials').scrollIntoViewIfNeeded();
   const quotes = await page.locator('#testimonials figure').evaluateAll((figs) => figs.map((f) => {

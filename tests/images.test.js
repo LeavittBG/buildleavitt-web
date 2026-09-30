@@ -28,7 +28,6 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
   await p.waitForTimeout(1000);
 
   const loaded = await p.evaluate(() => [...document.querySelectorAll('img')]
-    .filter((i) => i.id !== 'lightbox-img')
     .map((i) => ({ fallback: i.getAttribute('src'), actual: (i.currentSrc || '').split('/').pop(),
                    w: i.naturalWidth, h: i.naturalHeight })));
 
@@ -42,50 +41,16 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
      (notWebp.length ? ' - not: ' + [...new Set(notWebp.map((i) => i.fallback))].join(', ') : ''));
   ok(loaded.every((i) => i.w > 0 && i.h > 0), 'every image decoded (no broken images)');
 
-  // display:contents must leave the gallery grid untouched
-  const geom = await p.evaluate(() => {
-    const imgs = [...document.querySelectorAll('#gallery .gallery-img')];
-    // offsetLeft/offsetTop are layout positions and ignore the reveal transform,
-    // unlike getBoundingClientRect which would report translateY(30px) offsets.
-    return imgs.map((i) => ({ w: i.offsetWidth, h: i.offsetHeight, left: i.offsetLeft, top: i.offsetTop }));
-  });
-  ok(new Set(geom.map((g) => g.w)).size === 1 && geom[0].w > 200,
-     `gallery tiles all ${geom[0].w}px wide - grid intact under display:contents`);
-  ok(new Set(geom.map((g) => g.h)).size === 1, 'gallery tiles all equal height');
-  ok(new Set(geom.map((g) => g.left)).size === 3,
-     `gallery still in 3 columns (found ${new Set(geom.map((g) => g.left)).size})`);
-  // Regression guard: <source> must not claim its own grid cell under display:contents.
-  const rowTops = new Set(geom.map((g) => g.top));
-  ok(rowTops.size === 2,
-     `gallery is 2 rows of 3, i.e. <source> takes no grid cell (found ${rowTops.size} rows)`);
-
-  // Lightbox resolution
-  await p.locator('.gallery-img').first().scrollIntoViewIfNeeded();
-  await p.locator('.gallery-img').first().click();
-  await p.waitForTimeout(500);
-  const lb = await p.locator('#lightbox-img').evaluate((el) => el.currentSrc.split('/').pop());
-  ok(lb.endsWith('.webp'), `lightbox opens the WebP (${lb})`);
-  await p.keyboard.press('Escape'); await p.waitForTimeout(400);
-
-  // Every tile, not just the first: the lightbox takes currentSrc, so a tile
-  // whose WebP was missing would quietly open the heavier fallback.
-  const count = await p.locator('.gallery-img').count();
-  const opened = [];
-  for (let i = 0; i < count; i++) {
-    await p.locator('.gallery-img').nth(i).scrollIntoViewIfNeeded();
-    await p.locator('.gallery-img').nth(i).click();
-    await p.waitForTimeout(350);
-    opened.push(await p.locator('#lightbox-img').evaluate((el) => el.currentSrc.split('/').pop()));
-    await p.keyboard.press('Escape'); await p.waitForTimeout(300);
-  }
-  ok(opened.every((f) => f.endsWith('.webp')),
-     `all ${count} gallery tiles open as WebP` +
-     (opened.some((f) => !f.endsWith('.webp')) ? ': ' + opened.filter(f => !f.endsWith('.webp')).join(', ') : ''));
+  // This file also used to check the photo gallery's grid and its lightbox:
+  // that <source> took no grid cell under display:contents, and that every tile
+  // opened the WebP. The gallery and lightbox came off the site with The
+  // Storyteller's photographs in September 2026; the WebP checks above still
+  // cover every image that remains.
 
   await p.evaluate(() => window.scrollTo(0, 0)); await p.waitForTimeout(600);
   await p.screenshot({ path: OUT + '/shot-webp-hero.png' });
-  await p.locator('#gallery').scrollIntoViewIfNeeded(); await p.waitForTimeout(1200);
-  await p.screenshot({ path: OUT + '/shot-webp-gallery.png' });
+  await p.locator('#plans').scrollIntoViewIfNeeded(); await p.waitForTimeout(1200);
+  await p.screenshot({ path: OUT + '/shot-webp-plans.png' });
 
   await b.close();
   console.log(fail === 0 ? '\nAll WebP checks passed.' : `\n${fail} failed.`);

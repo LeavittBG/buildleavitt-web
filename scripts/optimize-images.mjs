@@ -41,15 +41,6 @@ const TARGETS = {
   'kyle.jpg': 928,
   'Before.jpg': 1800,
   'After.jpg': 1800,
-  // The Storyteller, photographed inside and out. These replaced six photos of
-  // six different houses: the gallery now shows one home a visitor can also
-  // walk through on /plans/the-storyteller.html.
-  'storyteller-exterior.jpg': 1600,
-  'storyteller-living-fireplace.jpg': 1600,
-  'storyteller-living-kitchen.jpg': 1600,
-  'storyteller-kitchen.jpg': 1600,
-  'storyteller-kitchen-range.jpg': 1600,
-  'storyteller-owners-bath.jpg': 1600,
   'Gold.png': 1200,
 };
 
