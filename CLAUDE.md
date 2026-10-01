@@ -44,7 +44,7 @@ The plan scripts need poppler (`pdftoppm`, `pdfinfo`, `pdftohtml`). One check in
 
 ## Plans data rules (`src/plans.json`)
 
-Specs, prices and square footage come only from Leavitt's own figures, never estimates. A missing value renders "On request". `sqftFrom`/`priceFrom` mean "starting at", and the "starting at means without additional options" qualifier must travel with every price. `plans.test.js` fails if any figure on a page differs from the data or the qualifier goes missing. Elevation captions must be read off the rendered page, not from `pdftotext`, because the brochures carry hidden text layers. The `_README` inside `src/plans.json` and the README's "Home plans" section have the full workflow for adding a model.
+Specs, prices and square footage come only from Leavitt's own figures, never estimates. A missing value renders "On request". `sqftFrom`/`priceFrom` mean "starting at", and the qualifier "Starting price is for the home with all standard features included, and does not include the homesite" must travel with every price (it links to the Leavitt Standard list at `#included`). `plans.test.js` fails if any figure on a page differs from the data or the qualifier goes missing. Elevation captions must be read off the rendered page, not from `pdftotext`, because the brochures carry hidden text layers. The `_README` inside `src/plans.json` and the README's "Home plans" section have the full workflow for adding a model.
 
 ## Tests
 

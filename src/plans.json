@@ -19,8 +19,8 @@
     "that for one page; `crop: false` takes the page whole.",
     "",
     "A page can name an `image` under assets-src/ instead of coming from a brochure",
-    "PDF. the-storyteller works that way: it is a house that has been built, so its",
-    "'elevation' is the photograph from the home page.",
+    "PDF. the-storyteller works that way: it has no brochure, so its floor plans come",
+    "as separate images, and with no elevation its first-floor plan fronts its card.",
     "",
     "An elevation's `label` is the caption printed under the rendering. That caption",
     "is deliberately cropped OUT of the image (Leavitt asked for it off the site),",
@@ -33,10 +33,10 @@
     "",
     "`sqft` is living square footage. `sqftFrom` true means their sheet said",
     "'starting at', rendered as 'From 2,626'; false means the figure is exact.",
-    "`price` is the starting price and `priceFrom` marks it the same way. Leavitt's",
-    "note on that sheet - 'starting at means without additional options' - is not",
-    "decoration: build-plans.mjs prints it alongside every price on the site, and it",
-    "must keep travelling with them.",
+    "`price` is the starting price and `priceFrom` marks it the same way. The",
+    "qualifier - the starting price includes every standard feature and not the",
+    "homesite - is not decoration: build-plans.mjs prints it alongside every price",
+    "on the site, and it must keep travelling with them.",
     "",
     "`sqftNote`, `bathsNote` and `priceNote` print a qualifying line under a figure,",
     "for the cases one number cannot carry honestly: the-storyteller gains 70 sq ft",
@@ -623,7 +623,7 @@
     {
       "slug": "the-storyteller",
       "name": "The Storyteller",
-      "summary": "A two-story Modern Farmhouse with 4 bedrooms, a first-floor in-law suite and a two-car garage, at 3,770 living square feet. This one is built — the photographs on the home page are this house.",
+      "summary": "A two-story Modern Farmhouse with 4 bedrooms, a first-floor in-law suite and a two-car garage, at 3,770 living square feet.",
       "specs": {
         "beds": "4",
         "baths": "4.5",
@@ -637,29 +637,21 @@
         "priceFrom": true
       },
       "style": "Modern Farmhouse",
-      "built": true,
       "pages": [
         {
           "page": 1,
-          "id": "elevation",
-          "label": "The Storyteller as built",
-          "image": "storyteller-exterior.jpg",
-          "crop": false
-        },
-        {
-          "page": 2,
           "id": "floor-1",
           "label": "Basement Floor Plan",
           "image": "plans/the-storyteller-basement.jpg"
         },
         {
-          "page": 3,
+          "page": 2,
           "id": "floor-2",
           "label": "First Floor Plan",
           "image": "plans/the-storyteller-first.jpg"
         },
         {
-          "page": 4,
+          "page": 3,
           "id": "floor-3",
           "label": "Second Floor Plan",
           "image": "plans/the-storyteller-second.jpg"

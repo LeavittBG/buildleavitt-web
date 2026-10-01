@@ -14,18 +14,12 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
   await p.waitForTimeout(1500);
 
   const m = await p.evaluate(() => {
-    // The strip's tiles are the grid's own links. Matching on the label alone
-    // would also count the footer's Instagram icon, which now has a label too.
-    const insta = [...document.querySelectorAll('.grid > a[href*="instagram.com"]')];
     const logo = document.querySelector('#main-nav img');
     const hero = document.querySelector('#hero img');
     const kyle = document.querySelector('img[src="kyle.jpg"]');
     const ba = document.querySelector('#ba-slider');
     const baImg = document.querySelector('#ba-slider img');
     return {
-      instaCols: [...new Set(insta.map(a => a.offsetLeft))].length,
-      instaRows: [...new Set(insta.map(a => a.offsetTop))].length,
-      instaCount: insta.length,
       logoW: logo.offsetWidth, logoH: logo.offsetHeight,
       heroW: hero.offsetWidth, heroH: hero.offsetHeight,
       kyleW: kyle.offsetWidth, kyleH: kyle.offsetHeight,
@@ -36,7 +30,8 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
   });
   console.log(JSON.stringify(m, null, 1).replace(/[{}"]/g, '').trim());
   ok(m.sourcesRendered === 0, `none of the ${m.totalSources} <source> elements occupy layout space`);
-  ok(m.instaCols === 6 && m.instaRows === 1, `Instagram strip is one row of 6 (${m.instaCols}x${m.instaRows})`);
+  // The Instagram photo strip (one row of 6) used to be checked here; it came off
+  // the site with The Storyteller's photographs in September 2026.
   ok(m.logoH > 0 && m.logoW > 0, `nav logo sized ${m.logoW}x${m.logoH}`);
   ok(m.heroW === 1280, `hero image spans the viewport (${m.heroW}px)`);
   ok(Math.abs(m.kyleW - m.kyleH) <= 1, `kyle.jpg still square (${m.kyleW}x${m.kyleH})`);

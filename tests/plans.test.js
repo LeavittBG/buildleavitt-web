@@ -170,6 +170,11 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
     ok(figures[0] === lowest,
       `the anchor is the lowest price in the data ($${lowest.toLocaleString('en-US')}, got $${(figures[0] ?? 0).toLocaleString('en-US')})`);
 
+    // The Storyteller's card used to be the only one with a photograph and a
+    // "Built - photographed" label, which read as though it were the only house
+    // Leavitt had built. No card singles a plan out that way.
+    ok(!/photographed/i.test(idx.body.textContent), 'no plan card is labelled as the one photographed');
+
     // No card may carry a price of its own.
     for (const m of models) {
       const card = [...idx.querySelectorAll('a[href^="/plans/"]')]
@@ -177,8 +182,15 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
       ok(!!card && !/\$/.test(card.textContent), `${m.slug}: card shows no price`);
     }
 
-    ok(/without any optional features/i.test(idx.body.textContent),
+    // The qualifier used to say "without any optional features added", after
+    // Leavitt's price sheet. Leavitt's realtor pointed out that it made the house
+    // sound bare when the Leavitt Standard already includes so much, so it now
+    // says the standard features are included - and links to the list of them.
+    ok(/with all standard features included/i.test(idx.body.textContent),
       'the anchor carries the "starting price" qualifier');
+    const stdLink = [...idx.querySelectorAll('a')].find((a) => /all standard features/i.test(a.textContent));
+    ok(!!stdLink && stdLink.getAttribute('href') === '#included' && !!idx.getElementById('included'),
+      'the qualifier links to the list of standard features on the same page');
     ok(/do(es)? not include the homesite/i.test(idx.body.textContent),
       'the anchor says the homesite is excluded');
     const asOf = plansJson.pricesAsOf;

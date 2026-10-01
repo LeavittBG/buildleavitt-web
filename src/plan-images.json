@@ -450,13 +450,6 @@
     }
   },
   "the-storyteller": {
-    "elevation": {
-      "file": "the-storyteller-elevation",
-      "ext": "jpg",
-      "width": 1024,
-      "height": 695,
-      "label": "The Storyteller as built"
-    },
     "floor-1": {
       "file": "the-storyteller-floor-1",
       "ext": "png",

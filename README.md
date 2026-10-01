@@ -172,17 +172,24 @@ by hand, reading each page off the render.
 
 A model can supply its pages as image files instead of a PDF: put `image` on each
 page in `src/plans.json`, relative to `assets-src/`. The Storyteller works this
-way — it is a house that has actually been built, so its "elevation" is the
-photograph from the home page and its floor plans came as separate images.
+way — its floor plans came as separate images from a listing sheet, and it has
+no elevation drawing, so its card and link preview show its first-floor plan
+instead (`coverOf()` in `build-plans.mjs`).
 
-A photograph also wants `crop: false`, which takes the image whole — the
-automatic crop keeps the largest block of ink and drops everything else, which
-is right for a sheet and wrong for a photograph. Plan images coming from a
-listing sheet should be left to crop normally: that strips the photographer's
-footer along with the rest of the furniture.
+A photograph wants `crop: false`, which takes the image whole — the automatic
+crop keeps the largest block of ink and drops everything else, which is right
+for a sheet and wrong for a photograph. Plan images coming from a listing sheet
+should be left to crop normally: that strips the photographer's footer along
+with the rest of the furniture.
 
-The download button changes to "See it built", linking to the photographs,
-since there is no brochure to offer.
+With no brochure there is no download button.
+
+The Storyteller's elevation used to be a photograph of the finished house, and
+six more photographs of it made up the home page gallery. They came off the site
+in September 2026 on Leavitt's realtor's advice: it was the only home shown
+built, which read as though it were the only one, and its granite as dated.
+New photography can go back in the same way; a brochure with a drawn
+elevation would slot in like the others.
 
 ### Specs
 
@@ -197,12 +204,16 @@ is not the one in the data.
 two models are exact and have it `false`. Keep that distinction — it is the
 difference between a starting price and a promise.
 
-`price` works the same way, with `priceFrom`. Leavitt's note on the price sheet —
-*"starting at means without additional options"* — is not decoration:
-`build-plans.mjs` prints it beside every price on the site, and it has to keep
-travelling with them. `pricesAsOf` dates the list and is printed with it. A test
-fails if any dollar figure on a page is not the one in the data, or if the
-qualifier goes missing.
+`price` works the same way, with `priceFrom`. The qualifier printed beside it —
+*"Starting price is for the home with all standard features included, and does
+not include the homesite"* — is not decoration: `build-plans.mjs` prints it
+beside every price on the site, and it has to keep travelling with them. It used
+to say "without any optional features added", after Leavitt's price sheet; the
+realtor pointed out that made the house sound bare when the Leavitt Standard
+already includes so much, so it now says what is included and links to that
+list. `pricesAsOf` dates the list and is printed with it. A test fails if any
+dollar figure on a page is not the one in the data, or if the qualifier goes
+missing.
 
 `sqftNote`, `bathsNote` and `priceNote` print a qualifying line under a figure,
 for cases one number cannot carry honestly — The Storyteller gains 70 sq ft with

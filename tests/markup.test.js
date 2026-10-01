@@ -26,7 +26,7 @@ for (const file of ['index.html', 'success.html']) {
   for (const r of refs) ok(fs.existsSync(path.join(ROOT, r)), `asset exists: ${r}`);
 
   // images have dimensions
-  const imgs = [...d.querySelectorAll('img')].filter(i => i.id !== 'lightbox-img');
+  const imgs = [...d.querySelectorAll('img')];
   const noDim = imgs.filter(i => !i.getAttribute('width') || !i.getAttribute('height'));
   ok(noDim.length === 0, `all ${imgs.length} <img> have width+height` + (noDim.length ? ` (missing: ${noDim.map(i=>i.getAttribute('src')).join(', ')})` : ''));
 
@@ -44,7 +44,7 @@ const ids = [...html.matchAll(/getElementById\('([^']+)'\)/g)].map(m => m[1]);
 for (const id of [...new Set(ids)]) ok(!!d.getElementById(id), `getElementById('${id}') resolves`);
 
 // querySelectorAll selectors used by the script match something
-for (const sel of ['.service-card','.process-card','.gallery-img','.mobile-link']) {
+for (const sel of ['.service-card','.process-card','.mobile-link']) {
   const n = d.querySelectorAll(sel).length;
   ok(n > 0, `selector ${sel} matches ${n} element(s)`);
 }
@@ -243,6 +243,43 @@ console.log("\n== Facebook links go to Leavitt's page ==");
   const wrong = found.filter((x) => !x.endsWith(": " + FACEBOOK));
   ok(found.length >= 3 && wrong.length === 0,
      `all ${found.length} Facebook links are ${FACEBOOK}` + (wrong.length ? " - wrong: " + wrong.join(" | ") : ""));
+}
+
+// When the photo gallery came off the homepage, the header of all eighteen plan
+// pages still offered "Gallery", pointing at a #gallery that no longer existed.
+// A link to a section of a page has to find that section: on every page, each
+// same-site link with a #fragment must name an id that exists on its target.
+console.log("\n== every link to a section of a page finds that section ==");
+{
+  const pages = ["index.html", "privacy.html", "terms.html", "success.html", "404.html",
+    ...fs.readdirSync(path.join(ROOT, "plans")).filter((f) => f.endsWith(".html")).map((f) => "plans/" + f)];
+  const ids = new Map();
+  const idsOf = (f) => {
+    if (!ids.has(f)) {
+      const file = path.join(ROOT, f);
+      ids.set(f, fs.existsSync(file)
+        ? new Set([...new JSDOM(fs.readFileSync(file, "utf8")).window.document.querySelectorAll("[id]")].map((e) => e.id))
+        : null);
+    }
+    return ids.get(f);
+  };
+  const broken = [];
+  let checked = 0;
+  for (const f of pages) {
+    const doc = new JSDOM(fs.readFileSync(path.join(ROOT, f), "utf8")).window.document;
+    for (const a of doc.querySelectorAll("a[href*='#']")) {
+      const href = a.getAttribute("href");
+      if (/^[a-z]+:/i.test(href) || href === "#") continue;
+      const u = new URL(href, "https://buildleavitt.com/" + f);
+      if (!u.hash || u.hash === "#") continue;
+      const target = u.pathname.endsWith("/") ? u.pathname.slice(1) + "index.html" : u.pathname.slice(1);
+      const found = idsOf(target);
+      checked++;
+      if (!found || !found.has(decodeURIComponent(u.hash.slice(1)))) broken.push(`${f}: ${href}`);
+    }
+  }
+  ok(checked > 20 && broken.length === 0,
+     `all ${checked} section links land on a section that exists` + (broken.length ? " - broken: " + [...new Set(broken)].slice(0, 6).join(" | ") + (broken.length > 6 ? ` (+${broken.length - 6} more)` : "") : ""));
 }
 
 // The first Tag Manager container, GTM-K9ND8BDT, was created under the
