@@ -202,6 +202,14 @@ numbers — a wrong square footage on a builder's website is a problem, and a
 blank is not. A test fails the build if a page ever shows a square footage that
 is not the one in the data.
 
+Bedrooms, baths and garage are copied from the figures printed on each
+brochure's cover ("4+ bedrooms, 2.5+ baths, 2+ car garage"). They used to be the
+price sheet's ranges, which disagreed with the brochure a visitor could download
+from the same page, so a test now reads every cover and fails if a page shows
+anything else. Square footage and price are not on the covers and still come
+from the price sheet. The Storyteller has no brochure, so this check skips it and
+its figures stay as they were.
+
 `sqft` is living square footage. `sqftFrom: true` means Leavitt's sheet said
 "starting at", and the page renders "From 2,626" rather than a flat figure;
 two models are exact and have it `false`. Keep that distinction — it is the
