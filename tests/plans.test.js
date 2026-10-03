@@ -237,12 +237,14 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
     }
   }
 
-  console.log('\n== floor-plan labels corroborated by the PDF itself ==');
-  // The brochures carry hidden leftover layers, so extracted text can name sheets
-  // that are not the printed one - but the printed one is always in there too.
-  // So: the asserted label must appear somewhere in that page's text. A page whose
-  // title is drawn as vector art yields no text at all and is listed for a human
-  // to eyeball rather than silently passed.
+  console.log('\n== page labels match the title printed on each brochure page ==');
+  // Every page after the cover prints its title in the header band ("FIRST
+  // FLOOR", "BASEMENT OPTIONS"), and the site shows each page under that title.
+  // The brochures before October 2026 carried hidden leftover text layers, so
+  // this used to hunt for any "... Floor Plan" in the page text and leave pages
+  // with no text to a human; the rebuilt brochures have clean text, so the
+  // header can be read directly and every label checked against it. Pages must
+  // also stay in the brochure's order: a label on the wrong page fails here.
   const { execFileSync, spawnSync } = require('child_process');
   // pdftotext comes with poppler (brew install poppler / apt install
   // poppler-utils). Without it this one cross-check is skipped, loudly, rather
@@ -251,31 +253,26 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
   if (spawnSync('pdftotext', ['-v']).error) {
     console.log('  SKIP  pdftotext is not installed, so brochure text cannot be cross-checked');
   } else {
-  const unverifiable = [];
   let corroborated = 0;
+  const wrong = [];
   for (const m of models) {
     // A model built from images has no brochure to cross-check against; its
     // labels were read straight off the plan images instead.
-    if (m.pages.every(p => p.image)) { unverifiable.push(`${m.slug} (no brochure)`); continue; }
+    if (m.pages.every(p => p.image)) continue;
+    const pdf = path.join(ROOT, `assets-src/plans/${m.slug}.pdf`);
+    const pageCount = Number(/Pages:\s*(\d+)/.exec(execFileSync('pdfinfo', [pdf], { encoding: 'utf8' }))[1]);
+    ok(m.pages.length === pageCount, `${m.slug}: every page of the brochure is shown (${m.pages.length} of ${pageCount})`);
     for (const pg of m.pages) {
-      if (pg.id.startsWith('elevation')) continue;
-      const text = execFileSync('pdftotext',
-        ['-f', String(pg.page), '-l', String(pg.page), path.join(ROOT, `assets-src/plans/${m.slug}.pdf`), '-'],
-        { encoding: 'utf8' });
-      const found = [...new Set(text.match(/(Basement|First|Second|Third|Lower|Upper|Main)\s+Floor Plan/gi) || [])]
-        .map(s => s.replace(/\s+/g, ' ').toLowerCase());
-      if (!found.length) { unverifiable.push(`${m.slug} p${pg.page}`); continue; }
-      ok(found.includes(pg.label.toLowerCase()),
-        `${m.slug} p${pg.page}: "${pg.label}" appears in the page text${found.includes(pg.label.toLowerCase()) ? '' : ` (found ${JSON.stringify(found)})`}`);
-      corroborated++;
+      if (pg.id === 'elevation') continue;
+      const first = execFileSync('pdftotext', ['-f', String(pg.page), '-l', String(pg.page), '-layout', pdf, '-'],
+        { encoding: 'utf8' }).split('\n').find((l) => l.trim()) || '';
+      const title = first.trim().split(/\s{2,}/).pop();
+      if (title.toLowerCase() === pg.label.toLowerCase()) corroborated++;
+      else wrong.push(`${m.slug} p${pg.page}: data says "${pg.label}", page says "${title}"`);
     }
   }
-  console.log(`  ....  ${corroborated} labels corroborated from page text`);
-  // These three were checked by eye against the rendered page instead.
-  const EYEBALLED = ['the-craftsman p2', 'the-daydreamer p2', 'the-novel p2',
-                     'the-storyteller (no brochure)'];
-  ok(unverifiable.every(u => EYEBALLED.includes(u)),
-    `only the known vector-art titles lack page text (${JSON.stringify(unverifiable)})`);
+  ok(wrong.length === 0 && corroborated > 50,
+    `all ${corroborated} page labels match the printed titles` + (wrong.length ? ': ' + wrong.join(' | ') : ''));
   }
 
   console.log('\n== page labels match the data ==');

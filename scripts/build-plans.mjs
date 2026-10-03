@@ -261,7 +261,14 @@ const picture = (img, { alt, cls, lazy = true }) => {
 const sheets = (model) => model.pages.map((p) => ({ ...p, img: images[model.slug]?.[p.id] }))
   .filter((p) => p.img);
 
-const floorsOf = (model) => sheets(model).filter((s) => !s.id.startsWith('elevation'));
+/**
+ * A floor plan, as opposed to the elevation, a page of options or the page of
+ * alternate elevations. The brochures put each floor's options on a page of
+ * their own ("First Floor Options"), shown on the plan page as printed; the
+ * card's "3 floor plans" counts only the floors themselves.
+ */
+const isFloor = (s) => s.id !== 'elevation' && !/options|elevations/i.test(s.label);
+const floorsOf = (model) => sheets(model).filter(isFloor);
 
 /**
  * The drawing that stands for a plan on its card and in link previews: the
@@ -273,7 +280,7 @@ const floorsOf = (model) => sheets(model).filter((s) => !s.id.startsWith('elevat
 const coverOf = (model) => {
   const all = sheets(model);
   return all.find((s) => s.id === 'elevation') ||
-    all.find((s) => s.label === 'First Floor Plan') || all[0];
+    all.find((s) => s.label === 'First Floor') || all[0];
 };
 const coverAlt = (model, cover) =>
   cover.id === 'elevation' ? `${model.name} front elevation` : `${model.name} ${cover.label.toLowerCase()}`;
@@ -362,10 +369,12 @@ for (const [i, model] of models.entries()) {
                 <h2 class="text-2xl md:text-3xl font-serif text-[#0f172a] mb-6">${esc(s.label)}</h2>
                 ${picture(s.img, {
                   alt: `${model.name} ${s.label.toLowerCase()} drawing`,
-                  cls: 'w-full h-auto bg-white border border-gray-200',
+                  // Padding because the brochure pages are cut close: the room
+                  // dimension tables would otherwise touch the frame.
+                  cls: 'w-full h-auto bg-white border border-gray-200 p-3 sm:p-6',
                 })}
                 <figcaption class="mt-3 text-sm text-gray-500 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-                    <span>Dashed outlines mark optional features available for this plan.</span>
+                    <span>${isFloor(s) ? 'Dashed outlines mark optional features available for this plan.' : ''}</span>
                     <!-- At phone width the drawing is ~360px wide and the room labels are
                          unreadable. Opening the image itself is the zero-JavaScript way to
                          let someone pinch and zoom it. -->

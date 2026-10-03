@@ -151,22 +151,25 @@ currently alphabetical by the name after "The".
 
 1. Put the brochure at `assets-src/plans/<slug>.pdf` (lowercase, hyphenated —
    `the-visionary.pdf`). The slug becomes the page URL.
-2. Run `npm run plans:scaffold`. It reads the PDF's built-in outline (the page
-   list Acrobat shows in the sidebar: "The Poet-Foundation", "The Poet-First
-   Floor") and prints a ready-made entry to paste into `src/plans.json`.
-3. Fill in the one thing the outline does not contain: the caption printed under
-   the front elevation, marked `TODO` in the scaffolded entry. **Read it off the
-   rendered page.** Do not trust text extracted from the PDF — these brochures
-   carry leftover hidden layers, so `pdftotext` reports sheet names that are not
-   the ones actually printed. The `_README` in `src/plans.json` has the details.
+2. Run `npm run plans:scaffold`. It reads the brochure the way the site does —
+   the elevation caption from the cover, and each later page's title from its
+   header band ("FIRST FLOOR", "BASEMENT OPTIONS") — and prints a ready-made
+   entry to paste into `src/plans.json`, pages in the brochure's own order.
+3. Fill in the specs from Leavitt's own figures (never from the brochure), and
+   check every label against the rendered pages. `plans.test.js` fails if a
+   label does not match its page's printed title, or a page is left out.
 4. Run `npm run plans`, then `npm run build`, then open `plans/index.html` and
-   the new model page and check the drawings look right. If a page is cropped
-   badly, give it a `band` override — see `src/plans.json`.
+   the new model page and check the drawings look right. Every brochure page is
+   cut to the bands in `brochureBands` (`src/plans.json`) — the elevation on the
+   cover, the body of every other page — so a brochure in a different layout
+   needs those checked, or a `band` override on the page.
 5. Commit the generated `plans/` files along with your edit. Netlify does not
    run these scripts.
 
-If a PDF has no outline, the scaffold says so and that model has to be filled in
-by hand, reading each page off the render.
+This works for the brochure template Leavitt adopted in October 2026. The
+brochures before it carried hidden leftover text layers, so their titles had to
+be read through the PDF's outline or off the rendered page; anything in the old
+layout has to be filled in by hand.
 
 ### A model with no brochure
 
