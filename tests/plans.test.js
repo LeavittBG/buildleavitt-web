@@ -275,6 +275,33 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
     `all ${corroborated} page labels match the printed titles` + (wrong.length ? ': ' + wrong.join(' | ') : ''));
   }
 
+  console.log('\n== bedrooms, baths and garage match each brochure cover ==');
+  // Until October 2026 the plan pages showed the price sheet's ranges ("4–5
+  // bedrooms, 3–6 baths") beside a downloadable brochure whose cover printed
+  // "4+ bedrooms, 2.5+ baths". Leavitt chose the brochure's figures, so each
+  // page has to show exactly what its cover prints. Square footage and price
+  // are not on the covers and still come from the price sheet.
+  if (spawnSync('pdftotext', ['-v']).error) {
+    console.log('  SKIP  pdftotext is not installed, so the brochure covers cannot be read');
+  } else {
+    for (const m of models) {
+      if (m.pages.every(p => p.image)) continue;
+      const cover = execFileSync('pdftotext', ['-f', '1', '-l', '1', '-layout',
+        path.join(ROOT, `plans/pdf/${m.slug}.pdf`), '-'], { encoding: 'utf8' }).split('\n');
+      const at = cover.findIndex((l) => /BEDROOMS\s+BATHS\s+CAR GARAGE/.test(l));
+      // The three figures sit on the line above their captions, split by wide
+      // gaps; "2.5 +" is laid out with a space before the plus.
+      const [beds, baths, garage] = (cover[at - 1] || '').trim().split(/\s{2,}/).map((t) => t.replace(/\s+/g, ''));
+      const want = { Bedrooms: beds, Bathrooms: baths, Garage: `${garage} car` };
+      const doc = new JSDOM(fs.readFileSync(path.join(ROOT, `plans/${m.slug}.html`), 'utf8')).window.document;
+      const shown = Object.fromEntries([...doc.querySelectorAll('dt')]
+        .map(dt => [dt.textContent.trim(), (dt.nextElementSibling?.textContent || '').trim()]));
+      const off = Object.keys(want).filter(k => shown[k] !== want[k]).map(k => `${k} "${shown[k]}", cover "${want[k]}"`);
+      ok(at > 0 && off.length === 0, `${m.slug}: ${beds} bedrooms, ${baths} baths, ${garage} car garage as on the cover` +
+        (at > 0 ? '' : ' (cover figures not found)') + (off.length ? ': ' + off.join(' | ') : ''));
+    }
+  }
+
   console.log('\n== page labels match the data ==');
   for (const m of models) {
     const text = new JSDOM(fs.readFileSync(path.join(ROOT, `plans/${m.slug}.html`), 'utf8'))

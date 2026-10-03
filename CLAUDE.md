@@ -44,7 +44,7 @@ The plan scripts need poppler (`pdftoppm`, `pdfinfo`, `pdftohtml`). One check in
 
 ## Plans data rules (`src/plans.json`)
 
-Specs, prices and square footage come only from Leavitt's own figures, never estimates. A missing value renders "On request". `sqftFrom`/`priceFrom` mean "starting at", and the qualifier "Starting price is for the home with all standard features included, and does not include the homesite" must travel with every price (it links to the Leavitt Standard list at `#included`). `plans.test.js` fails if any figure on a page differs from the data or the qualifier goes missing. The brochures (October 2026 template) share one layout: a cover with the elevation, then one page per floor and per set of options, each titled in its header band. Every page is shown on the site in the brochure's order, cut to `brochureBands` in `src/plans.json`; the cover caption and specs are cut off. `plans.test.js` checks each label against its page's printed title and that no page is left out. The `_README` inside `src/plans.json` and the README's "Home plans" section have the full workflow for adding a model.
+Specs, prices and square footage come only from Leavitt's own figures, never estimates. A missing value renders "On request". `sqftFrom`/`priceFrom` mean "starting at", and the qualifier "Starting price is for the home with all standard features included, and does not include the homesite" must travel with every price (it links to the Leavitt Standard list at `#included`). `plans.test.js` fails if any figure on a page differs from the data or the qualifier goes missing. Bedrooms, baths and garage are copied from each brochure's cover ("4+", "2.5+", "2+ car"), and the test fails if they differ from it. The brochures (October 2026 template) share one layout: a cover with the elevation, then one page per floor and per set of options, each titled in its header band. Every page is shown on the site in the brochure's order, cut to `brochureBands` in `src/plans.json`; the cover caption and specs are cut off. `plans.test.js` checks each label against its page's printed title and that no page is left out. The `_README` inside `src/plans.json` and the README's "Home plans" section have the full workflow for adding a model.
 
 ## Tests
 
@@ -77,7 +77,8 @@ What Kyle Leavitt (the owner) decided while reviewing the site with Claude, so l
 
 ### Brochures and plan figures
 - The October 2026 brochures came from Kyle's Drive folder `LBG Home Brochures/Updates Home brochures`. Their covers give starting points ("4+ bedrooms, 2.5+ baths").
-- The site's "At a glance" figures stay as the price-sheet ranges, by Kyle's choice. The Draftsman (3+ vs 4–5 bedrooms) and The Innovator (2+ vs 4) differ most. Change them only with numbers from Kyle.
+- Bedrooms, baths and garage on each plan page match the brochure cover exactly (Kyle's choice, October 3, 2026). They replaced the price-sheet ranges, and `plans.test.js` reads every cover and fails if a page differs. Square footage and prices are not on the covers and still come from the September 2026 price sheet.
+- The Innovator is a two-story home (Kyle, October 3, 2026). Its current brochure is wrong to call the second floor optional, and Kyle is having it corrected. Until the corrected brochure arrives, the site keeps the current cover's figures (2+ bedrooms, 2+ baths) but stays two-story at 2,330 sq ft. Don't change it to one story to match the brochure.
 - The Storyteller has no brochure. A brochure for it needs a front elevation drawing, ideally from the permit set.
 
 ### Analytics, accounts and marketing
