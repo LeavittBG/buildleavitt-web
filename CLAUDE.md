@@ -78,7 +78,7 @@ What Kyle Leavitt (the owner) decided while reviewing the site with Claude, so l
 ### Brochures and plan figures
 - The October 2026 brochures came from Kyle's Drive folder `LBG Home Brochures/Updates Home brochures`. Their covers give starting points ("4+ bedrooms, 2.5+ baths").
 - Bedrooms, baths and garage on each plan page match the brochure cover exactly (Kyle's choice, October 3, 2026). They replaced the price-sheet ranges, and `plans.test.js` reads every cover and fails if a page differs. Square footage and prices are not on the covers and still come from the September 2026 price sheet.
-- The Innovator's brochure shows a one-floor home (2+ bedrooms) with an optional second floor. The site still calls it two-story with 2,330 sq ft, from the price sheet's fuller version, until Kyle confirms which to show.
+- The Innovator is a two-story home (Kyle, October 3, 2026). Its current brochure is wrong to call the second floor optional, and Kyle is having it corrected. Until the corrected brochure arrives, the site keeps the current cover's figures (2+ bedrooms, 2+ baths) but stays two-story at 2,330 sq ft. Don't change it to one story to match the brochure.
 - The Storyteller has no brochure. A brochure for it needs a front elevation drawing, ideally from the permit set.
 
 ### Analytics, accounts and marketing
