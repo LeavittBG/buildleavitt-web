@@ -110,6 +110,17 @@ it when it sits beside text; a link or button that contains *only* an icon needs
 an `aria-label` saying where it goes. `markup.test.js` fails any link or button
 without a name, on every page.
 
+The three service-card icons in "Built for your lifestyle." are the exception:
+they were drawn for this site in October 2026, after the stock house, ruler and
+hammer read as a template. They show a house drawn in three dimensions with a
+dimension line, a floor plan with its doors swinging, and a house with an
+addition sketched in dashes. Each is navy line work with gold for the
+architect's marks, and sits straight on the page with no tile behind it. Each
+viewBox is cropped to its drawing so the three share a baseline and line up
+with their headings. Each `stroke-width` is set so every line renders at 1.8px,
+however far that drawing is scaled. `markup.test.js` fails if a tile or any
+other colour comes back.
+
 ## Not-found page
 
 `404.html` is what Netlify shows, with a 404 status, for any address that has

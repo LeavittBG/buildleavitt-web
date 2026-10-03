@@ -78,6 +78,20 @@ for (const sel of ['.service-card','.process-card','.mobile-link']) {
      'no carousel: no slides, dots, arrows or auto-advance timer');
 }
 
+// The service cards had stock icons (a house, a ruler, a hammer) in heavy navy
+// tiles that turned tan under the pointer, so a screenshot taken mid-hover made
+// the set look mismatched. They are line drawings made for the site now, set
+// straight on the page: navy for the building, gold for the architect's marks.
+{
+  const icons = [...d.querySelectorAll('.service-card svg')];
+  const tiles = [...d.querySelectorAll('.service-card > div:first-child')].filter((t) => /\bbg-|group-hover:/.test(t.className));
+  const colors = [...new Set(icons.flatMap((s) => [s, ...s.querySelectorAll('[stroke]')].map((e) => e.getAttribute('stroke').toLowerCase())))];
+  const stray = colors.filter((c) => !['currentcolor', '#c2a67a'].includes(c));
+  ok(icons.length === 3 && tiles.length === 0 && stray.length === 0,
+     'service icons sit straight on the page in navy and gold: no tiles, no hover colour flip' +
+     (tiles.length || stray.length ? ` - found ${tiles.length} tile(s)${stray.length ? ', colours ' + stray.join(', ') : ''}` : ''));
+}
+
 // form labels all point at a real control
 const labels = [...d.querySelectorAll('form label[for]')];
 ok(labels.length > 0 && labels.every(l => d.getElementById(l.getAttribute('for'))),
