@@ -15,7 +15,7 @@ npm test -- hero           # only test files whose name contains "hero"
 node tests/layout.test.js  # one file on its own (each test is a plain script)
 npm run plans              # plans:images (PDFs -> plans/img, plans/pdf) then plans:build
 npm run plans:build        # src/plans.json -> plans/*.html, sitemap.xml, robots.txt
-npm run plans:scaffold     # print a src/plans.json entry from a new brochure PDF's outline
+npm run plans:scaffold     # print a src/plans.json entry from a new brochure's cover caption and page titles
 npm run images             # resize + WebP the photos in assets-src/
 npm run test:fonts         # refresh tests/fixtures/fonts after changing the Google Fonts URL
 ```
@@ -44,7 +44,7 @@ The plan scripts need poppler (`pdftoppm`, `pdfinfo`, `pdftohtml`). One check in
 
 ## Plans data rules (`src/plans.json`)
 
-Specs, prices and square footage come only from Leavitt's own figures, never estimates. A missing value renders "On request". `sqftFrom`/`priceFrom` mean "starting at", and the qualifier "Starting price is for the home with all standard features included, and does not include the homesite" must travel with every price (it links to the Leavitt Standard list at `#included`). `plans.test.js` fails if any figure on a page differs from the data or the qualifier goes missing. Elevation captions must be read off the rendered page, not from `pdftotext`, because the brochures carry hidden text layers. The `_README` inside `src/plans.json` and the README's "Home plans" section have the full workflow for adding a model.
+Specs, prices and square footage come only from Leavitt's own figures, never estimates. A missing value renders "On request". `sqftFrom`/`priceFrom` mean "starting at", and the qualifier "Starting price is for the home with all standard features included, and does not include the homesite" must travel with every price (it links to the Leavitt Standard list at `#included`). `plans.test.js` fails if any figure on a page differs from the data or the qualifier goes missing. The brochures (October 2026 template) share one layout: a cover with the elevation, then one page per floor and per set of options, each titled in its header band. Every page is shown on the site in the brochure's order, cut to `brochureBands` in `src/plans.json`; the cover caption and specs are cut off. `plans.test.js` checks each label against its page's printed title and that no page is left out. The `_README` inside `src/plans.json` and the README's "Home plans" section have the full workflow for adding a model.
 
 ## Tests
 

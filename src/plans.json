@@ -4,19 +4,21 @@
     "assets-src/plans/ into images using the `pages` list below, and",
     "scripts/build-plans.mjs generates plans/index.html and plans/<slug>.html.",
     "",
-    "Page roles come from each PDF's document outline ('The Poet-Foundation'),",
-    "read by scripts/scaffold-plans.mjs. That outline is the one machine-readable",
-    "label in these files that can be trusted. The printed sheet titles cannot:",
-    "the brochures carry leftover hidden content layers that pdftoppm does not",
-    "render but pdftotext still returns, so extracted text names the wrong sheet.",
-    "the-maestro and the-visionary have no outline at all, so their page order was",
-    "read off the rendered pages. So were all sixteen elevation captions, which are",
-    "not in the outline either.",
+    "Page roles come from the title printed in each page's header band ('FIRST",
+    "FLOOR', 'BASEMENT OPTIONS') and are listed in the brochure's own order. The",
+    "October 2026 brochures were rebuilt from scratch, so their text is clean and",
+    "pdftotext reads those titles reliably; the brochures before them carried hidden",
+    "content layers that made extracted text name the wrong sheet, and had to be read",
+    "off the rendered page instead. The sixteen elevation captions match the old ones.",
     "",
-    "`id` also names the output file: plans/img/<slug>-<id>.{webp,png,jpg}. The crop",
-    "is measured per page - extract-plans.mjs keeps the tallest block of ink, which",
-    "is always the drawing - so no band needs tuning. `band` [top, bottom] overrides",
-    "that for one page; `crop: false` takes the page whole.",
+    "`id` also names the output file: plans/img/<slug>-<id>.{webp,png,jpg}. Every",
+    "brochure shares one template, so the crop is the same for all of them:",
+    "`brochureBands` gives the fractions of page height kept - the elevation on page",
+    "1, and the body of every other page (drawing, room dimensions and options",
+    "together, as they are printed) - and extract-plans.mjs then trims the",
+    "whitespace. `band` [top, bottom] overrides that for one page; `crop: false`",
+    "takes the page whole. A model without a brochure falls back to keeping the",
+    "tallest block of ink.",
     "",
     "A page can name an `image` under assets-src/ instead of coming from a brochure",
     "PDF. the-storyteller works that way: it has no brochure, so its floor plans come",
@@ -49,6 +51,17 @@
     "",
     "`pricesAsOf` dates the whole price list, and is printed with the prices."
   ],
+  "brochureBands": {
+    "_note": "Every brochure in assets-src/plans/ uses one template: a navy title band, the content, and a logo footer. These are the fractions of page height to keep - the elevation on page 1 (between the title band and the caption, which Leavitt asked to keep off the site), and the body of every other page (between the header band and the footer rule). Measured on all 92 pages of the October 2026 set; scripts/extract-plans.mjs then trims the whitespace.",
+    "elevation": [
+      0.19,
+      0.6
+    ],
+    "sheet": [
+      0.1,
+      0.916
+    ]
+  },
   "models": [
     {
       "slug": "the-craftsman",
@@ -72,18 +85,18 @@
         },
         {
           "page": 2,
-          "id": "floor-1",
-          "label": "Basement Floor Plan"
+          "id": "first-floor",
+          "label": "First Floor"
         },
         {
           "page": 3,
-          "id": "floor-2",
-          "label": "First Floor Plan"
+          "id": "second-floor",
+          "label": "Second Floor"
         },
         {
           "page": 4,
-          "id": "floor-3",
-          "label": "Second Floor Plan"
+          "id": "basement",
+          "label": "Basement"
         }
       ],
       "style": "Modern Farmhouse"
@@ -110,18 +123,28 @@
         },
         {
           "page": 2,
-          "id": "floor-1",
-          "label": "Basement Floor Plan"
+          "id": "first-floor",
+          "label": "First Floor"
         },
         {
           "page": 3,
-          "id": "floor-2",
-          "label": "First Floor Plan"
+          "id": "first-floor-options",
+          "label": "First Floor Options"
         },
         {
           "page": 4,
-          "id": "floor-3",
-          "label": "Second Floor Plan"
+          "id": "second-floor",
+          "label": "Second Floor"
+        },
+        {
+          "page": 5,
+          "id": "basement",
+          "label": "Basement"
+        },
+        {
+          "page": 6,
+          "id": "basement-options",
+          "label": "Basement Options"
         }
       ],
       "style": "Modern Farmhouse"
@@ -148,18 +171,28 @@
         },
         {
           "page": 2,
-          "id": "floor-1",
-          "label": "Basement Floor Plan"
+          "id": "first-floor",
+          "label": "First Floor"
         },
         {
           "page": 3,
-          "id": "floor-2",
-          "label": "First Floor Plan"
+          "id": "first-floor-options",
+          "label": "First Floor Options"
         },
         {
           "page": 4,
-          "id": "floor-3",
-          "label": "Second Floor Plan"
+          "id": "second-floor",
+          "label": "Second Floor"
+        },
+        {
+          "page": 5,
+          "id": "basement",
+          "label": "Basement"
+        },
+        {
+          "page": 6,
+          "id": "basement-options",
+          "label": "Basement Options"
         }
       ],
       "style": "Modern Farmhouse"
@@ -186,18 +219,23 @@
         },
         {
           "page": 2,
-          "id": "floor-1",
-          "label": "Basement Floor Plan"
+          "id": "first-floor",
+          "label": "First Floor"
         },
         {
           "page": 3,
-          "id": "floor-2",
-          "label": "First Floor Plan"
+          "id": "first-floor-options",
+          "label": "First Floor Options"
         },
         {
           "page": 4,
-          "id": "elevation-2",
-          "label": "Additional Elevations"
+          "id": "basement",
+          "label": "Basement"
+        },
+        {
+          "page": 5,
+          "id": "other-elevations",
+          "label": "Elevations"
         }
       ],
       "style": "Modern Farmhouse"
@@ -224,18 +262,33 @@
         },
         {
           "page": 2,
-          "id": "floor-1",
-          "label": "Basement Floor Plan"
+          "id": "first-floor",
+          "label": "First Floor"
         },
         {
           "page": 3,
-          "id": "floor-2",
-          "label": "First Floor Plan"
+          "id": "first-floor-options",
+          "label": "First Floor Options"
         },
         {
           "page": 4,
-          "id": "floor-3",
-          "label": "Second Floor Plan"
+          "id": "second-floor",
+          "label": "Second Floor"
+        },
+        {
+          "page": 5,
+          "id": "second-floor-options",
+          "label": "Second Floor Options"
+        },
+        {
+          "page": 6,
+          "id": "basement",
+          "label": "Basement"
+        },
+        {
+          "page": 7,
+          "id": "basement-options",
+          "label": "Basement Options"
         }
       ],
       "style": "Modern Farmhouse"
@@ -262,18 +315,33 @@
         },
         {
           "page": 2,
-          "id": "floor-1",
-          "label": "Basement Floor Plan"
+          "id": "first-floor",
+          "label": "First Floor"
         },
         {
           "page": 3,
-          "id": "floor-2",
-          "label": "First Floor Plan"
+          "id": "first-floor-options",
+          "label": "First Floor Options"
         },
         {
           "page": 4,
-          "id": "floor-3",
-          "label": "Second Floor Plan"
+          "id": "second-floor",
+          "label": "Second Floor"
+        },
+        {
+          "page": 5,
+          "id": "second-floor-options",
+          "label": "Second Floor Options"
+        },
+        {
+          "page": 6,
+          "id": "basement",
+          "label": "Basement"
+        },
+        {
+          "page": 7,
+          "id": "basement-options",
+          "label": "Basement Options"
         }
       ],
       "style": "Modern Farmhouse"
@@ -300,18 +368,33 @@
         },
         {
           "page": 2,
-          "id": "floor-1",
-          "label": "Basement Floor Plan"
+          "id": "first-floor",
+          "label": "First Floor"
         },
         {
           "page": 3,
-          "id": "floor-2",
-          "label": "First Floor Plan"
+          "id": "first-floor-options",
+          "label": "First Floor Options"
         },
         {
           "page": 4,
-          "id": "floor-3",
-          "label": "Second Floor Plan"
+          "id": "second-floor",
+          "label": "Second Floor"
+        },
+        {
+          "page": 5,
+          "id": "second-floor-options",
+          "label": "Second Floor Options"
+        },
+        {
+          "page": 6,
+          "id": "basement",
+          "label": "Basement"
+        },
+        {
+          "page": 7,
+          "id": "basement-options",
+          "label": "Basement Options"
         }
       ],
       "style": "Modern Farmhouse"
@@ -338,18 +421,18 @@
         },
         {
           "page": 2,
-          "id": "floor-1",
-          "label": "Basement Floor Plan"
+          "id": "first-floor",
+          "label": "First Floor"
         },
         {
           "page": 3,
-          "id": "floor-2",
-          "label": "First Floor Plan"
+          "id": "second-floor",
+          "label": "Second Floor"
         },
         {
           "page": 4,
-          "id": "floor-3",
-          "label": "Second Floor Plan"
+          "id": "basement",
+          "label": "Basement"
         }
       ],
       "style": "Modern Farmhouse"
@@ -376,18 +459,23 @@
         },
         {
           "page": 2,
-          "id": "floor-1",
-          "label": "Basement Floor Plan"
+          "id": "first-floor",
+          "label": "First Floor"
         },
         {
           "page": 3,
-          "id": "floor-2",
-          "label": "First Floor Plan"
+          "id": "first-floor-options",
+          "label": "First Floor Options"
         },
         {
           "page": 4,
-          "id": "floor-3",
-          "label": "Second Floor Plan"
+          "id": "optional-second-floor",
+          "label": "Optional Second Floor"
+        },
+        {
+          "page": 5,
+          "id": "basement",
+          "label": "Basement"
         }
       ],
       "style": "Modern Farmhouse"
@@ -414,18 +502,23 @@
         },
         {
           "page": 2,
-          "id": "floor-1",
-          "label": "Basement Floor Plan"
+          "id": "first-floor",
+          "label": "First Floor"
         },
         {
           "page": 3,
-          "id": "floor-2",
-          "label": "First Floor Plan"
+          "id": "second-floor",
+          "label": "Second Floor"
         },
         {
           "page": 4,
-          "id": "floor-3",
-          "label": "Second Floor Plan"
+          "id": "basement",
+          "label": "Basement"
+        },
+        {
+          "page": 5,
+          "id": "basement-options",
+          "label": "Basement Options"
         }
       ],
       "style": "Modern Farmhouse"
@@ -452,18 +545,28 @@
         },
         {
           "page": 2,
-          "id": "floor-1",
-          "label": "Basement Floor Plan"
+          "id": "first-floor",
+          "label": "First Floor"
         },
         {
           "page": 3,
-          "id": "floor-2",
-          "label": "First Floor Plan"
+          "id": "first-floor-options",
+          "label": "First Floor Options"
         },
         {
           "page": 4,
-          "id": "floor-3",
-          "label": "Second Floor Plan"
+          "id": "second-floor",
+          "label": "Second Floor"
+        },
+        {
+          "page": 5,
+          "id": "basement",
+          "label": "Basement"
+        },
+        {
+          "page": 6,
+          "id": "basement-options",
+          "label": "Basement Options"
         }
       ],
       "style": "Modern Farmhouse"
@@ -490,18 +593,28 @@
         },
         {
           "page": 2,
-          "id": "floor-1",
-          "label": "Basement Floor Plan"
+          "id": "first-floor",
+          "label": "First Floor"
         },
         {
           "page": 3,
-          "id": "floor-2",
-          "label": "First Floor Plan"
+          "id": "first-floor-options",
+          "label": "First Floor Options"
         },
         {
           "page": 4,
-          "id": "floor-3",
-          "label": "Second Floor Plan"
+          "id": "second-floor",
+          "label": "Second Floor"
+        },
+        {
+          "page": 5,
+          "id": "basement",
+          "label": "Basement"
+        },
+        {
+          "page": 6,
+          "id": "basement-options",
+          "label": "Basement Options"
         }
       ],
       "style": "Modern Farmhouse"
@@ -528,18 +641,28 @@
         },
         {
           "page": 2,
-          "id": "floor-1",
-          "label": "Basement Floor Plan"
+          "id": "first-floor",
+          "label": "First Floor"
         },
         {
           "page": 3,
-          "id": "floor-2",
-          "label": "First Floor Plan"
+          "id": "first-floor-options",
+          "label": "First Floor Options"
         },
         {
           "page": 4,
-          "id": "floor-3",
-          "label": "Second Floor Plan"
+          "id": "second-floor",
+          "label": "Second Floor"
+        },
+        {
+          "page": 5,
+          "id": "basement",
+          "label": "Basement"
+        },
+        {
+          "page": 6,
+          "id": "basement-options",
+          "label": "Basement Options"
         }
       ],
       "style": "Modern Farmhouse"
@@ -566,18 +689,23 @@
         },
         {
           "page": 2,
-          "id": "floor-1",
-          "label": "Basement Floor Plan"
+          "id": "first-floor",
+          "label": "First Floor"
         },
         {
           "page": 3,
-          "id": "floor-2",
-          "label": "First Floor Plan"
+          "id": "first-floor-options",
+          "label": "First Floor Options"
         },
         {
           "page": 4,
-          "id": "floor-3",
-          "label": "Second Floor Plan"
+          "id": "second-floor",
+          "label": "Second Floor"
+        },
+        {
+          "page": 5,
+          "id": "basement",
+          "label": "Basement"
         }
       ],
       "style": "Modern Farmhouse"
@@ -604,18 +732,28 @@
         },
         {
           "page": 2,
-          "id": "floor-1",
-          "label": "Basement Floor Plan"
+          "id": "first-floor",
+          "label": "First Floor"
         },
         {
           "page": 3,
-          "id": "floor-2",
-          "label": "First Floor Plan"
+          "id": "first-floor-options",
+          "label": "First Floor Options"
         },
         {
           "page": 4,
-          "id": "floor-3",
-          "label": "Second Floor Plan"
+          "id": "second-floor",
+          "label": "Second Floor"
+        },
+        {
+          "page": 5,
+          "id": "basement",
+          "label": "Basement"
+        },
+        {
+          "page": 6,
+          "id": "basement-options",
+          "label": "Basement Options"
         }
       ],
       "style": "Modern Farmhouse"
@@ -641,19 +779,19 @@
         {
           "page": 1,
           "id": "floor-1",
-          "label": "Basement Floor Plan",
+          "label": "Basement",
           "image": "plans/the-storyteller-basement.jpg"
         },
         {
           "page": 2,
           "id": "floor-2",
-          "label": "First Floor Plan",
+          "label": "First Floor",
           "image": "plans/the-storyteller-first.jpg"
         },
         {
           "page": 3,
           "id": "floor-3",
-          "label": "Second Floor Plan",
+          "label": "Second Floor",
           "image": "plans/the-storyteller-second.jpg"
         }
       ],
@@ -681,18 +819,33 @@
         },
         {
           "page": 2,
-          "id": "floor-1",
-          "label": "Basement Floor Plan"
+          "id": "first-floor",
+          "label": "First Floor"
         },
         {
           "page": 3,
-          "id": "floor-2",
-          "label": "First Floor Plan"
+          "id": "first-floor-options",
+          "label": "First Floor Options"
         },
         {
           "page": 4,
-          "id": "floor-3",
-          "label": "Second Floor Plan"
+          "id": "second-floor",
+          "label": "Second Floor"
+        },
+        {
+          "page": 5,
+          "id": "second-floor-options",
+          "label": "Second Floor Options"
+        },
+        {
+          "page": 6,
+          "id": "basement",
+          "label": "Basement"
+        },
+        {
+          "page": 7,
+          "id": "basement-options",
+          "label": "Basement Options"
         }
       ],
       "style": "Modern Farmhouse"

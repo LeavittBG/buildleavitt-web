@@ -3,450 +3,625 @@
     "elevation": {
       "file": "the-craftsman-elevation",
       "ext": "png",
-      "width": 1445,
-      "height": 833,
+      "width": 1446,
+      "height": 834,
       "label": "Elevation D – Modern Farmhouse w/ Stone, Board & Batten and Siding"
     },
-    "floor-1": {
-      "file": "the-craftsman-floor-1",
+    "first-floor": {
+      "file": "the-craftsman-first-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1699,
-      "label": "Basement Floor Plan"
+      "width": 1501,
+      "height": 1702,
+      "label": "First Floor"
     },
-    "floor-2": {
-      "file": "the-craftsman-floor-2",
+    "second-floor": {
+      "file": "the-craftsman-second-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1699,
-      "label": "First Floor Plan"
+      "width": 1498,
+      "height": 1478,
+      "label": "Second Floor"
     },
-    "floor-3": {
-      "file": "the-craftsman-floor-3",
+    "basement": {
+      "file": "the-craftsman-basement",
       "ext": "png",
-      "width": 1600,
-      "height": 1699,
-      "label": "Second Floor Plan"
+      "width": 1502,
+      "height": 1684,
+      "label": "Basement"
     }
   },
   "the-daydreamer": {
     "elevation": {
       "file": "the-daydreamer-elevation",
       "ext": "png",
-      "width": 1417,
-      "height": 674,
+      "width": 1468,
+      "height": 699,
       "label": "Elevation C – Modern Farmhouse w/ Stone, Board & Batten and Siding"
     },
-    "floor-1": {
-      "file": "the-daydreamer-floor-1",
+    "first-floor": {
+      "file": "the-daydreamer-first-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1698,
-      "label": "Basement Floor Plan"
+      "width": 1499,
+      "height": 1620,
+      "label": "First Floor"
     },
-    "floor-2": {
-      "file": "the-daydreamer-floor-2",
+    "first-floor-options": {
+      "file": "the-daydreamer-first-floor-options",
       "ext": "png",
-      "width": 1600,
-      "height": 1698,
-      "label": "First Floor Plan"
+      "width": 1484,
+      "height": 1692,
+      "label": "First Floor Options"
     },
-    "floor-3": {
-      "file": "the-daydreamer-floor-3",
+    "second-floor": {
+      "file": "the-daydreamer-second-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1698,
-      "label": "Second Floor Plan"
+      "width": 1501,
+      "height": 1440,
+      "label": "Second Floor"
+    },
+    "basement": {
+      "file": "the-daydreamer-basement",
+      "ext": "png",
+      "width": 1498,
+      "height": 1545,
+      "label": "Basement"
+    },
+    "basement-options": {
+      "file": "the-daydreamer-basement-options",
+      "ext": "png",
+      "width": 1498,
+      "height": 1610,
+      "label": "Basement Options"
     }
   },
   "the-draftsman": {
     "elevation": {
       "file": "the-draftsman-elevation",
       "ext": "png",
-      "width": 1486,
-      "height": 688,
+      "width": 1468,
+      "height": 680,
       "label": "Elevation B – Modern Farmhouse w/ Stone, Board & Batten and Siding"
     },
-    "floor-1": {
-      "file": "the-draftsman-floor-1",
+    "first-floor": {
+      "file": "the-draftsman-first-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "Basement Floor Plan"
+      "width": 1499,
+      "height": 1652,
+      "label": "First Floor"
     },
-    "floor-2": {
-      "file": "the-draftsman-floor-2",
+    "first-floor-options": {
+      "file": "the-draftsman-first-floor-options",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "First Floor Plan"
+      "width": 1348,
+      "height": 1708,
+      "label": "First Floor Options"
     },
-    "floor-3": {
-      "file": "the-draftsman-floor-3",
+    "second-floor": {
+      "file": "the-draftsman-second-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "Second Floor Plan"
+      "width": 1499,
+      "height": 1513,
+      "label": "Second Floor"
+    },
+    "basement": {
+      "file": "the-draftsman-basement",
+      "ext": "png",
+      "width": 1499,
+      "height": 1434,
+      "label": "Basement"
+    },
+    "basement-options": {
+      "file": "the-draftsman-basement-options",
+      "ext": "png",
+      "width": 1380,
+      "height": 1664,
+      "label": "Basement Options"
     }
   },
   "the-entrepreneur": {
     "elevation": {
       "file": "the-entrepreneur-elevation",
       "ext": "png",
-      "width": 1458,
-      "height": 578,
+      "width": 1468,
+      "height": 583,
       "label": "Elevation B – Modern Farmhouse w/ Stone, Board & Batten and Siding"
     },
-    "floor-1": {
-      "file": "the-entrepreneur-floor-1",
+    "first-floor": {
+      "file": "the-entrepreneur-first-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "Basement Floor Plan"
+      "width": 1499,
+      "height": 1668,
+      "label": "First Floor"
     },
-    "floor-2": {
-      "file": "the-entrepreneur-floor-2",
+    "first-floor-options": {
+      "file": "the-entrepreneur-first-floor-options",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "First Floor Plan"
+      "width": 510,
+      "height": 820,
+      "label": "First Floor Options"
     },
-    "elevation-2": {
-      "file": "the-entrepreneur-elevation-2",
+    "basement": {
+      "file": "the-entrepreneur-basement",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "Additional Elevations"
+      "width": 1499,
+      "height": 1640,
+      "label": "Basement"
+    },
+    "other-elevations": {
+      "file": "the-entrepreneur-other-elevations",
+      "ext": "png",
+      "width": 1493,
+      "height": 1308,
+      "label": "Elevations"
     }
   },
   "the-expressionist-i": {
     "elevation": {
       "file": "the-expressionist-i-elevation",
       "ext": "png",
-      "width": 1444,
-      "height": 650,
+      "width": 1468,
+      "height": 662,
       "label": "Elevation B – Modern Farmhouse w/ Stone, Board & Batten and Siding"
     },
-    "floor-1": {
-      "file": "the-expressionist-i-floor-1",
+    "first-floor": {
+      "file": "the-expressionist-i-first-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "Basement Floor Plan"
+      "width": 1499,
+      "height": 1578,
+      "label": "First Floor"
     },
-    "floor-2": {
-      "file": "the-expressionist-i-floor-2",
+    "first-floor-options": {
+      "file": "the-expressionist-i-first-floor-options",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "First Floor Plan"
+      "width": 902,
+      "height": 1394,
+      "label": "First Floor Options"
     },
-    "floor-3": {
-      "file": "the-expressionist-i-floor-3",
+    "second-floor": {
+      "file": "the-expressionist-i-second-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "Second Floor Plan"
+      "width": 1499,
+      "height": 1502,
+      "label": "Second Floor"
+    },
+    "second-floor-options": {
+      "file": "the-expressionist-i-second-floor-options",
+      "ext": "png",
+      "width": 1488,
+      "height": 1688,
+      "label": "Second Floor Options"
+    },
+    "basement": {
+      "file": "the-expressionist-i-basement",
+      "ext": "png",
+      "width": 1498,
+      "height": 1392,
+      "label": "Basement"
+    },
+    "basement-options": {
+      "file": "the-expressionist-i-basement-options",
+      "ext": "png",
+      "width": 1290,
+      "height": 1066,
+      "label": "Basement Options"
     }
   },
   "the-expressionist-ii": {
     "elevation": {
       "file": "the-expressionist-ii-elevation",
       "ext": "png",
-      "width": 1444,
-      "height": 650,
+      "width": 1468,
+      "height": 662,
       "label": "Elevation B – Modern Farmhouse w/ Stone and Board & Batten"
     },
-    "floor-1": {
-      "file": "the-expressionist-ii-floor-1",
+    "first-floor": {
+      "file": "the-expressionist-ii-first-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "Basement Floor Plan"
+      "width": 1499,
+      "height": 1593,
+      "label": "First Floor"
     },
-    "floor-2": {
-      "file": "the-expressionist-ii-floor-2",
+    "first-floor-options": {
+      "file": "the-expressionist-ii-first-floor-options",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "First Floor Plan"
+      "width": 1496,
+      "height": 1394,
+      "label": "First Floor Options"
     },
-    "floor-3": {
-      "file": "the-expressionist-ii-floor-3",
+    "second-floor": {
+      "file": "the-expressionist-ii-second-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "Second Floor Plan"
+      "width": 1499,
+      "height": 1530,
+      "label": "Second Floor"
+    },
+    "second-floor-options": {
+      "file": "the-expressionist-ii-second-floor-options",
+      "ext": "png",
+      "width": 952,
+      "height": 1374,
+      "label": "Second Floor Options"
+    },
+    "basement": {
+      "file": "the-expressionist-ii-basement",
+      "ext": "png",
+      "width": 1498,
+      "height": 1419,
+      "label": "Basement"
+    },
+    "basement-options": {
+      "file": "the-expressionist-ii-basement-options",
+      "ext": "png",
+      "width": 1470,
+      "height": 1042,
+      "label": "Basement Options"
     }
   },
   "the-illustrator": {
     "elevation": {
       "file": "the-illustrator-elevation",
       "ext": "png",
-      "width": 1556,
-      "height": 875,
+      "width": 1468,
+      "height": 827,
       "label": "Elevation C – Modern Farmhouse w/ Stone, Board & Batten and Siding"
     },
-    "floor-1": {
-      "file": "the-illustrator-floor-1",
+    "first-floor": {
+      "file": "the-illustrator-first-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "Basement Floor Plan"
+      "width": 1499,
+      "height": 1595,
+      "label": "First Floor"
     },
-    "floor-2": {
-      "file": "the-illustrator-floor-2",
+    "first-floor-options": {
+      "file": "the-illustrator-first-floor-options",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "First Floor Plan"
+      "width": 1436,
+      "height": 1292,
+      "label": "First Floor Options"
     },
-    "floor-3": {
-      "file": "the-illustrator-floor-3",
+    "second-floor": {
+      "file": "the-illustrator-second-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "Second Floor Plan"
+      "width": 1499,
+      "height": 1570,
+      "label": "Second Floor"
+    },
+    "second-floor-options": {
+      "file": "the-illustrator-second-floor-options",
+      "ext": "png",
+      "width": 1496,
+      "height": 1602,
+      "label": "Second Floor Options"
+    },
+    "basement": {
+      "file": "the-illustrator-basement",
+      "ext": "png",
+      "width": 1498,
+      "height": 1386,
+      "label": "Basement"
+    },
+    "basement-options": {
+      "file": "the-illustrator-basement-options",
+      "ext": "png",
+      "width": 1338,
+      "height": 1104,
+      "label": "Basement Options"
     }
   },
   "the-impressionist": {
     "elevation": {
       "file": "the-impressionist-elevation",
       "ext": "png",
-      "width": 1458,
-      "height": 782,
+      "width": 1468,
+      "height": 787,
       "label": "Elevation C – Modern Farmhouse w/ Stone, Board & Batten and Siding"
     },
-    "floor-1": {
-      "file": "the-impressionist-floor-1",
+    "first-floor": {
+      "file": "the-impressionist-first-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "Basement Floor Plan"
+      "width": 1499,
+      "height": 1593,
+      "label": "First Floor"
     },
-    "floor-2": {
-      "file": "the-impressionist-floor-2",
+    "second-floor": {
+      "file": "the-impressionist-second-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "First Floor Plan"
+      "width": 1294,
+      "height": 1431,
+      "label": "Second Floor"
     },
-    "floor-3": {
-      "file": "the-impressionist-floor-3",
+    "basement": {
+      "file": "the-impressionist-basement",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "Second Floor Plan"
+      "width": 1500,
+      "height": 1627,
+      "label": "Basement"
     }
   },
   "the-innovator": {
     "elevation": {
       "file": "the-innovator-elevation",
       "ext": "png",
-      "width": 1389,
-      "height": 808,
+      "width": 1432,
+      "height": 834,
       "label": "Elevation A – Modern Farmhouse w/ Stone, Board & Batten and Siding"
     },
-    "floor-1": {
-      "file": "the-innovator-floor-1",
+    "first-floor": {
+      "file": "the-innovator-first-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "Basement Floor Plan"
+      "width": 1499,
+      "height": 1652,
+      "label": "First Floor"
     },
-    "floor-2": {
-      "file": "the-innovator-floor-2",
+    "first-floor-options": {
+      "file": "the-innovator-first-floor-options",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "First Floor Plan"
+      "width": 1284,
+      "height": 1002,
+      "label": "First Floor Options"
     },
-    "floor-3": {
-      "file": "the-innovator-floor-3",
+    "optional-second-floor": {
+      "file": "the-innovator-optional-second-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "Second Floor Plan"
+      "width": 1256,
+      "height": 1442,
+      "label": "Optional Second Floor"
+    },
+    "basement": {
+      "file": "the-innovator-basement",
+      "ext": "png",
+      "width": 1500,
+      "height": 1644,
+      "label": "Basement"
     }
   },
   "the-maestro": {
     "elevation": {
       "file": "the-maestro-elevation",
       "ext": "png",
-      "width": 1389,
-      "height": 792,
+      "width": 1453,
+      "height": 830,
       "label": "Elevation D – Modern Farmhouse w/ Stone, Board & Batten and Siding"
     },
-    "floor-1": {
-      "file": "the-maestro-floor-1",
+    "first-floor": {
+      "file": "the-maestro-first-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1697,
-      "label": "Basement Floor Plan"
+      "width": 1499,
+      "height": 1674,
+      "label": "First Floor"
     },
-    "floor-2": {
-      "file": "the-maestro-floor-2",
+    "second-floor": {
+      "file": "the-maestro-second-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1697,
-      "label": "First Floor Plan"
+      "width": 1501,
+      "height": 1633,
+      "label": "Second Floor"
     },
-    "floor-3": {
-      "file": "the-maestro-floor-3",
+    "basement": {
+      "file": "the-maestro-basement",
       "ext": "png",
-      "width": 1600,
-      "height": 1697,
-      "label": "Second Floor Plan"
+      "width": 1498,
+      "height": 1462,
+      "label": "Basement"
+    },
+    "basement-options": {
+      "file": "the-maestro-basement-options",
+      "ext": "png",
+      "width": 1300,
+      "height": 1136,
+      "label": "Basement Options"
     }
   },
   "the-novel": {
     "elevation": {
       "file": "the-novel-elevation",
       "ext": "png",
-      "width": 1403,
-      "height": 726,
+      "width": 1468,
+      "height": 761,
       "label": "Elevation B – Modern Farmhouse w/ Stone, Board & Batten and Siding"
     },
-    "floor-1": {
-      "file": "the-novel-floor-1",
+    "first-floor": {
+      "file": "the-novel-first-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "Basement Floor Plan"
+      "width": 1499,
+      "height": 1675,
+      "label": "First Floor"
     },
-    "floor-2": {
-      "file": "the-novel-floor-2",
+    "first-floor-options": {
+      "file": "the-novel-first-floor-options",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "First Floor Plan"
+      "width": 1488,
+      "height": 1590,
+      "label": "First Floor Options"
     },
-    "floor-3": {
-      "file": "the-novel-floor-3",
+    "second-floor": {
+      "file": "the-novel-second-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "Second Floor Plan"
+      "width": 1499,
+      "height": 1505,
+      "label": "Second Floor"
+    },
+    "basement": {
+      "file": "the-novel-basement",
+      "ext": "png",
+      "width": 1498,
+      "height": 1492,
+      "label": "Basement"
+    },
+    "basement-options": {
+      "file": "the-novel-basement-options",
+      "ext": "png",
+      "width": 1384,
+      "height": 1240,
+      "label": "Basement Options"
     }
   },
   "the-pioneer-i": {
     "elevation": {
       "file": "the-pioneer-i-elevation",
       "ext": "png",
-      "width": 1378,
-      "height": 695,
+      "width": 1468,
+      "height": 741,
       "label": "Elevation C – Modern Farmhouse w/ Stone, Board & Batten and Siding"
     },
-    "floor-1": {
-      "file": "the-pioneer-i-floor-1",
+    "first-floor": {
+      "file": "the-pioneer-i-first-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "Basement Floor Plan"
+      "width": 1499,
+      "height": 1532,
+      "label": "First Floor"
     },
-    "floor-2": {
-      "file": "the-pioneer-i-floor-2",
+    "first-floor-options": {
+      "file": "the-pioneer-i-first-floor-options",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "First Floor Plan"
+      "width": 1448,
+      "height": 1642,
+      "label": "First Floor Options"
     },
-    "floor-3": {
-      "file": "the-pioneer-i-floor-3",
+    "second-floor": {
+      "file": "the-pioneer-i-second-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "Second Floor Plan"
+      "width": 1499,
+      "height": 1514,
+      "label": "Second Floor"
+    },
+    "basement": {
+      "file": "the-pioneer-i-basement",
+      "ext": "png",
+      "width": 1498,
+      "height": 1426,
+      "label": "Basement"
+    },
+    "basement-options": {
+      "file": "the-pioneer-i-basement-options",
+      "ext": "png",
+      "width": 1494,
+      "height": 1691,
+      "label": "Basement Options"
     }
   },
   "the-pioneer-ii": {
     "elevation": {
       "file": "the-pioneer-ii-elevation",
       "ext": "png",
-      "width": 1378,
-      "height": 695,
+      "width": 1468,
+      "height": 741,
       "label": "Elevation C – Modern Farmhouse w/ Stone, Board & Batten and Siding"
     },
-    "floor-1": {
-      "file": "the-pioneer-ii-floor-1",
+    "first-floor": {
+      "file": "the-pioneer-ii-first-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "Basement Floor Plan"
+      "width": 1499,
+      "height": 1515,
+      "label": "First Floor"
     },
-    "floor-2": {
-      "file": "the-pioneer-ii-floor-2",
+    "first-floor-options": {
+      "file": "the-pioneer-ii-first-floor-options",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "First Floor Plan"
+      "width": 1448,
+      "height": 1608,
+      "label": "First Floor Options"
     },
-    "floor-3": {
-      "file": "the-pioneer-ii-floor-3",
+    "second-floor": {
+      "file": "the-pioneer-ii-second-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "Second Floor Plan"
+      "width": 1499,
+      "height": 1516,
+      "label": "Second Floor"
+    },
+    "basement": {
+      "file": "the-pioneer-ii-basement",
+      "ext": "png",
+      "width": 1498,
+      "height": 1382,
+      "label": "Basement"
+    },
+    "basement-options": {
+      "file": "the-pioneer-ii-basement-options",
+      "ext": "png",
+      "width": 1494,
+      "height": 1675,
+      "label": "Basement Options"
     }
   },
   "the-poet": {
     "elevation": {
       "file": "the-poet-elevation",
       "ext": "png",
-      "width": 1528,
-      "height": 677,
+      "width": 1468,
+      "height": 651,
       "label": "Elevation C – Modern Farmhouse w/ Stone, Board & Batten and Siding"
     },
-    "floor-1": {
-      "file": "the-poet-floor-1",
+    "first-floor": {
+      "file": "the-poet-first-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "Basement Floor Plan"
+      "width": 1499,
+      "height": 1592,
+      "label": "First Floor"
     },
-    "floor-2": {
-      "file": "the-poet-floor-2",
+    "first-floor-options": {
+      "file": "the-poet-first-floor-options",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "First Floor Plan"
+      "width": 1466,
+      "height": 478,
+      "label": "First Floor Options"
     },
-    "floor-3": {
-      "file": "the-poet-floor-3",
+    "second-floor": {
+      "file": "the-poet-second-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "Second Floor Plan"
+      "width": 1499,
+      "height": 1542,
+      "label": "Second Floor"
+    },
+    "basement": {
+      "file": "the-poet-basement",
+      "ext": "png",
+      "width": 1500,
+      "height": 1580,
+      "label": "Basement"
     }
   },
   "the-romantic": {
     "elevation": {
       "file": "the-romantic-elevation",
       "ext": "png",
-      "width": 1333,
-      "height": 893,
+      "width": 1246,
+      "height": 834,
       "label": "Elevation A – Modern Farmhouse w/ Stone, Board & Batten and Siding"
     },
-    "floor-1": {
-      "file": "the-romantic-floor-1",
+    "first-floor": {
+      "file": "the-romantic-first-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "Basement Floor Plan"
+      "width": 1499,
+      "height": 1580,
+      "label": "First Floor"
     },
-    "floor-2": {
-      "file": "the-romantic-floor-2",
+    "first-floor-options": {
+      "file": "the-romantic-first-floor-options",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "First Floor Plan"
+      "width": 1098,
+      "height": 1108,
+      "label": "First Floor Options"
     },
-    "floor-3": {
-      "file": "the-romantic-floor-3",
+    "second-floor": {
+      "file": "the-romantic-second-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1696,
-      "label": "Second Floor Plan"
+      "width": 1369,
+      "height": 1523,
+      "label": "Second Floor"
+    },
+    "basement": {
+      "file": "the-romantic-basement",
+      "ext": "png",
+      "width": 1498,
+      "height": 1423,
+      "label": "Basement"
+    },
+    "basement-options": {
+      "file": "the-romantic-basement-options",
+      "ext": "png",
+      "width": 1350,
+      "height": 1180,
+      "label": "Basement Options"
     }
   },
   "the-storyteller": {
@@ -455,51 +630,72 @@
       "ext": "png",
       "width": 1600,
       "height": 1101,
-      "label": "Basement Floor Plan"
+      "label": "Basement"
     },
     "floor-2": {
       "file": "the-storyteller-floor-2",
       "ext": "png",
       "width": 1600,
       "height": 1222,
-      "label": "First Floor Plan"
+      "label": "First Floor"
     },
     "floor-3": {
       "file": "the-storyteller-floor-3",
       "ext": "png",
       "width": 1600,
       "height": 1233,
-      "label": "Second Floor Plan"
+      "label": "Second Floor"
     }
   },
   "the-visionary": {
     "elevation": {
       "file": "the-visionary-elevation",
       "ext": "png",
-      "width": 1417,
-      "height": 703,
+      "width": 1468,
+      "height": 729,
       "label": "Elevation B – Modern Farmhouse w/ Stone, Board & Batten and Siding"
     },
-    "floor-1": {
-      "file": "the-visionary-floor-1",
+    "first-floor": {
+      "file": "the-visionary-first-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1703,
-      "label": "Basement Floor Plan"
+      "width": 1499,
+      "height": 1653,
+      "label": "First Floor"
     },
-    "floor-2": {
-      "file": "the-visionary-floor-2",
+    "first-floor-options": {
+      "file": "the-visionary-first-floor-options",
       "ext": "png",
-      "width": 1600,
-      "height": 1703,
-      "label": "First Floor Plan"
+      "width": 1352,
+      "height": 1678,
+      "label": "First Floor Options"
     },
-    "floor-3": {
-      "file": "the-visionary-floor-3",
+    "second-floor": {
+      "file": "the-visionary-second-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1703,
-      "label": "Second Floor Plan"
+      "width": 1499,
+      "height": 1523,
+      "label": "Second Floor"
+    },
+    "second-floor-options": {
+      "file": "the-visionary-second-floor-options",
+      "ext": "png",
+      "width": 1398,
+      "height": 1060,
+      "label": "Second Floor Options"
+    },
+    "basement": {
+      "file": "the-visionary-basement",
+      "ext": "png",
+      "width": 1498,
+      "height": 1494,
+      "label": "Basement"
+    },
+    "basement-options": {
+      "file": "the-visionary-basement-options",
+      "ext": "png",
+      "width": 1486,
+      "height": 1104,
+      "label": "Basement Options"
     }
   }
 }

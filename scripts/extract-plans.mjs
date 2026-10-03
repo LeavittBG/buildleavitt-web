@@ -158,7 +158,7 @@ async function encodeFallback(source) {
 }
 const kb = (n) => (n / 1024).toFixed(0).padStart(5) + ' KB';
 
-const { models } = JSON.parse(readFileSync(join(ROOT, 'src', 'plans.json'), 'utf8'));
+const { models, brochureBands } = JSON.parse(readFileSync(join(ROOT, 'src', 'plans.json'), 'utf8'));
 
 for (const d of [IMG, PDF, TMP]) mkdirSync(d, { recursive: true });
 
@@ -228,11 +228,18 @@ for (const model of models) {
     if (crop === false) {
       base = sharp(rendered).resize({ width: MAX_WIDTH, withoutEnlargement: true });
     } else {
-      // A page may override the measurement from plans.json, as [top, bottom]
-      // fractions of page height, if a future brochure ever defeats findDrawing.
-      const box = band
-        ? { top: Math.round(meta.height * band[0]),
-            height: Math.round(meta.height * (band[1] - band[0])) }
+      // The brochures share one template, so a brochure page is cut to the band
+      // plans.json gives for it - the elevation on page 1, the body (drawing,
+      // room dimensions and options, as printed) on every other page. A page
+      // can override that with its own `band`, as [top, bottom] fractions of
+      // page height. Image pages, which have no template, keep the tallest
+      // block of ink instead.
+      const use = band || (!image && brochureBands
+        ? (id === 'elevation' ? brochureBands.elevation : brochureBands.sheet)
+        : null);
+      const box = use
+        ? { top: Math.round(meta.height * use[0]),
+            height: Math.round(meta.height * (use[1] - use[0])) }
         : await findDrawing(rendered);
 
       const extract = { left: 0, width: meta.width, ...box };
