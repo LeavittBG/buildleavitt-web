@@ -53,3 +53,41 @@ Specs, prices and square footage come only from Leavitt's own figures, never est
   - `fonts.js`: serves the real web fonts from `tests/fixtures/fonts/`, because text width decides several layout checks.
 - **Structure of a test file:** each one starts with a comment saying what past bug it guards against. Keep that pattern for new tests, and confirm a new check fails against the old behavior before relying on it.
 - **Timing:** nothing on the homepage animates on load any more, so tests can measure as soon as fonts are ready. `hero-wrap.test.js` reads each `.hero-line`'s line boxes with a Range to confirm the headline stays on two lines.
+
+## Decisions and history (September–October 2026)
+
+What Kyle Leavitt (the owner) decided while reviewing the site with Claude, so later sessions do not reopen it. Pull requests #18–#31.
+
+### How changes are made
+- Every change goes through a pull request from `claude/leavitt-website-review-79vqny`. Kyle checks the Netlify deploy preview and says "merge". After merging, reset that branch to `main` and confirm the change on buildleavitt.com.
+- Explain changes in plain language. When Kyle asks for an overview before a push, wait for his go-ahead.
+- This sandbox cannot reach facebook.com, googletagmanager.com, Netlify deploy previews or Kyle's computer. Files from him come through Google Drive (`LBG Home Brochures`) or chat attachments.
+
+### Content decisions
+- **Leave homepage pricing alone.**
+- **Hero:** the AI-generated house stays until the photographer's shots arrive. A replacement needs a full-resolution file (about 2400px wide or more). A daylight photo wants a neutral dark shadow behind the copy, not the navy fade.
+- **No template look:** no italic heading endings, no eyebrow labels over headings, no "1 Uncompromising Standard" figure. All three testimonials show at once; there is no carousel.
+- **Trust figures:** "20+ years" and "100+ homes" are confirmed accurate.
+- **About section:** the two paragraphs are Kyle's own words. Don't rewrite them.
+- **Removed claims:** "3D renderings" and "premier architects" were taken out. The process pop-ups still mention a "dedicated project manager" (step 03) and a "comprehensive warranty package" (step 04); Kyle has not confirmed either.
+- **Copy rewrite:** Kyle's answers to the copy-rewrite questions are deferred to a later date.
+- **Menu:** Client Login lives in the footer and the phone menu, not the desktop menu bar.
+- **Storyteller photos (removed on the realtor's advice):** they made it look as if Leavitt had built one house, and the granite read as dated. The photos, gallery, lightbox and Gallery menu links were removed everywhere. A gallery can return when new photography exists. Link previews use The Visionary's elevation.
+- **Price wording:** the qualifier reads "with all standard features included", on the realtor's suggestion.
+
+### Brochures and plan figures
+- The October 2026 brochures came from Kyle's Drive folder `LBG Home Brochures/Updates Home brochures`. Their covers give starting points ("4+ bedrooms, 2.5+ baths").
+- The site's "At a glance" figures stay as the price-sheet ranges, by Kyle's choice. The Draftsman (3+ vs 4–5 bedrooms) and The Innovator (2+ vs 4) differ most. Change them only with numbers from Kyle.
+- The Storyteller has no brochure. A brochure for it needs a front elevation drawing, ideally from the permit set.
+
+### Analytics, accounts and marketing
+- **Ownership:** Kyle (kyle@buildleavitt.com) owns and administers Tag Manager (`GTM-PHGFM247`), Google Analytics 4 (`G-RT4JHER039`; setting data retention to 14 months was recommended but is unconfirmed) and Search Console (Domain property, verified June 29, 2026).
+- **Lead tracking:** contact-form sends count as the `generate_lead` key event. It is configured in GA ("Create event": `page_view` where the URL contains `success.html`), not in the site's code.
+- **Marketing agency:** Brighter Media Group (Ken Guise) works through smartadops@gmail.com. Its access:
+  - Google Business Profile: manager
+  - Tag Manager: account User, container Publish
+  - GA: Editor
+  - Search Console: Full user
+  - Netlify: team invite. Kyle appears to have upgraded to Netlify Pro for it (the upgrade came minutes before the invite); check the agency is not an Owner.
+- **Old container:** the agency's own container, `GTM-K9ND8BDT`, was replaced and must not return.
+- **Privacy policy:** it names Google Analytics and Tag Manager. If the agency adds ad tags (Google Ads, Meta pixel, remarketing), name them in `privacy.html`, and have an attorney check the "we do not sell" line under Maryland's privacy law. The REVIEW comments in that file say so too.
