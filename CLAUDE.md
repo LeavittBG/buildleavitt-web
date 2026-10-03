@@ -81,13 +81,13 @@ What Kyle Leavitt (the owner) decided while reviewing the site with Claude, so l
 - The Storyteller has no brochure. A brochure for it needs a front elevation drawing, ideally from the permit set.
 
 ### Analytics, accounts and marketing
-- **Ownership:** Kyle (kyle@buildleavitt.com) owns and administers Tag Manager (`GTM-PHGFM247`), Google Analytics 4 (`G-RT4JHER039`, data retention 14 months) and Search Console (Domain property, verified June 29, 2026).
+- **Ownership:** Kyle (kyle@buildleavitt.com) owns and administers Tag Manager (`GTM-PHGFM247`), Google Analytics 4 (`G-RT4JHER039`; setting data retention to 14 months was recommended but is unconfirmed) and Search Console (Domain property, verified June 29, 2026).
 - **Lead tracking:** contact-form sends count as the `generate_lead` key event. It is configured in GA ("Create event": `page_view` where the URL contains `success.html`), not in the site's code.
 - **Marketing agency:** Brighter Media Group (Ken Guise) works through smartadops@gmail.com. Its access:
   - Google Business Profile: manager
   - Tag Manager: account User, container Publish
   - GA: Editor
   - Search Console: Full user
-  - Netlify: team invite. Kyle upgraded to Netlify Pro for it; check the agency is not an Owner.
+  - Netlify: team invite. Kyle appears to have upgraded to Netlify Pro for it (the upgrade came minutes before the invite); check the agency is not an Owner.
 - **Old container:** the agency's own container, `GTM-K9ND8BDT`, was replaced and must not return.
 - **Privacy policy:** it names Google Analytics and Tag Manager. If the agency adds ad tags (Google Ads, Meta pixel, remarketing), name them in `privacy.html`, and have an attorney check the "we do not sell" line under Maryland's privacy law. The REVIEW comments in that file say so too.
