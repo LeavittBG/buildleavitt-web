@@ -105,6 +105,19 @@ for (const sel of ['.service-card','.process-card','.mobile-link']) {
      (boxes.length ? `, ${boxes.length} boxed` : '') + ')');
 }
 
+// The email, phone and office links had their icons in white tiles that turned
+// navy under the pointer. They are a plain directory now, each entry between
+// fine rules like the form's fields beside it. With that, nothing on the
+// homepage fills a tile or box with colour on hover; the text turning gold is
+// the only hover cue left on these links.
+{
+  const contact = [...d.querySelectorAll('#contact a[href^="mailto:"], #contact a[href^="tel:"], #contact a[href*="maps.google"]')];
+  const iconned = contact.filter((a) => a.querySelector('svg'));
+  ok(contact.length === 3 && iconned.length === 0, `contact details are a plain directory: 3 links, no icon tiles (${iconned.length} with icons)`);
+  const flips = (html.match(/group-hover:bg-[^\s"]+/g) || []);
+  ok(flips.length === 0, 'nothing on the homepage fills with colour under the pointer' + (flips.length ? ' - found ' + [...new Set(flips)].join(', ') : ''));
+}
+
 // form labels all point at a real control
 const labels = [...d.querySelectorAll('form label[for]')];
 ok(labels.length > 0 && labels.every(l => d.getElementById(l.getAttribute('for'))),
