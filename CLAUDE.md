@@ -68,6 +68,7 @@ What Kyle Leavitt (the owner) decided while reviewing the site with Claude, so l
 - **Hero:** the AI-generated house stays until the photographer's shots arrive. A replacement needs a full-resolution file (about 2400px wide or more). A daylight photo wants a neutral dark shadow behind the copy, not the navy fade.
 - **No template look:** no italic heading endings, no eyebrow labels over headings, no "1 Uncompromising Standard" figure. All three testimonials show at once; there is no carousel.
 - **Service icons (Kyle, October 3, 2026):** the stock house, ruler and hammer in navy tiles were replaced by custom line drawings with no tiles and no hover colour flip. They follow Kyle's "Service Icon Redesign Guide": a house in 3-D with a dimension line, a floor plan, and a house with a dashed addition, navy with gold marks.
+- **Process steps (Kyle, October 4, 2026):** the boxed 01–04 numbers that filled with gold on hover became a left-aligned timeline: a fine rule over each step, a small gold square where it starts, and the number as a small gold label. The numbers stay because the steps happen in order. `markup.test.js` guards this and the service icons.
 - **Trust figures:** "20+ years" and "100+ homes" are confirmed accurate.
 - **About section:** the two paragraphs are Kyle's own words. Don't rewrite them.
 - **Removed claims:** "3D renderings" and "premier architects" were taken out. The process pop-ups still mention a "dedicated project manager" (step 03) and a "comprehensive warranty package" (step 04); Kyle has not confirmed either.
