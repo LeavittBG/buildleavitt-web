@@ -92,6 +92,19 @@ for (const sel of ['.service-card','.process-card','.mobile-link']) {
      (tiles.length || stray.length ? ` - found ${tiles.length} tile(s)${stray.length ? ', colours ' + stray.join(', ') : ''}` : ''));
 }
 
+// The four process steps had their numbers in large gold-bordered boxes that
+// filled with gold under the pointer, the same stock effect. They are a
+// timeline now: a fine rule over each step, a small gold mark where it starts,
+// and the number as a label. The numbers stay, because the steps are in order.
+{
+  const steps = [...d.querySelectorAll('.process-card')];
+  const boxes = steps.filter((s) => s.querySelector('[class*="group-hover:bg-"], [class*="border-2"]'));
+  const nums = steps.map((s) => (s.textContent.match(/\b0\d\b/) || [])[0]).join(' ');
+  ok(steps.length === 4 && boxes.length === 0 && nums === '01 02 03 04',
+     `process steps are a timeline numbered 01-04, with no boxes and no hover colour flip (numbers: ${nums}` +
+     (boxes.length ? `, ${boxes.length} boxed` : '') + ')');
+}
+
 // form labels all point at a real control
 const labels = [...d.querySelectorAll('form label[for]')];
 ok(labels.length > 0 && labels.every(l => d.getElementById(l.getAttribute('for'))),
