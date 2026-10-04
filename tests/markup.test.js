@@ -114,6 +114,13 @@ for (const sel of ['.service-card','.process-card','.mobile-link']) {
   const contact = [...d.querySelectorAll('#contact a[href^="mailto:"], #contact a[href^="tel:"], #contact a[href*="maps.google"]')];
   const iconned = contact.filter((a) => a.querySelector('svg'));
   ok(contact.length === 3 && iconned.length === 0, `contact details are a plain directory: 3 links, no icon tiles (${iconned.length} with icons)`);
+  // The "Read More" on each service card and process step only faded in under
+  // the pointer, so visitors could miss that the cards open, and on a phone,
+  // where nothing is hovered, it never showed at all. It is always shown now.
+  const more = [...d.querySelectorAll('.service-card, .process-card')]
+    .map((c) => [...c.children].find((el) => /Read More/.test(el.textContent)));
+  const hidden = more.filter((el) => !el || /(^|\s)(opacity-0|invisible|hidden|sr-only)(\s|$)/.test(el.className));
+  ok(more.length === 7 && hidden.length === 0, `"Read More" shows on all 7 service and process cards without hovering (${hidden.length} hidden)`);
   const flips = (html.match(/group-hover:bg-[^\s"]+/g) || []);
   ok(flips.length === 0, 'nothing on the homepage fills with colour under the pointer' + (flips.length ? ' - found ' + [...new Set(flips)].join(', ') : ''));
 }
