@@ -66,9 +66,10 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
     await page.close();
   }
   // The desktop menu bar must sit on one line. Between 1024 and ~1100px wide
-  // "Client Login" and "Get a Quote" used to wrap onto two lines each; Client
-  // Login moved to the footer and the phone menu, which cleared the room. It
-  // is only for existing clients, so it no longer takes space from new ones.
+  // "Client Login" and "Get a Quote" used to wrap onto two lines each, and
+  // Client Login was moved down to the footer. Kyle wanted it back at the top
+  // (October 7, 2026), so it returned smaller, set apart after Get a Quote.
+  // Nothing may wrap, and the bar must not run off the right edge.
   for (const w of [1024, 1060, 1100, 1180, 1280, 1440, 1920]) {
     const page = await b.newPage({ viewport: { width: w, height: 800 } });
     await serveFonts(page);
@@ -80,6 +81,8 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
       return new Set([...r.getClientRects()].filter((x) => x.width > 0).map((x) => Math.round(x.top))).size > 1;
     }).map((a) => a.textContent.trim()));
     ok(wrapped.length === 0, `${w}px: every menu bar link fits on one line` + (wrapped.length ? ' - wrapped: ' + wrapped.join(', ') : ''));
+    const right = await page.evaluate(() => Math.max(...[...document.querySelectorAll('#main-nav .lg\\:flex > a')].map((a) => a.getBoundingClientRect().right)));
+    ok(right <= w - 16, `${w}px: the menu bar ends inside the page (right edge ${Math.round(right)}px)`);
     await page.close();
   }
   {
@@ -90,9 +93,32 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
       phone: !!document.querySelector('#mobile-menu a[href*="connect.buildleavitt.com"]'),
       footer: !!document.querySelector('footer a[href*="connect.buildleavitt.com"]'),
     }));
-    ok(!where.bar && where.phone && where.footer, `Client Login is in the phone menu and footer, not the desktop bar (${JSON.stringify(where)})`);
+    ok(where.bar && where.phone && where.footer, `Client Login is in the desktop bar, the phone menu and the footer (${JSON.stringify(where)})`);
     await page.close();
   }
+  // The plan pages carry the same link in their header from tablet width up,
+  // beside Plans and Get a Quote. It must not push them onto two lines.
+  // Plan pages load /dist/styles.css from the site root, so they are served.
+  const site = await serveRepo();
+  for (const w of [768, 1024, 1440]) {
+    const page = await b.newPage({ viewport: { width: w, height: 800 } });
+    await serveFonts(page);
+    await page.goto(site.base + '/plans/the-poet.html');
+    await page.evaluate(() => document.fonts.ready);
+    const r = await page.evaluate(() => {
+      const links = [...document.querySelectorAll('header nav[aria-label="Main"] a')];
+      const login = links.find((a) => a.href.includes('connect.buildleavitt.com'));
+      return {
+        login: !!login && login.getBoundingClientRect().width > 0,
+        tops: new Set(links.map((a) => Math.round(a.getBoundingClientRect().top + a.getBoundingClientRect().height / 2))).size,
+        tall: links.some((a) => a.getBoundingClientRect().height > 60),
+        right: Math.max(...links.map((a) => a.getBoundingClientRect().right)),
+      };
+    });
+    ok(r.login && r.tops === 1 && !r.tall && r.right <= w - 16, `plan page ${w}px: Client Login shows in the header, all on one line (${JSON.stringify(r)})`);
+    await page.close();
+  }
+  await site.close();
 
   await b.close();
   console.log(fail === 0 ? '\nAll layout checks passed.' : `\n${fail} failed.`);

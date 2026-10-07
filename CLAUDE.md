@@ -75,7 +75,7 @@ What Kyle Leavitt (the owner) decided while reviewing the site with Claude, so l
 - **About section:** the two paragraphs are Kyle's own words. Don't rewrite them.
 - **Removed claims:** "3D renderings" and "premier architects" were taken out. The process pop-ups still mention a "dedicated project manager" (step 03) and a "comprehensive warranty package" (step 04); Kyle has not confirmed either.
 - **Copy rewrite:** Kyle's answers to the copy-rewrite questions are deferred to a later date.
-- **Menu:** Client Login lives in the footer and the phone menu, not the desktop menu bar.
+- **Menu:** the menu links stay as they are. Client Login is at the top (Kyle, October 7, 2026): at the end of the desktop menu bar after a fine rule, small and gold, and in the plan-page header from tablet width up. It is also in the phone menu and the footer. It once wrapped onto two lines on small laptops, and `layout.test.js` checks it stays on one line at every width.
 - **Storyteller photos (removed on the realtor's advice):** they made it look as if Leavitt had built one house, and the granite read as dated. The photos, gallery, lightbox and Gallery menu links were removed everywhere. A gallery can return when new photography exists. Link previews use The Visionary's elevation.
 - **Price wording:** the qualifier reads "with all standard features included", on the realtor's suggestion.
 
