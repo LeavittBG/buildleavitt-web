@@ -625,26 +625,33 @@
     }
   },
   "the-storyteller": {
-    "floor-1": {
-      "file": "the-storyteller-floor-1",
-      "ext": "png",
-      "width": 1600,
-      "height": 1101,
-      "label": "Basement"
+    "elevation": {
+      "file": "the-storyteller-elevation",
+      "ext": "jpg",
+      "width": 1468,
+      "height": 820,
+      "label": "Front Elevation – Modern Farmhouse w/ Stone, Board & Batten, Shakes and Siding"
     },
-    "floor-2": {
-      "file": "the-storyteller-floor-2",
+    "first-floor": {
+      "file": "the-storyteller-first-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1222,
+      "width": 1498,
+      "height": 1649,
       "label": "First Floor"
     },
-    "floor-3": {
-      "file": "the-storyteller-floor-3",
+    "second-floor": {
+      "file": "the-storyteller-second-floor",
       "ext": "png",
-      "width": 1600,
-      "height": 1233,
+      "width": 1492,
+      "height": 1556,
       "label": "Second Floor"
+    },
+    "basement": {
+      "file": "the-storyteller-basement",
+      "ext": "png",
+      "width": 1498,
+      "height": 1255,
+      "label": "Basement"
     }
   },
   "the-visionary": {

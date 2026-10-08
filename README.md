@@ -185,10 +185,9 @@ layout has to be filled in by hand.
 ### A model with no brochure
 
 A model can supply its pages as image files instead of a PDF: put `image` on each
-page in `src/plans.json`, relative to `assets-src/`. The Storyteller works this
-way — its floor plans came as separate images from a listing sheet, and it has
-no elevation drawing, so its card and link preview show its first-floor plan
-instead (`coverOf()` in `build-plans.mjs`).
+page in `src/plans.json`, relative to `assets-src/`. With no elevation, its card
+and link preview show its first-floor plan instead (`coverOf()` in
+`build-plans.mjs`). No model works this way now.
 
 A photograph wants `crop: false`, which takes the image whole — the automatic
 crop keeps the largest block of ink and drops everything else, which is right
@@ -198,12 +197,23 @@ with the rest of the furniture.
 
 With no brochure there is no download button.
 
-The Storyteller's elevation used to be a photograph of the finished house, and
-six more photographs of it made up the home page gallery. They came off the site
-in September 2026 on Leavitt's realtor's advice: it was the only home shown
-built, which read as though it were the only one, and its granite as dated.
-New photography can go back in the same way; a brochure with a drawn
-elevation would slot in like the others.
+### The Storyteller's brochure
+
+The Storyteller worked that way until October 2026: its floor plans came as
+separate images from a listing sheet, and it had no brochure. Its elevation had
+been a photograph of the finished house, and six more photographs of it made up
+the home page gallery; they came off the site in September 2026 on Leavitt's
+realtor's advice, because it was the only home shown built, which read as though
+it were the only one.
+
+Once every other plan showed a photo rendering, Leavitt had a front photograph of
+The Storyteller restyled to match them — the house as photographed, with the
+sky, trees, light and lawn of the renderings and the house number removed — and
+`scripts/make-storyteller-brochure.py` set it, with the three listing-sheet
+plans, in the same brochure template as the other sixteen (`assets-src/plans/`
+keeps the photo and the plan images it was built from). Its room dimensions are
+read off those plans, and the photographer's notice under each plan is cropped
+off, as the site always did. Since then it is a brochure model like any other.
 
 ### Specs
 
@@ -218,8 +228,7 @@ brochure's cover ("4+ bedrooms, 2.5+ baths, 2+ car garage"). They used to be the
 price sheet's ranges, which disagreed with the brochure a visitor could download
 from the same page, so a test now reads every cover and fails if a page shows
 anything else. Square footage and price are not on the covers and still come
-from the price sheet. The Storyteller has no brochure, so this check skips it and
-its figures stay as they were.
+from the price sheet.
 
 `sqft` is living square footage. `sqftFrom: true` means Leavitt's sheet said
 "starting at", and the page renders "From 2,626" rather than a flat figure;

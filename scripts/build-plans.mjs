@@ -277,9 +277,8 @@ const floorsOf = (model) => sheets(model).filter(isFloor);
 /**
  * The drawing that stands for a plan on its card and in link previews: the
  * front elevation, or, for a plan with no elevation drawing, its first-floor
- * plan. The Storyteller is that case - its only elevation was a photograph of
- * the finished house, taken off the site because it was the only home shown
- * built, which read as though it were the only one Leavitt had built.
+ * plan. No model is that case now; The Storyteller was until its brochure was
+ * made in October 2026.
  */
 const coverOf = (model) => {
   const all = sheets(model);
