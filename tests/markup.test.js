@@ -271,6 +271,32 @@ console.log("\n== no claims Leavitt has not made ==");
   ok(found.length === 0, 'no "premier architects" or "3D renderings" on the homepage' + (found.length ? ' - found: ' + found.join(', ') : ''));
 }
 
+// --- Leavitt Connect ---
+// Leavitt Connect is Leavitt's own homeowner app, and Kyle's rule for the
+// section about it (October 2026) is that every claim is true and checkable:
+// it never says Leavitt is the only builder with an app, and it never sends
+// people to an app store, because the app opens in the phone's browser. Each
+// of the six things it does must still be described, along with the sign-in
+// link and the office line the video ends on.
+console.log("\n== Leavitt Connect section ==");
+{
+  const sec = d.querySelector('#leavitt-connect');
+  ok(!!sec, 'the homepage has a Leavitt Connect section');
+  if (sec) {
+    const text = sec.textContent.replace(/\s+/g, ' ');
+    const banned = [/\bonly\b[^.]*\b(builder|app)/i, /\b(first|unique|unlike any|no other)\b/i, /app store|google play|download the app/i];
+    const found = banned.filter((re) => re.test(text)).map(String);
+    ok(found.length === 0, 'no "only builder", "first" or app-store claims' + (found.length ? ' - found: ' + found.join(', ') : ''));
+    const titles = [...sec.querySelectorAll('li h3')].map((h) => h.textContent.trim());
+    const need = ['schedule', 'selections', 'change orders', 'inspections', 'password', 'updates'];
+    const missing = need.filter((w) => !titles.some((t) => t.toLowerCase().includes(w)));
+    ok(missing.length === 0, `all six features are described (${titles.length} found)` + (missing.length ? ' - missing: ' + missing.join(', ') : ''));
+    ok(/every homeowner on the home signs/i.test(text), 'change orders say every homeowner on the home signs');
+    ok(!!sec.querySelector('a[href="https://connect.buildleavitt.com"]') && !!sec.querySelector('a[href="tel:+18668326524"]') && !!sec.querySelector('a[href="#contact"]'),
+       'it links to the sign-in, the office line and the contact form');
+  }
+}
+
 // --- Facebook ---
 // The site pointed at facebook.com/LeavittBuildingGroup, which is not
 // Leavitt's page. The address below is the page's permanent one, as the
