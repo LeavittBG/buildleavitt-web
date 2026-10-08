@@ -168,10 +168,10 @@ let missing = 0;
 for (const model of models) {
   const { slug } = model;
 
-  // Most models are a four-page brochure PDF. A model can instead supply each
-  // page as an image file (`image` on the page), which is how The Storyteller
-  // works: it is a finished house, so its "elevation" is a photograph and its
-  // floor plans came as separate images rather than a brochure.
+  // Most models are a brochure PDF. A model can instead supply each page as an
+  // image file (`image` on the page), which is how The Storyteller worked until
+  // its brochure was made in October 2026: its floor plans came as separate
+  // images rather than a brochure.
   const fromImages = model.pages.every((p) => p.image);
   const src = join(SRC, `${slug}.pdf`);
 
@@ -223,7 +223,7 @@ for (const model of models) {
     const meta = await sharp(rendered).metadata();
 
     // `crop: false` takes the page whole, for a source with no furniture to
-    // strip - The Storyteller's "elevation" is a photograph, not a sheet.
+    // strip, such as a photograph rather than a sheet.
     let base;
     if (crop === false) {
       base = sharp(rendered).resize({ width: MAX_WIDTH, withoutEnlargement: true });
@@ -262,6 +262,12 @@ for (const model of models) {
 
     writeFileSync(join(IMG, `${name}.webp`), webp);
     writeFileSync(join(IMG, `${name}.${ext}`), fallback);
+    // A sheet can change kind - the elevations went from drawings (PNG) to photo
+    // renderings (JPEG) - and the fallback of the old kind would be left behind,
+    // still served to anything that links it by name.
+    for (const other of ['png', 'jpg']) {
+      if (other !== ext) rmSync(join(IMG, `${name}.${other}`), { force: true });
+    }
 
     manifest[slug][id] = { file: name, ext, width: dims.width, height: dims.height, label };
 

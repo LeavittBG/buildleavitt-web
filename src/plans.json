@@ -21,8 +21,8 @@
     "tallest block of ink.",
     "",
     "A page can name an `image` under assets-src/ instead of coming from a brochure",
-    "PDF. the-storyteller works that way: it has no brochure, so its floor plans come",
-    "as separate images, and with no elevation its first-floor plan fronts its card.",
+    "PDF, for a model with no brochure. None uses that now: the-storyteller did until",
+    "October 2026, when its brochure was made from its floor-plan images and a photo.",
     "",
     "An elevation's `label` is the caption printed under the rendering. That caption",
     "is deliberately cropped OUT of the image (Leavitt asked for it off the site),",
@@ -774,7 +774,7 @@
         "sqftFrom": false,
         "sqftNote": "3,840 with the three-car garage option",
         "stories": 2,
-        "garage": "2 or 3 car",
+        "garage": "2+ car",
         "bathsNote": "plus an optional full bath in the basement",
         "price": 1112777,
         "priceFrom": true
@@ -783,21 +783,23 @@
       "pages": [
         {
           "page": 1,
-          "id": "floor-1",
-          "label": "Basement",
-          "image": "plans/the-storyteller-basement.jpg"
+          "id": "elevation",
+          "label": "Front Elevation – Modern Farmhouse w/ Stone, Board & Batten, Shakes and Siding"
         },
         {
           "page": 2,
-          "id": "floor-2",
-          "label": "First Floor",
-          "image": "plans/the-storyteller-first.jpg"
+          "id": "first-floor",
+          "label": "First Floor"
         },
         {
           "page": 3,
-          "id": "floor-3",
-          "label": "Second Floor",
-          "image": "plans/the-storyteller-second.jpg"
+          "id": "second-floor",
+          "label": "Second Floor"
+        },
+        {
+          "page": 4,
+          "id": "basement",
+          "label": "Basement"
         }
       ],
       "_note": "Bath count is 4.5. The second-floor plan appears to show more because one bathroom is split into two labelled zones on the drawing - confirmed by Leavitt."
