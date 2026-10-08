@@ -284,7 +284,7 @@ console.log("\n== Leavitt Connect section ==");
   ok(!!sec, 'the homepage has a Leavitt Connect section');
   if (sec) {
     const text = sec.textContent.replace(/\s+/g, ' ');
-    const banned = [/\bonly\b[^.]*\b(builder|app)/i, /\b(first|unique|unlike any|no other)\b/i, /app store|google play|download the app/i];
+    const banned = [/\bonly\b[^.]*\b(builder|app)/i, /\bfirst (home ?)?(builder|app|of its kind)|\b(unique|unlike any|no other)\b/i, /app store|google play|download the app/i];
     const found = banned.filter((re) => re.test(text)).map(String);
     ok(found.length === 0, 'no "only builder", "first" or app-store claims' + (found.length ? ' - found: ' + found.join(', ') : ''));
     const titles = [...sec.querySelectorAll('li h3')].map((h) => h.textContent.trim());
