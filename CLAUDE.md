@@ -78,6 +78,7 @@ What Kyle Leavitt (the owner) decided while reviewing the site with Claude, so l
 - **Menu:** Client Login lives in the footer and the phone menu, not the desktop menu bar.
 - **Storyteller photos (removed on the realtor's advice):** they made it look as if Leavitt had built one house, and the granite read as dated. The photos, gallery, lightbox and Gallery menu links were removed everywhere. A gallery can return when new photography exists. Link previews use The Visionary's elevation.
 - **Price wording:** the qualifier reads "with all standard features included", on the realtor's suggestion.
+- **Photo renderings replace the elevation drawings (Kyle, October 8, 2026):** the realtor advised that having no realistic images was hurting the site. Each brochure cover's elevation drawing was replaced, inside the PDF in `assets-src/plans/`, by a photorealistic rendering generated from that same drawing (Artlist image-to-image). `npm run plans` then carries it to the plan pages, the downloadable PDFs and the homepage cards. Each rendering was checked against its drawing for windows, doors, gables, porch and garage, and redone if it changed the house. There is no "artist's rendering" label, by Kyle's choice. The original drawings are in git history. If a brochure's design changes, regenerate the rendering from the new drawing rather than reusing the old one.
 
 ### Brochures and plan figures
 - The October 2026 brochures came from Kyle's Drive folder `LBG Home Brochures/Updates Home brochures`. Their covers give starting points ("4+ bedrooms, 2.5+ baths").

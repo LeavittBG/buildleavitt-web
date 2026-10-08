@@ -262,6 +262,12 @@ for (const model of models) {
 
     writeFileSync(join(IMG, `${name}.webp`), webp);
     writeFileSync(join(IMG, `${name}.${ext}`), fallback);
+    // A sheet can change kind - the elevations went from drawings (PNG) to photo
+    // renderings (JPEG) - and the fallback of the old kind would be left behind,
+    // still served to anything that links it by name.
+    for (const other of ['png', 'jpg']) {
+      if (other !== ext) rmSync(join(IMG, `${name}.${other}`), { force: true });
+    }
 
     manifest[slug][id] = { file: name, ext, width: dims.width, height: dims.height, label };
 

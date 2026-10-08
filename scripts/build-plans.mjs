@@ -581,11 +581,14 @@ writeFileSync(join(OUT, 'index.html'), indexHtml);
 console.log(`plans/index.html  (${models.length} models)`);
 
 // ------------------------------------------------- homepage teaser dimensions
-// index.html is hand-maintained, but the three teaser cards point at generated
-// images whose size changes whenever a crop does. Typing those numbers by hand
-// went stale the first time a crop moved, so they are synced from the manifest
-// instead. Only width/height on plans/img/* are touched; nothing else in the
-// file is rewritten, and re-running with no change is a no-op.
+// index.html is hand-maintained, but the three teaser cards and the link-preview
+// tags point at generated images whose size changes whenever a crop does, and
+// whose fallback format changes with the kind of image (a drawing is a PNG, a
+// photo rendering a JPEG). Typing those by hand went stale the first time a crop
+// moved, so they are synced from the manifest instead. Only the extension of
+// plans/img/* references, width/height on their <img>, and the og:image size
+// are touched; nothing else in the file is rewritten, and re-running with no
+// change is a no-op.
 {
   const indexPath = join(ROOT, 'index.html');
   const before = readFileSync(indexPath, 'utf8');
@@ -593,23 +596,38 @@ console.log(`plans/index.html  (${models.length} models)`);
     Object.values(images).flatMap((m) => Object.values(m).map((i) => [i.file, i])));
 
   let patched = 0;
-  const after = before.replace(
-    /(<img\s[^>]*?src="plans\/img\/([^".]+)\.png"[^>]*?)width="(\d+)" height="(\d+)"/g,
-    (whole, lead, file, w, h) => {
+  const after = before
+    .replace(/(plans\/img\/([a-z0-9-]+))\.(png|jpg)\b/g, (whole, stem, file, ext) => {
       const real = byFile[file];
       if (!real) {
-        console.error(`  ! index.html references plans/img/${file}.png, which is not generated`);
+        console.error(`  ! index.html references plans/img/${file}.${ext}, which is not generated`);
         return whole;
       }
-      if (+w === real.width && +h === real.height) return whole;
+      if (real.ext === ext) return whole;
       patched++;
-      return `${lead}width="${real.width}" height="${real.height}"`;
-    });
+      return `${stem}.${real.ext}`;
+    })
+    .replace(
+      /(<img\s[^>]*?src="plans\/img\/([^".]+)\.(?:png|jpg)"[^>]*?)width="(\d+)" height="(\d+)"/g,
+      (whole, lead, file, w, h) => {
+        const real = byFile[file];
+        if (!real || (+w === real.width && +h === real.height)) return whole;
+        patched++;
+        return `${lead}width="${real.width}" height="${real.height}"`;
+      })
+    .replace(
+      /(<meta property="og:image" content="[^"]*\/plans\/img\/([^".]+)\.(?:png|jpg)">\s*<meta property="og:image:width" content=")(\d+)("\s*>\s*<meta property="og:image:height" content=")(\d+)"/g,
+      (whole, a, file, w, b, h) => {
+        const real = byFile[file];
+        if (!real || (+w === real.width && +h === real.height)) return whole;
+        patched++;
+        return `${a}${real.width}${b}${real.height}"`;
+      });
 
   if (after !== before) writeFileSync(indexPath, after);
   console.log(patched
-    ? `index.html  (${patched} teaser image size${patched === 1 ? '' : 's'} synced)`
-    : 'index.html  (teaser image sizes already correct)');
+    ? `index.html  (${patched} plan image reference${patched === 1 ? '' : 's'} synced)`
+    : 'index.html  (plan image references already correct)');
 }
 
 // -------------------------------------------------------------- sitemap
