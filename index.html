@@ -119,6 +119,19 @@
       }
     }
     </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "VideoObject",
+      "name": "Leavitt Connect for homebuyers",
+      "description": "A short tour of Leavitt Connect, Leavitt Building Group's own app for homeowners: the schedule, selections, change orders signed online, inspections, punch lists and documents, shown on a sample home.",
+      "thumbnailUrl": "https://buildleavitt.com/media/leavitt-connect-poster.webp",
+      "contentUrl": "https://buildleavitt.com/media/leavitt-connect-homebuyers.mp4",
+      "uploadDate": "2026-10-08",
+      "duration": "PT1M48S",
+      "publisher": { "@id": "https://buildleavitt.com/#business" }
+    }
+    </script>
 </head>
 <body class="min-h-screen bg-[#fcfcfc] text-gray-900 font-sans overflow-x-hidden">
     <!-- Google Tag Manager (noscript) -->
@@ -151,6 +164,13 @@
                     <a href="#process" class="text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors whitespace-nowrap">Process</a>
                     <a href="#contact" class="bg-[#c2a67a] text-[#0f172a] px-6 py-3 text-xs lg:text-sm uppercase tracking-widest font-bold hover:bg-white transition-colors">
                         Get a Quote
+                    </a>
+                    <!-- Client Login sits apart from the menu, after a fine rule, smaller and
+                         in gold: it is for people already building with Leavitt, so it is easy
+                         to find at the top without competing with Get a Quote. -->
+                    <a href="https://connect.buildleavitt.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 border-l border-white/20 pl-5 xl:pl-10 text-[#c2a67a] hover:text-white text-xs uppercase tracking-widest font-semibold transition-colors whitespace-nowrap">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-4 h-4"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        Client Login
                     </a>
                 </div>
 
@@ -417,8 +437,93 @@
         </div>
     </section>
 
+    <!-- Leavitt Connect -->
+    <!-- Leavitt's own homeowner app, as a reason to build with Leavitt (Kyle,
+         October 2026). Every line is something the app does today; it never
+         claims Leavitt is the only builder with an app. markup.test.js checks
+         that wording. -->
+    <section id="leavitt-connect" class="py-24 md:py-32 px-6 bg-white overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-light text-[#0f172a] mb-6">Leavitt Connect.</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto text-lg">
+                    Our own app, built for Leavitt homeowners. Follow your build from your phone: where things
+                    stand, what&rsquo;s next, and anything that needs your signature. One more way building with
+                    Leavitt is different.
+                </p>
+            </div>
+
+            <!-- The video is hosted here rather than on YouTube, which can run ads on
+                 any video, possibly a competitor's (Kyle, October 2026). It is a 5.5MB
+                 1080p copy of the 38MB original. preload="none": nothing downloads
+                 until play is pressed, so the homepage is no heavier; the still is the
+                 schedule screen, chosen because it shows no demo prices. -->
+            <figure class="max-w-5xl mx-auto mb-20">
+                <video id="connect-video" class="block w-full h-auto aspect-video bg-[#0f172a] shadow-2xl" controls preload="none" playsinline width="1920" height="1080" poster="media/leavitt-connect-poster.webp" aria-label="Leavitt Connect for homebuyers, a 1 minute 48 second tour">
+                    <source src="media/leavitt-connect-homebuyers.mp4" type="video/mp4">
+                    <track kind="captions" src="media/leavitt-connect-homebuyers.vtt" srclang="en" label="English">
+                </video>
+                <figcaption class="mt-4 text-sm text-gray-500">A sample home: the names and numbers aren&rsquo;t real.</figcaption>
+                <details class="mt-4 border-t border-gray-200 pt-4 text-gray-600">
+                    <summary class="cursor-pointer text-[11px] font-bold uppercase tracking-widest text-[#0f172a] hover:underline underline-offset-4">Read the transcript</summary>
+                    <div class="mt-4 space-y-3 leading-relaxed max-w-3xl">
+                    <p>When you build with Leavitt Building Group, you get Leavitt Connect: your new home, on your phone, from the first day of construction to closing. Here&rsquo;s a two-minute look at what you&rsquo;ll see. It&rsquo;s a sample home, so the names and numbers aren&rsquo;t real.</p>
+                    <p>There&rsquo;s no password to remember. You sign in with a code we email you, or with Face ID. Your home page shows where the build is now, what&rsquo;s next, your price with every change included, and key dates like closing.</p>
+                    <p>The full schedule is there, phase by phase, and Leavitt keeps it current as the job moves. Every finish and fixture you&rsquo;ve chosen is in one place, with the date you signed off.</p>
+                    <p>Changes are never a surprise. Each change order spells out what&rsquo;s changing, what it costs, and how it affects the schedule, and you sign it securely online. Once it&rsquo;s signed, your price updates, and the signed copy is saved with your documents.</p>
+                    <p>Walk-through punch lists include photos of what was found, and how it was fixed. You can follow every county inspection, and keep your contract, plans, permits, and warranties in one place.</p>
+                    <p>When there&rsquo;s news, you get a short email, never a flood. And behind the scenes, Leavitt&rsquo;s office and trade partners work in the same system, so it all stays up to date. That&rsquo;s Leavitt Connect, one more way building with Leavitt is different. To talk about your new home, call (866) 832-6524.</p>
+                    </div>
+                </details>
+            </figure>
+
+            <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-10">
+                <li class="border-t border-gray-200 pt-6">
+                    <h3 class="text-xl font-serif text-[#0f172a] mb-3">Your schedule</h3>
+                    <p class="text-gray-600 leading-relaxed">See where your home is in the schedule and what comes next.</p>
+                    <button type="button" data-seek="35" class="mt-4 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[#0f172a] underline-offset-4 hover:underline cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true" focusable="false" class="w-3 h-3 text-[#c2a67a]"><path d="M6 4.5v15l13-7.5z"/></svg>See it in the video &middot; 0:35</button>
+                </li>
+                <li class="border-t border-gray-200 pt-6">
+                    <h3 class="text-xl font-serif text-[#0f172a] mb-3">Your selections</h3>
+                    <p class="text-gray-600 leading-relaxed">Review your selections in one place.</p>
+                    <button type="button" data-seek="42" class="mt-4 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[#0f172a] underline-offset-4 hover:underline cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true" focusable="false" class="w-3 h-3 text-[#c2a67a]"><path d="M6 4.5v15l13-7.5z"/></svg>See it in the video &middot; 0:42</button>
+                </li>
+                <li class="border-t border-gray-200 pt-6">
+                    <h3 class="text-xl font-serif text-[#0f172a] mb-3">Change orders, signed online</h3>
+                    <p class="text-gray-600 leading-relaxed">Review and sign from your phone. Every homeowner on the home signs.</p>
+                    <button type="button" data-seek="50" class="mt-4 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[#0f172a] underline-offset-4 hover:underline cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true" focusable="false" class="w-3 h-3 text-[#c2a67a]"><path d="M6 4.5v15l13-7.5z"/></svg>See it in the video &middot; 0:50</button>
+                </li>
+                <li class="border-t border-gray-200 pt-6">
+                    <h3 class="text-xl font-serif text-[#0f172a] mb-3">Inspections, punch lists and documents</h3>
+                    <p class="text-gray-600 leading-relaxed">See the inspections your home has passed, your walk-through punch list with photos, and your documents.</p>
+                    <button type="button" data-seek="70" class="mt-4 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[#0f172a] underline-offset-4 hover:underline cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true" focusable="false" class="w-3 h-3 text-[#c2a67a]"><path d="M6 4.5v15l13-7.5z"/></svg>See it in the video &middot; 1:10</button>
+                </li>
+                <li class="border-t border-gray-200 pt-6">
+                    <h3 class="text-xl font-serif text-[#0f172a] mb-3">Nothing to download, no password</h3>
+                    <p class="text-gray-600 leading-relaxed">Leavitt Connect opens in your phone&rsquo;s browser. Sign in with a code sent to your email, or with Face ID or your fingerprint.</p>
+                    <button type="button" data-seek="18" class="mt-4 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[#0f172a] underline-offset-4 hover:underline cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true" focusable="false" class="w-3 h-3 text-[#c2a67a]"><path d="M6 4.5v15l13-7.5z"/></svg>See it in the video &middot; 0:18</button>
+                </li>
+                <li class="border-t border-gray-200 pt-6">
+                    <h3 class="text-xl font-serif text-[#0f172a] mb-3">Updates, not noise</h3>
+                    <p class="text-gray-600 leading-relaxed">Short email updates, never a flood.</p>
+                    <button type="button" data-seek="85" class="mt-4 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[#0f172a] underline-offset-4 hover:underline cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true" focusable="false" class="w-3 h-3 text-[#c2a67a]"><path d="M6 4.5v15l13-7.5z"/></svg>See it in the video &middot; 1:25</button>
+                </li>
+            </ul>
+
+            <div class="mt-16 flex flex-col items-center gap-6 text-center">
+                <a href="#contact" class="inline-flex items-center gap-2 bg-[#0f172a] text-white px-8 py-4 uppercase tracking-[0.2em] font-bold text-xs hover:bg-[#c2a67a] hover:text-[#0f172a] transition-colors">
+                    Let&rsquo;s talk about your home
+                </a>
+                <p class="text-gray-600">
+                    Or call <a href="tel:+18668326524" class="text-[#0f172a] font-medium whitespace-nowrap hover:text-[#c2a67a] transition-colors">(866) 832-6524</a>.
+                    Already building with us? <a href="https://connect.buildleavitt.com" target="_blank" rel="noopener noreferrer" class="text-[#0f172a] font-medium underline underline-offset-4 decoration-[#c2a67a] hover:text-[#c2a67a] transition-colors">Sign in to Leavitt Connect</a>.
+                </p>
+            </div>
+        </div>
+    </section>
+
     <!-- Interactive Before & After Section -->
-    <section class="py-24 md:py-32 px-6 bg-white overflow-hidden">
+    <section class="py-24 md:py-32 px-6 bg-white border-t border-gray-200 overflow-hidden">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-5xl font-light text-[#0f172a]">The Art of Renovation.</h2>
@@ -1008,6 +1113,20 @@
         closeProcessBtn.addEventListener('click', closeModal);
         processModal.addEventListener('click', (e) => {
             if (e.target === processModal) closeModal();
+        });
+
+        // Leavitt Connect: each "See it in the video" button plays the tour from
+        // the moment that feature is shown. With preload="none" the video has no
+        // duration until it starts loading, so the jump waits for its metadata.
+        const connectVideo = document.getElementById('connect-video');
+        document.querySelectorAll('[data-seek]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const t = Number(btn.getAttribute('data-seek'));
+                if (connectVideo.readyState >= 1) connectVideo.currentTime = t;
+                else connectVideo.addEventListener('loadedmetadata', () => { connectVideo.currentTime = t; }, { once: true });
+                connectVideo.scrollIntoView({ block: 'center' });
+                connectVideo.play().catch(() => {});
+            });
         });
     </script>
 </body>
