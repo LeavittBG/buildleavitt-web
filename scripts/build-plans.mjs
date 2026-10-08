@@ -218,6 +218,10 @@ const head = ({ title, description, canonical, image }) => `<!DOCTYPE html>
             <nav aria-label="Main" class="flex items-center gap-6 md:gap-8 text-xs md:text-sm uppercase tracking-widest font-semibold">
                 <a href="/plans/" class="text-gray-300 hover:text-white transition-colors">Plans</a>
                 <a href="/#contact" class="bg-[#c2a67a] text-[#0f172a] px-5 py-3 hover:bg-white transition-colors">Get a Quote</a>
+                <a href="https://connect.buildleavitt.com" target="_blank" rel="noopener noreferrer" class="hidden md:flex items-center gap-2 border-l border-white/20 pl-6 md:pl-8 text-xs text-[#c2a67a] hover:text-white transition-colors whitespace-nowrap">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-4 h-4"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    Client Login
+                </a>
             </nav>
         </div>
     </header>
