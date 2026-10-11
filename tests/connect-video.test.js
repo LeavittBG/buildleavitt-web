@@ -70,6 +70,28 @@ const plain = (s) => s.replace(/[\u2018\u2019]/g, "'").replace(/\s+/g, ' ').trim
   const length = mp4Seconds(mp4);
   ok(Math.abs(length - 108) < 2, `it runs 1:48 (${length.toFixed(1)}s)`);
 
+  console.log('\n== what Google is told about it ==');
+  // Search Console flagged the homepage's VideoObject in October 2026: its
+  // "uploadDate" was a bare date, which Google reads as an invalid datetime with
+  // no timezone. It wants ISO 8601 with an offset, like 2026-10-08T15:19:04-04:00
+  // (the moment the video went live). The other fields are checked against the
+  // page's own video so a replacement file cannot leave them stale.
+  const origin = 'https://buildleavitt.com/';
+  const ld = [...d.querySelectorAll('script[type="application/ld+json"]')]
+    .map((s) => { try { return JSON.parse(s.textContent); } catch { return null; } })
+    .find((j) => j && j['@type'] === 'VideoObject');
+  ok(!!ld, 'the homepage describes the video to Google (a VideoObject)');
+  if (ld) {
+    const up = ld.uploadDate || '';
+    ok(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2})?(Z|[+-]\d{2}:\d{2})$/.test(up) && !isNaN(Date.parse(up)),
+       `uploadDate is a full date and time with a timezone (${up || 'missing'})`);
+    ok(Date.parse(up) <= Date.now(), 'uploadDate is not in the future');
+    ok(ld.contentUrl === origin + src.replace(/^\//, ''), `contentUrl is the video the page plays (${ld.contentUrl})`);
+    ok(ld.thumbnailUrl === origin + poster.replace(/^\//, ''), `thumbnailUrl is the poster (${ld.thumbnailUrl})`);
+    const m = /^PT(?:(\d+)M)?(?:(\d+)S)?$/.exec(ld.duration || '');
+    ok(!!m && Math.abs((+m[1] || 0) * 60 + (+m[2] || 0) - length) < 2, `duration matches the file (${ld.duration || 'missing'})`);
+  }
+
   console.log('\n== captions and transcript ==');
   const vtt = fs.readFileSync(path.join(ROOT, track), 'utf8');
   ok(vtt.startsWith('WEBVTT'), 'the captions file is WebVTT');
