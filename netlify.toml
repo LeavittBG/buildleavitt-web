@@ -9,7 +9,7 @@
   #   README.md CLAUDE.md
   #                notes for whoever works on the site
   # markup.test.js checks this list. This only touches the build clone.
-  command = "npm run build && rm -rf assets-src tests src scripts package.json package-lock.json tailwind.config.js README.md CLAUDE.md"
+  command = "npm run build && rm -rf assets-src tests src scripts package.json package-lock.json tailwind.config.js README.md CLAUDE.md HANDOFF.md"
   publish = "."
   # No serverless functions are in use. If you add some later, restore:
   #   functions = "netlify/functions"

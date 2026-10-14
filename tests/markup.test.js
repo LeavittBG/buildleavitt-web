@@ -155,7 +155,7 @@ ok(!html.includes('data-lucide='), 'no icon is left for a library to draw');
   // public pages - buildleavitt.com/README.md, /package.json, /src/plans.json.
   const command = (toml.match(/^\s*command\s*=\s*"([^"]*)"/m) || [])[1] || '';
   const removed = (command.match(/rm -rf ([^&;]*)/) || [])[1]?.trim().split(/\s+/) || [];
-  const mustGo = ['assets-src', 'tests', 'src', 'scripts', 'package.json', 'package-lock.json', 'tailwind.config.js', 'README.md', 'CLAUDE.md'];
+  const mustGo = ['assets-src', 'tests', 'src', 'scripts', 'package.json', 'package-lock.json', 'tailwind.config.js', 'README.md', 'CLAUDE.md', 'HANDOFF.md'];
   const kept = mustGo.filter((f) => !removed.includes(f));
   ok(/npm run build\s*&&\s*rm -rf/.test(command) && kept.length === 0,
      'Netlify deletes non-site files after building the CSS' + (kept.length ? ' - still published: ' + kept.join(', ') : ''));

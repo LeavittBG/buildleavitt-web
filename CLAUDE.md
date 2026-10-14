@@ -98,3 +98,15 @@ What Kyle Leavitt (the owner) decided while reviewing the site with Claude, so l
   - Netlify: team invite. Kyle appears to have upgraded to Netlify Pro for it (the upgrade came minutes before the invite); check the agency is not an Owner.
 - **Old container:** the agency's own container, `GTM-K9ND8BDT`, was replaced and must not return.
 - **Privacy policy:** it names Google Analytics and Tag Manager. If the agency adds ad tags (Google Ads, Meta pixel, remarketing), name them in `privacy.html`, and have an attorney check the "we do not sell" line under Maryland's privacy law. The REVIEW comments in that file say so too.
+
+## Job pricing app (October 2026)
+
+Kyle also has a private job-pricing app, **Leavitt Job Pricing**, built with Claude in October 2026. It is a claude.ai Artifact with the artifact's database behind it, pinned in his sidebar; it is not part of this site. `HANDOFF.md` has the full picture. Rules every session must keep:
+
+- **This repository is public. Nothing of the app goes in it:** no page, scripts, tests, seed data, backups, screenshots, prices, margins, fees, client or vendor names. `HANDOFF.md` and this section are the only trace, and both stay figure-free. `netlify.toml` deletes `HANDOFF.md` from the deploy and `markup.test.js` checks that; any other non-site file added at the root goes on the same list.
+- **Where it lives:** find the artifact with the Artifact tool's `list` action (title "Leavitt Job Pricing"). Read its page before publishing; its database is read and written with `ArtifactData`. The editable sources are in the zip Kyle holds (`leavitt-job-pricing-source-2026-10-14.zip`); ask him for it, and work on it in the scratchpad, never in this tree.
+- **Every dollar figure comes from Leavitt's own data** (budgets, quotes, price sheets, official fee schedules). Never estimate or invent one; a line without a figure shows as missing and asks for a number.
+- **Before any publish:** build with `node build.mjs`, run all four `ui-test*.cjs` suites, restate the artifact's capabilities in full if the field is passed at all, and send Kyle a fresh offline copy afterwards.
+- **Database rules:** clone snapshot bodies before editing (they arrive frozen), `set` replaces a whole document, pin writes to the document's current version, batches of at most 50, and never run a write to learn a result's shape. Kyle edits settings and jobs in the app; never overwrite them with seed data.
+- **Gmail sends are real** and go through the viewer's connector; never retry one unattended.
+- **Kyle's way of working:** plain language, screenshots for bugs, a guarding test that fails on the old build before each fix, and his go-ahead before anything outward-facing or hard to undo.
