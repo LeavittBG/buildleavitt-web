@@ -134,10 +134,19 @@ const controls = [...d.querySelectorAll('form input:not([type=hidden]), form sel
 ok(controls.every(c => c.id && d.querySelector(`label[for="${c.id}"]`)),
    `all ${controls.length} visible form controls have a label`);
 
-// data-service / data-step keys exist in the JS data objects
-const svc = JSON.parse('{' + html.match(/const serviceData = \{([\s\S]*?)\n        \};/)[1].replace(/(\w+):/g,'"$1":') + '}');
-[...d.querySelectorAll('[data-service]')].forEach(c =>
-  ok(!!svc[c.getAttribute('data-service')], `serviceData has key "${c.getAttribute('data-service')}"`));
+// Each service card is a link to that service's own page. They used to open a
+// two-paragraph pop-up filled in by script (serviceData), which search engines
+// read as homepage text, so nothing on the site could rank for a service by
+// itself. The pop-up must not come back, and every card must point at a page
+// that exists.
+{
+  const cards = [...d.querySelectorAll('.service-card')];
+  const targets = cards.map((c) => c.getAttribute('href'));
+  const missing = targets.filter((h) => !h || !fs.existsSync(path.join(ROOT, h.replace(/^\//, ''))));
+  ok(cards.length === 3 && cards.every((c) => c.tagName === 'A') && missing.length === 0,
+     `the 3 service cards are links to pages that exist (${targets.join(', ')})` + (missing.length ? ' - missing: ' + missing.join(', ') : ''));
+  ok(!d.querySelector('#service-modal') && !/serviceData/.test(html), 'the service pop-up is gone');
+}
 
 // no leftover references to the removed image or old selectors
 ok(!html.includes('w9259kw9259'), 'no reference to the deleted 9.3MB PNG');
@@ -170,7 +179,7 @@ ok(!html.includes('data-lucide='), 'no icon is left for a library to draw');
 // stopped drawing.
 console.log("\n== every link and button has a name, on every page ==");
 {
-  const pages = ['index.html', 'privacy.html', 'terms.html', 'success.html', '404.html',
+  const pages = ['index.html', 'custom-homes.html', 'semi-custom-homes.html', 'renovations.html', 'privacy.html', 'terms.html', 'success.html', '404.html',
     ...fs.readdirSync(path.join(ROOT, 'plans')).filter((f) => f.endsWith('.html')).map((f) => 'plans/' + f)];
   const named = (el) => (el.textContent || '').trim() || el.getAttribute('aria-label') || el.getAttribute('title') ||
     [...el.querySelectorAll('img[alt]')].some((i) => i.getAttribute('alt').trim()) ||
@@ -226,7 +235,7 @@ console.log("\n== contact details are real ==");
 // downloaded, so an italic span would now render as a browser-faked slant too.
 console.log("\n== no italic text or italic font ==");
 {
-  const pages = ["index.html", "privacy.html", "terms.html", "success.html", "404.html",
+  const pages = ["index.html", "custom-homes.html", "semi-custom-homes.html", "renovations.html", "privacy.html", "terms.html", "success.html", "404.html",
     ...fs.readdirSync(path.join(ROOT, "plans")).filter((f) => f.endsWith(".html")).map((f) => "plans/" + f)];
   const found = [];
   for (const f of pages) {
@@ -246,7 +255,7 @@ console.log("\n== no italic text or italic font ==");
 // where you are rather than restating the heading.
 console.log("\n== no eyebrow labels over headings ==");
 {
-  const pages = ["index.html", "privacy.html", "terms.html", "success.html", "404.html",
+  const pages = ["index.html", "custom-homes.html", "semi-custom-homes.html", "renovations.html", "privacy.html", "terms.html", "success.html", "404.html",
     ...fs.readdirSync(path.join(ROOT, "plans")).filter((f) => f.endsWith(".html")).map((f) => "plans/" + f)];
   const found = [];
   for (const f of pages) {
@@ -306,7 +315,7 @@ console.log("\n== Leavitt Connect section ==");
 console.log("\n== Facebook links go to Leavitt's page ==");
 {
   const FACEBOOK = "https://www.facebook.com/profile.php?id=61591583276647";
-  const pages = ["index.html", "privacy.html", "terms.html", "success.html", "404.html",
+  const pages = ["index.html", "custom-homes.html", "semi-custom-homes.html", "renovations.html", "privacy.html", "terms.html", "success.html", "404.html",
     ...fs.readdirSync(path.join(ROOT, "plans")).filter((f) => f.endsWith(".html")).map((f) => "plans/" + f)];
   const found = [];
   for (const f of pages) {
@@ -324,7 +333,7 @@ console.log("\n== Facebook links go to Leavitt's page ==");
 // same-site link with a #fragment must name an id that exists on its target.
 console.log("\n== every link to a section of a page finds that section ==");
 {
-  const pages = ["index.html", "privacy.html", "terms.html", "success.html", "404.html",
+  const pages = ["index.html", "custom-homes.html", "semi-custom-homes.html", "renovations.html", "privacy.html", "terms.html", "success.html", "404.html",
     ...fs.readdirSync(path.join(ROOT, "plans")).filter((f) => f.endsWith(".html")).map((f) => "plans/" + f)];
   const ids = new Map();
   const idsOf = (f) => {
@@ -363,7 +372,7 @@ console.log("\n== every link to a section of a page finds that section ==");
 console.log("\n== every page loads Leavitt's own Tag Manager container ==");
 {
   const GTM = "GTM-PHGFM247";
-  const pages = ["index.html", "privacy.html", "terms.html", "success.html", "404.html",
+  const pages = ["index.html", "custom-homes.html", "semi-custom-homes.html", "renovations.html", "privacy.html", "terms.html", "success.html", "404.html",
     ...fs.readdirSync(path.join(ROOT, "plans")).filter((f) => f.endsWith(".html")).map((f) => "plans/" + f)];
   const bad = [];
   for (const f of pages) {
@@ -388,7 +397,7 @@ console.log("\n== opening hours agree, on every page ==");
   ok(spec.length === 1 && spec[0].dayOfWeek.join() === "Monday,Tuesday,Wednesday,Thursday,Friday" &&
      spec[0].opens === "08:00" && spec[0].closes === "17:00",
      "structured data gives Monday-Friday 08:00-17:00 and nothing else - Saturday is by appointment, not open");
-  const pages = ["index.html", "privacy.html", "terms.html", "404.html",
+  const pages = ["index.html", "custom-homes.html", "semi-custom-homes.html", "renovations.html", "privacy.html", "terms.html", "404.html",
     ...fs.readdirSync(path.join(ROOT, "plans")).filter((f) => f.endsWith(".html")).map((f) => "plans/" + f)];
   const wrong = [];
   for (const f of pages) {

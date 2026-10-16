@@ -21,19 +21,14 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
   ok((await page.locator('h1').innerText()).replace(/\s+/g, ' ').trim() === 'Crafting Custom Homes Across the Region.',
      'hero headline is on the page as plain text');
 
-  // Service modal: open by keyboard, close with Escape, focus restored
+  // Service cards are plain links to the service pages (no pop-up any more), so
+  // Enter on a focused card navigates. Checked by reading the href the browser
+  // resolved, which also proves the card is a real <a>.
   const card = page.locator('.service-card').first();
   await card.focus();
-  await page.keyboard.press('Enter');
-  await page.waitForTimeout(400);
-  ok(await page.locator('#service-modal').isVisible(), 'service modal opens via keyboard Enter');
-  ok((await page.locator('#service-modal-title').textContent()).includes('Custom Ground-Up'), 'service modal shows correct title');
-  ok(await page.evaluate(() => getComputedStyle(document.body).overflow) === 'hidden', 'body scroll locked while modal open');
-  await page.keyboard.press('Escape');
-  await page.waitForTimeout(400);
-  ok(!(await page.locator('#service-modal').isVisible()), 'Escape closes the service modal');
-  ok(await page.evaluate(() => getComputedStyle(document.body).overflow) !== 'hidden', 'body scroll restored');
-  ok(await page.evaluate(() => document.activeElement?.classList.contains('service-card')), 'focus returned to the card');
+  const target = await card.evaluate((a) => a.href);
+  ok(/\/custom-homes\.html$/.test(target), `first service card links to custom-homes.html (${target})`);
+  ok(!(await page.locator('#service-modal').count()), 'there is no service pop-up on the page');
 
   // Process modal via click
   await page.locator('.process-card').nth(2).click();
