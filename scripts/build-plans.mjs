@@ -65,7 +65,7 @@ const fromPrice = Math.min(...models.map((m) => m.specs?.price).filter(Boolean))
  */
 const priceNote = (extra = '') =>
   `Starting price is for the home with ` +
-  `<a href="#included" class="text-[#c2a67a] font-medium hover:underline">all standard features</a> ` +
+  `<a href="#included" class="text-[#866f4f] font-medium hover:underline">all standard features</a> ` +
   `included, and does not include the homesite` +
   (PRICES_AS_OF ? `. Current as of ${PRICES_AS_OF}` : '') + `.${extra}`;
 const images = JSON.parse(readFileSync(join(ROOT, 'src', 'plan-images.json'), 'utf8'));
@@ -120,10 +120,10 @@ const standardSection = () => `
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12">
 ${STANDARD.map(([heading, items]) => `                    <div>
-                        <h3 class="text-[11px] font-bold uppercase tracking-[0.2em] text-[#c2a67a] mb-6">${heading}</h3>
+                        <h3 class="text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] mb-6">${heading}</h3>
                         <ul class="space-y-4">
 ${items.map(([title, detail]) => `                            <li class="flex gap-3">
-                                <span aria-hidden="true" class="text-[#c2a67a] shrink-0 mt-1">&#10003;</span>
+                                <span aria-hidden="true" class="text-[#866f4f] shrink-0 mt-1">&#10003;</span>
                                 <span class="text-gray-700 leading-relaxed"><strong class="text-[#0f172a] font-medium">${title}</strong>${detail ? ` &mdash; ${detail}` : ''}</span>
                             </li>`).join('\n')}
                         </ul>
@@ -131,7 +131,7 @@ ${items.map(([title, detail]) => `                            <li class="flex ga
                 </div>
 
                 <p class="mt-12 text-sm text-gray-500">
-                    <a href="/plans/pdf/leavitt-standard.pdf" target="_blank" rel="noopener" class="text-[#c2a67a] font-medium hover:underline">Download the Leavitt Standard (PDF)</a>
+                    <a href="/plans/pdf/leavitt-standard.pdf" target="_blank" rel="noopener" class="text-[#866f4f] font-medium hover:underline">Download the Leavitt Standard (PDF)</a>
                     &mdash; handy for comparing against another builder&rsquo;s quote.
                 </p>
             </div>
@@ -382,7 +382,7 @@ for (const [i, model] of models.entries()) {
                          unreadable. Opening the image itself is the zero-JavaScript way to
                          let someone pinch and zoom it. -->
                     <a href="/plans/img/${s.img.file}.${s.img.ext || 'png'}" target="_blank" rel="noopener"
-                       class="text-[#c2a67a] font-medium hover:underline whitespace-nowrap">
+                       class="text-[#866f4f] font-medium hover:underline whitespace-nowrap">
                         Open full size<span class="sr-only"> image of the ${esc(model.name)} ${esc(s.label.toLowerCase())}</span>
                     </a>
                 </figcaption>
@@ -407,9 +407,9 @@ for (const [i, model] of models.entries()) {
     <main class="max-w-6xl mx-auto px-6 py-14 md:py-20">
 
         <nav aria-label="Breadcrumb" class="mb-10 text-sm text-gray-500">
-            <a href="/" class="hover:text-[#c2a67a]">Home</a>
+            <a href="/" class="hover:text-[#866f4f]">Home</a>
             <span class="mx-2" aria-hidden="true">/</span>
-            <a href="/plans/" class="hover:text-[#c2a67a]">Home Plans</a>
+            <a href="/plans/" class="hover:text-[#866f4f]">Home Plans</a>
             <span class="mx-2" aria-hidden="true">/</span>
             <span class="text-[#0f172a]">${esc(model.name)}</span>
         </nav>
@@ -450,18 +450,18 @@ ${specRows}
                     Start with this plan
                 </a>
                 ${hasBrochure ? `<a href="/plans/pdf/${model.slug}.pdf" target="_blank" rel="noopener"
-                   class="block w-full text-center border border-gray-300 px-6 py-4 uppercase tracking-[0.2em] font-bold text-xs text-[#0f172a] hover:border-[#c2a67a] hover:text-[#c2a67a] transition-colors">
+                   class="block w-full text-center border border-gray-300 px-6 py-4 uppercase tracking-[0.2em] font-bold text-xs text-[#0f172a] hover:border-[#c2a67a] hover:text-[#866f4f] transition-colors">
                     Download the PDF
                 </a>
                 <p class="text-xs text-gray-500 mt-4">Opens the full brochure for ${esc(model.name)} in a new tab.</p>` : ''}
                 <p class="text-sm text-gray-600 mt-6 pt-6 border-t border-gray-200">
                     Every Leavitt home includes
-                    <a href="/plans/#included" class="text-[#c2a67a] font-medium hover:underline">the Leavitt Standard</a>
+                    <a href="/plans/#included" class="text-[#866f4f] font-medium hover:underline">the Leavitt Standard</a>
                     &mdash; quartz, Andersen&reg; windows, 9&rsquo; ceilings and more, at no upgrade cost.
                 </p>
                 <p class="text-sm text-gray-600 mt-4">
                     Prefer to talk it through?
-                    <a href="tel:+18668326524" class="text-[#c2a67a] font-medium hover:underline">(866) 832-6524</a>
+                    <a href="tel:+18668326524" class="text-[#866f4f] font-medium hover:underline">(866) 832-6524</a>
                 </p>
             </aside>
         </div>
@@ -472,12 +472,12 @@ ${sheetBlocks}
         <nav aria-label="Other plans" class="border-t border-gray-200 pt-10 flex flex-col sm:flex-row justify-between gap-6 text-sm">
             <a href="/plans/${prev.slug}.html" class="group">
                 <span class="block text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-1">Previous plan</span>
-                <span class="text-lg text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">${esc(prev.name)}</span>
+                <span class="text-lg text-[#0f172a] group-hover:text-[#866f4f] transition-colors">${esc(prev.name)}</span>
             </a>
-            <a href="/plans/" class="self-center text-[#c2a67a] uppercase tracking-widest font-bold text-xs hover:underline">All plans</a>
+            <a href="/plans/" class="self-center text-[#866f4f] uppercase tracking-widest font-bold text-xs hover:underline">All plans</a>
             <a href="/plans/${next.slug}.html" class="group sm:text-right">
                 <span class="block text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-1">Next plan</span>
-                <span class="text-lg text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">${esc(next.name)}</span>
+                <span class="text-lg text-[#0f172a] group-hover:text-[#866f4f] transition-colors">${esc(next.name)}</span>
             </a>
         </nav>
 
@@ -523,10 +523,10 @@ const cards = models.map((model) => {
                         }) : '<span class="text-gray-400 text-sm">Drawings coming soon</span>'}
                     </div>
                     <div class="border-t border-gray-200 p-6">
-                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">${esc(model.name)}</h3>
+                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">${esc(model.name)}</h3>
                         ${facts ? `<p class="text-sm text-[#0f172a] mt-3">${facts}</p>` : ''}
                         <p class="text-sm text-gray-500 mt-1">${floors} floor plan${floors === 1 ? '' : 's'}</p>
-                        <span class="inline-block mt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#c2a67a]">View plan &rarr;</span>
+                        <span class="inline-block mt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f]">View plan &rarr;</span>
                     </div>
                 </a>`;
 }).join('\n');
@@ -543,7 +543,7 @@ const indexHtml = head({
     <main class="max-w-6xl mx-auto px-6 py-14 md:py-20">
 
         <nav aria-label="Breadcrumb" class="mb-10 text-sm text-gray-500">
-            <a href="/" class="hover:text-[#c2a67a]">Home</a>
+            <a href="/" class="hover:text-[#866f4f]">Home</a>
             <span class="mx-2" aria-hidden="true">/</span>
             <span class="text-[#0f172a]">Home Plans</span>
         </nav>
