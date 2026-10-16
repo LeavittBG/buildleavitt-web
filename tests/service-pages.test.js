@@ -54,7 +54,7 @@ const PAGES = [
     ok(!/warranty package|premier architects|3D render/i.test(text), `${file}: none of the unconfirmed claims`);
     ok(/dedicated project manager/.test(text), `${file}: names the dedicated project manager`);
     if (file !== 'renovations.html') {
-      ok(/one-year warranty from Leavitt Building Group and a third-party 2-10 warranty/.test(text), `${file}: states the warranty as Kyle gave it`);
+      ok(/one-year warranty from Leavitt Building Group and a 2-10 Home Buyer's Warranty/.test(text), `${file}: states the warranty as Kyle gave it`);
       ok(/realtor partners/.test(text) && /banking partner/.test(text) && /always your choice/.test(text), `${file}: covers land and financing, with the lender as the buyer's choice`);
     }
     if (file === 'custom-homes.html') ok(/10 to 12 months or more/.test(text), `${file}: gives the custom build time`);

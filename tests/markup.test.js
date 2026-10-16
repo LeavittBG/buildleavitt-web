@@ -329,7 +329,7 @@ console.log("\n== questions and their structured data agree ==");
   ok(differ.length === 0, 'every question and answer reads the same on the page and in the structured data' + (differ.length ? ' - differs: ' + differ.map((x) => x.q).join(' | ') : ''));
   const text = onPage.map((x) => x.a).join(' ');
   const facts = ['6 to 8 months', '10 to 12 months or more', 'realtor partners', 'banking partner', 'always your choice',
-    'one-year warranty from Leavitt Building Group and a third-party 2-10 warranty', 'dedicated project manager'];
+    "one-year warranty from Leavitt Building Group and a 2-10 Home Buyer's Warranty", 'dedicated project manager'];
   const missing = facts.filter((f) => !text.includes(f));
   ok(missing.length === 0, "the answers carry Kyle's facts as he gave them" + (missing.length ? ' - missing: ' + missing.join(', ') : ''));
   ok(!/warranty package/i.test(html), 'the vague "warranty package" wording is gone from the homepage');
