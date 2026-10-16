@@ -47,9 +47,18 @@ const PAGES = [
       .filter((u) => u && u.startsWith('/'));
     const missing = [...new Set(refs)].filter((u) => !fs.existsSync(path.join(ROOT, u.endsWith('/') ? u + 'index.html' : u.slice(1))));
     ok(missing.length === 0, `${file}: every local link and asset resolves` + (missing.length ? ' - missing: ' + missing.join(', ') : ''));
-    // No claims Kyle has not confirmed (see CLAUDE.md "Removed claims").
-    const text = d.body.textContent;
-    ok(!/dedicated project manager|warranty package|premier architects|3D render/i.test(text), `${file}: none of the unconfirmed claims`);
+    // No claims Kyle has not confirmed (see CLAUDE.md "Removed claims"). The
+    // project manager and the warranty were confirmed on October 16, 2026, in
+    // Kyle's own words, so the pages state them exactly as he gave them.
+    const text = d.body.textContent.replace(/\s+/g, ' ');
+    ok(!/warranty package|premier architects|3D render/i.test(text), `${file}: none of the unconfirmed claims`);
+    ok(/dedicated project manager/.test(text), `${file}: names the dedicated project manager`);
+    if (file !== 'renovations.html') {
+      ok(/one-year warranty from Leavitt Building Group and a third-party 2-10 warranty/.test(text), `${file}: states the warranty as Kyle gave it`);
+      ok(/realtor partners/.test(text) && /banking partner/.test(text) && /always your choice/.test(text), `${file}: covers land and financing, with the lender as the buyer's choice`);
+    }
+    if (file === 'custom-homes.html') ok(/10 to 12 months or more/.test(text), `${file}: gives the custom build time`);
+    if (file === 'semi-custom-homes.html') ok(/6 to 8 months/.test(text), `${file}: gives the semi-custom build time`);
   }
 
   // ------------------------------------------------------------------ browser
