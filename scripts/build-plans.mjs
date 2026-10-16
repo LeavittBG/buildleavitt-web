@@ -557,9 +557,14 @@ const indexHtml = head({
             the way you want to live. Change the elevation, the room sizes, the optional spaces;
             or bring us something else entirely.
         </p>
-        <p class="text-gray-600 max-w-2xl mb-8">
+        <p class="text-gray-600 max-w-2xl mb-4">
             Every sheet shows the optional features available for that model in dashed outline:
             in-law suites, conservatories, sunrooms, extended garages and finished lower levels.
+        </p>
+        <p class="text-gray-600 max-w-2xl mb-8">
+            A home built from one of these plans takes about 6 to 8 months to complete, depending on
+            the changes made to it. Every home comes with a one-year warranty from Leavitt Building
+            Group and a 2-10 Home Buyer's Warranty.
         </p>
 
         <!-- One anchor for the whole collection rather than a price beside each plan: enough for

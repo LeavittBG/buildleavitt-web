@@ -306,6 +306,35 @@ console.log("\n== Leavitt Connect section ==");
   }
 }
 
+// --- Questions we hear most ---
+// Kyle's answers of October 16, 2026 (build times, land, financing, warranty,
+// project manager) are on the homepage as plain <details>, so they need no
+// script, and repeated to Google as FAQPage structured data. The two copies
+// are written separately, so check they still say the same thing, and that the
+// facts themselves are still the ones Kyle gave.
+console.log("\n== questions and their structured data agree ==");
+{
+  const sec = d.querySelector('#faq');
+  const items = sec ? [...sec.querySelectorAll('details.faq-item')] : [];
+  const onPage = items.map((el) => ({
+    q: el.querySelector('summary h3')?.textContent.replace(/\s+/g, ' ').trim(),
+    a: el.querySelector('p')?.textContent.replace(/\s+/g, ' ').trim(),
+  }));
+  const ld = [...d.querySelectorAll('script[type="application/ld+json"]')]
+    .map((x) => JSON.parse(x.textContent)).find((j) => j['@type'] === 'FAQPage');
+  const inLd = (ld?.mainEntity || []).map((e) => ({ q: e.name, a: e.acceptedAnswer?.text }));
+  ok(items.length >= 6 && items.every((el) => !el.open), `the homepage asks ${items.length} questions, all closed until opened`);
+  ok(!!ld && inLd.length === onPage.length, `FAQPage structured data lists the same ${inLd.length} questions`);
+  const differ = onPage.filter((x, i) => !inLd[i] || inLd[i].q !== x.q || inLd[i].a.replace(/\s+/g, ' ').trim() !== x.a.replace(/ See the plans\.$/, ''));
+  ok(differ.length === 0, 'every question and answer reads the same on the page and in the structured data' + (differ.length ? ' - differs: ' + differ.map((x) => x.q).join(' | ') : ''));
+  const text = onPage.map((x) => x.a).join(' ');
+  const facts = ['6 to 8 months', '10 to 12 months or more', 'realtor partners', 'banking partner', 'always your choice',
+    "one-year warranty from Leavitt Building Group and a 2-10 Home Buyer's Warranty", 'dedicated project manager'];
+  const missing = facts.filter((f) => !text.includes(f));
+  ok(missing.length === 0, "the answers carry Kyle's facts as he gave them" + (missing.length ? ' - missing: ' + missing.join(', ') : ''));
+  ok(!/warranty package/i.test(html), 'the vague "warranty package" wording is gone from the homepage');
+}
+
 // --- Facebook ---
 // The site pointed at facebook.com/LeavittBuildingGroup, which is not
 // Leavitt's page. The address below is the page's permanent one, as the

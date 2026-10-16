@@ -96,6 +96,10 @@ section[id] { scroll-margin-top: 6rem; }
     transform: translate(-50%, -50%) scale(1.1);
 }
 
+/* Questions on the homepage: plain <details>, so they work without script. The
+   chevron turns when one is open; no keyframes, just the transition it has. */
+.faq-item[open] .faq-chevron { transform: rotate(180deg); }
+
 /* Reduced Motion: no smooth scrolling, and hover transitions finish at once */
 @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }

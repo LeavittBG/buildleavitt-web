@@ -132,6 +132,78 @@
       "publisher": { "@id": "https://buildleavitt.com/#business" }
     }
     </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How long does it take to build a home?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A semi-custom home takes about 6 to 8 months to complete, depending on the changes made to the plan. A fully custom home takes 10 to 12 months or more, depending on its size and scope."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need to own land first?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. We build on your lot, or help you find one through our realtor partners."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you help with financing?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We do not finance homes ourselves, but we have a banking partner we recommend to help buyers get the best available financing. Who you borrow from is always your choice."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What warranty comes with the home?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Every home comes with a one-year warranty from Leavitt Building Group and a 2-10 Home Buyer's Warranty."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Who will I deal with during the build?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Each home has a dedicated project manager who looks after its construction and is your point of contact throughout. Kyle Leavitt walks every job site himself, and you follow the schedule, selections, inspections and change orders in Leavitt Connect, our homeowner app."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is included in the price?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Every home includes the Leavitt Standard: 9-foot ceilings, quartz countertops, Andersen windows, hardwood or luxury vinyl plank flooring, a finished and painted garage and more, at no upgrade cost. A starting price is for the home with all standard features included, and does not include the homesite."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I change one of your plans?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Every plan is a starting point. The elevation, room sizes and optional spaces are adjusted to your lot and the way you want to live, and you choose the finishes, fixtures, cabinetry and flooring."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Where do you build?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Harford County and the surrounding counties: Baltimore, Carroll, Cecil and Anne Arundel, and into southern Pennsylvania. We are based in Forest Hill, Maryland."
+          }
+        }
+      ]
+    }
+    </script>
 </head>
 <body class="min-h-screen bg-[#fcfcfc] text-gray-900 font-sans overflow-x-hidden">
     <!-- Google Tag Manager (noscript) -->
@@ -651,6 +723,79 @@
         </div>
     </section>
 
+    <!-- Questions -->
+    <!-- Kyle's answers (October 16, 2026): build times, lots and land, financing,
+         the warranty, the project manager. The same questions and answers are in
+         the FAQPage structured data in <head>; markup.test.js checks they match.
+         <details> needs no script, so the questions show without it. -->
+    <section id="faq" class="py-24 md:py-32 px-6 bg-[#f8f9fa] border-t border-gray-200 overflow-hidden">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl md:text-5xl font-light text-[#0f172a] text-center mb-12 md:mb-16">Questions we hear most.</h2>
+            <div class="border-b border-gray-200">
+                <details class="faq-item border-t border-gray-200 group">
+                    <summary class="flex items-center justify-between gap-6 py-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                        <h3 class="text-lg md:text-xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">How long does it take to build a home?</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="faq-chevron w-5 h-5 shrink-0 text-[#c2a67a] transition-transform"><path d="m6 9 6 6 6-6"/></svg>
+                    </summary>
+                    <p class="pb-6 text-gray-600 leading-relaxed max-w-3xl">A semi-custom home takes about 6 to 8 months to complete, depending on the changes made to the plan. A fully custom home takes 10 to 12 months or more, depending on its size and scope.</p>
+                </details>
+                <details class="faq-item border-t border-gray-200 group">
+                    <summary class="flex items-center justify-between gap-6 py-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                        <h3 class="text-lg md:text-xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">Do I need to own land first?</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="faq-chevron w-5 h-5 shrink-0 text-[#c2a67a] transition-transform"><path d="m6 9 6 6 6-6"/></svg>
+                    </summary>
+                    <p class="pb-6 text-gray-600 leading-relaxed max-w-3xl">No. We build on your lot, or help you find one through our realtor partners.</p>
+                </details>
+                <details class="faq-item border-t border-gray-200 group">
+                    <summary class="flex items-center justify-between gap-6 py-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                        <h3 class="text-lg md:text-xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">Do you help with financing?</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="faq-chevron w-5 h-5 shrink-0 text-[#c2a67a] transition-transform"><path d="m6 9 6 6 6-6"/></svg>
+                    </summary>
+                    <p class="pb-6 text-gray-600 leading-relaxed max-w-3xl">We do not finance homes ourselves, but we have a banking partner we recommend to help buyers get the best available financing. Who you borrow from is always your choice.</p>
+                </details>
+                <details class="faq-item border-t border-gray-200 group">
+                    <summary class="flex items-center justify-between gap-6 py-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                        <h3 class="text-lg md:text-xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">What warranty comes with the home?</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="faq-chevron w-5 h-5 shrink-0 text-[#c2a67a] transition-transform"><path d="m6 9 6 6 6-6"/></svg>
+                    </summary>
+                    <p class="pb-6 text-gray-600 leading-relaxed max-w-3xl">Every home comes with a one-year warranty from Leavitt Building Group and a 2-10 Home Buyer's Warranty.</p>
+                </details>
+                <details class="faq-item border-t border-gray-200 group">
+                    <summary class="flex items-center justify-between gap-6 py-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                        <h3 class="text-lg md:text-xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">Who will I deal with during the build?</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="faq-chevron w-5 h-5 shrink-0 text-[#c2a67a] transition-transform"><path d="m6 9 6 6 6-6"/></svg>
+                    </summary>
+                    <p class="pb-6 text-gray-600 leading-relaxed max-w-3xl">Each home has a dedicated project manager who looks after its construction and is your point of contact throughout. Kyle Leavitt walks every job site himself, and you follow the schedule, selections, inspections and change orders in <a href="#leavitt-connect" class="text-[#0f172a] font-medium underline underline-offset-4 decoration-[#c2a67a] hover:text-[#c2a67a] transition-colors">Leavitt Connect</a>, our homeowner app.</p>
+                </details>
+                <details class="faq-item border-t border-gray-200 group">
+                    <summary class="flex items-center justify-between gap-6 py-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                        <h3 class="text-lg md:text-xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">What is included in the price?</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="faq-chevron w-5 h-5 shrink-0 text-[#c2a67a] transition-transform"><path d="m6 9 6 6 6-6"/></svg>
+                    </summary>
+                    <p class="pb-6 text-gray-600 leading-relaxed max-w-3xl">Every home includes <a href="/plans/#included" class="text-[#0f172a] font-medium underline underline-offset-4 decoration-[#c2a67a] hover:text-[#c2a67a] transition-colors">the Leavitt Standard</a>: 9-foot ceilings, quartz countertops, Andersen windows, hardwood or luxury vinyl plank flooring, a finished and painted garage and more, at no upgrade cost. A starting price is for the home with all standard features included, and does not include the homesite.</p>
+                </details>
+                <details class="faq-item border-t border-gray-200 group">
+                    <summary class="flex items-center justify-between gap-6 py-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                        <h3 class="text-lg md:text-xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">Can I change one of your plans?</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="faq-chevron w-5 h-5 shrink-0 text-[#c2a67a] transition-transform"><path d="m6 9 6 6 6-6"/></svg>
+                    </summary>
+                    <p class="pb-6 text-gray-600 leading-relaxed max-w-3xl">Yes. Every plan is a starting point. The elevation, room sizes and optional spaces are adjusted to your lot and the way you want to live, and you choose the finishes, fixtures, cabinetry and flooring. <a href="/plans/" class="text-[#0f172a] font-medium underline underline-offset-4 decoration-[#c2a67a] hover:text-[#c2a67a] transition-colors">See the plans</a>.</p>
+                </details>
+                <details class="faq-item border-t border-gray-200 group">
+                    <summary class="flex items-center justify-between gap-6 py-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                        <h3 class="text-lg md:text-xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">Where do you build?</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="faq-chevron w-5 h-5 shrink-0 text-[#c2a67a] transition-transform"><path d="m6 9 6 6 6-6"/></svg>
+                    </summary>
+                    <p class="pb-6 text-gray-600 leading-relaxed max-w-3xl">Harford County and the surrounding counties: Baltimore, Carroll, Cecil and Anne Arundel, and into southern Pennsylvania. We are based in Forest Hill, Maryland.</p>
+                </details>
+            </div>
+            <p class="mt-10 text-center text-gray-600">
+                Something else? <a href="#contact" class="inline-block py-1 text-[#0f172a] font-medium underline underline-offset-4 decoration-[#c2a67a] hover:text-[#c2a67a] transition-colors">Ask us</a>
+                or call <a href="tel:+18668326524" class="inline-block py-1 text-[#0f172a] font-medium whitespace-nowrap hover:text-[#c2a67a] transition-colors">(866) 832-6524</a>.
+            </p>
+        </div>
+    </section>
+
     <!-- Contact Section -->
     <section id="contact" class="py-24 md:py-32 px-6 bg-white overflow-hidden">
         <div class="max-w-7xl mx-auto">
@@ -1037,7 +1182,7 @@
             "4": {
                 step: "Step 04",
                 title: "The Handover",
-                content: "<p>As construction concludes, we conduct an exhaustive quality assurance walkthrough. We test every system, inspect every finish, and refine the final details.</p><p>You will be introduced to your new home's features and provided with a comprehensive warranty package. Our relationship doesn't end at move-in; we remain available to ensure your absolute satisfaction for years to come.</p>"
+                content: "<p>As construction concludes, we conduct an exhaustive quality assurance walkthrough. We test every system, inspect every finish, and refine the final details.</p><p>You will be introduced to your new home's features. Every home comes with a one-year warranty from Leavitt Building Group and a 2-10 Home Buyer's Warranty, and our relationship doesn't end at move-in.</p>"
             }
         };
 
