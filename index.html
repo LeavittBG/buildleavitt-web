@@ -239,8 +239,11 @@
                     </a>
                     <!-- Client Login sits apart from the menu, after a fine rule, smaller and
                          in gold: it is for people already building with Leavitt, so it is easy
-                         to find at the top without competing with Get a Quote. -->
-                    <a href="https://connect.buildleavitt.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 border-l border-white/20 pl-5 xl:pl-10 text-[#c2a67a] hover:text-white text-xs uppercase tracking-widest font-semibold transition-colors whitespace-nowrap">
+                         to find at the top without competing with Get a Quote. While the bar is
+                         still transparent over the hero it is white instead: the daylight photo
+                         puts pale sky behind it, and gold on sky could not be read (October 2026).
+                         Once the page scrolls and the bar turns navy, it is gold again. -->
+                    <a href="https://connect.buildleavitt.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 border-l border-white/20 pl-5 xl:pl-10 text-[#c2a67a] hover:text-white [.bg-transparent_&]:text-white [.bg-transparent_&]:hover:text-[#c2a67a] text-xs uppercase tracking-widest font-semibold transition-colors whitespace-nowrap">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-4 h-4"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                         Client Login
                     </a>
@@ -315,7 +318,10 @@
 
         <div class="relative z-10 w-full max-w-7xl mx-auto px-6 pt-4 pb-12 flex-1 flex flex-col justify-center lg:flex-none lg:block lg:pt-40 lg:pb-14">
             <div class="max-w-3xl">
-                <p class="text-[#c2a67a] text-xs md:text-sm font-semibold uppercase tracking-[0.2em] mb-6">
+                <!-- From lg up, white instead of gold and held to two lines (lg:max-w-sm) so it stays
+                     over the dark trees on the left of the daylight photo. As one gold line it
+                     ran across the cream siding of the house and its last words vanished. -->
+                <p class="text-[#c2a67a] lg:text-white/90 text-xs md:text-sm font-semibold uppercase tracking-[0.2em] mb-6 lg:max-w-sm">
                     <!-- The &nbsp;s keep each phrase whole, so on a phone the line can only
                          break after "Serving" - never leaving "&" dangling at a line end. -->
                     Custom&nbsp;Home&nbsp;Builder Serving Harford&nbsp;&amp;&nbsp;Surrounding&nbsp;Counties
@@ -367,7 +373,7 @@
                     <p class="text-gray-600 leading-relaxed">
                         Your dream, built from the foundation up. We collaborate with you from the initial architectural blueprints to the final walkthrough, ensuring every square foot is tailored to your family.
                     </p>
-                    <span class="self-start mt-auto pt-4 text-[#0f172a] text-[11px] font-bold uppercase tracking-widest underline-offset-4 group-hover:underline">Read More <span class="text-[#c2a67a]">&rarr;</span></span>
+                    <span class="self-start mt-auto pt-4 text-[#0f172a] text-[11px] font-bold uppercase tracking-widest underline-offset-4 group-hover:underline">Read More <span class="text-[#866f4f]">&rarr;</span></span>
                 </a>
 
                 <!-- Service 2 -->
@@ -379,7 +385,7 @@
                     <p class="text-gray-600 leading-relaxed">
                         The perfect balance of luxury and efficiency. Choose from a curated selection of premium floor plans, then work with our team to personalize the finishes, fixtures, and layouts.
                     </p>
-                    <span class="self-start mt-auto pt-4 text-[#0f172a] text-[11px] font-bold uppercase tracking-widest underline-offset-4 group-hover:underline">Read More <span class="text-[#c2a67a]">&rarr;</span></span>
+                    <span class="self-start mt-auto pt-4 text-[#0f172a] text-[11px] font-bold uppercase tracking-widest underline-offset-4 group-hover:underline">Read More <span class="text-[#866f4f]">&rarr;</span></span>
                 </a>
 
                 <!-- Service 3 -->
@@ -391,7 +397,7 @@
                     <p class="text-gray-600 leading-relaxed">
                         Breathe new life into the home you already love. From whole-house transformations and structural remodels to expansive multi-room additions, we bring rigorous craftsmanship to your renovation.
                     </p>
-                    <span class="self-start mt-auto pt-4 text-[#0f172a] text-[11px] font-bold uppercase tracking-widest underline-offset-4 group-hover:underline">Read More <span class="text-[#c2a67a]">&rarr;</span></span>
+                    <span class="self-start mt-auto pt-4 text-[#0f172a] text-[11px] font-bold uppercase tracking-widest underline-offset-4 group-hover:underline">Read More <span class="text-[#866f4f]">&rarr;</span></span>
                 </a>
             </div>
         </div>
@@ -607,8 +613,8 @@
                     Let&rsquo;s talk about your home
                 </a>
                 <p class="text-gray-600">
-                    Or call <a href="tel:+18668326524" class="inline-block py-1 text-[#0f172a] font-medium whitespace-nowrap hover:text-[#c2a67a] transition-colors">(866) 832-6524</a>.
-                    Already building with us? <a href="https://connect.buildleavitt.com" target="_blank" rel="noopener noreferrer" class="inline-block py-1 text-[#0f172a] font-medium underline underline-offset-4 decoration-[#c2a67a] hover:text-[#c2a67a] transition-colors">Sign in to Leavitt Connect</a>.
+                    Or call <a href="tel:+18668326524" class="inline-block py-1 text-[#0f172a] font-medium whitespace-nowrap hover:text-[#866f4f] transition-colors">(866) 832-6524</a>.
+                    Already building with us? <a href="https://connect.buildleavitt.com" target="_blank" rel="noopener noreferrer" class="inline-block py-1 text-[#0f172a] font-medium underline underline-offset-4 decoration-[#c2a67a] hover:text-[#866f4f] transition-colors">Sign in to Leavitt Connect</a>.
                 </p>
             </div>
         </div>
@@ -671,9 +677,9 @@
                         <picture class="contents"><source srcset="plans/img/the-visionary-elevation.webp" type="image/webp"><img src="plans/img/the-visionary-elevation.jpg" alt="The Visionary front elevation" width="1468" height="826" loading="lazy" decoding="async" class="max-h-full w-auto object-contain"></picture>
                     </div>
                     <div class="border-t border-gray-200 p-6">
-                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">The Visionary</h3>
+                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Visionary</h3>
                         <p class="text-sm text-[#0f172a] mt-3" data-plan-facts="the-visionary">4+ bed<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2.5+ bath<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>From 4,282 sq ft<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2 stories</p>
-                        <span class="inline-block mt-3 text-[11px] font-bold uppercase tracking-[0.2em] text-[#c2a67a]">View plan &rarr;</span>
+                        <span class="inline-block mt-3 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f]">View plan &rarr;</span>
                     </div>
                 </a>
 
@@ -682,9 +688,9 @@
                         <picture class="contents"><source srcset="plans/img/the-craftsman-elevation.webp" type="image/webp"><img src="plans/img/the-craftsman-elevation.jpg" alt="The Craftsman front elevation" width="1468" height="820" loading="lazy" decoding="async" class="max-h-full w-auto object-contain"></picture>
                     </div>
                     <div class="border-t border-gray-200 p-6">
-                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">The Craftsman</h3>
+                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Craftsman</h3>
                         <p class="text-sm text-[#0f172a] mt-3" data-plan-facts="the-craftsman">4 bed<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2.5+ bath<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>From 2,626 sq ft<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2 stories</p>
-                        <span class="inline-block mt-3 text-[11px] font-bold uppercase tracking-[0.2em] text-[#c2a67a]">View plan &rarr;</span>
+                        <span class="inline-block mt-3 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f]">View plan &rarr;</span>
                     </div>
                 </a>
 
@@ -693,9 +699,9 @@
                         <picture class="contents"><source srcset="plans/img/the-entrepreneur-elevation.webp" type="image/webp"><img src="plans/img/the-entrepreneur-elevation.jpg" alt="The Entrepreneur front elevation" width="1468" height="820" loading="lazy" decoding="async" class="max-h-full w-auto object-contain"></picture>
                     </div>
                     <div class="border-t border-gray-200 p-6">
-                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">The Entrepreneur</h3>
+                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Entrepreneur</h3>
                         <p class="text-sm text-[#0f172a] mt-3" data-plan-facts="the-entrepreneur">3 bed<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2.5+ bath<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2,795 sq ft<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>Ranch</p>
-                        <span class="inline-block mt-3 text-[11px] font-bold uppercase tracking-[0.2em] text-[#c2a67a]">View plan &rarr;</span>
+                        <span class="inline-block mt-3 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f]">View plan &rarr;</span>
                     </div>
                 </a>
             </div>
@@ -750,64 +756,64 @@
             <div class="border-b border-gray-200">
                 <details class="faq-item border-t border-gray-200 group">
                     <summary class="flex items-center justify-between gap-6 py-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                        <h3 class="text-lg md:text-xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">How long does it take to build a home?</h3>
+                        <h3 class="text-lg md:text-xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">How long does it take to build a home?</h3>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="faq-chevron w-5 h-5 shrink-0 text-[#c2a67a] transition-transform"><path d="m6 9 6 6 6-6"/></svg>
                     </summary>
                     <p class="pb-6 text-gray-600 leading-relaxed max-w-3xl">A semi-custom home takes about 6 to 8 months to complete, depending on the changes made to the plan. A fully custom home takes 10 to 12 months or more, depending on its size and scope.</p>
                 </details>
                 <details class="faq-item border-t border-gray-200 group">
                     <summary class="flex items-center justify-between gap-6 py-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                        <h3 class="text-lg md:text-xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">Do I need to own land first?</h3>
+                        <h3 class="text-lg md:text-xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">Do I need to own land first?</h3>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="faq-chevron w-5 h-5 shrink-0 text-[#c2a67a] transition-transform"><path d="m6 9 6 6 6-6"/></svg>
                     </summary>
                     <p class="pb-6 text-gray-600 leading-relaxed max-w-3xl">No. We build on your lot, or help you find one through our realtor partners.</p>
                 </details>
                 <details class="faq-item border-t border-gray-200 group">
                     <summary class="flex items-center justify-between gap-6 py-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                        <h3 class="text-lg md:text-xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">Do you help with financing?</h3>
+                        <h3 class="text-lg md:text-xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">Do you help with financing?</h3>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="faq-chevron w-5 h-5 shrink-0 text-[#c2a67a] transition-transform"><path d="m6 9 6 6 6-6"/></svg>
                     </summary>
                     <p class="pb-6 text-gray-600 leading-relaxed max-w-3xl">We do not finance homes ourselves, but we have a banking partner we recommend to help buyers get the best available financing. Who you borrow from is always your choice.</p>
                 </details>
                 <details class="faq-item border-t border-gray-200 group">
                     <summary class="flex items-center justify-between gap-6 py-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                        <h3 class="text-lg md:text-xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">What warranty comes with the home?</h3>
+                        <h3 class="text-lg md:text-xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">What warranty comes with the home?</h3>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="faq-chevron w-5 h-5 shrink-0 text-[#c2a67a] transition-transform"><path d="m6 9 6 6 6-6"/></svg>
                     </summary>
                     <p class="pb-6 text-gray-600 leading-relaxed max-w-3xl">Every home comes with a one-year warranty from Leavitt Building Group and a 2-10 Home Buyer's Warranty.</p>
                 </details>
                 <details class="faq-item border-t border-gray-200 group">
                     <summary class="flex items-center justify-between gap-6 py-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                        <h3 class="text-lg md:text-xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">Who will I deal with during the build?</h3>
+                        <h3 class="text-lg md:text-xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">Who will I deal with during the build?</h3>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="faq-chevron w-5 h-5 shrink-0 text-[#c2a67a] transition-transform"><path d="m6 9 6 6 6-6"/></svg>
                     </summary>
                     <p class="pb-6 text-gray-600 leading-relaxed max-w-3xl">Each home has a dedicated project manager who looks after its construction and is your point of contact throughout. Kyle Leavitt walks every job site himself, and you follow the schedule, selections, inspections and change orders in <a href="#leavitt-connect" class="text-[#0f172a] font-medium underline underline-offset-4 decoration-[#c2a67a] hover:text-[#c2a67a] transition-colors">Leavitt Connect</a>, our homeowner app.</p>
                 </details>
                 <details class="faq-item border-t border-gray-200 group">
                     <summary class="flex items-center justify-between gap-6 py-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                        <h3 class="text-lg md:text-xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">What is included in the price?</h3>
+                        <h3 class="text-lg md:text-xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">What is included in the price?</h3>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="faq-chevron w-5 h-5 shrink-0 text-[#c2a67a] transition-transform"><path d="m6 9 6 6 6-6"/></svg>
                     </summary>
                     <p class="pb-6 text-gray-600 leading-relaxed max-w-3xl">Every home includes <a href="/plans/#included" class="text-[#0f172a] font-medium underline underline-offset-4 decoration-[#c2a67a] hover:text-[#c2a67a] transition-colors">the Leavitt Standard</a>: 9-foot ceilings, quartz countertops, Andersen windows, hardwood or luxury vinyl plank flooring, a finished and painted garage and more, at no upgrade cost. A starting price is for the home with all standard features included, and does not include the homesite.</p>
                 </details>
                 <details class="faq-item border-t border-gray-200 group">
                     <summary class="flex items-center justify-between gap-6 py-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                        <h3 class="text-lg md:text-xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">Can I change one of your plans?</h3>
+                        <h3 class="text-lg md:text-xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">Can I change one of your plans?</h3>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="faq-chevron w-5 h-5 shrink-0 text-[#c2a67a] transition-transform"><path d="m6 9 6 6 6-6"/></svg>
                     </summary>
                     <p class="pb-6 text-gray-600 leading-relaxed max-w-3xl">Yes. Every plan is a starting point. The elevation, room sizes and optional spaces are adjusted to your lot and the way you want to live, and you choose the finishes, fixtures, cabinetry and flooring. <a href="/plans/" class="text-[#0f172a] font-medium underline underline-offset-4 decoration-[#c2a67a] hover:text-[#c2a67a] transition-colors">See the plans</a>.</p>
                 </details>
                 <details class="faq-item border-t border-gray-200 group">
                     <summary class="flex items-center justify-between gap-6 py-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                        <h3 class="text-lg md:text-xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">Where do you build?</h3>
+                        <h3 class="text-lg md:text-xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">Where do you build?</h3>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="faq-chevron w-5 h-5 shrink-0 text-[#c2a67a] transition-transform"><path d="m6 9 6 6 6-6"/></svg>
                     </summary>
                     <p class="pb-6 text-gray-600 leading-relaxed max-w-3xl">Harford County and the surrounding counties: Baltimore, Carroll, Cecil and Anne Arundel, and into southern Pennsylvania. We are based in Forest Hill, Maryland.</p>
                 </details>
             </div>
             <p class="mt-10 text-center text-gray-600">
-                Something else? <a href="#contact" class="inline-block py-1 text-[#0f172a] font-medium underline underline-offset-4 decoration-[#c2a67a] hover:text-[#c2a67a] transition-colors">Ask us</a>
-                or call <a href="tel:+18668326524" class="inline-block py-1 text-[#0f172a] font-medium whitespace-nowrap hover:text-[#c2a67a] transition-colors">(866) 832-6524</a>.
+                Something else? <a href="#contact" class="inline-block py-1 text-[#0f172a] font-medium underline underline-offset-4 decoration-[#c2a67a] hover:text-[#866f4f] transition-colors">Ask us</a>
+                or call <a href="tel:+18668326524" class="inline-block py-1 text-[#0f172a] font-medium whitespace-nowrap hover:text-[#866f4f] transition-colors">(866) 832-6524</a>.
             </p>
         </div>
     </section>
@@ -832,22 +838,22 @@
                     <div class="border-b border-gray-200">
                         <a href="mailto:discover@buildleavitt.com" class="group block py-[22px] border-t border-gray-200">
                             <div>
-                                <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-[#c2a67a] mb-1">Inquiries</p>
-                                <p class="text-lg text-[#0f172a] font-medium group-hover:text-[#c2a67a] transition-colors">discover@buildleavitt.com</p>
+                                <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] mb-1">Inquiries</p>
+                                <p class="text-lg text-[#0f172a] font-medium group-hover:text-[#866f4f] transition-colors">discover@buildleavitt.com</p>
                             </div>
                         </a>
 
                         <a href="tel:+18668326524" class="group block py-[22px] border-t border-gray-200">
                             <div>
-                                <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-[#c2a67a] mb-1">Call Us</p>
-                                <p class="text-lg text-[#0f172a] font-medium group-hover:text-[#c2a67a] transition-colors">(866) 832-6524</p>
+                                <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] mb-1">Call Us</p>
+                                <p class="text-lg text-[#0f172a] font-medium group-hover:text-[#866f4f] transition-colors">(866) 832-6524</p>
                             </div>
                         </a>
 
                         <a href="https://maps.google.com/?q=217+E.+Jarrettsville+Rd+Suite+3+Forest+Hill+MD+21050" target="_blank" rel="noopener noreferrer" class="group block py-[22px] border-t border-gray-200">
                             <div>
-                                <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-[#c2a67a] mb-1">Office</p>
-                                <address class="not-italic text-lg text-[#0f172a] font-medium max-w-[320px] leading-relaxed group-hover:text-[#c2a67a] transition-colors">
+                                <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] mb-1">Office</p>
+                                <address class="not-italic text-lg text-[#0f172a] font-medium max-w-[320px] leading-relaxed group-hover:text-[#866f4f] transition-colors">
                                     217 E. Jarrettsville Rd.<br/>Suite 3, Forest Hill, MD 21050
                                 </address>
                             </div>
@@ -873,7 +879,7 @@
                             <p class="text-sm text-gray-600">
                                 Starting from <strong id="contact-plan-name" class="text-[#0f172a] font-medium"></strong>
                             </p>
-                            <button type="button" id="contact-plan-clear" class="text-xs uppercase tracking-widest font-bold text-gray-500 hover:text-[#c2a67a] transition-colors cursor-pointer shrink-0">
+                            <button type="button" id="contact-plan-clear" class="text-xs uppercase tracking-widest font-bold text-gray-500 hover:text-[#866f4f] transition-colors cursor-pointer shrink-0">
                                 Clear
                             </button>
                         </div>
@@ -939,7 +945,7 @@
 
                         <p class="text-xs text-gray-500 leading-relaxed">
                             We use your details only to respond to your inquiry. See our
-                            <a href="privacy.html" class="inline-block py-1 text-[#c2a67a] font-medium hover:underline">Privacy Policy</a>.
+                            <a href="privacy.html" class="inline-block py-1 text-[#866f4f] font-medium hover:underline">Privacy Policy</a>.
                         </p>
                     </form>
                 </div>
@@ -958,10 +964,10 @@
                 <p class="text-gray-500 mt-2 text-sm md:text-base">Behind the scenes and latest projects on social media.</p>
             </div>
             <div class="flex items-center justify-center gap-6 flex-wrap">
-                <a href="https://www.facebook.com/profile.php?id=61591583276647" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 py-2 text-[#c2a67a] font-bold uppercase tracking-widest text-xs md:text-sm hover:text-[#0f172a] transition-colors">
+                <a href="https://www.facebook.com/profile.php?id=61591583276647" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 py-2 text-[#866f4f] font-bold uppercase tracking-widest text-xs md:text-sm hover:text-[#0f172a] transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-4 h-4"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg> Leavitt Building Group
                 </a>
-                <a href="https://www.instagram.com/buildLeavitt" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 py-2 text-[#c2a67a] font-bold uppercase tracking-widest text-xs md:text-sm hover:text-[#0f172a] transition-colors">
+                <a href="https://www.instagram.com/buildLeavitt" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 py-2 text-[#866f4f] font-bold uppercase tracking-widest text-xs md:text-sm hover:text-[#0f172a] transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-4 h-4"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg> @buildLeavitt
                 </a>
             </div>
