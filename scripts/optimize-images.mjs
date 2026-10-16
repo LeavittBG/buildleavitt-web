@@ -37,7 +37,7 @@ const NAVY = { r: 15, g: 23, b: 42, alpha: 1 };
 
 /** Max width each image is served at (roughly 2x its largest CSS display size). */
 const TARGETS = {
-  'hero-home.jpg': 2000,
+  'hero-home.jpg': 2560,
   'kyle.jpg': 928,
   'Before.jpg': 1800,
   'After.jpg': 1800,

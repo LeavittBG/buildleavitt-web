@@ -279,22 +279,29 @@
          lg, where a full-screen photo would put the copy over the busiest part
          of the house, the photo sits above as a banner and the copy follows on
          solid navy. Either way the hero fills the first screen, so "What We
-         Build" scrolls somewhere instead of a couple of inches. -->
+         Build" scrolls somewhere instead of a couple of inches.
+         The photograph (October 16, 2026) is The Pioneer I, re-lit from its plan
+         rendering in late-afternoon sun (Artlist, Nano Banana 2.1; master in
+         assets-src/hero-home.jpg, 6336x2688). It replaced a night-time house
+         that was not one of Leavitt's plans. The house sits right of centre, so
+         the object positions (58% on phones, 40% from lg) keep it in frame and
+         leave the tree line and shaded side wall under the copy; the fades are neutral black, not navy, so the
+         daylight colours stay true. -->
     <section id="hero" class="relative bg-[#0f172a] overflow-hidden lg:min-h-[100svh] lg:flex lg:items-end">
         <div class="relative h-[40svh] md:h-[52svh] lg:absolute lg:inset-0 lg:h-auto">
             <picture class="contents"><source srcset="hero-home.webp" type="image/webp"><img
                 src="hero-home.jpg"
-                alt=""
-                width="2000" height="848" fetchpriority="high"
-                class="absolute inset-0 w-full h-full object-cover object-[66%_50%] lg:object-right"
+                alt="The Pioneer I, one of Leavitt Building Group's home plans, in late-afternoon light"
+                width="2560" height="1086" fetchpriority="high"
+                class="absolute inset-0 w-full h-full object-cover object-[58%_50%] lg:object-[40%_50%]"
             /></picture>
             <!-- Keeps the menu readable over the sky. -->
-            <div class="absolute inset-x-0 top-0 h-36 lg:h-40 bg-gradient-to-b from-[#0f172a]/80 to-transparent"></div>
+            <div class="absolute inset-x-0 top-0 h-36 lg:h-40 bg-gradient-to-b from-black/55 to-transparent"></div>
             <!-- Phones and tablets: blends the banner into the navy below it. -->
             <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0f172a] to-transparent lg:hidden"></div>
-            <!-- Desktop: darkens the lower left, where the copy sits. -->
-            <div class="absolute inset-0 hidden lg:block bg-gradient-to-t from-[#0f172a] via-[#0f172a]/30 via-45% to-transparent"></div>
-            <div class="absolute inset-0 hidden lg:block bg-gradient-to-r from-[#0f172a]/90 via-[#0f172a]/55 via-35% to-transparent to-65%"></div>
+            <!-- Desktop: a neutral shadow over the lower left, where the copy sits. -->
+            <div class="absolute inset-0 hidden lg:block bg-gradient-to-t from-black/65 via-black/20 via-45% to-transparent"></div>
+            <div class="absolute inset-0 hidden lg:block bg-gradient-to-r from-black/60 via-black/30 via-35% to-transparent to-65%"></div>
         </div>
 
         <div class="relative z-10 w-full max-w-7xl mx-auto px-6 pt-4 pb-12 lg:pt-40 lg:pb-14">
