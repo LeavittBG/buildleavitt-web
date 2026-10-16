@@ -284,16 +284,25 @@
          rendering in late-afternoon sun (Artlist, Nano Banana 2.1; master in
          assets-src/hero-home.jpg, 6336x2688). It replaced a night-time house
          that was not one of Leavitt's plans. The house sits right of centre, so
-         the object positions (58% on phones, 40% from lg) keep it in frame and
-         leave the tree line and shaded side wall under the copy; the fades are neutral black, not navy, so the
+         on desktop it is positioned at 40% to keep it in frame and leave the
+         tree line and shaded side wall under the copy; the fades are neutral black, not navy, so the
          daylight colours stay true. -->
-    <section id="hero" class="relative bg-[#0f172a] overflow-hidden lg:min-h-[100svh] lg:flex lg:items-end">
-        <div class="relative h-[40svh] md:h-[52svh] lg:absolute lg:inset-0 lg:h-auto">
-            <picture class="contents"><source srcset="hero-home.webp" type="image/webp"><img
+    <section id="hero" class="relative bg-[#0f172a] overflow-hidden flex flex-col min-h-[100svh] lg:flex-row lg:items-end">
+        <!-- Below lg the banner is a separate crop of the same photograph, centred on
+             the house (hero-home-phone), shown at its own proportions so nothing is
+             cut off: a fixed-height banner zoomed the wide picture and lost the garage
+             on tall phones (Kyle, October 16, 2026). The hero keeps the first screen
+             by stretching the navy below the copy instead. -->
+        <div class="relative w-full aspect-[4400/2688] lg:aspect-auto lg:absolute lg:inset-0">
+            <picture class="contents">
+                <source media="(max-width: 1023px)" srcset="hero-home-phone.webp" type="image/webp">
+                <source media="(max-width: 1023px)" srcset="hero-home-phone.jpg">
+                <source srcset="hero-home.webp" type="image/webp">
+                <img
                 src="hero-home.jpg"
                 alt="The Pioneer I, one of Leavitt Building Group's home plans, in late-afternoon light"
                 width="2560" height="1086" fetchpriority="high"
-                class="absolute inset-0 w-full h-full object-cover object-[58%_50%] lg:object-[40%_50%]"
+                class="absolute inset-0 w-full h-full object-cover object-center lg:object-[40%_50%]"
             /></picture>
             <!-- Keeps the menu readable over the sky. -->
             <div class="absolute inset-x-0 top-0 h-36 lg:h-40 bg-gradient-to-b from-black/55 to-transparent"></div>
@@ -304,7 +313,7 @@
             <div class="absolute inset-0 hidden lg:block bg-gradient-to-r from-black/60 via-black/30 via-35% to-transparent to-65%"></div>
         </div>
 
-        <div class="relative z-10 w-full max-w-7xl mx-auto px-6 pt-4 pb-12 lg:pt-40 lg:pb-14">
+        <div class="relative z-10 w-full max-w-7xl mx-auto px-6 pt-4 pb-12 flex-1 flex flex-col justify-center lg:flex-none lg:block lg:pt-40 lg:pb-14">
             <div class="max-w-3xl">
                 <p class="text-[#c2a67a] text-xs md:text-sm font-semibold uppercase tracking-[0.2em] mb-6">
                     <!-- The &nbsp;s keep each phrase whole, so on a phone the line can only
