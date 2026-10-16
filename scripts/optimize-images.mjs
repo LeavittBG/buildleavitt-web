@@ -37,7 +37,7 @@ const NAVY = { r: 15, g: 23, b: 42, alpha: 1 };
 
 /** Max width each image is served at (roughly 2x its largest CSS display size). */
 const TARGETS = {
-  'Gemini_Generated_Image_ka316gka316gka31.jpg': 2000,
+  'hero-home.jpg': 2000,
   'kyle.jpg': 928,
   'Before.jpg': 1800,
   'After.jpg': 1800,

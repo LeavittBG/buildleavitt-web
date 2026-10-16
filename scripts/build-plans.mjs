@@ -20,7 +20,7 @@
  * Pages live one directory down, so every asset path must be root-relative
  * (/dist/styles.css, not dist/styles.css).
  */
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 import { execFileSync } from 'node:child_process';
@@ -216,9 +216,9 @@ const head = ({ title, description, canonical, image }) => `<!DOCTYPE html>
                 <picture class="contents"><source srcset="/Gold.webp" type="image/webp"><img src="/Gold.png" alt="Leavitt Building Group" width="1200" height="293" class="h-12 md:h-14 w-auto object-contain"></picture>
             </a>
             <nav aria-label="Main" class="flex items-center gap-6 md:gap-8 text-xs md:text-sm uppercase tracking-widest font-semibold">
-                <a href="/plans/" class="text-gray-300 hover:text-white transition-colors">Plans</a>
+                <a href="/plans/" class="inline-block py-2 text-gray-300 hover:text-white transition-colors">Plans</a>
                 <a href="/#contact" class="bg-[#c2a67a] text-[#0f172a] px-5 py-3 hover:bg-white transition-colors">Get a Quote</a>
-                <a href="https://connect.buildleavitt.com" target="_blank" rel="noopener noreferrer" class="hidden md:flex items-center gap-2 border-l border-white/20 pl-6 md:pl-8 text-xs text-[#c2a67a] hover:text-white transition-colors whitespace-nowrap">
+                <a href="https://connect.buildleavitt.com" target="_blank" rel="noopener noreferrer" class="hidden md:flex items-center gap-2 py-2 border-l border-white/20 pl-6 md:pl-8 text-xs text-[#c2a67a] hover:text-white transition-colors whitespace-nowrap">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-4 h-4"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                     Client Login
                 </a>
@@ -492,9 +492,28 @@ ${sheetBlocks}
 
 // ----------------------------------------------------------------- index page
 
+/**
+ * The facts a visitor compares plans by, on the card itself, so choosing one
+ * does not mean opening all seventeen. The same figures the plan page prints
+ * ("4+", "2.5+", "From 4,282"), so the tests that hold every figure to the data
+ * apply here too. Price stays off the cards (see fromPrice above).
+ */
+const cardFacts = (model) => {
+  const s = model.specs || {};
+  const dash = (v) => String(v).replace('-', '&ndash;');
+  const facts = [
+    s.beds && `${dash(s.beds)} bed`,
+    s.baths && `${dash(s.baths)} bath`,
+    s.sqft && `${s.sqftFrom ? 'From ' : ''}${s.sqft.toLocaleString('en-US')} sq ft`,
+    s.stories && (s.stories === 1 ? 'Ranch' : `${s.stories} stories`),
+  ].filter(Boolean);
+  return facts.length ? facts.join('<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>') : '';
+};
+
 const cards = models.map((model) => {
   const cover = coverOf(model);
   const floors = floorsOf(model).length;
+  const facts = cardFacts(model);
   return `
                 <a href="/plans/${model.slug}.html" class="group block bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors">
                     <div class="aspect-[4/3] w-full overflow-hidden bg-white flex items-center justify-center p-4">
@@ -505,7 +524,8 @@ const cards = models.map((model) => {
                     </div>
                     <div class="border-t border-gray-200 p-6">
                         <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">${esc(model.name)}</h3>
-                        <p class="text-sm text-gray-500 mt-2">${floors} floor plan${floors === 1 ? '' : 's'}${model.specs?.stories === 1 ? ' &middot; Ranch' : ''}</p>
+                        ${facts ? `<p class="text-sm text-[#0f172a] mt-3">${facts}</p>` : ''}
+                        <p class="text-sm text-gray-500 mt-1">${floors} floor plan${floors === 1 ? '' : 's'}</p>
                         <span class="inline-block mt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#c2a67a]">View plan &rarr;</span>
                     </div>
                 </a>`;
@@ -633,11 +653,30 @@ console.log(`plans/index.html  (${models.length} models)`);
     : 'index.html  (plan image references already correct)');
 }
 
+// ------------------------------------------------- hand-written plan cards
+// The homepage teaser and the semi-custom page each show three plans by hand.
+// The facts line under each name is filled from plans.json here, with the same
+// wording as the cards on /plans/, so a figure can never differ between pages.
+for (const file of ['index.html', 'semi-custom-homes.html']) {
+  const p = join(ROOT, file);
+  if (!existsSync(p)) continue;
+  const before = readFileSync(p, 'utf8');
+  let filled = 0;
+  const after = before.replace(/(<p [^>]*data-plan-facts="([a-z0-9-]+)"[^>]*>)[\s\S]*?(<\/p>)/g, (whole, open, slug, close) => {
+    const model = models.find((m) => m.slug === slug);
+    if (!model) { console.error(`  ! ${file} asks for facts of "${slug}", which is not in plans.json`); return whole; }
+    filled++;
+    return `${open}${cardFacts(model)}${close}`;
+  });
+  if (after !== before) writeFileSync(p, after);
+  console.log(`${file}  (${filled} plan card${filled === 1 ? '' : 's'} filled from plans.json)`);
+}
+
 // -------------------------------------------------------------- sitemap
 // Generated here because this script already knows every plan URL. The static
 // pages are listed explicitly; success.html is left out on purpose, it is
 // noindex. If a new top-level page is added to the site, add it to STATIC.
-const STATIC = ['/', '/plans/', '/privacy.html', '/terms.html'];
+const STATIC = ['/', '/custom-homes.html', '/semi-custom-homes.html', '/renovations.html', '/plans/', '/privacy.html', '/terms.html'];
 const urls = [...STATIC, ...models.map((m) => `/plans/${m.slug}.html`)];
 
 /*

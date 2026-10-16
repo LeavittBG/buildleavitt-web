@@ -189,8 +189,8 @@
         <!-- Mobile Nav (Hidden by default) -->
         <div id="mobile-menu" class="hidden lg:hidden bg-[#0f172a] border-t border-white/10 px-6 py-8 space-y-6">
             <a href="#services" class="mobile-link block text-gray-300 hover:text-white uppercase tracking-widest font-semibold">Services</a>
-            <a href="/plans/" class="mobile-link block text-gray-300 hover:text-white uppercase tracking-widest font-semibold">Home Plans</a>
-            <a href="#about" class="mobile-link block text-gray-300 hover:text-white uppercase tracking-widest font-semibold">About Us</a>
+            <a href="/plans/" class="mobile-link block text-gray-300 hover:text-white uppercase tracking-widest font-semibold">Plans</a>
+            <a href="#about" class="mobile-link block text-gray-300 hover:text-white uppercase tracking-widest font-semibold">About</a>
             <a href="#process" class="mobile-link block text-gray-300 hover:text-white uppercase tracking-widest font-semibold">Process</a>
             <a href="https://connect.buildleavitt.com" target="_blank" rel="noopener noreferrer" class="mobile-link flex items-center gap-2 text-[#c2a67a] hover:text-white uppercase tracking-widest font-semibold">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-5 h-5"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Client Login
@@ -210,8 +210,8 @@
          Build" scrolls somewhere instead of a couple of inches. -->
     <section id="hero" class="relative bg-[#0f172a] overflow-hidden lg:min-h-[100svh] lg:flex lg:items-end">
         <div class="relative h-[40svh] md:h-[52svh] lg:absolute lg:inset-0 lg:h-auto">
-            <picture class="contents"><source srcset="Gemini_Generated_Image_ka316gka316gka31.webp" type="image/webp"><img
-                src="Gemini_Generated_Image_ka316gka316gka31.jpg"
+            <picture class="contents"><source srcset="hero-home.webp" type="image/webp"><img
+                src="hero-home.jpg"
                 alt=""
                 width="2000" height="848" fetchpriority="high"
                 class="absolute inset-0 w-full h-full object-cover object-[66%_50%] lg:object-right"
@@ -246,7 +246,7 @@
                     <a href="#services" class="bg-[#c2a67a] text-[#0f172a] px-8 py-4 uppercase tracking-widest text-sm font-bold hover:bg-white transition-colors inline-flex items-center justify-center gap-2 whitespace-nowrap">
                         What We Build <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-[18px] h-[18px]"><path d="m9 18 6-6-6-6"/></svg>
                     </a>
-                    <a href="tel:+18668326524" class="text-white/90 hover:text-[#c2a67a] transition-colors text-sm uppercase tracking-widest font-semibold text-center sm:text-left whitespace-nowrap">or call (866) 832-6524</a>
+                    <a href="tel:+18668326524" class="inline-block py-2 text-white/90 hover:text-[#c2a67a] transition-colors text-sm uppercase tracking-widest font-semibold text-center sm:text-left whitespace-nowrap">or call (866) 832-6524</a>
                 </div>
             </div>
 
@@ -259,6 +259,10 @@
     </section>
 
     <!-- Services Section -->
+    <!-- Each card is a link to that service's own page (custom-homes.html,
+         semi-custom-homes.html, renovations.html). They used to open a two-
+         paragraph pop-up, which search engines read as homepage text, so no
+         page on the site could rank for a service on its own (October 2026). -->
     <section id="services" class="py-24 md:py-32 px-6 bg-white overflow-hidden">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-20">
@@ -267,7 +271,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
                 <!-- Service 1 -->
-                <div class="group cursor-pointer service-card flex flex-col" data-service="1">
+                <a href="/custom-homes.html" class="group service-card flex flex-col" data-service="1">
                     <div class="h-[52px] flex items-end mb-8 text-[#0f172a]">
                         <svg xmlns="http://www.w3.org/2000/svg" width="44" height="51" viewBox="7.02 4.77 35.35 41.1" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="block"><path d="M8 22v11l13 6.5L40 30V19"/><path d="M21 39.5v-11"/><path d="M8 22l13 6.5L40 19"/><path d="M8 22l6.5-6.75L21 28.5"/><path d="M14.5 15.25l19-9.5L40 19"/><path d="M29 35.5v-6.6l3.4-1.7v6.6"/><g stroke="#c2a67a"><path d="M21 43.5l19-9.5"/><path d="M19.6 42.1l2.8 2.8M38.6 32.6l2.8 2.8"/></g></svg>
                     </div>
@@ -276,10 +280,10 @@
                         Your dream, built from the foundation up. We collaborate with you from the initial architectural blueprints to the final walkthrough, ensuring every square foot is tailored to your family.
                     </p>
                     <span class="self-start mt-auto pt-4 text-[#0f172a] text-[11px] font-bold uppercase tracking-widest underline-offset-4 group-hover:underline">Read More <span class="text-[#c2a67a]">&rarr;</span></span>
-                </div>
+                </a>
 
                 <!-- Service 2 -->
-                <div class="group cursor-pointer service-card flex flex-col" data-service="2">
+                <a href="/semi-custom-homes.html" class="group service-card flex flex-col" data-service="2">
                     <div class="h-[52px] flex items-end mb-8 text-[#0f172a]">
                         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="6.98 6.98 34.03 34.03" fill="none" stroke="currentColor" stroke-width="1.53" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="block"><path d="M27 40H8V8h32v32h-6"/><path d="M8 24h8M23 24h17"/><path d="M23 8v16"/><g stroke="#c2a67a"><path d="M16 24v-7a7 7 0 0 1 7 7"/><path d="M34 40v-7a7 7 0 0 0-7 7"/></g></svg>
                     </div>
@@ -288,10 +292,10 @@
                         The perfect balance of luxury and efficiency. Choose from a curated selection of premium floor plans, then work with our team to personalize the finishes, fixtures, and layouts.
                     </p>
                     <span class="self-start mt-auto pt-4 text-[#0f172a] text-[11px] font-bold uppercase tracking-widest underline-offset-4 group-hover:underline">Read More <span class="text-[#c2a67a]">&rarr;</span></span>
-                </div>
+                </a>
 
                 <!-- Service 3 -->
-                <div class="group cursor-pointer service-card flex flex-col" data-service="3">
+                <a href="/renovations.html" class="group service-card flex flex-col" data-service="3">
                     <div class="h-[52px] flex items-end mb-8 text-[#0f172a]">
                         <svg xmlns="http://www.w3.org/2000/svg" width="61" height="42" viewBox="3.13 12.13 41.73 28.73" fill="none" stroke="currentColor" stroke-width="1.23" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="block"><path d="M4 40h40"/><path d="M6 40V24l11-11 11 11v16"/><path d="M14 40v-8h6v8"/><g stroke="#c2a67a" stroke-dasharray="2.5 3"><path d="M28 30l7-7 7 7v10"/></g></svg>
                     </div>
@@ -300,7 +304,7 @@
                         Breathe new life into the home you already love. From whole-house transformations and structural remodels to expansive multi-room additions, we bring rigorous craftsmanship to your renovation.
                     </p>
                     <span class="self-start mt-auto pt-4 text-[#0f172a] text-[11px] font-bold uppercase tracking-widest underline-offset-4 group-hover:underline">Read More <span class="text-[#c2a67a]">&rarr;</span></span>
-                </div>
+                </a>
             </div>
         </div>
     </section>
@@ -481,32 +485,32 @@
                 <li class="border-t border-gray-200 pt-6">
                     <h3 class="text-xl font-serif text-[#0f172a] mb-3">Your schedule</h3>
                     <p class="text-gray-600 leading-relaxed">See where your home is in the schedule and what comes next.</p>
-                    <button type="button" data-seek="35" class="mt-4 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[#0f172a] underline-offset-4 hover:underline cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true" focusable="false" class="w-3 h-3 text-[#c2a67a]"><path d="M6 4.5v15l13-7.5z"/></svg>See it in the video &middot; 0:35</button>
+                    <button type="button" data-seek="35" class="mt-2 py-2 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[#0f172a] underline-offset-4 hover:underline cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true" focusable="false" class="w-3 h-3 text-[#c2a67a]"><path d="M6 4.5v15l13-7.5z"/></svg>See it in the video &middot; 0:35</button>
                 </li>
                 <li class="border-t border-gray-200 pt-6">
                     <h3 class="text-xl font-serif text-[#0f172a] mb-3">Your selections</h3>
                     <p class="text-gray-600 leading-relaxed">Review your selections in one place.</p>
-                    <button type="button" data-seek="42" class="mt-4 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[#0f172a] underline-offset-4 hover:underline cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true" focusable="false" class="w-3 h-3 text-[#c2a67a]"><path d="M6 4.5v15l13-7.5z"/></svg>See it in the video &middot; 0:42</button>
+                    <button type="button" data-seek="42" class="mt-2 py-2 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[#0f172a] underline-offset-4 hover:underline cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true" focusable="false" class="w-3 h-3 text-[#c2a67a]"><path d="M6 4.5v15l13-7.5z"/></svg>See it in the video &middot; 0:42</button>
                 </li>
                 <li class="border-t border-gray-200 pt-6">
                     <h3 class="text-xl font-serif text-[#0f172a] mb-3">Change orders, signed online</h3>
                     <p class="text-gray-600 leading-relaxed">Review and sign from your phone. Every homeowner on the home signs.</p>
-                    <button type="button" data-seek="50" class="mt-4 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[#0f172a] underline-offset-4 hover:underline cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true" focusable="false" class="w-3 h-3 text-[#c2a67a]"><path d="M6 4.5v15l13-7.5z"/></svg>See it in the video &middot; 0:50</button>
+                    <button type="button" data-seek="50" class="mt-2 py-2 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[#0f172a] underline-offset-4 hover:underline cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true" focusable="false" class="w-3 h-3 text-[#c2a67a]"><path d="M6 4.5v15l13-7.5z"/></svg>See it in the video &middot; 0:50</button>
                 </li>
                 <li class="border-t border-gray-200 pt-6">
                     <h3 class="text-xl font-serif text-[#0f172a] mb-3">Inspections, punch lists and documents</h3>
                     <p class="text-gray-600 leading-relaxed">See the inspections your home has passed, your walk-through punch list with photos, and your documents.</p>
-                    <button type="button" data-seek="70" class="mt-4 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[#0f172a] underline-offset-4 hover:underline cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true" focusable="false" class="w-3 h-3 text-[#c2a67a]"><path d="M6 4.5v15l13-7.5z"/></svg>See it in the video &middot; 1:10</button>
+                    <button type="button" data-seek="70" class="mt-2 py-2 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[#0f172a] underline-offset-4 hover:underline cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true" focusable="false" class="w-3 h-3 text-[#c2a67a]"><path d="M6 4.5v15l13-7.5z"/></svg>See it in the video &middot; 1:10</button>
                 </li>
                 <li class="border-t border-gray-200 pt-6">
                     <h3 class="text-xl font-serif text-[#0f172a] mb-3">Nothing to download, no password</h3>
                     <p class="text-gray-600 leading-relaxed">Leavitt Connect opens in your phone&rsquo;s browser. Sign in with a code sent to your email, or with Face ID or your fingerprint.</p>
-                    <button type="button" data-seek="18" class="mt-4 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[#0f172a] underline-offset-4 hover:underline cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true" focusable="false" class="w-3 h-3 text-[#c2a67a]"><path d="M6 4.5v15l13-7.5z"/></svg>See it in the video &middot; 0:18</button>
+                    <button type="button" data-seek="18" class="mt-2 py-2 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[#0f172a] underline-offset-4 hover:underline cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true" focusable="false" class="w-3 h-3 text-[#c2a67a]"><path d="M6 4.5v15l13-7.5z"/></svg>See it in the video &middot; 0:18</button>
                 </li>
                 <li class="border-t border-gray-200 pt-6">
                     <h3 class="text-xl font-serif text-[#0f172a] mb-3">Updates, not noise</h3>
                     <p class="text-gray-600 leading-relaxed">Short email updates, never a flood.</p>
-                    <button type="button" data-seek="85" class="mt-4 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[#0f172a] underline-offset-4 hover:underline cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true" focusable="false" class="w-3 h-3 text-[#c2a67a]"><path d="M6 4.5v15l13-7.5z"/></svg>See it in the video &middot; 1:25</button>
+                    <button type="button" data-seek="85" class="mt-2 py-2 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[#0f172a] underline-offset-4 hover:underline cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true" focusable="false" class="w-3 h-3 text-[#c2a67a]"><path d="M6 4.5v15l13-7.5z"/></svg>See it in the video &middot; 1:25</button>
                 </li>
             </ul>
 
@@ -515,8 +519,8 @@
                     Let&rsquo;s talk about your home
                 </a>
                 <p class="text-gray-600">
-                    Or call <a href="tel:+18668326524" class="text-[#0f172a] font-medium whitespace-nowrap hover:text-[#c2a67a] transition-colors">(866) 832-6524</a>.
-                    Already building with us? <a href="https://connect.buildleavitt.com" target="_blank" rel="noopener noreferrer" class="text-[#0f172a] font-medium underline underline-offset-4 decoration-[#c2a67a] hover:text-[#c2a67a] transition-colors">Sign in to Leavitt Connect</a>.
+                    Or call <a href="tel:+18668326524" class="inline-block py-1 text-[#0f172a] font-medium whitespace-nowrap hover:text-[#c2a67a] transition-colors">(866) 832-6524</a>.
+                    Already building with us? <a href="https://connect.buildleavitt.com" target="_blank" rel="noopener noreferrer" class="inline-block py-1 text-[#0f172a] font-medium underline underline-offset-4 decoration-[#c2a67a] hover:text-[#c2a67a] transition-colors">Sign in to Leavitt Connect</a>.
                 </p>
             </div>
         </div>
@@ -560,7 +564,9 @@
     <!-- Home Plans teaser -->
     <!-- Three featured models only; the full set lives at /plans/, which is generated from
          src/plans.json by `npm run plans`. If a featured model is renamed or removed there,
-         update the three cards below to match - they are hand-maintained. -->
+         update the three cards below to match - they are hand-maintained. The facts line
+         under each name (data-plan-facts) is filled in from src/plans.json by
+         scripts/build-plans.mjs, so it can never disagree with the plan's own page. -->
     <section id="plans" class="py-24 md:py-32 px-6 bg-white border-t border-gray-200 overflow-hidden">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16">
@@ -578,6 +584,7 @@
                     </div>
                     <div class="border-t border-gray-200 p-6">
                         <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">The Visionary</h3>
+                        <p class="text-sm text-[#0f172a] mt-3" data-plan-facts="the-visionary">4+ bed<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2.5+ bath<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>From 4,282 sq ft<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2 stories</p>
                         <span class="inline-block mt-3 text-[11px] font-bold uppercase tracking-[0.2em] text-[#c2a67a]">View plan &rarr;</span>
                     </div>
                 </a>
@@ -588,6 +595,7 @@
                     </div>
                     <div class="border-t border-gray-200 p-6">
                         <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">The Craftsman</h3>
+                        <p class="text-sm text-[#0f172a] mt-3" data-plan-facts="the-craftsman">4 bed<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2.5+ bath<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>From 2,626 sq ft<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2 stories</p>
                         <span class="inline-block mt-3 text-[11px] font-bold uppercase tracking-[0.2em] text-[#c2a67a]">View plan &rarr;</span>
                     </div>
                 </a>
@@ -598,6 +606,7 @@
                     </div>
                     <div class="border-t border-gray-200 p-6">
                         <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#c2a67a] transition-colors">The Entrepreneur</h3>
+                        <p class="text-sm text-[#0f172a] mt-3" data-plan-facts="the-entrepreneur">3 bed<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2.5+ bath<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2,795 sq ft<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>Ranch</p>
                         <span class="inline-block mt-3 text-[11px] font-bold uppercase tracking-[0.2em] text-[#c2a67a]">View plan &rarr;</span>
                     </div>
                 </a>
@@ -769,7 +778,7 @@
 
                         <p class="text-xs text-gray-500 leading-relaxed">
                             We use your details only to respond to your inquiry. See our
-                            <a href="privacy.html" class="text-[#c2a67a] font-medium hover:underline">Privacy Policy</a>.
+                            <a href="privacy.html" class="inline-block py-1 text-[#c2a67a] font-medium hover:underline">Privacy Policy</a>.
                         </p>
                     </form>
                 </div>
@@ -788,10 +797,10 @@
                 <p class="text-gray-500 mt-2 text-sm md:text-base">Behind the scenes and latest projects on social media.</p>
             </div>
             <div class="flex items-center justify-center gap-6 flex-wrap">
-                <a href="https://www.facebook.com/profile.php?id=61591583276647" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-[#c2a67a] font-bold uppercase tracking-widest text-xs md:text-sm hover:text-[#0f172a] transition-colors">
+                <a href="https://www.facebook.com/profile.php?id=61591583276647" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 py-2 text-[#c2a67a] font-bold uppercase tracking-widest text-xs md:text-sm hover:text-[#0f172a] transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-4 h-4"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg> Leavitt Building Group
                 </a>
-                <a href="https://www.instagram.com/buildLeavitt" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-[#c2a67a] font-bold uppercase tracking-widest text-xs md:text-sm hover:text-[#0f172a] transition-colors">
+                <a href="https://www.instagram.com/buildLeavitt" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 py-2 text-[#c2a67a] font-bold uppercase tracking-widest text-xs md:text-sm hover:text-[#0f172a] transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-4 h-4"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg> @buildLeavitt
                 </a>
             </div>
@@ -805,45 +814,27 @@
                 <span class="text-white font-bold tracking-widest uppercase text-sm">Leavitt </span>
                 <span class="text-[#c2a67a] text-[10px] uppercase tracking-[0.3em] font-semibold">Building Group</span>
                 <p class="mt-2 text-sm">© <span id="year"></span> All Rights Reserved.</p>
-                <address class="not-italic mt-2 text-sm"><span class="whitespace-nowrap">217 E. Jarrettsville Rd., Suite 3,</span> <span class="whitespace-nowrap">Forest Hill, MD 21050</span><span class="mx-2" aria-hidden="true">&middot;</span><a href="tel:+18668326524" class="whitespace-nowrap hover:text-white transition-colors">(866) 832-6524</a></address>
+                <address class="not-italic mt-2 text-sm"><span class="whitespace-nowrap">217 E. Jarrettsville Rd., Suite 3,</span> <span class="whitespace-nowrap">Forest Hill, MD 21050</span><span class="mx-2" aria-hidden="true">&middot;</span><a href="tel:+18668326524" class="inline-block py-1 whitespace-nowrap hover:text-white transition-colors">(866) 832-6524</a></address>
                 <p class="mt-1 text-sm"><span class="block lg:inline">Monday&ndash;Friday 8&nbsp;a.m.&ndash;5&nbsp;p.m.</span><span class="hidden lg:inline mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span><wbr><span class="whitespace-nowrap">Saturday by appointment<span class="mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>Closed Sunday</span></p>
                 <p class="mt-1 text-xs text-gray-500 tracking-wider">MHBR 9796 | MHIC 161316 | PAHIC 212160</p>
             </div>
             <div class="flex flex-col md:flex-row items-center gap-6">
-                <div class="flex items-center gap-4 text-white">
-                    <a href="https://www.facebook.com/profile.php?id=61591583276647" target="_blank" rel="noopener noreferrer" aria-label="Leavitt Building Group on Facebook (opens in a new tab)" class="hover:text-[#c2a67a] transition-colors">
+                <div class="flex items-center gap-2 text-white">
+                    <a href="https://www.facebook.com/profile.php?id=61591583276647" target="_blank" rel="noopener noreferrer" aria-label="Leavitt Building Group on Facebook (opens in a new tab)" class="block p-2 hover:text-[#c2a67a] transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-5 h-5"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
                     </a>
-                    <a href="https://www.instagram.com/buildLeavitt" target="_blank" rel="noopener noreferrer" aria-label="Leavitt Building Group on Instagram (opens in a new tab)" class="hover:text-[#c2a67a] transition-colors">
+                    <a href="https://www.instagram.com/buildLeavitt" target="_blank" rel="noopener noreferrer" aria-label="Leavitt Building Group on Instagram (opens in a new tab)" class="block p-2 hover:text-[#c2a67a] transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-5 h-5"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
                     </a>
                 </div>
                 <div class="flex gap-6 text-sm uppercase tracking-wider font-semibold">
-                    <a href="privacy.html" class="hover:text-white transition-colors">Privacy</a>
-                    <a href="terms.html" class="hover:text-white transition-colors">Terms</a>
-                    <a href="https://connect.buildleavitt.com" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">Client Login</a>
+                    <a href="privacy.html" class="inline-block py-2 hover:text-white transition-colors">Privacy</a>
+                    <a href="terms.html" class="inline-block py-2 hover:text-white transition-colors">Terms</a>
+                    <a href="https://connect.buildleavitt.com" target="_blank" rel="noopener noreferrer" class="inline-block py-2 hover:text-white transition-colors">Client Login</a>
                 </div>
             </div>
         </div>
     </footer>
-
-    <!-- Service Details Modal -->
-    <div id="service-modal" role="dialog" aria-modal="true" aria-labelledby="service-modal-title" class="fixed inset-0 z-[100] bg-[#0f172a]/95 backdrop-blur-sm hidden flex items-center justify-center opacity-0 transition-opacity duration-300 px-6">
-        <div class="bg-white max-w-2xl w-full p-8 md:p-12 relative shadow-2xl border-t-4 border-[#c2a67a]">
-            <button id="close-service-modal" type="button" aria-label="Close" class="absolute top-6 right-6 text-gray-400 hover:text-[#c2a67a] transition-colors cursor-pointer p-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-8 h-8 pointer-events-none"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-            </button>
-            <div class="mb-6 pr-8">
-                <span id="service-modal-subtitle" class="text-[11px] font-bold uppercase tracking-[0.3em] text-[#c2a67a] mb-3 block">Expertise</span>
-                <!-- Filled in from serviceData when the dialog opens. It used to hold the placeholder
-                     "Service Name", which search engines read as a real heading on the page. -->
-                <h2 id="service-modal-title" class="text-3xl md:text-4xl font-serif text-[#0f172a] leading-tight"></h2>
-            </div>
-            <div id="service-modal-content" class="text-gray-600 leading-relaxed space-y-4 text-base md:text-lg">
-                <!-- Content gets injected here via Javascript -->
-            </div>
-        </div>
-    </div>
 
     <!-- Process Details Modal -->
     <div id="process-modal" role="dialog" aria-modal="true" aria-labelledby="process-modal-title" class="fixed inset-0 z-[100] bg-[#0f172a]/95 backdrop-blur-sm hidden flex items-center justify-center opacity-0 transition-opacity duration-300 px-6">
@@ -959,6 +950,16 @@
                 plan = (new URLSearchParams(window.location.search).get('plan') || '').trim();
             } catch (e) { /* malformed query string - no plan */ }
 
+            // The service pages link here with the "Project Interest" already chosen
+            // (/custom-homes.html -> /?interest=Custom%20Home%20Build#contact). Only an
+            // exact match for one of the options is accepted; anything else is ignored.
+            const interest = document.getElementById('contact-interest');
+            let wanted = '';
+            try {
+                wanted = (new URLSearchParams(window.location.search).get('interest') || '').trim();
+            } catch (e) { /* malformed query string - no interest */ }
+            if (interest && wanted && [...interest.options].some((o) => o.text === wanted)) interest.value = wanted;
+
             if (!plan || plan.length > 60 || !/^[A-Za-z0-9 '&-]+$/.test(plan)) return;
 
             field.value = plan;
@@ -1015,51 +1016,6 @@
                 }
             });
         };
-
-        // --- Service Details Content & Logic ---
-        const serviceData = {
-            "1": {
-                title: "Custom Ground-Up",
-                content: "<p>Building a custom home from the ground up is the ultimate expression of your personal style and lifestyle needs. We guide you through every step, from lot selection and architectural design to material sourcing and final construction.</p><p>Our dedicated team ensures that your completely bespoke home is built to the highest standards of quality, matching your exact specifications and budget.</p>"
-            },
-            "2": {
-                title: "Semi-Custom Homes",
-                content: "<p>If you want a luxurious new home without the timeline of a fully custom build, our semi-custom options offer the perfect balance. Select from our portfolio of proven, high-end floor plans and personalize them to your taste.</p><p>You'll have the freedom to choose your finishes, fixtures, cabinetry, and flooring, ensuring the home feels distinctly yours while benefiting from a streamlined construction process.</p>"
-            },
-            "3": {
-                title: "Large-Scale Renovations",
-                content: "<p>Transform your current property into your dream home. Our large-scale renovation services cover everything from whole-house remodels and structural changes to adding second stories or expansive new wings.</p><p>We bring the same rigorous craftsmanship and project management to our renovations as we do to our new builds, seamlessly integrating the new spaces with your home's existing charm.</p>"
-            }
-        };
-
-        const serviceModal = document.getElementById('service-modal');
-        const serviceModalTitle = document.getElementById('service-modal-title');
-        const serviceModalContent = document.getElementById('service-modal-content');
-        const closeServiceBtn = document.getElementById('close-service-modal');
-        const serviceCards = document.querySelectorAll('.service-card');
-
-        serviceCards.forEach(card => {
-            const open = () => {
-                const data = serviceData[card.getAttribute('data-service')];
-                if (!data) return;
-
-                serviceModalTitle.textContent = data.title;
-                serviceModalContent.innerHTML = data.content;
-
-                showModal(serviceModal, closeServiceBtn);
-            };
-
-            card.setAttribute('role', 'button');
-            card.setAttribute('tabindex', '0');
-            card.addEventListener('click', open);
-            activateOnKey(card, open);
-        });
-
-        closeServiceBtn.addEventListener('click', closeModal);
-        serviceModal.addEventListener('click', (e) => {
-            if (e.target === serviceModal) closeModal();
-        });
-
 
         // --- Process Details Content & Logic ---
         const processData = {

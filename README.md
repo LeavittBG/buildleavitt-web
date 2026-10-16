@@ -275,9 +275,24 @@ change, change them in all of those places; `markup.test.js` fails if the hours
 on any page stop matching the structured data. Saturday is by appointment,
 which the structured data has no way to say, so it lists Monday–Friday only.
 
+## Service pages
+
+`custom-homes.html`, `semi-custom-homes.html` and `renovations.html` are
+hand-written, one per service, with the same header and footer as the plan
+pages. The homepage service cards link to them (they used to open a pop-up).
+Each page's call to action opens the contact form with "Project Interest"
+already chosen: `/?interest=Custom%20Home%20Build#contact`. The semi-custom
+page shows three plan cards whose facts line (`data-plan-facts`) is filled in
+by `npm run plans:build`, like the homepage teaser. `tests/service-pages.test.js`
+checks the pages, the hand-off and that every link is at least 24px tall.
+
 ## Forms
 
 The contact form is a Netlify form. Netlify detects the fields from the
 deployed HTML, so every field it should record has to exist in `index.html` —
 including `Plan`, the hidden field that records which plan page a visitor came
-from. Submissions appear under Forms in the Netlify dashboard.
+from. Submissions appear under Forms in the Netlify dashboard. The form posts
+to `/success.html`, but Netlify rewrites that to `/success` when it publishes
+the page, so the thank-you address visitors see is `buildleavitt.com/success`;
+anything that counts a lead by URL (the Google Analytics `generate_lead` event)
+has to match that.
