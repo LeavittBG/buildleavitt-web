@@ -1,0 +1,64 @@
+# Every night, check that buildleavitt.com is still exactly what main says it
+# is, that nothing was added to the Tag Manager container, and that the domain's
+# DNS still points where it should. scripts/watch-site.mjs does the checking
+# and explains what it looks for; this file only runs it and, when it finds a
+# difference, opens a GitHub issue that mentions Kyle (GitHub emails him) or
+# adds to the one already open. A quiet night leaves no trace but a green run.
+#
+# To run it by hand: Actions, "Site watch", "Run workflow".
+
+name: Site watch
+
+on:
+  schedule:
+    # 06:17 UTC: about 2 a.m. in Maryland, when no deploy is in flight.
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Compare the live site with this repository
+        id: watch
+        # No npm install: the script has no dependencies.
+        run: node scripts/watch-site.mjs --report watch-report.md
+        continue-on-error: true
+
+      - name: Open or update the issue when anything differs
+        if: steps.watch.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -eu
+          if [ ! -s watch-report.md ]; then
+            printf 'The check itself failed before it could write a report. See the run log.\n' > watch-report.md
+          fi
+          {
+            printf '@LeavittBG the nightly site watch found something. Run log: %s\n\n' "$RUN_URL"
+            cat watch-report.md
+          } > issue-body.md
+          gh label create site-watch --color D93F0B --description "Opened by the nightly site watch" --force >/dev/null 2>&1 || true
+          existing=$(gh issue list --label site-watch --state open --limit 1 --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body-file issue-body.md
+          else
+            gh issue create --title "Site watch: buildleavitt.com differs from what GitHub expects" --label site-watch --body-file issue-body.md
+          fi
+
+      - name: Fail the run when anything differs
+        if: steps.watch.outcome == 'failure'
+        run: exit 1

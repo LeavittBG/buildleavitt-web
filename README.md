@@ -61,6 +61,44 @@ Artifacts. To make a failing run block the merge button:
    and select it
 5. **Create**
 
+## Site watch
+
+Nobody tells a small business when its website has been tampered with, so the
+repository checks for itself. Every night `.github/workflows/watch-site.yml`
+runs `scripts/watch-site.mjs`, which:
+
+- downloads every file Netlify publishes and compares it, byte for byte, with
+  what is on `main`. The only difference it accepts is the rewrite Netlify
+  makes to the contact form's opening tag when it wires the form up. A form
+  pointed anywhere else is reported, because that is how leads get stolen;
+- reads the live Tag Manager container (`GTM-PHGFM247`): its version, the
+  kinds of tags and variables in it, and every web address it mentions. Tag
+  Manager is the one place code can be added to every page without touching
+  GitHub or Netlify, so a new version, a Custom HTML tag or a non-Google
+  address is reported;
+- looks up the domain's DNS: the name servers, the mail servers, where the
+  bare domain and `www` point, that SPF still names Google Workspace, and
+  that the DMARC policy is no weaker than the baseline;
+- confirms Netlify is still the one serving the site, over HTTPS, with the
+  `http://` and `www` addresses redirecting to it.
+
+When anything differs, the run opens a GitHub issue labelled `site-watch`
+that mentions Kyle, or adds to the one already open, and GitHub emails it to
+him. A quiet night leaves nothing but a green run under Actions.
+
+The expected state is `BASELINE` at the top of the script. When a change was
+made on purpose (a new Tag Manager version, a DNS change, DMARC moved from
+`none` to `quarantine`), update the baseline in a pull request so the next
+night is quiet. Until then the issue comes back every night, which is the
+point. If the change was not deliberate, the issue says where to look and how
+to put the site back.
+
+To run it by hand: on GitHub, Actions, **Site watch**, **Run workflow**; or
+locally, `node scripts/watch-site.mjs`, which needs no `npm install`.
+`tests/watch-site.test.js` checks that the watch notices a changed page, a
+redirected form and a tampered container, and does not cry wolf about the
+form rewrite.
+
 ## Fonts
 
 Inter and Playfair Display are declared in `tailwind.config.js` under
