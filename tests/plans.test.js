@@ -150,25 +150,27 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
       .filter(n => n !== m.specs.sqft);
     ok(stray.length === 0, `${m.slug}: every square-footage figure is ${m.specs.sqft}${stray.length ? ' (found ' + [...new Set(stray)].join(', ') + ')' : ''}`);
 
-    // Per-model prices are deliberately not published: the collection carries one
-    // anchor and the model pages carry none. A price reappearing on a model page
-    // would quietly turn the plans back into a price list.
+    // No plan page shows a price (see "no price on the plans pages" below). A
+    // price reappearing on a model page would quietly turn the plans back into
+    // a price list.
     const money = [...doc.body.textContent.matchAll(/\$([\d,]+)/g)].map(x => x[0]);
     ok(money.length === 0,
       `${m.slug}: no price on the model page${money.length ? ' (found ' + [...new Set(money)].join(', ') + ')' : ''}`);
   }
 
-  console.log('\n== one price anchor, on the collection only ==');
+  console.log('\n== no price on the plans pages ==');
   {
     const idx = new JSDOM(fs.readFileSync(path.join(ROOT, 'plans/index.html'), 'utf8')).window.document;
-    const figures = [...idx.body.textContent.matchAll(/\$([\d,]+)/g)].map(x => +x[1].replace(/,/g, ''));
-    ok(figures.length === 1, `exactly one price on the collection page (found ${figures.length})`);
-
-    // It has to be the cheapest model, or "starts at" is not true. Derived from
-    // the data so adding a cheaper model updates it automatically.
-    const lowest = Math.min(...models.map(m => m.specs?.price).filter(Boolean));
-    ok(figures[0] === lowest,
-      `the anchor is the lowest price in the data ($${lowest.toLocaleString('en-US')}, got $${(figures[0] ?? 0).toLocaleString('en-US')})`);
+    // Until October 26, 2026 the collection page carried one price, "Pricing
+    // starts at" the lowest figure in plans.json, with its qualifier underneath.
+    // Kyle took it off. A dollar figure coming back here would put prices on the
+    // site without his say, and the qualifier left behind on its own would
+    // describe a price that is no longer there.
+    const figures = [...idx.body.textContent.matchAll(/\$[\d,]+/g)].map(x => x[0]);
+    ok(figures.length === 0,
+      `no price on the collection page${figures.length ? ' (found ' + [...new Set(figures)].join(', ') + ')' : ''}`);
+    ok(!/starting price|pricing starts/i.test(idx.body.textContent),
+      'no "starting price" wording on the collection page');
 
     // The Storyteller's card used to be the only one with a photograph and a
     // "Built - photographed" label, which read as though it were the only house
@@ -181,20 +183,6 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
         .find(a => a.getAttribute('href') === `/plans/${m.slug}.html`);
       ok(!!card && !/\$/.test(card.textContent), `${m.slug}: card shows no price`);
     }
-
-    // The qualifier used to say "without any optional features added", after
-    // Leavitt's price sheet. Leavitt's realtor pointed out that it made the house
-    // sound bare when the Leavitt Standard already includes so much, so it now
-    // says the standard features are included - and links to the list of them.
-    ok(/with all standard features included/i.test(idx.body.textContent),
-      'the anchor carries the "starting price" qualifier');
-    const stdLink = [...idx.querySelectorAll('a')].find((a) => /all standard features/i.test(a.textContent));
-    ok(!!stdLink && stdLink.getAttribute('href') === '#included' && !!idx.getElementById('included'),
-      'the qualifier links to the list of standard features on the same page');
-    ok(/do(es)? not include the homesite/i.test(idx.body.textContent),
-      'the anchor says the homesite is excluded');
-    const asOf = plansJson.pricesAsOf;
-    if (asOf) ok(idx.body.textContent.includes(asOf), `the anchor is dated (${asOf})`);
   }
 
   console.log('\n== the elevation caption is off the site ==');

@@ -31,7 +31,7 @@ Each file in `tests/` loads the real pages in a headless Chrome and checks
 something that has actually gone wrong on this site before — the headline
 breaking onto the wrong lines, words not painting on one Windows machine,
 content left hidden when a script failed, the site rendering in the wrong typeface,
-prices or square footage drifting from Leavitt's figures. The comment at the
+square footage drifting from Leavitt's figures, a price reappearing on the plans. The comment at the
 top of each file says what it guards against and why. Run `npm test` before
 merging anything that touches the markup, the stylesheet or the plans data.
 
@@ -235,18 +235,16 @@ from the price sheet.
 two models are exact and have it `false`. Keep that distinction — it is the
 difference between a starting price and a promise.
 
-`price` works the same way, with `priceFrom`. The qualifier printed beside it —
-*"Starting price is for the home with all standard features included, and does
-not include the homesite"* — is not decoration: `build-plans.mjs` prints it
-beside every price on the site, and it has to keep travelling with them. It used
-to say "without any optional features added", after Leavitt's price sheet; the
-realtor pointed out that made the house sound bare when the Leavitt Standard
-already includes so much, so it now says what is included and links to that
-list. `pricesAsOf` dates the list and is printed with it. A test fails if any
-dollar figure on a page is not the one in the data, or if the qualifier goes
-missing.
+`price` works the same way, with `priceFrom`, and `pricesAsOf` dates the list,
+but no price is printed on the plan pages. Until October 26, 2026 the collection
+page showed one, "Pricing starts at" the lowest figure in the data, with the
+qualifier *"Starting price is for the home with all standard features included,
+and does not include the homesite"*; Kyle took it off. The figures stay in the
+data as Leavitt's own record. If a price ever goes back on a page, the qualifier
+goes with it. A test fails if a dollar figure or "starting price" wording
+appears on any plan page.
 
-`sqftNote`, `bathsNote` and `priceNote` print a qualifying line under a figure,
+`sqftNote` and `bathsNote` print a qualifying line under a figure,
 for cases one number cannot carry honestly — The Storyteller gains 70 sq ft with
 the three-car garage, and has an optional basement full bath on top of its 4.5.
 
