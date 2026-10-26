@@ -40,12 +40,13 @@
     "",
     "`sqft` is living square footage. `sqftFrom` true means their sheet said",
     "'starting at', rendered as 'From 2,626'; false means the figure is exact.",
-    "`price` is the starting price and `priceFrom` marks it the same way. The",
-    "qualifier - the starting price includes every standard feature and not the",
-    "homesite - is not decoration: build-plans.mjs prints it alongside every price",
-    "on the site, and it must keep travelling with them.",
+    "`price` is the starting price and `priceFrom` marks it the same way. No price",
+    "is printed on the site (Kyle took the 'Pricing starts at' figure off /plans/ on",
+    "October 26, 2026); the figures stay here as Leavitt's own record. If one ever",
+    "goes back on a page, so does its qualifier - the starting price includes every",
+    "standard feature and not the homesite.",
     "",
-    "`sqftNote`, `bathsNote` and `priceNote` print a qualifying line under a figure,",
+    "`sqftNote` and `bathsNote` print a qualifying line under a figure,",
     "for the cases one number cannot carry honestly: the-storyteller gains 70 sq ft",
     "with the three-car garage, and its bath count has an optional basement full",
     "bath on top.",
@@ -54,7 +55,7 @@
     "single-story house. A missing value renders 'On request'; it is never filled",
     "in with a guess.",
     "",
-    "`pricesAsOf` dates the whole price list, and is printed with the prices."
+    "`pricesAsOf` dates the whole price list."
   ],
   "brochureBands": {
     "_note": "Every brochure in assets-src/plans/ uses one template: a navy title band, the content, and a logo footer. These are the fractions of page height to keep - the elevation on page 1 (between the title band and the caption, which Leavitt asked to keep off the site), and the body of every other page (between the header band and the footer rule). Measured on all 92 pages of the October 2026 set; scripts/extract-plans.mjs then trims the whitespace.",

@@ -32,42 +32,14 @@ const GTM = 'GTM-PHGFM247';
 
 const plansData = JSON.parse(readFileSync(join(ROOT, 'src', 'plans.json'), 'utf8'));
 const { models } = plansData;
-const PRICES_AS_OF = plansData.pricesAsOf || '';
 
-/** A starting price, or null where Leavitt has not given one. */
-const money = (n) => '$' + n.toLocaleString('en-US');
-
-/**
- * The lowest starting price across the models, for the one figure the site shows.
- *
- * Per-model prices are deliberately NOT published. Leavitt's reasoning: the
- * business is fully custom, and a menu of prices beside each plan reads like a
- * production builder's price list rather than a starting point. One anchor at
- * the top of the collection still does the useful half of the job - it tells
- * someone whether they are in the right place before they fill in a form.
- *
- * Derived rather than typed, so it stays true to the data. `price` stays in
- * plans.json as Leavitt's own record and as the source of this number.
+/*
+ * No price is shown on the plan pages. Until October 26, 2026 the collection
+ * page carried one, "Pricing starts at" the lowest figure in plans.json, with
+ * its qualifier (the standard features included, the homesite not); the model
+ * pages and cards carried none. Kyle took it off. `price` stays in plans.json
+ * as Leavitt's own record, and nothing here prints it.
  */
-const fromPrice = Math.min(...models.map((m) => m.specs?.price).filter(Boolean));
-
-/**
- * The qualifiers that have to travel with that figure.
- *
- * This used to say the price was "for the home without any optional features
- * added", after Leavitt's price sheet ("starting at means without additional
- * options"). Leavitt's realtor pointed out that it made the house sound bare,
- * when the Leavitt Standard already includes what other builders sell as
- * upgrades; it now says the standard features are included, and links to the
- * list of them further down this page. The homesite exclusion matters more
- * still - it is the first thing a buyer assumes either way, and assuming wrong
- * is the difference between this figure and the real cost of a house.
- */
-const priceNote = (extra = '') =>
-  `Starting price is for the home with ` +
-  `<a href="#included" class="text-[#866f4f] font-medium hover:underline">all standard features</a> ` +
-  `included, and does not include the homesite` +
-  (PRICES_AS_OF ? `. Current as of ${PRICES_AS_OF}` : '') + `.${extra}`;
 const images = JSON.parse(readFileSync(join(ROOT, 'src', 'plan-images.json'), 'utf8'));
 
 const esc = (s) => String(s)
@@ -496,7 +468,7 @@ ${sheetBlocks}
  * The facts a visitor compares plans by, on the card itself, so choosing one
  * does not mean opening all seventeen. The same figures the plan page prints
  * ("4+", "2.5+", "From 4,282"), so the tests that hold every figure to the data
- * apply here too. Price stays off the cards (see fromPrice above).
+ * apply here too. No price (see the note at the top).
  */
 const cardFacts = (model) => {
   const s = model.specs || {};
@@ -561,20 +533,11 @@ const indexHtml = head({
             Every sheet shows the optional features available for that model in dashed outline:
             in-law suites, conservatories, sunrooms, extended garages and finished lower levels.
         </p>
-        <p class="text-gray-600 max-w-2xl mb-8">
+        <p class="text-gray-600 max-w-2xl mb-14">
             A home built from one of these plans takes about 6 to 8 months to complete, depending on
             the changes made to it. Every home comes with a one-year warranty from Leavitt Building
             Group and a 2-10 Home Buyer's Warranty.
         </p>
-
-        <!-- One anchor for the whole collection rather than a price beside each plan: enough for
-             a visitor to know whether they are in the right place, without reading as a price
-             list. ${'$'}{fromPrice} is the lowest figure in plans.json, so it cannot drift. -->
-        <p class="border-l-2 border-[#c2a67a] pl-6 mb-4">
-            <span class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 block mb-1">The collection</span>
-            <span class="text-2xl md:text-3xl font-light text-[#0f172a]">Pricing starts at ${money(fromPrice)}</span>
-        </p>
-        <p class="text-sm text-gray-500 max-w-2xl mb-14">${priceNote(' A fully custom home is priced to its own drawings &mdash; talk to us about your homesite and what you have in mind.')}</p>
 
         <h2 class="sr-only">Available plans</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
