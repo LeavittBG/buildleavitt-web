@@ -128,7 +128,7 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
       const known = v !== null && v !== undefined && v !== '';
 
       // Where the data carries a qualifier, the page has to show it.
-      const NOTE_FOR = { sqft: 'sqftNote', baths: 'bathsNote', price: 'priceNote' };
+      const NOTE_FOR = { sqft: 'sqftNote', baths: 'bathsNote' };
       const wantNote = m.specs[NOTE_FOR[key]];
       if (wantNote) ok(note === wantNote, `${m.slug}: ${dts[0]} note reads "${wantNote}" (got "${note}")`);
 
@@ -183,6 +183,21 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
         .find(a => a.getAttribute('href') === `/plans/${m.slug}.html`);
       ok(!!card && !/\$/.test(card.textContent), `${m.slug}: card shows no price`);
     }
+
+    // The same day Kyle had the prices taken out of src/plans.json too. They
+    // had stayed there "as Leavitt's record", but this repository is public, so
+    // a figure kept in the data was still published to anyone reading the code.
+    const data = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plans.json'), 'utf8'));
+    const priceKeys = [];
+    const walk = (v) => {
+      if (v && typeof v === 'object') for (const [k, x] of Object.entries(v)) {
+        if (/price/i.test(k)) priceKeys.push(k);
+        walk(x);
+      }
+    };
+    walk(data);
+    ok(priceKeys.length === 0,
+      `no price in src/plans.json${priceKeys.length ? ` (found ${priceKeys.length}: ${[...new Set(priceKeys)].join(', ')})` : ''}`);
   }
 
   console.log('\n== the elevation caption is off the site ==');
@@ -267,8 +282,8 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
   // Until October 2026 the plan pages showed the price sheet's ranges ("4–5
   // bedrooms, 3–6 baths") beside a downloadable brochure whose cover printed
   // "4+ bedrooms, 2.5+ baths". Leavitt chose the brochure's figures, so each
-  // page has to show exactly what its cover prints. Square footage and price
-  // are not on the covers and still come from the price sheet.
+  // page has to show exactly what its cover prints. Square footage is not on
+  // the covers and still comes from the price sheet.
   if (spawnSync('pdftotext', ['-v']).error) {
     console.log('  SKIP  pdftotext is not installed, so the brochure covers cannot be read');
   } else {
