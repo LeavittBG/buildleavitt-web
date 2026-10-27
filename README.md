@@ -258,7 +258,11 @@ The "what's included in every home" list at `/plans/#included` is built from the
 searchable and readable on a phone. The printable sheet lives at
 `assets-src/leavitt-standard.pdf` and is copied to `plans/pdf/` by
 `npm run plans:images`; the section links to it. Edit the array and the PDF
-together so they do not drift.
+together so they do not drift. The PDF was made with WeasyPrint and its source
+is not in this repository, so a small wording fix is made in the PDF itself:
+"TGI" became "TJI" on October 27, 2026 by swapping one letter's glyph in its
+page content (the "J" was already in the embedded font), checked by rendering
+before and after. `plans.test.js` reads the PDF's text for that line.
 
 The three cards in the "Home plans" section of `index.html` are hand-written and
 point at three specific models. If you rename or remove one of those, update that

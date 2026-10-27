@@ -231,8 +231,20 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
       ok(items.length === 16, `all 16 standard items are listed (found ${items.length})`);
       ok(/Andersen/.test(sec.textContent) && /Advantech/.test(sec.textContent),
         'brand names from the sheet survive');
+      // Leavitt installs TJI joists (Weyerhaeuser's I-joist). The list and the
+      // PDF both said "TGI" until Kyle caught it on October 27, 2026.
+      ok(/\bTJI floor joists\b/i.test(sec.textContent) && !/\bTGI\b/.test(sec.textContent),
+        'the floor joists are TJI, not TGI');
     }
     ok(fs.existsSync(path.join(ROOT, 'plans/pdf/leavitt-standard.pdf')), 'the Leavitt Standard PDF is published');
+    // The PDF is edited by hand alongside STANDARD in build-plans.mjs, so check
+    // the same correction reached it, in the source and the published copy.
+    const { spawnSync } = require('child_process');
+    for (const pdf of ['assets-src/leavitt-standard.pdf', 'plans/pdf/leavitt-standard.pdf']) {
+      const text = spawnSync('pdftotext', [path.join(ROOT, pdf), '-'], { encoding: 'utf8' });
+      if (text.error) { console.log(`  SKIP  pdftotext is not installed, so ${pdf} cannot be read`); continue; }
+      ok(/\bTJI Floor Joists\b/i.test(text.stdout) && !/\bTGI\b/.test(text.stdout), `${pdf}: the floor joists are TJI, not TGI`);
+    }
     // Every model page should point at it.
     for (const m of models) {
       const doc = new JSDOM(fs.readFileSync(path.join(ROOT, `plans/${m.slug}.html`), 'utf8')).window.document;

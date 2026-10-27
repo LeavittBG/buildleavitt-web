@@ -76,7 +76,7 @@ const STANDARD = [
     ['Finished &amp; painted garage', 'insulated walls and service door'],
     ['Customer-owned propane tank', 'topped off at move-in'],
     ['75&rsquo; &times; 10&rsquo; asphalt drive', 'includes 30&rsquo; &times; 30&rsquo; parking pad and 10&rsquo; &times; 10&rsquo; turnaround'],
-    ['Structural integrity', 'TGI floor joists and Advantech&reg; subflooring, glued and screwed'],
+    ['Structural integrity', 'TJI floor joists and Advantech&reg; subflooring, glued and screwed'],
   ]],
 ];
 
