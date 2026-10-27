@@ -34,11 +34,12 @@ const plansData = JSON.parse(readFileSync(join(ROOT, 'src', 'plans.json'), 'utf8
 const { models } = plansData;
 
 /*
- * No price is shown on the plan pages. Until October 26, 2026 the collection
- * page carried one, "Pricing starts at" the lowest figure in plans.json, with
- * its qualifier (the standard features included, the homesite not); the model
- * pages and cards carried none. Kyle took it off. `price` stays in plans.json
- * as Leavitt's own record, and nothing here prints it.
+ * No price is shown on the plan pages, and plans.json holds none. Until
+ * October 26, 2026 the collection page carried one, "Pricing starts at" the
+ * lowest figure in plans.json, with its qualifier (the standard features
+ * included, the homesite not); the model pages and cards carried none. Kyle
+ * took it off, and the same day had the per-model prices taken out of
+ * plans.json, because this repository is public.
  */
 const images = JSON.parse(readFileSync(join(ROOT, 'src', 'plan-images.json'), 'utf8'));
 
@@ -75,7 +76,7 @@ const STANDARD = [
     ['Finished &amp; painted garage', 'insulated walls and service door'],
     ['Customer-owned propane tank', 'topped off at move-in'],
     ['75&rsquo; &times; 10&rsquo; asphalt drive', 'includes 30&rsquo; &times; 30&rsquo; parking pad and 10&rsquo; &times; 10&rsquo; turnaround'],
-    ['Structural integrity', 'TGI floor joists and Advantech&reg; subflooring, glued and screwed'],
+    ['Structural integrity', 'TJI floor joists and Advantech&reg; subflooring, glued and screwed'],
   ]],
 ];
 
@@ -126,7 +127,7 @@ const SPECS = [
 ];
 
 /** Specs whose value can carry a qualifying line underneath it. */
-const NOTE_FOR = { sqft: 'sqftNote', baths: 'bathsNote', price: 'priceNote' };
+const NOTE_FOR = { sqft: 'sqftNote', baths: 'bathsNote' };
 
 /*
  * image: { url, width, height, alt } - the picture a link preview shows when a

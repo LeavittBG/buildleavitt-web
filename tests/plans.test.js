@@ -128,7 +128,7 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
       const known = v !== null && v !== undefined && v !== '';
 
       // Where the data carries a qualifier, the page has to show it.
-      const NOTE_FOR = { sqft: 'sqftNote', baths: 'bathsNote', price: 'priceNote' };
+      const NOTE_FOR = { sqft: 'sqftNote', baths: 'bathsNote' };
       const wantNote = m.specs[NOTE_FOR[key]];
       if (wantNote) ok(note === wantNote, `${m.slug}: ${dts[0]} note reads "${wantNote}" (got "${note}")`);
 
@@ -183,6 +183,21 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
         .find(a => a.getAttribute('href') === `/plans/${m.slug}.html`);
       ok(!!card && !/\$/.test(card.textContent), `${m.slug}: card shows no price`);
     }
+
+    // The same day Kyle had the prices taken out of src/plans.json too. They
+    // had stayed there "as Leavitt's record", but this repository is public, so
+    // a figure kept in the data was still published to anyone reading the code.
+    const data = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plans.json'), 'utf8'));
+    const priceKeys = [];
+    const walk = (v) => {
+      if (v && typeof v === 'object') for (const [k, x] of Object.entries(v)) {
+        if (/price/i.test(k)) priceKeys.push(k);
+        walk(x);
+      }
+    };
+    walk(data);
+    ok(priceKeys.length === 0,
+      `no price in src/plans.json${priceKeys.length ? ` (found ${priceKeys.length}: ${[...new Set(priceKeys)].join(', ')})` : ''}`);
   }
 
   console.log('\n== the elevation caption is off the site ==');
@@ -216,8 +231,20 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
       ok(items.length === 16, `all 16 standard items are listed (found ${items.length})`);
       ok(/Andersen/.test(sec.textContent) && /Advantech/.test(sec.textContent),
         'brand names from the sheet survive');
+      // Leavitt installs TJI joists (Weyerhaeuser's I-joist). The list and the
+      // PDF both said "TGI" until Kyle caught it on October 27, 2026.
+      ok(/\bTJI floor joists\b/i.test(sec.textContent) && !/\bTGI\b/.test(sec.textContent),
+        'the floor joists are TJI, not TGI');
     }
     ok(fs.existsSync(path.join(ROOT, 'plans/pdf/leavitt-standard.pdf')), 'the Leavitt Standard PDF is published');
+    // The PDF is edited by hand alongside STANDARD in build-plans.mjs, so check
+    // the same correction reached it, in the source and the published copy.
+    const { spawnSync } = require('child_process');
+    for (const pdf of ['assets-src/leavitt-standard.pdf', 'plans/pdf/leavitt-standard.pdf']) {
+      const text = spawnSync('pdftotext', [path.join(ROOT, pdf), '-'], { encoding: 'utf8' });
+      if (text.error) { console.log(`  SKIP  pdftotext is not installed, so ${pdf} cannot be read`); continue; }
+      ok(/\bTJI Floor Joists\b/i.test(text.stdout) && !/\bTGI\b/.test(text.stdout), `${pdf}: the floor joists are TJI, not TGI`);
+    }
     // Every model page should point at it.
     for (const m of models) {
       const doc = new JSDOM(fs.readFileSync(path.join(ROOT, `plans/${m.slug}.html`), 'utf8')).window.document;
@@ -267,8 +294,8 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
   // Until October 2026 the plan pages showed the price sheet's ranges ("4–5
   // bedrooms, 3–6 baths") beside a downloadable brochure whose cover printed
   // "4+ bedrooms, 2.5+ baths". Leavitt chose the brochure's figures, so each
-  // page has to show exactly what its cover prints. Square footage and price
-  // are not on the covers and still come from the price sheet.
+  // page has to show exactly what its cover prints. Square footage is not on
+  // the covers and still comes from the price sheet.
   if (spawnSync('pdftotext', ['-v']).error) {
     console.log('  SKIP  pdftotext is not installed, so the brochure covers cannot be read');
   } else {

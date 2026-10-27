@@ -227,22 +227,25 @@ Bedrooms, baths and garage are copied from the figures printed on each
 brochure's cover ("4+ bedrooms, 2.5+ baths, 2+ car garage"). They used to be the
 price sheet's ranges, which disagreed with the brochure a visitor could download
 from the same page, so a test now reads every cover and fails if a page shows
-anything else. Square footage and price are not on the covers and still come
-from the price sheet.
+anything else. Square footage is not on the covers and still comes from the
+price sheet.
 
 `sqft` is living square footage. `sqftFrom: true` means Leavitt's sheet said
 "starting at", and the page renders "From 2,626" rather than a flat figure;
 two models are exact and have it `false`. Keep that distinction — it is the
 difference between a starting price and a promise.
 
-`price` works the same way, with `priceFrom`, and `pricesAsOf` dates the list,
-but no price is printed on the plan pages. Until October 26, 2026 the collection
-page showed one, "Pricing starts at" the lowest figure in the data, with the
-qualifier *"Starting price is for the home with all standard features included,
-and does not include the homesite"*; Kyle took it off. The figures stay in the
-data as Leavitt's own record. If a price ever goes back on a page, the qualifier
-goes with it. A test fails if a dollar figure or "starting price" wording
-appears on any plan page.
+There are no prices in the data. Until October 26, 2026 each model carried its
+starting price (`price`, `priceFrom`, dated by `pricesAsOf`), and the collection
+page showed one, "Pricing starts at" the lowest of them, with the qualifier
+*"Starting price is for the home with all standard features included, and does
+not include the homesite"*. Kyle took the figure off the page and then had the
+prices deleted from `src/plans.json`, because this repository is public: a
+figure kept in the data was still published to anyone reading the code. Older
+commits still hold the September 2026 figures. If a price ever goes back on a
+page, the qualifier goes with it. A test fails if a dollar figure or "starting
+price" wording appears on any plan page, or if any key in the data has "price"
+in its name.
 
 `sqftNote` and `bathsNote` print a qualifying line under a figure,
 for cases one number cannot carry honestly — The Storyteller gains 70 sq ft with
@@ -255,7 +258,11 @@ The "what's included in every home" list at `/plans/#included` is built from the
 searchable and readable on a phone. The printable sheet lives at
 `assets-src/leavitt-standard.pdf` and is copied to `plans/pdf/` by
 `npm run plans:images`; the section links to it. Edit the array and the PDF
-together so they do not drift.
+together so they do not drift. The PDF was made with WeasyPrint and its source
+is not in this repository, so a small wording fix is made in the PDF itself:
+"TGI" became "TJI" on October 27, 2026 by swapping one letter's glyph in its
+page content (the "J" was already in the embedded font), checked by rendering
+before and after. `plans.test.js` reads the PDF's text for that line.
 
 The three cards in the "Home plans" section of `index.html` are hand-written and
 point at three specific models. If you rename or remove one of those, update that

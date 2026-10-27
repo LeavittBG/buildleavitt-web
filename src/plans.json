@@ -35,16 +35,15 @@
     "",
     "`beds`, `baths` and `garage` are copied from the brochure cover ('4+ BEDROOMS',",
     "'2.5+ BATHS', '2+ CAR GARAGE'), and plans.test.js reads every cover and fails if",
-    "a page differs. Square footage and price are not on the covers; they come from",
-    "Leavitt's price sheet.",
+    "a page differs. Square footage is not on the covers; it comes from Leavitt's",
+    "price sheet.",
     "",
     "`sqft` is living square footage. `sqftFrom` true means their sheet said",
     "'starting at', rendered as 'From 2,626'; false means the figure is exact.",
-    "`price` is the starting price and `priceFrom` marks it the same way. No price",
-    "is printed on the site (Kyle took the 'Pricing starts at' figure off /plans/ on",
-    "October 26, 2026); the figures stay here as Leavitt's own record. If one ever",
-    "goes back on a page, so does its qualifier - the starting price includes every",
-    "standard feature and not the homesite.",
+    "There are no prices in this file, and none go back in. Kyle took the 'Pricing",
+    "starts at' figure off /plans/ on October 26, 2026, and the per-model prices out",
+    "of this file the same day: the repository is public, so a figure kept here was",
+    "still published. plans.test.js fails on any key with 'price' in its name.",
     "",
     "`sqftNote` and `bathsNote` print a qualifying line under a figure,",
     "for the cases one number cannot carry honestly: the-storyteller gains 70 sq ft",
@@ -53,9 +52,7 @@
     "",
     "`stories` is observable from the plan set - no second-floor sheet means a",
     "single-story house. A missing value renders 'On request'; it is never filled",
-    "in with a guess.",
-    "",
-    "`pricesAsOf` dates the whole price list."
+    "in with a guess."
   ],
   "brochureBands": {
     "_note": "Every brochure in assets-src/plans/ uses one template: a navy title band, the content, and a logo footer. These are the fractions of page height to keep - the elevation on page 1 (between the title band and the caption, which Leavitt asked to keep off the site), and the body of every other page (between the header band and the footer rule). Measured on all 92 pages of the October 2026 set; scripts/extract-plans.mjs then trims the whitespace.",
@@ -79,9 +76,7 @@
         "sqft": 2626,
         "sqftFrom": true,
         "stories": 2,
-        "garage": "2 car",
-        "price": 773777,
-        "priceFrom": true
+        "garage": "2 car"
       },
       "pages": [
         {
@@ -117,9 +112,7 @@
         "sqft": 2884,
         "sqftFrom": true,
         "stories": 2,
-        "garage": "2+ car",
-        "price": 840777,
-        "priceFrom": true
+        "garage": "2+ car"
       },
       "pages": [
         {
@@ -165,9 +158,7 @@
         "sqft": 3204,
         "sqftFrom": true,
         "stories": 2,
-        "garage": "2+ car",
-        "price": 944777,
-        "priceFrom": true
+        "garage": "2+ car"
       },
       "pages": [
         {
@@ -213,9 +204,7 @@
         "sqft": 2795,
         "sqftFrom": false,
         "stories": 1,
-        "garage": "2+ car",
-        "price": 994777,
-        "priceFrom": true
+        "garage": "2+ car"
       },
       "pages": [
         {
@@ -256,9 +245,7 @@
         "sqft": 4422,
         "sqftFrom": true,
         "stories": 2,
-        "garage": "3 car",
-        "price": 1303777,
-        "priceFrom": true
+        "garage": "3 car"
       },
       "pages": [
         {
@@ -309,9 +296,7 @@
         "sqft": 4288,
         "sqftFrom": true,
         "stories": 2,
-        "garage": "3 car",
-        "price": 1568777,
-        "priceFrom": true
+        "garage": "3 car"
       },
       "pages": [
         {
@@ -362,9 +347,7 @@
         "sqft": 3791,
         "sqftFrom": true,
         "stories": 2,
-        "garage": "2 car",
-        "price": 1117777,
-        "priceFrom": true
+        "garage": "2 car"
       },
       "pages": [
         {
@@ -415,9 +398,7 @@
         "sqft": 3540,
         "sqftFrom": true,
         "stories": 2,
-        "garage": "2 car",
-        "price": 1259777,
-        "priceFrom": true
+        "garage": "2 car"
       },
       "pages": [
         {
@@ -453,9 +434,7 @@
         "sqft": 2330,
         "sqftFrom": false,
         "stories": 2,
-        "garage": "2 car",
-        "price": 829777,
-        "priceFrom": true
+        "garage": "2 car"
       },
       "pages": [
         {
@@ -496,9 +475,7 @@
         "sqft": 2884,
         "sqftFrom": true,
         "stories": 2,
-        "garage": "2 car",
-        "price": 850777,
-        "priceFrom": true
+        "garage": "2 car"
       },
       "pages": [
         {
@@ -539,9 +516,7 @@
         "sqft": 3900,
         "sqftFrom": true,
         "stories": 2,
-        "garage": "2+ car",
-        "price": 1149777,
-        "priceFrom": true
+        "garage": "2+ car"
       },
       "pages": [
         {
@@ -587,9 +562,7 @@
         "sqft": 4024,
         "sqftFrom": true,
         "stories": 2,
-        "garage": "2+ car",
-        "price": 1186777,
-        "priceFrom": true
+        "garage": "2+ car"
       },
       "pages": [
         {
@@ -635,9 +608,7 @@
         "sqft": 4024,
         "sqftFrom": true,
         "stories": 2,
-        "garage": "2+ car",
-        "price": 1186777,
-        "priceFrom": true
+        "garage": "2+ car"
       },
       "pages": [
         {
@@ -683,9 +654,7 @@
         "sqft": 5321,
         "sqftFrom": true,
         "stories": 2,
-        "garage": "2 car",
-        "price": 1264777,
-        "priceFrom": true
+        "garage": "2 car"
       },
       "pages": [
         {
@@ -726,9 +695,7 @@
         "sqft": 2778,
         "sqftFrom": true,
         "stories": 2,
-        "garage": "2 car",
-        "price": 818777,
-        "priceFrom": true
+        "garage": "2 car"
       },
       "pages": [
         {
@@ -776,9 +743,7 @@
         "sqftNote": "3,840 with the three-car garage option",
         "stories": 2,
         "garage": "2+ car",
-        "bathsNote": "plus an optional full bath in the basement",
-        "price": 1112777,
-        "priceFrom": true
+        "bathsNote": "plus an optional full bath in the basement"
       },
       "style": "Modern Farmhouse",
       "pages": [
@@ -815,9 +780,7 @@
         "sqft": 4282,
         "sqftFrom": true,
         "stories": 2,
-        "garage": "2+ car",
-        "price": 1262777,
-        "priceFrom": true
+        "garage": "2+ car"
       },
       "pages": [
         {
@@ -858,6 +821,5 @@
       ],
       "style": "Modern Farmhouse"
     }
-  ],
-  "pricesAsOf": "September 2026"
+  ]
 }
