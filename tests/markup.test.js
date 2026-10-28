@@ -333,6 +333,11 @@ console.log("\n== questions and their structured data agree ==");
   const missing = facts.filter((f) => !text.includes(f));
   ok(missing.length === 0, "the answers carry Kyle's facts as he gave them" + (missing.length ? ' - missing: ' + missing.join(', ') : ''));
   ok(!/warranty package/i.test(html), 'the vague "warranty package" wording is gone from the homepage');
+  // "What is included in the price?" ended with the starting-price qualifier
+  // until October 28, 2026. Once the price came off /plans/ it described a
+  // figure no visitor could see, and Kyle had it taken out.
+  ok(!/starting price/i.test(text) && !/starting price/i.test(JSON.stringify(ld || {})),
+    'no "starting price" sentence in the answers or their structured data');
 }
 
 // --- Facebook ---
