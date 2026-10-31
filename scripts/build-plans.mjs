@@ -261,7 +261,7 @@ const isExterior = (s) => s.id.startsWith('elevation-');
 /* What each alternate exterior is, in one line under its heading and in its alt
    text. Keep it to what the rendering shows; the brochure page says the same. */
 const EXTERIOR_NOTES = {
-  'elevation-modern-brick': 'charcoal brick and white lap siding, with black windows and stained wood doors',
+  'elevation-modern-brick': 'charcoal brick and white lap siding, with black windows and a stained wood front door',
 };
 const floorsOf = (model) => sheets(model).filter(isFloor);
 

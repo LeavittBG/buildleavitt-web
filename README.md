@@ -229,8 +229,15 @@ Artlist (Nano Banana 2.1 image-to-image, 2K, 16:9), which keeps the camera, the
 house, every window, door, porch and garage door, the lawn and the light, and
 changes only the finishes. Every rendering was checked against its farmhouse
 rendering for windows, doors, gables, porch and garage, and redone if it changed
-the house. They are kept as `assets-src/plans/<slug>-modern-brick.jpg`. The
-prompt, for a retake (Kyle approves the cost of any retake first):
+the house. Kyle then had the garage doors made black on the eight plans whose
+garage faces the street (Pioneer I and II, Craftsman, Illustrator, Impressionist,
+Innovator, Maestro, Romantic), so they sit back in the dark brick and the
+stained front door is the one warm accent; that was a second, targeted edit of
+each rendering ("Change only the garage doors: make them satin black, keeping
+exactly the same door design..."). They are kept as
+`assets-src/plans/<slug>-modern-brick.jpg`. The first prompt, for a retake
+(Kyle approves the cost of any retake first), followed on those eight by the
+garage-door edit:
 
 > Keep this exact photograph: the same camera position, framing and lens; the
 > same house footprint, massing, roof lines, roof pitches and gables; every

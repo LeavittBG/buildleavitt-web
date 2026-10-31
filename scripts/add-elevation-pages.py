@@ -2,8 +2,9 @@
 
 Every brochure's cover shows its plan as a Modern Farmhouse. In October 2026
 Kyle added a second exterior to every plan, Modern Brick (charcoal brick, white
-lap siding, black windows, stained wood doors), after being told that a buyer
-who does not care for farmhouse style should see something else. Each one is a
+lap siding, black windows, a stained wood front door and black garage doors),
+after being told that a buyer who does not care for farmhouse style should see
+something else. Each one is a
 photo rendering made from that plan's own cover rendering (Artlist, Nano Banana
 2.1 image-to-image), keeping the house - roof lines, gables, every window, door,
 porch and garage door - and changing only the finishes. The renderings are kept
@@ -78,7 +79,7 @@ STYLES = {
         "MODERN BRICK",
         "with Charcoal Brick and Lap Siding",
         ["The same floor plan as the Modern Farmhouse elevation on the cover, finished in",
-         "charcoal brick and white lap siding, with black windows and stained wood doors."],
+         "charcoal brick and white lap siding, with black windows and a stained wood front door."],
     ),
 }
 
