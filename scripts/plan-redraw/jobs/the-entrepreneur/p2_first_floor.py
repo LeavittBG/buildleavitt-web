@@ -32,6 +32,8 @@ STALL = [(936, 532, 1062, 804)]
 PENINSULA = [(2415, 622, 2945, 860)]
 ISLAND = [(2545, 975, 2750, 1112)]
 PDR_SINK = [(1950, 1435, 2036, 1545)]
+# sunroom tray outline, redrawn whole (its label had cut the top edge)
+SUN_TRAY = [(2300, 160, 2900, 174), (2300, 585, 2900, 599), (2302, 160, 2316, 599), (2886, 160, 2900, 599)]
 
 
 def bath(c):
@@ -118,11 +120,12 @@ def draw(c, img):
     B.PXFT = PXFT
     B.K = c.K = K
     walls, wins = B.trace(img)
-    drop = TEXT + TUB + STALL + PENINSULA + ISLAND + PDR_SINK
+    drop = TEXT + TUB + STALL + PENINSULA + ISLAND + PDR_SINK + SUN_TRAY
     nv, gr = B.lineart(img, walls, drop=drop)
     B.draw_geom(c, gr, B.OPT)
     B.draw_geom(c, nv, B.NAVY)
     B.draw_geom(c, B.hairlines(img, walls, drop), B.NAVY)
+    B.dashed_rect(c, 2308.5, 167, 2892.5, 592, w=0.45)
     bath(c)
     kitchen(c)
     B.vanity(c, 2034, 1480, 'left', 24, 19)            # powder room vanity (was a pedestal sink)
