@@ -166,7 +166,7 @@
       "file": "the-expressionist-i-first-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1578,
+      "height": 1577,
       "label": "First Floor"
     },
     "first-floor-options": {
@@ -180,7 +180,7 @@
       "file": "the-expressionist-i-second-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1502,
+      "height": 1503,
       "label": "Second Floor"
     },
     "second-floor-options": {
@@ -217,7 +217,7 @@
       "file": "the-expressionist-ii-first-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1593,
+      "height": 1592,
       "label": "First Floor"
     },
     "first-floor-options": {
@@ -231,7 +231,7 @@
       "file": "the-expressionist-ii-second-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1530,
+      "height": 1531,
       "label": "Second Floor"
     },
     "second-floor-options": {
@@ -268,7 +268,7 @@
       "file": "the-illustrator-first-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1595,
+      "height": 1591,
       "label": "First Floor"
     },
     "first-floor-options": {
@@ -325,15 +325,15 @@
     "second-floor": {
       "file": "the-impressionist-second-floor",
       "ext": "png",
-      "width": 1294,
-      "height": 1431,
+      "width": 1295,
+      "height": 1443,
       "label": "Second Floor"
     },
     "basement": {
       "file": "the-impressionist-basement",
       "ext": "png",
       "width": 1500,
-      "height": 1627,
+      "height": 1641,
       "label": "Basement"
     }
   },

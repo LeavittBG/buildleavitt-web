@@ -106,7 +106,9 @@ def labels(c):
     S(c, 1108, 94, 'GAS FIREPLACE', size=3.6)
     S(c, 987, 1266, 'TRAY CEILING', size=3.4, color=o)
     S(c, 688, 1109, 'PANTRY', size=3.6)
-    S(c, 474, 1156, "BUTLER'S PANTRY", size=3.2, rotate=-90)
+    c.line(472.5, 1100, 472.5, 1205, 0.9, color=B.NAVY)      # butler's pantry shelf edge
+    S(c, 460, 1156, "BUTLER'S", size=3.0, rotate=-90)
+    S(c, 488, 1156, 'PANTRY', size=3.0, rotate=-90)
     S(c, 830, 1149, 'CLOSET', size=3.4, rotate=-90)
     S(c, 1365, 990, 'CLOSET', size=3.4, rotate=-90)
     S(c, 716, 223, 'OPT. PATIO DOOR', size=3.6, color=o)
