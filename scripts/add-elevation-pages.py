@@ -107,10 +107,15 @@ def centered(c, cx, y, s, font, size, color, cs=0):
 
 def extract_logos():
     """The page logo and the Equal Housing mark, from The Visionary, so they are
-    the same files every other brochure page carries."""
-    pdf = pikepdf.open(SRC / "plans" / "the-visionary.pdf")
+    the same files every other brochure page carries. Read from the untouched
+    original where there is one: a redrawn brochure's plans are vector drawings
+    (form XObjects, which have no width), not pictures."""
+    original = SRC / "plans" / "originals" / "the-visionary.pdf"
+    pdf = pikepdf.open(original if original.exists() else SRC / "plans" / "the-visionary.pdf")
     wanted = {2984: "logo-page.png", 480: "eho.png"}
     for _, x in pdf.pages[1].Resources.XObject.items():
+        if x.get("/Subtype") != "/Image":
+            continue
         name = wanted.get(int(x.Width))
         if not name:
             continue

@@ -11,21 +11,21 @@
       "file": "the-craftsman-first-floor",
       "ext": "png",
       "width": 1501,
-      "height": 1702,
+      "height": 1703,
       "label": "First Floor"
     },
     "second-floor": {
       "file": "the-craftsman-second-floor",
       "ext": "png",
       "width": 1498,
-      "height": 1478,
+      "height": 1480,
       "label": "Second Floor"
     },
     "basement": {
       "file": "the-craftsman-basement",
       "ext": "png",
       "width": 1502,
-      "height": 1684,
+      "height": 1682,
       "label": "Basement"
     },
     "elevation-modern-brick": {
@@ -48,7 +48,7 @@
       "file": "the-daydreamer-first-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1620,
+      "height": 1622,
       "label": "First Floor"
     },
     "first-floor-options": {
@@ -69,7 +69,7 @@
       "file": "the-daydreamer-basement",
       "ext": "png",
       "width": 1498,
-      "height": 1545,
+      "height": 1544,
       "label": "Basement"
     },
     "basement-options": {
@@ -99,7 +99,7 @@
       "file": "the-draftsman-first-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1652,
+      "height": 1653,
       "label": "First Floor"
     },
     "first-floor-options": {
@@ -113,7 +113,7 @@
       "file": "the-draftsman-second-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1513,
+      "height": 1516,
       "label": "Second Floor"
     },
     "basement": {
@@ -150,7 +150,7 @@
       "file": "the-entrepreneur-first-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1668,
+      "height": 1665,
       "label": "First Floor"
     },
     "first-floor-options": {
@@ -164,7 +164,7 @@
       "file": "the-entrepreneur-basement",
       "ext": "png",
       "width": 1499,
-      "height": 1640,
+      "height": 1642,
       "label": "Basement"
     },
     "other-elevations": {
@@ -595,7 +595,7 @@
       "file": "the-pioneer-ii-first-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1515,
+      "height": 1516,
       "label": "First Floor"
     },
     "first-floor-options": {
@@ -609,14 +609,14 @@
       "file": "the-pioneer-ii-second-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1516,
+      "height": 1517,
       "label": "Second Floor"
     },
     "basement": {
       "file": "the-pioneer-ii-basement",
       "ext": "png",
       "width": 1498,
-      "height": 1382,
+      "height": 1384,
       "label": "Basement"
     },
     "basement-options": {
@@ -646,7 +646,7 @@
       "file": "the-poet-first-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1592,
+      "height": 1593,
       "label": "First Floor"
     },
     "first-floor-options": {
@@ -660,7 +660,7 @@
       "file": "the-poet-second-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1542,
+      "height": 1544,
       "label": "Second Floor"
     },
     "basement": {
@@ -778,7 +778,7 @@
       "file": "the-visionary-first-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1653,
+      "height": 1651,
       "label": "First Floor"
     },
     "first-floor-options": {
@@ -792,7 +792,7 @@
       "file": "the-visionary-second-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1523,
+      "height": 1520,
       "label": "Second Floor"
     },
     "second-floor-options": {
@@ -806,7 +806,7 @@
       "file": "the-visionary-basement",
       "ext": "png",
       "width": 1498,
-      "height": 1494,
+      "height": 1492,
       "label": "Basement"
     },
     "basement-options": {
