@@ -128,18 +128,20 @@ def lockers(c):
 
 
 def labels(c):
+    # Each name is centred in its room: on the open floor between walls and built-ins, in the
+    # tray-ceiling outline where there is one, over the island in the kitchen (Kyle, Oct 31).
     L, S = B.label, B.small
-    L(c, 1325, 610, 'TWO-STORY\nFAMILY ROOM', '18\'-1" × 17\'-0"')
-    L(c, 763, 790, 'LIBRARY', '10\'-10" × 13\'-2"')
-    L(c, 2035, 705, 'KITCHEN', '19\'-8" × 13\'-2"')
-    L(c, 2620, 785, 'BREAKFAST\nNOOK', '10\'-0" × 13\'-2"')
-    L(c, 815, 1615, 'LIVING ROOM', '13\'-7" × 13\'-10"', 'OPT. TRAY CEILING')
-    L(c, 1760, 1605, 'DINING ROOM', '13\'-9" × 13\'-10"', 'OPT. TRAY CEILING')
-    L(c, 1262, 1655, 'TWO-STORY\nFOYER')
+    L(c, 1325, 577, 'TWO-STORY\nFAMILY ROOM', '18\'-1" × 17\'-0"')
+    L(c, 765, 810, 'LIBRARY', '10\'-10" × 13\'-2"')
+    L(c, 2092, 702, 'KITCHEN', '19\'-8" × 13\'-2"')
+    L(c, 2610, 807, 'BREAKFAST\nNOOK', '10\'-0" × 13\'-2"')
+    L(c, 800, 1589, 'LIVING ROOM', '13\'-7" × 13\'-10"', 'OPT. TRAY CEILING')
+    L(c, 1725, 1581, 'DINING ROOM', '13\'-9" × 13\'-10"', 'OPT. TRAY CEILING')
+    L(c, 1262, 1668, 'TWO-STORY\nFOYER')
     L(c, 1455, 1310, 'GALLERY', name_pt=5.4)
-    L(c, 2540, 1190, 'LAUNDRY', name_pt=5.4)
-    L(c, 2380, 1745, 'TWO-CAR GARAGE', '21\'-4" × 19\'-10"')
-    L(c, 1255, 1970, 'CONC. PORCH', name_pt=4.8)
+    L(c, 2557, 1180, 'LAUNDRY', name_pt=5.4)
+    L(c, 2395, 1750, 'TWO-CAR GARAGE', '21\'-4" × 19\'-10"')
+    L(c, 1262, 1940, 'CONC. PORCH', name_pt=4.8)
     L(c, 618, 1128, 'PDR.\nROOM', name_pt=4.6)
     L(c, 1745, 1175, 'HALL', name_pt=4.8)
     c.line(1863.5, 1076, 1863.5, 1278, 0.6, color=B.NAVY)          # butler's pantry counter edge
