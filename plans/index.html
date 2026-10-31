@@ -90,212 +90,353 @@
             Group and a 2-10 Home Buyer's Warranty.
         </p>
 
-        <h2 class="sr-only">Available plans</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <h2 class="text-2xl md:text-3xl font-serif text-[#0f172a] mb-8">Find your plan</h2>
 
-                <a href="/plans/the-craftsman.html" class="group block bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors">
-                    <div class="aspect-[4/3] w-full overflow-hidden bg-white flex items-center justify-center p-4">
-                        <picture class="contents"><source srcset="/plans/img/the-craftsman-elevation.webp" type="image/webp"><img src="/plans/img/the-craftsman-elevation.jpg" alt="The Craftsman front elevation" width="1468" height="820" loading="lazy" decoding="async" class="max-h-full w-auto object-contain"></picture>
-                    </div>
-                    <div class="border-t border-gray-200 p-6">
-                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Craftsman</h3>
-                        <p class="text-sm text-[#0f172a] mt-3">4 bed<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2.5+ bath<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>From 2,626 sq ft<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2 stories</p>
-                        <p class="text-sm text-gray-500 mt-1">3 floor plans</p>
-                        <span class="inline-block mt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f]">View plan &rarr;</span>
-                    </div>
-                </a>
+        <div id="plan-finder">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
 
-                <a href="/plans/the-daydreamer.html" class="group block bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors">
-                    <div class="aspect-[4/3] w-full overflow-hidden bg-white flex items-center justify-center p-4">
-                        <picture class="contents"><source srcset="/plans/img/the-daydreamer-elevation.webp" type="image/webp"><img src="/plans/img/the-daydreamer-elevation.jpg" alt="The Daydreamer front elevation" width="1468" height="820" loading="lazy" decoding="async" class="max-h-full w-auto object-contain"></picture>
+                <fieldset>
+                    <legend class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-3">How many stories?</legend>
+                    <div class="flex flex-wrap gap-2">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="finder-stories" value="" class="sr-only peer" checked>
+                            <span class="inline-block border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">Either</span>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="finder-stories" value="1" class="sr-only peer">
+                            <span class="inline-block border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">One story</span>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="finder-stories" value="2" class="sr-only peer">
+                            <span class="inline-block border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">Two stories</span>
+                        </label>
                     </div>
-                    <div class="border-t border-gray-200 p-6">
-                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Daydreamer</h3>
-                        <p class="text-sm text-[#0f172a] mt-3">4+ bed<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2.5+ bath<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>From 2,884 sq ft<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2 stories</p>
-                        <p class="text-sm text-gray-500 mt-1">3 floor plans</p>
-                        <span class="inline-block mt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f]">View plan &rarr;</span>
-                    </div>
-                </a>
+                </fieldset>
 
-                <a href="/plans/the-draftsman.html" class="group block bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors">
-                    <div class="aspect-[4/3] w-full overflow-hidden bg-white flex items-center justify-center p-4">
-                        <picture class="contents"><source srcset="/plans/img/the-draftsman-elevation.webp" type="image/webp"><img src="/plans/img/the-draftsman-elevation.jpg" alt="The Draftsman front elevation" width="1468" height="820" loading="lazy" decoding="async" class="max-h-full w-auto object-contain"></picture>
+                <fieldset>
+                    <legend class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-3">Bedrooms</legend>
+                    <div class="flex flex-wrap gap-2">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="finder-beds" value="" class="sr-only peer" checked>
+                            <span class="inline-block border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">Any</span>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="finder-beds" value="3" class="sr-only peer">
+                            <span class="inline-block border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">3 or more</span>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="finder-beds" value="4" class="sr-only peer">
+                            <span class="inline-block border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">4 or more</span>
+                        </label>
                     </div>
-                    <div class="border-t border-gray-200 p-6">
-                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Draftsman</h3>
-                        <p class="text-sm text-[#0f172a] mt-3">3+ bed<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2.5+ bath<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>From 3,204 sq ft<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2 stories</p>
-                        <p class="text-sm text-gray-500 mt-1">3 floor plans</p>
-                        <span class="inline-block mt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f]">View plan &rarr;</span>
-                    </div>
-                </a>
+                </fieldset>
 
-                <a href="/plans/the-entrepreneur.html" class="group block bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors">
-                    <div class="aspect-[4/3] w-full overflow-hidden bg-white flex items-center justify-center p-4">
-                        <picture class="contents"><source srcset="/plans/img/the-entrepreneur-elevation.webp" type="image/webp"><img src="/plans/img/the-entrepreneur-elevation.jpg" alt="The Entrepreneur front elevation" width="1468" height="820" loading="lazy" decoding="async" class="max-h-full w-auto object-contain"></picture>
+                <fieldset>
+                    <legend class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-3">Living space, sq ft</legend>
+                    <div class="flex flex-wrap gap-2">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="finder-size" value="" class="sr-only peer" checked>
+                            <span class="inline-block border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">Any</span>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="finder-size" value="under-3000" class="sr-only peer">
+                            <span class="inline-block border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">Under 3,000</span>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="finder-size" value="3000-4000" class="sr-only peer">
+                            <span class="inline-block border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">3,000 to 4,000</span>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="finder-size" value="over-4000" class="sr-only peer">
+                            <span class="inline-block border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">Over 4,000</span>
+                        </label>
                     </div>
-                    <div class="border-t border-gray-200 p-6">
-                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Entrepreneur</h3>
-                        <p class="text-sm text-[#0f172a] mt-3">3 bed<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2.5+ bath<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2,795 sq ft<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>Ranch</p>
-                        <p class="text-sm text-gray-500 mt-1">2 floor plans</p>
-                        <span class="inline-block mt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f]">View plan &rarr;</span>
-                    </div>
-                </a>
+                </fieldset>
+            </div>
 
-                <a href="/plans/the-expressionist-i.html" class="group block bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors">
-                    <div class="aspect-[4/3] w-full overflow-hidden bg-white flex items-center justify-center p-4">
-                        <picture class="contents"><source srcset="/plans/img/the-expressionist-i-elevation.webp" type="image/webp"><img src="/plans/img/the-expressionist-i-elevation.jpg" alt="The Expressionist I front elevation" width="1468" height="820" loading="lazy" decoding="async" class="max-h-full w-auto object-contain"></picture>
-                    </div>
-                    <div class="border-t border-gray-200 p-6">
-                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Expressionist I</h3>
-                        <p class="text-sm text-[#0f172a] mt-3">3+ bed<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2.5+ bath<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>From 4,422 sq ft<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2 stories</p>
-                        <p class="text-sm text-gray-500 mt-1">3 floor plans</p>
-                        <span class="inline-block mt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f]">View plan &rarr;</span>
-                    </div>
-                </a>
+            <p class="text-sm text-gray-600 mb-6" data-finder-status aria-live="polite">All 17 plans. Answer a question or two above and the list narrows.</p>
 
-                <a href="/plans/the-expressionist-ii.html" class="group block bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors">
-                    <div class="aspect-[4/3] w-full overflow-hidden bg-white flex items-center justify-center p-4">
-                        <picture class="contents"><source srcset="/plans/img/the-expressionist-ii-elevation.webp" type="image/webp"><img src="/plans/img/the-expressionist-ii-elevation.jpg" alt="The Expressionist II front elevation" width="1468" height="820" loading="lazy" decoding="async" class="max-h-full w-auto object-contain"></picture>
-                    </div>
-                    <div class="border-t border-gray-200 p-6">
-                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Expressionist II</h3>
-                        <p class="text-sm text-[#0f172a] mt-3">4+ bed<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>3.5+ bath<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>From 4,288 sq ft<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2 stories</p>
-                        <p class="text-sm text-gray-500 mt-1">3 floor plans</p>
-                        <span class="inline-block mt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f]">View plan &rarr;</span>
-                    </div>
-                </a>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-                <a href="/plans/the-illustrator.html" class="group block bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors">
-                    <div class="aspect-[4/3] w-full overflow-hidden bg-white flex items-center justify-center p-4">
-                        <picture class="contents"><source srcset="/plans/img/the-illustrator-elevation.webp" type="image/webp"><img src="/plans/img/the-illustrator-elevation.jpg" alt="The Illustrator front elevation" width="1468" height="820" loading="lazy" decoding="async" class="max-h-full w-auto object-contain"></picture>
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col" data-plan="the-craftsman" data-stories="2" data-beds="4" data-sqft="2626" data-featured>
+                    <a href="/plans/the-craftsman.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="/plans/img/the-craftsman-elevation.webp" type="image/webp"><img src="/plans/img/the-craftsman-elevation.jpg" alt="The Craftsman front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Craftsman</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">4 bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">From 2,626 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-craftsman.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Craftsman&interest=Semi-Custom%20Home#contact" data-start-plan="The Craftsman" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
                     </div>
-                    <div class="border-t border-gray-200 p-6">
-                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Illustrator</h3>
-                        <p class="text-sm text-[#0f172a] mt-3">4+ bed<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2.5+ bath<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>From 3,791 sq ft<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2 stories</p>
-                        <p class="text-sm text-gray-500 mt-1">3 floor plans</p>
-                        <span class="inline-block mt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f]">View plan &rarr;</span>
-                    </div>
-                </a>
+                </div>
 
-                <a href="/plans/the-impressionist.html" class="group block bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors">
-                    <div class="aspect-[4/3] w-full overflow-hidden bg-white flex items-center justify-center p-4">
-                        <picture class="contents"><source srcset="/plans/img/the-impressionist-elevation.webp" type="image/webp"><img src="/plans/img/the-impressionist-elevation.jpg" alt="The Impressionist front elevation" width="1468" height="820" loading="lazy" decoding="async" class="max-h-full w-auto object-contain"></picture>
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col" data-plan="the-daydreamer" data-stories="2" data-beds="4" data-sqft="2884" data-featured>
+                    <a href="/plans/the-daydreamer.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="/plans/img/the-daydreamer-elevation.webp" type="image/webp"><img src="/plans/img/the-daydreamer-elevation.jpg" alt="The Daydreamer front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Daydreamer</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">4+ bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">From 2,884 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-daydreamer.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Daydreamer&interest=Semi-Custom%20Home#contact" data-start-plan="The Daydreamer" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
                     </div>
-                    <div class="border-t border-gray-200 p-6">
-                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Impressionist</h3>
-                        <p class="text-sm text-[#0f172a] mt-3">4 bed<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2.5+ bath<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>From 3,540 sq ft<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2 stories</p>
-                        <p class="text-sm text-gray-500 mt-1">3 floor plans</p>
-                        <span class="inline-block mt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f]">View plan &rarr;</span>
-                    </div>
-                </a>
+                </div>
 
-                <a href="/plans/the-innovator.html" class="group block bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors">
-                    <div class="aspect-[4/3] w-full overflow-hidden bg-white flex items-center justify-center p-4">
-                        <picture class="contents"><source srcset="/plans/img/the-innovator-elevation.webp" type="image/webp"><img src="/plans/img/the-innovator-elevation.jpg" alt="The Innovator front elevation" width="1468" height="820" loading="lazy" decoding="async" class="max-h-full w-auto object-contain"></picture>
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col" data-plan="the-draftsman" data-stories="2" data-beds="3" data-sqft="3204" data-featured>
+                    <a href="/plans/the-draftsman.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="/plans/img/the-draftsman-elevation.webp" type="image/webp"><img src="/plans/img/the-draftsman-elevation.jpg" alt="The Draftsman front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Draftsman</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">3+ bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">From 3,204 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-draftsman.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Draftsman&interest=Semi-Custom%20Home#contact" data-start-plan="The Draftsman" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
                     </div>
-                    <div class="border-t border-gray-200 p-6">
-                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Innovator</h3>
-                        <p class="text-sm text-[#0f172a] mt-3">2+ bed<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2+ bath<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2,330 sq ft<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2 stories</p>
-                        <p class="text-sm text-gray-500 mt-1">3 floor plans</p>
-                        <span class="inline-block mt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f]">View plan &rarr;</span>
-                    </div>
-                </a>
+                </div>
 
-                <a href="/plans/the-maestro.html" class="group block bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors">
-                    <div class="aspect-[4/3] w-full overflow-hidden bg-white flex items-center justify-center p-4">
-                        <picture class="contents"><source srcset="/plans/img/the-maestro-elevation.webp" type="image/webp"><img src="/plans/img/the-maestro-elevation.jpg" alt="The Maestro front elevation" width="1468" height="820" loading="lazy" decoding="async" class="max-h-full w-auto object-contain"></picture>
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col" data-plan="the-entrepreneur" data-stories="1" data-beds="3" data-sqft="2795" data-featured>
+                    <a href="/plans/the-entrepreneur.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="/plans/img/the-entrepreneur-elevation.webp" type="image/webp"><img src="/plans/img/the-entrepreneur-elevation.jpg" alt="The Entrepreneur front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Entrepreneur</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">3 bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2,795 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">Ranch</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-entrepreneur.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Entrepreneur&interest=Semi-Custom%20Home#contact" data-start-plan="The Entrepreneur" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
                     </div>
-                    <div class="border-t border-gray-200 p-6">
-                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Maestro</h3>
-                        <p class="text-sm text-[#0f172a] mt-3">4+ bed<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2.5+ bath<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>From 2,884 sq ft<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2 stories</p>
-                        <p class="text-sm text-gray-500 mt-1">3 floor plans</p>
-                        <span class="inline-block mt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f]">View plan &rarr;</span>
-                    </div>
-                </a>
+                </div>
 
-                <a href="/plans/the-novel.html" class="group block bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors">
-                    <div class="aspect-[4/3] w-full overflow-hidden bg-white flex items-center justify-center p-4">
-                        <picture class="contents"><source srcset="/plans/img/the-novel-elevation.webp" type="image/webp"><img src="/plans/img/the-novel-elevation.jpg" alt="The Novel front elevation" width="1468" height="820" loading="lazy" decoding="async" class="max-h-full w-auto object-contain"></picture>
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col" data-plan="the-expressionist-i" data-stories="2" data-beds="3" data-sqft="4422" data-featured>
+                    <a href="/plans/the-expressionist-i.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="/plans/img/the-expressionist-i-elevation.webp" type="image/webp"><img src="/plans/img/the-expressionist-i-elevation.jpg" alt="The Expressionist I front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Expressionist I</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">3+ bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">From 4,422 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-expressionist-i.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Expressionist%20I&interest=Semi-Custom%20Home#contact" data-start-plan="The Expressionist I" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
                     </div>
-                    <div class="border-t border-gray-200 p-6">
-                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Novel</h3>
-                        <p class="text-sm text-[#0f172a] mt-3">4+ bed<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2.5+ bath<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>From 3,900 sq ft<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2 stories</p>
-                        <p class="text-sm text-gray-500 mt-1">3 floor plans</p>
-                        <span class="inline-block mt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f]">View plan &rarr;</span>
-                    </div>
-                </a>
+                </div>
 
-                <a href="/plans/the-pioneer-i.html" class="group block bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors">
-                    <div class="aspect-[4/3] w-full overflow-hidden bg-white flex items-center justify-center p-4">
-                        <picture class="contents"><source srcset="/plans/img/the-pioneer-i-elevation.webp" type="image/webp"><img src="/plans/img/the-pioneer-i-elevation.jpg" alt="The Pioneer I front elevation" width="1468" height="820" loading="lazy" decoding="async" class="max-h-full w-auto object-contain"></picture>
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col" data-plan="the-expressionist-ii" data-stories="2" data-beds="4" data-sqft="4288" data-featured>
+                    <a href="/plans/the-expressionist-ii.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="/plans/img/the-expressionist-ii-elevation.webp" type="image/webp"><img src="/plans/img/the-expressionist-ii-elevation.jpg" alt="The Expressionist II front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Expressionist II</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">4+ bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">3.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">From 4,288 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-expressionist-ii.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Expressionist%20II&interest=Semi-Custom%20Home#contact" data-start-plan="The Expressionist II" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
                     </div>
-                    <div class="border-t border-gray-200 p-6">
-                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Pioneer I</h3>
-                        <p class="text-sm text-[#0f172a] mt-3">4+ bed<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>3.5+ bath<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>From 4,024 sq ft<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2 stories</p>
-                        <p class="text-sm text-gray-500 mt-1">3 floor plans</p>
-                        <span class="inline-block mt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f]">View plan &rarr;</span>
-                    </div>
-                </a>
+                </div>
 
-                <a href="/plans/the-pioneer-ii.html" class="group block bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors">
-                    <div class="aspect-[4/3] w-full overflow-hidden bg-white flex items-center justify-center p-4">
-                        <picture class="contents"><source srcset="/plans/img/the-pioneer-ii-elevation.webp" type="image/webp"><img src="/plans/img/the-pioneer-ii-elevation.jpg" alt="The Pioneer II front elevation" width="1468" height="820" loading="lazy" decoding="async" class="max-h-full w-auto object-contain"></picture>
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col" data-plan="the-illustrator" data-stories="2" data-beds="4" data-sqft="3791" data-featured>
+                    <a href="/plans/the-illustrator.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="/plans/img/the-illustrator-elevation.webp" type="image/webp"><img src="/plans/img/the-illustrator-elevation.jpg" alt="The Illustrator front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Illustrator</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">4+ bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">From 3,791 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-illustrator.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Illustrator&interest=Semi-Custom%20Home#contact" data-start-plan="The Illustrator" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
                     </div>
-                    <div class="border-t border-gray-200 p-6">
-                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Pioneer II</h3>
-                        <p class="text-sm text-[#0f172a] mt-3">4+ bed<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>3.5+ bath<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>From 4,024 sq ft<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2 stories</p>
-                        <p class="text-sm text-gray-500 mt-1">3 floor plans</p>
-                        <span class="inline-block mt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f]">View plan &rarr;</span>
-                    </div>
-                </a>
+                </div>
 
-                <a href="/plans/the-poet.html" class="group block bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors">
-                    <div class="aspect-[4/3] w-full overflow-hidden bg-white flex items-center justify-center p-4">
-                        <picture class="contents"><source srcset="/plans/img/the-poet-elevation.webp" type="image/webp"><img src="/plans/img/the-poet-elevation.jpg" alt="The Poet front elevation" width="1468" height="820" loading="lazy" decoding="async" class="max-h-full w-auto object-contain"></picture>
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col" data-plan="the-impressionist" data-stories="2" data-beds="4" data-sqft="3540" data-featured>
+                    <a href="/plans/the-impressionist.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="/plans/img/the-impressionist-elevation.webp" type="image/webp"><img src="/plans/img/the-impressionist-elevation.jpg" alt="The Impressionist front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Impressionist</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">4 bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">From 3,540 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-impressionist.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Impressionist&interest=Semi-Custom%20Home#contact" data-start-plan="The Impressionist" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
                     </div>
-                    <div class="border-t border-gray-200 p-6">
-                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Poet</h3>
-                        <p class="text-sm text-[#0f172a] mt-3">3 bed<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2.5+ bath<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>From 5,321 sq ft<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2 stories</p>
-                        <p class="text-sm text-gray-500 mt-1">3 floor plans</p>
-                        <span class="inline-block mt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f]">View plan &rarr;</span>
-                    </div>
-                </a>
+                </div>
 
-                <a href="/plans/the-romantic.html" class="group block bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors">
-                    <div class="aspect-[4/3] w-full overflow-hidden bg-white flex items-center justify-center p-4">
-                        <picture class="contents"><source srcset="/plans/img/the-romantic-elevation.webp" type="image/webp"><img src="/plans/img/the-romantic-elevation.jpg" alt="The Romantic front elevation" width="1468" height="820" loading="lazy" decoding="async" class="max-h-full w-auto object-contain"></picture>
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col" data-plan="the-innovator" data-stories="2" data-beds="2" data-sqft="2330" data-featured>
+                    <a href="/plans/the-innovator.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="/plans/img/the-innovator-elevation.webp" type="image/webp"><img src="/plans/img/the-innovator-elevation.jpg" alt="The Innovator front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Innovator</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">2+ bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2,330 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-innovator.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Innovator&interest=Semi-Custom%20Home#contact" data-start-plan="The Innovator" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
                     </div>
-                    <div class="border-t border-gray-200 p-6">
-                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Romantic</h3>
-                        <p class="text-sm text-[#0f172a] mt-3">4 bed<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>3.5+ bath<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>From 2,778 sq ft<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2 stories</p>
-                        <p class="text-sm text-gray-500 mt-1">3 floor plans</p>
-                        <span class="inline-block mt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f]">View plan &rarr;</span>
-                    </div>
-                </a>
+                </div>
 
-                <a href="/plans/the-storyteller.html" class="group block bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors">
-                    <div class="aspect-[4/3] w-full overflow-hidden bg-white flex items-center justify-center p-4">
-                        <picture class="contents"><source srcset="/plans/img/the-storyteller-elevation.webp" type="image/webp"><img src="/plans/img/the-storyteller-elevation.jpg" alt="The Storyteller front elevation" width="1468" height="820" loading="lazy" decoding="async" class="max-h-full w-auto object-contain"></picture>
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col" data-plan="the-maestro" data-stories="2" data-beds="4" data-sqft="2884" data-featured>
+                    <a href="/plans/the-maestro.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="/plans/img/the-maestro-elevation.webp" type="image/webp"><img src="/plans/img/the-maestro-elevation.jpg" alt="The Maestro front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Maestro</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">4+ bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">From 2,884 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-maestro.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Maestro&interest=Semi-Custom%20Home#contact" data-start-plan="The Maestro" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
                     </div>
-                    <div class="border-t border-gray-200 p-6">
-                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Storyteller</h3>
-                        <p class="text-sm text-[#0f172a] mt-3">4 bed<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>4.5 bath<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>3,770 sq ft<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2 stories</p>
-                        <p class="text-sm text-gray-500 mt-1">3 floor plans</p>
-                        <span class="inline-block mt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f]">View plan &rarr;</span>
-                    </div>
-                </a>
+                </div>
 
-                <a href="/plans/the-visionary.html" class="group block bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors">
-                    <div class="aspect-[4/3] w-full overflow-hidden bg-white flex items-center justify-center p-4">
-                        <picture class="contents"><source srcset="/plans/img/the-visionary-elevation.webp" type="image/webp"><img src="/plans/img/the-visionary-elevation.jpg" alt="The Visionary front elevation" width="1468" height="826" loading="lazy" decoding="async" class="max-h-full w-auto object-contain"></picture>
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col" data-plan="the-novel" data-stories="2" data-beds="4" data-sqft="3900" data-featured>
+                    <a href="/plans/the-novel.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="/plans/img/the-novel-elevation.webp" type="image/webp"><img src="/plans/img/the-novel-elevation.jpg" alt="The Novel front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Novel</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">4+ bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">From 3,900 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-novel.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Novel&interest=Semi-Custom%20Home#contact" data-start-plan="The Novel" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
                     </div>
-                    <div class="border-t border-gray-200 p-6">
-                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Visionary</h3>
-                        <p class="text-sm text-[#0f172a] mt-3">4+ bed<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2.5+ bath<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>From 4,282 sq ft<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2 stories</p>
-                        <p class="text-sm text-gray-500 mt-1">3 floor plans</p>
-                        <span class="inline-block mt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f]">View plan &rarr;</span>
+                </div>
+
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col" data-plan="the-pioneer-i" data-stories="2" data-beds="4" data-sqft="4024" data-featured>
+                    <a href="/plans/the-pioneer-i.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="/plans/img/the-pioneer-i-elevation.webp" type="image/webp"><img src="/plans/img/the-pioneer-i-elevation.jpg" alt="The Pioneer I front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Pioneer I</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">4+ bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">3.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">From 4,024 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-pioneer-i.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Pioneer%20I&interest=Semi-Custom%20Home#contact" data-start-plan="The Pioneer I" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
                     </div>
-                </a>
+                </div>
+
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col" data-plan="the-pioneer-ii" data-stories="2" data-beds="4" data-sqft="4024" data-featured>
+                    <a href="/plans/the-pioneer-ii.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="/plans/img/the-pioneer-ii-elevation.webp" type="image/webp"><img src="/plans/img/the-pioneer-ii-elevation.jpg" alt="The Pioneer II front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Pioneer II</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">4+ bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">3.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">From 4,024 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-pioneer-ii.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Pioneer%20II&interest=Semi-Custom%20Home#contact" data-start-plan="The Pioneer II" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
+                    </div>
+                </div>
+
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col" data-plan="the-poet" data-stories="2" data-beds="3" data-sqft="5321" data-featured>
+                    <a href="/plans/the-poet.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="/plans/img/the-poet-elevation.webp" type="image/webp"><img src="/plans/img/the-poet-elevation.jpg" alt="The Poet front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Poet</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">3 bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">From 5,321 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-poet.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Poet&interest=Semi-Custom%20Home#contact" data-start-plan="The Poet" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
+                    </div>
+                </div>
+
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col" data-plan="the-romantic" data-stories="2" data-beds="4" data-sqft="2778" data-featured>
+                    <a href="/plans/the-romantic.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="/plans/img/the-romantic-elevation.webp" type="image/webp"><img src="/plans/img/the-romantic-elevation.jpg" alt="The Romantic front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Romantic</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">4 bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">3.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">From 2,778 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-romantic.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Romantic&interest=Semi-Custom%20Home#contact" data-start-plan="The Romantic" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
+                    </div>
+                </div>
+
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col" data-plan="the-storyteller" data-stories="2" data-beds="4" data-sqft="3770" data-featured>
+                    <a href="/plans/the-storyteller.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="/plans/img/the-storyteller-elevation.webp" type="image/webp"><img src="/plans/img/the-storyteller-elevation.jpg" alt="The Storyteller front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Storyteller</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">4 bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">4.5 bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">3,770 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-storyteller.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Storyteller&interest=Semi-Custom%20Home#contact" data-start-plan="The Storyteller" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
+                    </div>
+                </div>
+
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col" data-plan="the-visionary" data-stories="2" data-beds="4" data-sqft="4282" data-featured>
+                    <a href="/plans/the-visionary.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="/plans/img/the-visionary-elevation.webp" type="image/webp"><img src="/plans/img/the-visionary-elevation.jpg" alt="The Visionary front elevation" width="1468" height="826" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Visionary</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">4+ bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">From 4,282 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-visionary.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Visionary&interest=Semi-Custom%20Home#contact" data-start-plan="The Visionary" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hidden border border-gray-200 bg-white p-8 md:p-10" data-finder-empty>
+                <p class="text-xl font-serif text-[#0f172a] mb-3">Nothing on the shelf fits all three.</p>
+                <p class="text-gray-600 max-w-xl mb-6">That is not the end of it: every plan here is adjusted to the way you want to live, and we draw from scratch too. Loosen one answer, or tell us what you have in mind.</p>
+                <a href="/?interest=Custom%20Home%20Build#contact" class="inline-flex items-center gap-2 bg-[#0f172a] text-white px-8 py-4 uppercase tracking-[0.2em] font-bold text-xs hover:bg-[#c2a67a] hover:text-[#0f172a] transition-colors">Start a custom home</a>
+            </div>
+
         </div>
 
 
@@ -412,6 +553,70 @@
         </section>
 
     </main>
+
+    <script>
+    (() => {
+        const root = document.getElementById('plan-finder');
+        if (!root) return;
+        const cap = Number(root.getAttribute('data-cap')) || Infinity;
+        const cards = [...root.querySelectorAll('[data-plan]')];
+        const total = cards.length;
+        const radios = [...root.querySelectorAll('input[type="radio"]')];
+        const status = root.querySelector('[data-finder-status]');
+        const empty = root.querySelector('[data-finder-empty]');
+        const more = root.querySelector('[data-finder-more]');
+        const KEYS = ['stories', 'beds', 'size'];
+        const idle = status ? status.textContent : '';
+        const band = (sqft) => (sqft < 3000 ? 'under-3000' : sqft <= 4000 ? '3000-4000' : 'over-4000');
+        const read = () => Object.fromEntries(KEYS.map((k) => {
+            const r = radios.find((x) => x.name === 'finder-' + k && x.checked);
+            return [k, r ? r.value : ''];
+        }));
+        const fits = (card, f) =>
+            (!f.stories || card.getAttribute('data-stories') === f.stories) &&
+            (!f.beds || Number(card.getAttribute('data-beds')) >= Number(f.beds)) &&
+            (!f.size || band(Number(card.getAttribute('data-sqft'))) === f.size);
+        const plural = (n, word) => n + ' ' + word + (n === 1 ? '' : 's');
+        const apply = () => {
+            const f = read();
+            const narrowed = KEYS.some((k) => f[k]);
+            let shown = 0, matched = 0;
+            for (const card of cards) {
+                const m = fits(card, f);
+                if (m) matched++;
+                const show = m && (narrowed ? shown < cap : (cap === Infinity || card.hasAttribute('data-featured')));
+                if (show) shown++;
+                card.classList.toggle('hidden', !show);
+            }
+            const q = new URLSearchParams();
+            KEYS.forEach((k) => { if (f[k]) q.set(k, f[k]); });
+            const qs = q.toString() ? '?' + q.toString() : '';
+            if (status) {
+                status.textContent = !narrowed ? idle
+                    : matched === 0 ? 'No plan matches all three answers.'
+                    : matched === shown ? plural(matched, 'plan') + (matched === 1 ? ' matches.' : ' match.')
+                    : 'Showing ' + shown + ' of the ' + plural(matched, 'plan') + ' that match.';
+            }
+            if (empty) empty.classList.toggle('hidden', !narrowed || matched > 0);
+            if (more) {
+                more.href = '/plans/' + qs;
+                more.textContent = narrowed && matched > shown ? 'See all ' + matched + ' matching plans' : 'Browse all ' + total + ' plans';
+            }
+            if (cap === Infinity && history.replaceState) history.replaceState(null, '', location.pathname + qs + location.hash);
+        };
+        let preset = false;
+        try {
+            const params = new URLSearchParams(location.search);
+            for (const k of KEYS) {
+                const v = params.get(k);
+                const r = v && radios.find((x) => x.name === 'finder-' + k && x.value === v);
+                if (r) { r.checked = true; preset = true; }
+            }
+        } catch (e) { /* malformed query string: start from "any" */ }
+        radios.forEach((r) => r.addEventListener('change', apply));
+        if (preset) apply();
+    })();
+    </script>
 
     <footer class="bg-[#0f172a] text-gray-400 py-10 px-6">
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
