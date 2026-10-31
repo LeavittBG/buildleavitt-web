@@ -91,8 +91,10 @@ def labels(c):
     S(c, 1918, 1555, 'BENCH', size=3.6)
     for x, y in ((548, 893), (1084, 893), (1781, 1154)):
         S(c, x, y, 'LINEN', size=3.6)
-    S(c, 1021, 1180, 'DN', size=4.0)
-    S(c, 1111, 1180, 'DN', size=4.0)
+    S(c, 1024, 1172, 'DN', size=4.0)
+    S(c, 1110, 1172, 'DN', size=4.0)
+    B.arrow(c, [(1046, 1193), (1000, 1193)], w=0.4)
+    B.arrow(c, [(1088, 1193), (1136, 1193)], w=0.4)
     S(c, 818, 805, 'OPT. JULIET BALCONY', size=3.6, color=o)
     S(c, 818, 885, 'WOOD RAILING', size=3.2)
     S(c, 884, 1106, 'WOOD RAILING', size=3.2)
