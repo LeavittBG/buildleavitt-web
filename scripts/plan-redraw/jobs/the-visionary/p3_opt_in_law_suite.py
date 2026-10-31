@@ -5,13 +5,13 @@ import blib as B
 import bhelp
 
 PAGE, XREF = 3, 25
-DROP = [(105, 190, 255, 290), (355, 100, 480, 190), (60, 540, 500, 655)]
+DROP = [(128, 200, 236, 290), (355, 100, 462, 236), (60, 540, 500, 655)]
 
 
 def after(c):
-    B.label(c, 160, 240, 'OPT.\nBATH', name_pt=5.0)
-    B.label(c, 418, 148, 'OPT.\nW.I.C.', name_pt=5.0)
-    B.label(c, 318, 597, 'OPTIONAL\nIN-LAW SUITE', '13\'-6" × 15\'-5"')
+    bhelp.vlabel(c, 180, 240, 'OPT.\nBATH', name_pt=4.6)
+    bhelp.vlabel(c, 418, 148, 'OPT.\nW.I.C.', name_pt=4.6)
+    bhelp.vlabel(c, 318, 597, 'OPTIONAL\nIN-LAW SUITE', '13\'-6" × 15\'-5"')
 
 
 def draw(c, img):

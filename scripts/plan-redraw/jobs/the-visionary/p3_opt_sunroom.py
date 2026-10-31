@@ -8,9 +8,9 @@ DROP = [(140, 200, 520, 320), (618, 100, 662, 335), (135, 515, 475, 630)]
 
 
 def after(c):
-    B.label(c, 327, 258, 'OPTIONAL SUNROOM', '12\'-11" × 10\'-4"')
+    bhelp.vlabel(c, 327, 258, 'OPTIONAL SUNROOM', '12\'-11" × 10\'-4"')
     B.small(c, 637, 217, 'OPT. PATIO DOOR', size=3.8, color=B.OPT, rotate=-90)
-    B.label(c, 305, 577, 'BREAKFAST NOOK', '9\'-10" × 15\'-2"')
+    bhelp.vlabel(c, 305, 577, 'BREAKFAST NOOK', '9\'-10" × 15\'-2"')
 
 
 def draw(c, img):

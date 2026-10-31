@@ -10,9 +10,9 @@ DROP = [(94, 355, 150, 640), (340, 466, 705, 507), (295, 640, 755, 752)]
 
 def after(c):
     B.small(c, 121, 497, 'OPTIONAL GAS FIREPLACE', size=3.6, rotate=-90)
-    B.dashed(c, [(155, CATH), (840, CATH)], w=0.45)
-    B.small(c, 515, CATH - 20, 'OPTIONAL CATHEDRAL CEILING', size=3.8, color=B.OPT)
-    B.label(c, 515, 690, 'OPTIONAL\nCONSERVATORY', '13\'-6" × 21\'-1"')
+    B.dashed(c, [(258, CATH), (788, CATH)], w=0.45)
+    B.small(c, 522, CATH - 20, 'OPTIONAL CATHEDRAL CEILING', size=3.8, color=B.OPT)
+    bhelp.vlabel(c, 522, 690, 'OPTIONAL\nCONSERVATORY', '13\'-6" × 21\'-1"')
 
 
 def draw(c, img):

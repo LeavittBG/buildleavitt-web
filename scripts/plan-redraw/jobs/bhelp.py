@@ -275,3 +275,10 @@ def light_walls(img, drop=()):
     m &= ~B._rects_mask(light.shape, drop)
     m = ndi.binary_closing(m, np.ones((3, 3), bool))
     return B._vectorize(m)
+
+
+def vlabel(c, x, y, name, size_txt=None, note=None, **kw):
+    """Room label at the smaller size used on option drawings."""
+    kw.setdefault('name_pt', 5.2)
+    kw.setdefault('sub_pt', 4.3)
+    B.label(c, x, y, name, size_txt, note, **kw)

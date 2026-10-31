@@ -8,10 +8,10 @@ DROP = [(135, 20, 395, 132), (488, 12, 738, 112), (1000, 0, 1268, 96), (1405, 19
 
 
 def after(c):
-    B.label(c, 265, 75, 'LIVING ROOM', '12\'-5" × 14\'-6"')
-    B.label(c, 613, 62, 'TWO-STORY\nFOYER', name_pt=5.4)
-    B.label(c, 1134, 48, 'DINING ROOM', '12\'-3" × 14\'-6"')
-    B.label(c, 1582, 250, 'TWO-CAR GARAGE', '21\'-8" × 28\'-8"')
+    bhelp.vlabel(c, 265, 75, 'LIVING ROOM', '12\'-5" × 14\'-6"')
+    bhelp.vlabel(c, 613, 62, 'TWO-STORY\nFOYER', name_pt=4.8)
+    bhelp.vlabel(c, 1134, 48, 'DINING ROOM', '12\'-3" × 14\'-6"')
+    bhelp.vlabel(c, 1582, 250, 'TWO-CAR GARAGE', '21\'-8" × 28\'-8"')
 
 
 def draw(c, img):

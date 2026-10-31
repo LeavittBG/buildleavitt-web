@@ -60,6 +60,7 @@ def beams(c):
 def labels(c):
     L, S = B.label, B.small
     # centred in each room (Kyle, Oct 31): Pioneer I's centres moved up 76 px
+    c.rect(1205, 466, 240, 98, sw=0, fill='#ffffff')         # keep the beam lines off the lettering
     L(c, 1325, 515, 'FAMILY ROOM', '18\'-1" × 17\'-0"', 'OPT. BEAMED CEILING')
     L(c, 765, 734, 'LIBRARY', '10\'-10" × 13\'-2"')
     L(c, 2092, 626, 'KITCHEN', '19\'-8" × 13\'-2"')
