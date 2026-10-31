@@ -8,8 +8,10 @@ Changed (Kyle, October 31, 2026):
   - owner's bath: the tub in its 3'-3" x 5'-7" alcove (the bath's only bathing fixture) becomes a
     walk-in tiled shower in the same alcove, glass along the open side, linear drain
   - lettering re-set in Roboto Condensed, room names centred in their rooms
-Left as is: the stair is straight; the hall (buddy) bath keeps its tub/shower; the quarter-round
-railing at the open-to-foyer edge is a floor edge, not a stair, and stays as drawn.
+  - the quarter-round wood railing at the open-to-foyer edge is straightened (Kyle's follow-up,
+    October 31, 2026): two straight runs meeting at a square corner with a post, as on The
+    Visionary; the small piece of floor inside the old curve becomes hall
+Left as is: the stair is straight; the hall (buddy) bath keeps its tub/shower.
 """
 import blib as B
 
@@ -30,6 +32,22 @@ FAM = (815, 283, 1065, 483)
 TUB = [(1772, 484, 1869, 657)]
 # the newel block at the head of the centre flight reads as a window
 WIN_DROP = [(950, 1030, 1020, 1090)]
+# the curved railing between its end posts at (679, 1326) and (793, 1212)
+CURVE = [(674, 1205, 801, 1337)]
+P0, PC, P1 = (679.0, 1326.0), (793.0, 1326.0), (793.0, 1212.0)
+
+
+def railing(c):
+    """Straight wood railing, drawn like the traced ones: a navy band with a fine white centre
+    line, square posts at the ends and the corner."""
+    N = B.NAVY
+    band = 12.0 / (B.K / 72.0)                              # 12 px band, in points
+    pts = [(P0[0] - 2, P0[1]), PC, (P1[0], P1[1] - 2)]
+    c.polyline(pts, w=band, color=N)
+    c.polyline(pts, w=0.35, color='#ffffff')
+    for x, y in (P0, PC, P1):
+        c.rect(x - 8, y - 8, 16, 16, sw=0, fill=N)
+        c.rect(x - 3, y - 3, 6, 6, sw=0, fill='#ffffff')
 
 
 def owners_shower(c):
@@ -78,11 +96,12 @@ def labels(c):
 def draw(c, img):
     c.K = B.K
     walls, wins = B.trace(img, win_drop=WIN_DROP)
-    drop = TEXT + [FAM] + TUB
+    drop = TEXT + [FAM] + TUB + CURVE
     nv, gr = B.lineart(img, walls, drop=drop)
     B.draw_geom(c, gr, B.OPT)
     B.draw_geom(c, nv, B.NAVY)
     B.draw_geom(c, B.hairlines(img, walls, drop), B.NAVY)
     owners_shower(c)
+    railing(c)
     B.draw_plan_walls(c, walls, wins)
     labels(c)

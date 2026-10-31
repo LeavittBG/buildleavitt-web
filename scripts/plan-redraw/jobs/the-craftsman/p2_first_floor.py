@@ -3,7 +3,9 @@
 Source raster 2497x2263 px at 387 dpi; 46.2 px/ft (garage 20'-3" inside = 934 px, 22'-5" = 1037 px).
 Traced: walls, windows, linework (doors, cabinets, stair, dashed options).
 Modernised (Kyle, October 31, 2026): powder-room pedestal sink -> 24" vanity.
-Left as drawn: the kitchen has an island and no peninsula; the U-stair turns on winders (not a
+Kitchen (Kyle, October 31): the small island becomes an 8'-0" x 3'-0" island with four stools
+(42" to the cooktop run, 40" to the sink run, 37" behind the stools, as the old one had).
+Left as drawn: the U-stair turns on winders (not a
 flared or curved start), so it is only re-traced.
 """
 import blib as B
@@ -22,12 +24,25 @@ PDR_SINK = [(710, 1153, 820, 1232)]
 WIN_DROP = [(1050, 1100, 1700, 1900), (1560, 1140, 1620, 1190)]
 
 
+OLD_ISLAND = [(968, 738, 1176, 880)]
+
+def island(c, x0, y0, x1, y1, stools):
+    """Larger island (Kyle, October 31, 2026): seating overhang on the same side as the old
+    island's, 12 in deep (dashed), stools drawn like The Pioneer I's."""
+    k = B.PXFT / 12.0
+    B.box(c, x0, y0, x1, y1, sw=0.6)
+    c.line(x0, y1 - 12 * k, x1, y1 - 12 * k, 0.35, color=B.NAVY, dash=c.dash(2.5, 1.6))
+    for i in range(stools):
+        cx = x0 + (x1 - x0) * (i + 0.5) / stools
+        c.circle(cx, y1 + 9.5 * k, 7 * k, sw=0.45, color=B.GREY)
+
+
 def labels(c):
     L, S, o = B.label, B.small, B.OPT
     # names centred in their rooms: tray outlines, open floor, over the island in the kitchen
     L(c, 392, 815, 'DINING ROOM', '11\'-7" × 13\'-10"', 'OPT. TRAY CEILING')
     L(c, 392, 1532, 'LIVING ROOM', '13\'-1" × 16\'-1"', 'OPT. TRAY CEILING')
-    L(c, 1070, 668, 'KITCHEN', '19\'-10" × 13\'-10"')
+    L(c, 1119, 667, 'KITCHEN', '19\'-10" × 13\'-10"')
     L(c, 1372, 600, 'BREAKFAST\nNOOK')
     L(c, 1985, 816, 'FAMILY ROOM', '16\'-8" × 13\'-10"', 'OPT. BEAMED CEILING')
     L(c, 1901, 1680, 'TWO-CAR GARAGE', '20\'-3" × 22\'-5"')
@@ -35,7 +50,7 @@ def labels(c):
     L(c, 1182, 1300, 'LAUNDRY', name_pt=5.6)
     L(c, 893, 1700, 'TWO-STORY\nFOYER')
     L(c, 898, 2066, 'CONC. PORCH', name_pt=5.2)
-    S(c, 1070, 806, 'ISLAND', size=4.0)
+    S(c, 1119, 790, 'ISLAND', size=4.0)
     S(c, 760, 1104, 'PANTRY', size=4.0)
     S(c, 805, 1511, 'CLOSET', size=4.0)
     S(c, 1036, 1516, 'DN', size=4.2)
@@ -60,11 +75,12 @@ def labels(c):
 def draw(c, img):
     B.K, B.PXFT = K, PXFT
     walls, wins = B.trace(img, win_drop=WIN_DROP)
-    drop = TEXT + PDR_SINK
+    drop = TEXT + PDR_SINK + OLD_ISLAND
     nv, gr = B.lineart(img, walls, drop=drop)
     B.draw_geom(c, gr, B.OPT)
     B.draw_geom(c, nv, B.NAVY)
     B.draw_geom(c, B.hairlines(img, walls, drop), B.NAVY)
     B.vanity(c, 765.5, 1151, 'down', 24, 19)          # powder room vanity (was a pedestal sink)
+    island(c, 934, 744, 1304, 883, 4)
     B.draw_plan_walls(c, walls, wins)
     labels(c)

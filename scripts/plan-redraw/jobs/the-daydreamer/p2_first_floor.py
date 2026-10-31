@@ -9,7 +9,9 @@ Changed (Kyle, October 31, 2026):
     square newels, in place; treads redrawn clean
   - powder room: pedestal sink -> 24" vanity
   - lettering re-set in Roboto Condensed, room names centred in their rooms
-Left as is: the kitchen has one island and no peninsula; no desk, no garage-entry bench, and no
+Kitchen (Kyle, October 31): the small island becomes a 7'-0" x 2'-11" island with four stools
+(42" to the cooktop run and the sink run, 36" behind the stools).
+Left as is: no desk, no garage-entry bench, and no
 room for a walk-in pantry inside the existing walls.
 """
 import blib as B
@@ -52,6 +54,19 @@ def stair(c):
     B.small(c, 1104, 1380, 'UP', size=4.0, rotate=-90)
 
 
+OLD_ISLAND = [(1274, 614, 1446, 732)]
+
+def island(c, x0, y0, x1, y1, stools):
+    """Larger island (Kyle, October 31, 2026): seating overhang on the same side as the old
+    island's, 12 in deep (dashed), stools drawn like The Pioneer I's."""
+    k = B.PXFT / 12.0
+    B.box(c, x0, y0, x1, y1, sw=0.6)
+    c.line(x0, y1 - 12 * k, x1, y1 - 12 * k, 0.35, color=B.NAVY, dash=c.dash(2.5, 1.6))
+    for i in range(stools):
+        cx = x0 + (x1 - x0) * (i + 0.5) / stools
+        c.circle(cx, y1 + 9.5 * k, 7 * k, sw=0.45, color=B.GREY)
+
+
 def labels(c):
     L, S = B.label, B.small
     o = B.OPT
@@ -59,7 +74,7 @@ def labels(c):
     # over the island in the kitchen)
     L(c, 806, 663, 'DINING ROOM', '13\'-0" × 13\'-8"', 'OPT. TRAY CEILING')
     L(c, 806, 1245, 'LIVING ROOM', '13\'-0" × 14\'-8"', 'OPT. TRAY CEILING')
-    L(c, 1359, 552, 'KITCHEN', '21\'-1" × 14\'-4"')
+    L(c, 1417, 553, 'KITCHEN', '21\'-1" × 14\'-4"')
     L(c, 1662, 640, 'BREAKFAST\nNOOK')
     L(c, 2297, 665, 'FAMILY ROOM', '23\'-0" × 13\'-7"', 'OPT. BEAMED CEILING')
     L(c, 1630, 1400, 'LIBRARY', '12\'-0" × 10\'-8"')
@@ -68,7 +83,7 @@ def labels(c):
     L(c, 1223, 1656, 'CONC. PORCH', name_pt=5.2)
     L(c, 1589, 1055, 'PDR.\nROOM', name_pt=4.6)
     S(c, 1793, 1032, 'LAUNDRY', size=4.4, rotate=-90, weight=700)
-    S(c, 1363, 664, 'ISLAND', size=3.6)
+    S(c, 1417, 655, 'ISLAND', size=3.6)
     S(c, 1157, 932, 'PANTRY', size=3.8)
     S(c, 1419, 997, 'DN', size=4.0)
     S(c, 1470, 1238, 'CLOSET', size=3.6, rotate=-45)
@@ -89,7 +104,7 @@ def labels(c):
 
 def draw(c, img):
     walls, wins = B.trace(img, win_drop=WIN_DROP)
-    drop = TEXT + STAIR + PDR_SINK
+    drop = TEXT + STAIR + PDR_SINK + OLD_ISLAND
     nv, gr = B.lineart(img, walls, drop=drop)
     nv = nv.difference(DIAG_TEXT)
     hl = B.hairlines(img, walls, drop).difference(DIAG_TEXT)
@@ -98,5 +113,6 @@ def draw(c, img):
     B.draw_geom(c, hl, B.NAVY)
     B.vanity(c, 1588, 953, 'down', 24, 18)                     # powder room vanity
     stair(c)
+    island(c, 1285, 619, 1550, 730, 4)
     B.draw_plan_walls(c, walls, wins)
     labels(c)

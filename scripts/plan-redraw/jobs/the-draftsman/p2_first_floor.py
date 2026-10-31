@@ -9,7 +9,9 @@ Changed (Kyle, October 31, 2026):
   - main stair: the rounded (bullnose) first step becomes a square-cut step with square newels
   - powder room: pedestal sink -> 24" vanity
   - lettering re-set in Roboto Condensed, room names centred in their rooms
-Left as is: the kitchen has a small island and no peninsula; the bar counter between the family
+  - kitchen: the small island becomes a 6'-4" x 3'-2" island with three stools (40" to the
+    cooktop and angled sink runs, 36" to the bar and behind the stools)
+Left as is: the bar counter between the family
 room and kitchen is a divider, not a peninsula; no desk or garage-entry bench; no room for a
 walk-in pantry (the pantry is a reach-in under the counter run).
 """
@@ -61,12 +63,25 @@ def stair_start(c):
     B.arrow(c, [(994, 1140), (1036, 1140)], w=0.45)
 
 
+OLD_ISLAND = [(1732, 731, 1904, 848)]
+
+def island(c, x0, y0, x1, y1, stools):
+    """Larger island (Kyle, October 31, 2026): seating overhang on the same side as the old
+    island's, 12 in deep (dashed), stools drawn like The Pioneer I's."""
+    k = B.PXFT / 12.0
+    B.box(c, x0, y0, x1, y1, sw=0.6)
+    c.line(x0, y1 - 12 * k, x1, y1 - 12 * k, 0.35, color=B.NAVY, dash=c.dash(2.5, 1.6))
+    for i in range(stools):
+        cx = x0 + (x1 - x0) * (i + 0.5) / stools
+        c.circle(cx, y1 + 9.5 * k, 7 * k, sw=0.45, color=B.GREY)
+
+
 def labels(c):
     L, S = B.label, B.small
     o = B.OPT
     L(c, 1123, 645, 'TWO-STORY\nFAMILY ROOM', '16\'-3" × 21\'-8"')
     L(c, 1705, 335, 'MORNING ROOM', '13\'-6" × 11\'-10"', 'OPTIONAL CATHEDRAL CEILING')
-    L(c, 1817, 668, 'KITCHEN', '19\'-4" × 14\'-0"')
+    L(c, 1764, 663, 'KITCHEN', '19\'-4" × 14\'-0"')
     L(c, 317, 1128, "OWNER'S BEDROOM", '15\'-5" × 19\'-11"', 'OPT. TRAY CEILING')
     L(c, 505, 420, "OWNER'S\nBATH", note='OPT. CATHEDRAL CEILING')
     L(c, 1408, 1530, 'DINING ROOM', '11\'-8" × 16\'-0"', 'OPT. TRAY CEILING')
@@ -81,7 +96,7 @@ def labels(c):
     L(c, 991, 1794, 'CONC. PORCH', name_pt=5.0)
     S(c, 712, 919, 'CLOSET', size=4.0)
     S(c, 2108, 1035, 'PANTRY', size=3.6)
-    S(c, 1820, 780, 'ISLAND', size=3.6)
+    S(c, 1764, 771, 'ISLAND', size=3.6)
     S(c, 321, 673, 'LINEN', size=3.4, rotate=45)
     S(c, 1010, 1118, 'UP', size=4.0)
     S(c, 1485, 1122, 'DN', size=4.0)
@@ -95,7 +110,7 @@ def labels(c):
 
 def draw(c, img):
     walls, wins = B.trace(img, win_drop=WIN_DROP)
-    drop = TEXT + STAIR_START + PDR_SINK
+    drop = TEXT + STAIR_START + PDR_SINK + OLD_ISLAND
     cutout = unary_union([BATH_DROP, LINEN_TEXT])
     nv, gr = B.lineart(img, walls, drop=drop)
     hl = B.hairlines(img, walls, drop)
@@ -105,5 +120,6 @@ def draw(c, img):
     shower(c)
     stair_start(c)
     B.vanity(c, 630, 1365, 'right', 24, 19)                     # powder room vanity
+    island(c, 1644, 727, 1884, 847, 3)
     B.draw_plan_walls(c, walls, wins)
     labels(c)

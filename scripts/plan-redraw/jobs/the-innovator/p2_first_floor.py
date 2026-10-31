@@ -8,6 +8,10 @@ Modernised (Kyle, October 31, 2026):
     corner (about 5'-6" x 5'-5"): glass on the room side and along the top with a 30" open entry,
     bench on the back wall, linear drain under the window. The old shower stall is across the
     room, so it can't join; it becomes a towel closet behind its existing door.
+  - Kyle's follow-up the same day: the small closet above the right-hand vanity (beside it on the
+    plan) is removed and the vanity runs on into its space as a 7'-2" double vanity, since the
+    towel closet now gives the storage; the towel closet is made shallower, 2'-0" deep instead
+    of the old stall's 2'-9", with a framed front and a 24" door, the rest going back to the bath.
 Left as drawn: one kitchen island and no peninsula; the stair is straight; the hall bath keeps
 its tub; the pantry is a reach-in. All lettering kept as printed (CLAUDE.md: the brochure's
 second-floor wording is Kyle's to correct, not ours).
@@ -28,7 +32,10 @@ TEXT = [(390, 52, 625, 92), (185, 160, 222, 272), (350, 375, 660, 484), (1085, 1
         (1925, 1099, 2060, 1153), (2270, 1099, 2405, 1153), (25, 1255, 66, 1445), (25, 2045, 66, 2183),
         (120, 1835, 200, 1948), (1548, 1215, 1600, 1255)]
 OB_TUB = [(2206, 1586, 2454, 1832)]
-OB_STALL = [(1878, 1261, 2006, 1435)]
+OB_STALL = [(1870, 1256, 2092, 1488)]          # old stall, its door and swing, the niche below it
+OB_CLOSET = [(2270, 1256, 2456, 1596)]         # closet beside the right-hand vanity + the vanity
+# walls to take out: the closet's top jamb stub and its bottom wall (the vanity runs on through)
+OB_CUT = [(2355, 1257, 2386, 1290), (2355, 1374, 2456, 1414)]
 
 # new shower: inside faces of the corner, top = end of the right-hand vanity, left = end of the
 # bottom vanity counter
@@ -50,15 +57,29 @@ def owners_shower(c):
 
 
 def towel_closet(c):
-    """Old shower stall: shelves along its back wall, behind the existing door."""
+    """Old shower stall made a towel closet, 2'-0" deep (back wall at x 1878): shelves behind a
+    framed front with a 24" door that swings into the bath; the niche below keeps its place."""
     N = B.NAVY
-    x0, y0, x1, y1 = 1878.0, 1261.0, 2006.0, 1435.0
     k = B.PXFT / 12.0
-    c.rect(x0, y0, x1 - x0, y1 - y0, sw=0, fill='#ffffff')
-    c.rect(x0, y0, x1 - x0, y1 - y0, sw=0.45, color=N)
-    c.line(x0 + 16 * k, y0, x0 + 16 * k, y1, 0.45, color=N, dash=c.dash(2.5, 1.6))
-    B.small(c, x0 + 16 * k + 22, (y0 + y1) / 2, 'TOWEL', size=3.4, rotate=-90)
-    B.small(c, x0 + 16 * k + 44, (y0 + y1) / 2, 'CLOSET', size=3.4, rotate=-90)
+    x0, y0, y1 = 1878.0, 1261.0, 1440.0
+    fx0 = x0 + 24 * k                       # inside face of the new front partition
+    fx1 = fx0 + 4.5 * k
+    c.rect(1870, 1256, 2092 - 1870, 1486 - 1256, sw=0, fill='#ffffff')
+    c.line(x0 + 16 * k, y0 + 2, x0 + 16 * k, y1 - 2, 0.45, color=N, dash=c.dash(2.5, 1.6))   # shelves
+    c.line(x0, y1, fx0, y1, 0.45, color=N)                                  # closet floor / niche top
+    B.small(c, (x0 + x0 + 16 * k) / 2, (y0 + y1) / 2, 'TOWEL CLOSET', size=3.2, rotate=-90)
+    d0, d1 = 1305.0, 1305.0 + 24 * k        # 24" door opening
+    for ya, yb in ((1257.0, d0), (d1, 1488.0)):
+        c.rect(fx0, ya, fx1 - fx0, yb - ya, sw=0.35, color=N, fill=B.FILL)
+    B.door(c, (fx1, d0), (fx1, d1), side=-1)
+
+
+def owners_vanity(c):
+    """Double vanity along the right-hand wall, from the top wall to the shower: 7'-2" x 19"."""
+    k = B.PXFT / 12.0
+    xw, ya, yb = 2456.0, 1257.0, 1585.0
+    L = (yb - ya) / k
+    B.vanity(c, xw, (ya + yb) / 2, 'left', L, 19, sinks=(-L / 4, L / 4))
 
 
 def labels(c):
@@ -106,13 +127,14 @@ def labels(c):
 def draw(c, img):
     B.K = c.K = K
     B.PXFT = PXFT
-    walls, wins = B.trace(img)
-    drop = TEXT + OB_TUB + OB_STALL
+    walls, wins = B.trace(img, cut=OB_CUT)
+    drop = TEXT + OB_TUB + OB_STALL + OB_CLOSET
     nv, gr = B.lineart(img, walls, drop=drop)
     B.draw_geom(c, gr, B.OPT)
     B.draw_geom(c, nv, B.NAVY)
     B.draw_geom(c, B.hairlines(img, walls, drop), B.NAVY)
     owners_shower(c)
     towel_closet(c)
+    owners_vanity(c)
     B.draw_plan_walls(c, walls, wins)
     labels(c)
