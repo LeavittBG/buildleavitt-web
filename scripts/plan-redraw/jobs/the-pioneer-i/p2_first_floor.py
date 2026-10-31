@@ -171,6 +171,7 @@ def draw(c, img):
     nv, gr = B.lineart(img, walls, drop=drop)
     B.draw_geom(c, gr, B.OPT)
     B.draw_geom(c, nv, B.NAVY)
+    B.draw_geom(c, B.hairlines(img, walls, drop), B.NAVY)
     B.vanity(c, 690, 1277, 'up', 24, 19)                      # powder room vanity
     kitchen(c)
     coffee_bar(c)

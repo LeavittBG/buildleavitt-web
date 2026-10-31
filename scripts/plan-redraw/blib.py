@@ -624,3 +624,22 @@ def draw_geom(c, geom, color=NAVY):
     if geom.is_empty:
         return
     c.path(poly_path(geom), sw=0, fill=color, extra='fill-rule="evenodd"')
+
+
+def hairlines(img_path, walls_geom, drop=()):
+    """1-px linework that lineart() loses (its outline has no area): optional doors, hairline
+    dashes, ceiling lines. Picked out as dark pixels not part of a thicker stroke, widened to 2 px."""
+    a, grey, navy = load(img_path)
+    lum = a.sum(-1) / 3.0
+    core = lum < 120
+    thick = ndi.binary_opening(core, np.ones((3, 3), bool))
+    thin = core & ~ndi.binary_dilation(thick, np.ones((3, 3), bool))
+    wm = np.zeros(core.shape, np.uint8)
+    for p in getattr(walls_geom, 'geoms', [walls_geom]):
+        if p.is_empty:
+            continue
+        cv2.fillPoly(wm, [np.array(p.exterior.coords, np.int32)], 1)
+    wm = ndi.binary_dilation(wm.astype(bool), np.ones((7, 7), bool))
+    thin &= ~wm & ~_rects_mask(core.shape, drop)
+    thin = ndi.binary_dilation(thin, np.ones((2, 2), bool))
+    return _contours_to_geom(thin, eps=0.6, min_area=2)
