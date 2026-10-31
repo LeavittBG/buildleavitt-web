@@ -1,7 +1,7 @@
 """The Pioneer I - FIRST FLOOR OPTIONS, vignette 'OPTIONAL 3 CAR GARAGE' (page 3, xref 22).
 Source raster 1434x916 px, 438 dpi, ~37.8 px/ft (33'-4" inside = 1265 px). Traced walls/windows/
 linework; lettering re-set. Follows the first-floor change (Kyle, October 31, 2026): the bench by
-the garage entry becomes lockers with a bench, same as /tmp/pw/jobs/p1_first.py lockers()."""
+the garage entry becomes lockers with a bench, same as p2_first_floor.py lockers()."""
 import sys
 import blib as B
 hairlines = B.hairlines

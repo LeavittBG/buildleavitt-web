@@ -483,6 +483,16 @@ def render(c, out_pdf, png=True):
                margin={'top': '0', 'right': '0', 'bottom': '0', 'left': '0'})
         b.close()
     os.remove(hp)
+    # Chromium rounds the page up a little; trim it to the drawing's exact size (top-left
+    # origin) so swap() maps the drawing onto the image's rectangle without rescaling it.
+    import pikepdf
+    with pikepdf.open(out_pdf, allow_overwriting_input=True) as pdf:
+        pg = pdf.pages[0]
+        x0, y0, x1, y1 = [float(v) for v in pg.mediabox]
+        pg.mediabox = pikepdf.Array([x0, y1 - hin * 72.0, x0 + win * 72.0, y1])
+        if '/CropBox' in pg.obj:
+            del pg.obj['/CropBox']
+        pdf.save(out_pdf)
     if png:
         subprocess.run(['pdftoppm', '-r', str(int(K)), '-png', '-singlefile', out_pdf, out_pdf[:-4]], check=True)
     return out_pdf
