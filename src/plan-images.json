@@ -349,7 +349,7 @@
       "file": "the-innovator-first-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1652,
+      "height": 1648,
       "label": "First Floor"
     },
     "first-floor-options": {
@@ -362,7 +362,7 @@
     "optional-second-floor": {
       "file": "the-innovator-optional-second-floor",
       "ext": "png",
-      "width": 1256,
+      "width": 1254,
       "height": 1442,
       "label": "Optional Second Floor"
     },
@@ -370,7 +370,7 @@
       "file": "the-innovator-basement",
       "ext": "png",
       "width": 1500,
-      "height": 1644,
+      "height": 1646,
       "label": "Basement"
     }
   },
@@ -386,21 +386,21 @@
       "file": "the-maestro-first-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1674,
+      "height": 1676,
       "label": "First Floor"
     },
     "second-floor": {
       "file": "the-maestro-second-floor",
       "ext": "png",
       "width": 1501,
-      "height": 1633,
+      "height": 1635,
       "label": "Second Floor"
     },
     "basement": {
       "file": "the-maestro-basement",
       "ext": "png",
       "width": 1498,
-      "height": 1462,
+      "height": 1461,
       "label": "Basement"
     },
     "basement-options": {
@@ -444,7 +444,7 @@
       "file": "the-novel-basement",
       "ext": "png",
       "width": 1498,
-      "height": 1492,
+      "height": 1494,
       "label": "Basement"
     },
     "basement-options": {
@@ -592,7 +592,7 @@
       "file": "the-romantic-first-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1580,
+      "height": 1578,
       "label": "First Floor"
     },
     "first-floor-options": {
@@ -606,14 +606,14 @@
       "file": "the-romantic-second-floor",
       "ext": "png",
       "width": 1369,
-      "height": 1523,
+      "height": 1522,
       "label": "Second Floor"
     },
     "basement": {
       "file": "the-romantic-basement",
       "ext": "png",
       "width": 1498,
-      "height": 1423,
+      "height": 1426,
       "label": "Basement"
     },
     "basement-options": {
@@ -636,21 +636,21 @@
       "file": "the-storyteller-first-floor",
       "ext": "png",
       "width": 1498,
-      "height": 1649,
+      "height": 1650,
       "label": "First Floor"
     },
     "second-floor": {
       "file": "the-storyteller-second-floor",
       "ext": "png",
-      "width": 1492,
-      "height": 1556,
+      "width": 1490,
+      "height": 1557,
       "label": "Second Floor"
     },
     "basement": {
       "file": "the-storyteller-basement",
       "ext": "png",
       "width": 1498,
-      "height": 1255,
+      "height": 1256,
       "label": "Basement"
     }
   },

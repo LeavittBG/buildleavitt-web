@@ -405,7 +405,7 @@ def listing_lines(img, walls_geom, drop=(), dark=150):
     if drop:
         m &= ~B._rects_mask(m.shape, drop)
     m = ndi.binary_dilation(m, np.ones((2, 2), bool))
-    return B._contours_to_geom(m, eps=0.7, min_area=2)
+    return B._contours_to_geom(m, eps=0.7, min_area=14)     # drops JPEG speckle on the teal floors
 
 
 def listing_erase_text(img, rects, out=None, max_glyph=48, fill=(234, 234, 222), hard=()):
@@ -417,7 +417,7 @@ def listing_erase_text(img, rects, out=None, max_glyph=48, fill=(234, 234, 222),
     a, grey, navy = B.load(img)
     lum = a.sum(-1) / 3.0
     sat = a.max(-1) - a.min(-1)
-    dark = (lum < 170) & (sat < 44)          # not the teal bath floors
+    dark = (lum < 120) & (sat < 44)          # glyph cores only: not the teal floors or their JPEG noise
     lab, n = ndi.label(dark, np.ones((3, 3), bool))
     b = a.copy()
     for i, sl in enumerate(ndi.find_objects(lab)):
@@ -429,6 +429,18 @@ def listing_erase_text(img, rects, out=None, max_glyph=48, fill=(234, 234, 222),
         if any(rx0 <= x0 and x1 <= rx1 and ry0 <= y0 and y1 <= ry1 for rx0, ry0, rx1, ry1 in rects):
             m = ndi.binary_dilation(lab[sl] == i + 1, np.ones((5, 5), bool))
             b[sl][m] = fill
+    # faint leftovers (apostrophes, antialiased edges) as small whole components
+    faint = (b.sum(-1) / 3.0 < 175) & ((b.max(-1) - b.min(-1)) < 60)
+    lab2, n2 = ndi.label(faint, np.ones((3, 3), bool))
+    for i, sl in enumerate(ndi.find_objects(lab2)):
+        if sl is None:
+            continue
+        y0, y1, x0, x1 = sl[0].start, sl[0].stop, sl[1].start, sl[1].stop
+        comp = lab2[sl] == i + 1
+        if max(y1 - y0, x1 - x0) > max_glyph or (b[sl][comp].sum(-1) / 3.0).mean() < 70:
+            continue                     # too big, or solid black linework: not a glyph remnant
+        if any(rx0 <= x0 and x1 <= rx1 and ry0 <= y0 and y1 <= ry1 for rx0, ry0, rx1, ry1 in rects):
+            b[sl][ndi.binary_dilation(comp, np.ones((3, 3), bool))] = fill
     for x0, y0, x1, y1 in hard:
         b[int(y0):int(y1), int(x0):int(x1)] = fill
     out = out or img[:-4] + '_notext.png'
