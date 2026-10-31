@@ -227,11 +227,14 @@ const foot = () => `
 /**
  * <picture> with the WebP first and the PNG as the fallback, carrying the real
  * pixel size so the browser reserves the space before the image loads.
+ * `base` is "/" on the plan pages, which live a directory down, and "" on the
+ * homepage, whose paths are relative (several tests open index.html straight
+ * from disk, where "/plans/img/..." would resolve to the root of the machine).
  */
-const picture = (img, { alt, cls, lazy = true }) => {
+const picture = (img, { alt, cls, lazy = true, base = '/' }) => {
   const a = lazy ? ' loading="lazy" decoding="async"' : ' decoding="async"';
-  return `<picture class="contents"><source srcset="/plans/img/${img.file}.webp" type="image/webp">` +
-    `<img src="/plans/img/${img.file}.${img.ext || 'png'}" alt="${esc(alt)}" width="${img.width}" height="${img.height}"${a} class="${cls}"></picture>`;
+  return `<picture class="contents"><source srcset="${base}plans/img/${img.file}.webp" type="image/webp">` +
+    `<img src="${base}plans/img/${img.file}.${img.ext || 'png'}" alt="${esc(alt)}" width="${img.width}" height="${img.height}"${a} class="${cls}"></picture>`;
 };
 
 /** Every sheet this model has, in the order they are shown. */
@@ -317,11 +320,254 @@ const shareImage = (model) => {
   };
 };
 
+/**
+ * The facts a visitor compares plans by, on the card itself, so choosing one
+ * does not mean opening all seventeen. The same figures the plan page prints
+ * ("4+", "2.5+", "From 4,282"), so the tests that hold every figure to the data
+ * apply here too. No price (see the note at the top).
+ */
+const cardFacts = (model) => {
+  const s = model.specs || {};
+  const dash = (v) => String(v).replace('-', '&ndash;');
+  const facts = [
+    s.beds && `${dash(s.beds)} bed`,
+    s.baths && `${dash(s.baths)} bath`,
+    s.sqft && `${s.sqftFrom ? 'From ' : ''}${s.sqft.toLocaleString('en-US')} sq ft`,
+    s.stories && (s.stories === 1 ? 'Ranch' : `${s.stories} stories`),
+  ].filter(Boolean);
+  // Each fact is kept on one line with its separator, and the line may only
+  // break between facts: "2 / stories" split across lines once, and with no
+  // break anywhere the whole line ran out of its card on a phone.
+  return facts.map((f, i) => `<span class="whitespace-nowrap">${f}${i < facts.length - 1
+    ? ' <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span>' : ''}</span>`).join(' ');
+};
+
+/**
+ * Where "Start with this plan" goes: the homepage form, with the plan named
+ * and "Semi-Custom Home" chosen as the project type, since starting from one
+ * of these plans is the semi-custom path. The visitor can change either.
+ */
+const startHref = (model) => `/?plan=${encodeURIComponent(model.name)}&interest=Semi-Custom%20Home#contact`;
+
+// ------------------------------------------------------------- plan finder
+/*
+ * The plan finder: three questions (stories, bedrooms, size) that narrow the
+ * plans as they are answered, on the homepage and at the top of /plans/. It
+ * exists because seventeen plans is too many to compare by opening each one,
+ * and because a visitor who has narrowed to two or three plans is a visitor
+ * with a next step: "Start with this plan" hands the choice to the contact
+ * form.
+ *
+ * Everything the finder matches on comes from src/plans.json, carried on each
+ * card as data attributes, so a figure can never differ from the plan's own
+ * page. The cards are all in the HTML; the script only shows and hides them,
+ * so with scripts blocked every plan is still there (the homepage shows its
+ * featured six and links to the rest). The script itself is written once here
+ * and placed on both pages.
+ */
+
+/* The six plans the homepage shows before a question is answered, in order.
+   The Pioneer I leads because it is the house in the hero photograph; the rest
+   spread across sizes and include the ranch. */
+const FEATURED = ['the-pioneer-i', 'the-visionary', 'the-storyteller', 'the-entrepreneur', 'the-craftsman', 'the-romantic'];
+
+/* The "bedrooms" figure on a cover is a floor ("4+") or an exact count ("3");
+   either way its first number is the fewest bedrooms the plan has. */
+const minBeds = (beds) => parseInt(String(beds), 10) || 0;
+
+/* Size bands for the third question. The bands are on the starting figure,
+   the only one Leavitt gives. */
+const SIZE_BANDS = [
+  ['under-3000', 'Under 3,000'],
+  ['3000-4000', '3,000 to 4,000'],
+  ['over-4000', 'Over 4,000'],
+];
+
+const FINDER_QUESTIONS = [
+  ['stories', 'How many stories?', [['', 'Either'], ['1', 'One story'], ['2', 'Two stories']]],
+  ['beds', 'Bedrooms', [['', 'Any'], ['3', '3 or more'], ['4', '4 or more']]],
+  ['size', 'Living space, sq ft', [['', 'Any'], ...SIZE_BANDS]],
+];
+
+/**
+ * One plan as a card: the rendering edge to edge, the name, the facts line,
+ * and two ways on - the plan's page, or the contact form with the plan named.
+ */
+const planCard = (model, { featured = false, finder = true, base = '/' } = {}) => {
+  const s = model.specs || {};
+  const cover = coverOf(model);
+  const facts = cardFacts(model);
+  const data = finder
+    ? ` data-plan="${model.slug}" data-stories="${s.stories ?? ''}" data-beds="${minBeds(s.beds)}" data-sqft="${s.sqft ?? ''}"${featured ? ' data-featured' : ''}`
+    : '';
+  return `
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col${finder && !featured ? ' hidden' : ''}"${data}>
+                    <a href="/plans/${model.slug}.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            ${cover ? picture(cover.img, {
+                              alt: coverAlt(model, cover),
+                              cls: 'w-full h-full object-cover',
+                              base,
+                            }) : '<span class="block p-6 text-gray-400 text-sm">Drawings coming soon</span>'}
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">${esc(model.name)}</h3>
+                            ${facts ? `<p class="text-sm text-[#0f172a] mt-2">${facts}</p>` : ''}
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/${model.slug}.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="${startHref(model)}" data-start-plan="${esc(model.name)}" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
+                    </div>
+                </div>`;
+};
+
+/**
+ * The finder itself: the questions, the status line, the cards and the empty
+ * state. `cap` is how many matches the page shows before pointing at /plans/;
+ * the homepage shows six, /plans/ shows them all.
+ */
+const finderHtml = ({ cap, base = '/' } = {}) => {
+  const capped = Number.isFinite(cap);
+  const questions = FINDER_QUESTIONS.map(([key, legend, options]) => `
+                <fieldset>
+                    <legend class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-3">${legend}</legend>
+                    <div class="flex flex-wrap gap-2">
+${options.map(([value, label], i) => `                        <label class="cursor-pointer">
+                            <input type="radio" name="finder-${key}" value="${value}" class="sr-only peer"${i === 0 ? ' checked' : ''}>
+                            <span class="inline-block border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">${label}</span>
+                        </label>`).join('\n')}
+                    </div>
+                </fieldset>`).join('\n');
+
+  const cards = models.map((m) => planCard(m, { featured: !capped || FEATURED.includes(m.slug), base }));
+  const ordered = capped
+    ? [...FEATURED.map((slug) => models.findIndex((m) => m.slug === slug)), ...models.map((_, i) => i).filter((i) => !FEATURED.includes(models[i].slug))]
+        .map((i) => cards[i])
+    : cards;
+
+  return `
+        <div id="plan-finder"${capped ? ` data-cap="${cap}"` : ''}>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+${questions}
+            </div>
+
+            <p class="text-sm text-gray-600 mb-6" data-finder-status aria-live="polite">${capped
+              ? `Six of our ${models.length} plans, to start. Answer a question or two above and the list narrows.`
+              : `All ${models.length} plans. Answer a question or two above and the list narrows.`}</p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+${ordered.join('\n')}
+            </div>
+
+            <div class="hidden border border-gray-200 bg-white p-8 md:p-10" data-finder-empty>
+                <p class="text-xl font-serif text-[#0f172a] mb-3">Nothing on the shelf fits all three.</p>
+                <p class="text-gray-600 max-w-xl mb-6">That is not the end of it: every plan here is adjusted to the way you want to live, and we draw from scratch too. Loosen one answer, or tell us what you have in mind.</p>
+                <a href="/?interest=Custom%20Home%20Build#contact" class="inline-flex items-center gap-2 bg-[#0f172a] text-white px-8 py-4 uppercase tracking-[0.2em] font-bold text-xs hover:bg-[#c2a67a] hover:text-[#0f172a] transition-colors">Start a custom home</a>
+            </div>
+${capped ? `
+            <div class="text-center mt-12">
+                <a href="/plans/" data-finder-more class="inline-flex items-center gap-2 bg-[#0f172a] text-white px-8 py-4 uppercase tracking-[0.2em] font-bold text-xs hover:bg-[#c2a67a] hover:text-[#0f172a] transition-colors">
+                    Browse all ${models.length} plans
+                </a>
+            </div>` : ''}
+        </div>`;
+};
+
+/*
+ * The finder's script. No framework, no fetch: the cards are already on the
+ * page, so this reads the three answers and shows the cards that fit. On
+ * /plans/ the answers are also kept in the address (?stories=1&beds=4), so a
+ * narrowed list can be shared or arrived at from the homepage's "See all"
+ * link; on the homepage the address is left alone, because ?plan= belongs to
+ * the contact form there.
+ */
+const finderScript = () => `
+    <script>
+    (() => {
+        const root = document.getElementById('plan-finder');
+        if (!root) return;
+        const cap = Number(root.getAttribute('data-cap')) || Infinity;
+        const cards = [...root.querySelectorAll('[data-plan]')];
+        const total = cards.length;
+        const radios = [...root.querySelectorAll('input[type="radio"]')];
+        const status = root.querySelector('[data-finder-status]');
+        const empty = root.querySelector('[data-finder-empty]');
+        const more = root.querySelector('[data-finder-more]');
+        const KEYS = ['stories', 'beds', 'size'];
+        const idle = status ? status.textContent : '';
+        const band = (sqft) => (sqft < 3000 ? 'under-3000' : sqft <= 4000 ? '3000-4000' : 'over-4000');
+        const read = () => Object.fromEntries(KEYS.map((k) => {
+            const r = radios.find((x) => x.name === 'finder-' + k && x.checked);
+            return [k, r ? r.value : ''];
+        }));
+        const fits = (card, f) =>
+            (!f.stories || card.getAttribute('data-stories') === f.stories) &&
+            (!f.beds || Number(card.getAttribute('data-beds')) >= Number(f.beds)) &&
+            (!f.size || band(Number(card.getAttribute('data-sqft'))) === f.size);
+        const plural = (n, word) => n + ' ' + word + (n === 1 ? '' : 's');
+        const apply = () => {
+            const f = read();
+            const narrowed = KEYS.some((k) => f[k]);
+            let shown = 0, matched = 0;
+            for (const card of cards) {
+                const m = fits(card, f);
+                if (m) matched++;
+                const show = m && (narrowed ? shown < cap : (cap === Infinity || card.hasAttribute('data-featured')));
+                if (show) shown++;
+                card.classList.toggle('hidden', !show);
+            }
+            const q = new URLSearchParams();
+            KEYS.forEach((k) => { if (f[k]) q.set(k, f[k]); });
+            const qs = q.toString() ? '?' + q.toString() : '';
+            if (status) {
+                status.textContent = !narrowed ? idle
+                    : matched === 0 ? 'No plan matches all three answers.'
+                    : matched === shown ? plural(matched, 'plan') + (matched === 1 ? ' matches.' : ' match.')
+                    : 'Showing ' + shown + ' of the ' + plural(matched, 'plan') + ' that match.';
+            }
+            if (empty) empty.classList.toggle('hidden', !narrowed || matched > 0);
+            if (more) {
+                more.href = '/plans/' + qs;
+                more.textContent = narrowed && matched > shown ? 'See all ' + matched + ' matching plans' : 'Browse all ' + total + ' plans';
+            }
+            if (cap === Infinity && history.replaceState) history.replaceState(null, '', location.pathname + qs + location.hash);
+        };
+        let preset = false;
+        try {
+            const params = new URLSearchParams(location.search);
+            for (const k of KEYS) {
+                const v = params.get(k);
+                const r = v && radios.find((x) => x.name === 'finder-' + k && x.value === v);
+                if (r) { r.checked = true; preset = true; }
+            }
+        } catch (e) { /* malformed query string: start from "any" */ }
+        radios.forEach((r) => r.addEventListener('change', apply));
+        if (preset) apply();
+    })();
+    </script>`;
+
+/**
+ * Three plans like this one: the same number of stories where possible, then
+ * the nearest in size. For the plan page, so a visitor who is close but not
+ * sold has somewhere to go besides the alphabetical neighbours.
+ */
+const similarTo = (model) => {
+  const s = model.specs || {};
+  return models
+    .filter((m) => m !== model)
+    .map((m) => ({ m, d: Math.abs((m.specs?.sqft || 0) - (s.sqft || 0)) + (m.specs?.stories === s.stories ? 0 : 100000) }))
+    .sort((a, b) => a.d - b.d)
+    .slice(0, 3)
+    .map((x) => x.m);
+};
+
 // ---------------------------------------------------------------- model pages
 
 for (const [i, model] of models.entries()) {
   const all = sheets(model);
-  const elevation = all.find((s) => s.id === 'elevation');
+  const s = model.specs || {};
+  const elevation = all.find((x) => x.id === 'elevation');
   const rest = all.filter((s) => s !== elevation);
   const prev = models[(i - 1 + models.length) % models.length];
   const next = models[(i + 1) % models.length];
@@ -418,7 +664,7 @@ ${specRows}
 
             <aside class="bg-white border border-gray-200 p-8 h-fit">
                 <h2 class="text-xl font-serif text-[#0f172a] mb-4">Interested in this plan?</h2>
-                <a href="/?plan=${encodeURIComponent(model.name)}#contact"
+                <a href="${startHref(model)}"
                    class="block w-full text-center bg-[#0f172a] text-white px-6 py-4 uppercase tracking-[0.2em] font-bold text-xs hover:bg-[#c2a67a] hover:text-[#0f172a] transition-colors mb-4">
                     Start with this plan
                 </a>
@@ -441,6 +687,14 @@ ${specRows}
 
         <h2 class="sr-only">Drawings</h2>
 ${sheetBlocks}
+
+        <section class="border-t border-gray-200 pt-12 mb-16">
+            <h2 class="text-2xl md:text-3xl font-serif text-[#0f172a] mb-2">Plans like this one</h2>
+            <p class="text-gray-600 mb-8">${s.stories === 1 ? 'Other plans' : 'Other two-story plans'} close in size to ${esc(model.name)}.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+${similarTo(model).map((m) => planCard(m, { finder: false })).join('\n')}
+            </div>
+        </section>
 
         <nav aria-label="Other plans" class="border-t border-gray-200 pt-10 flex flex-col sm:flex-row justify-between gap-6 text-sm">
             <a href="/plans/${prev.slug}.html" class="group">
@@ -465,44 +719,7 @@ ${sheetBlocks}
 
 // ----------------------------------------------------------------- index page
 
-/**
- * The facts a visitor compares plans by, on the card itself, so choosing one
- * does not mean opening all seventeen. The same figures the plan page prints
- * ("4+", "2.5+", "From 4,282"), so the tests that hold every figure to the data
- * apply here too. No price (see the note at the top).
- */
-const cardFacts = (model) => {
-  const s = model.specs || {};
-  const dash = (v) => String(v).replace('-', '&ndash;');
-  const facts = [
-    s.beds && `${dash(s.beds)} bed`,
-    s.baths && `${dash(s.baths)} bath`,
-    s.sqft && `${s.sqftFrom ? 'From ' : ''}${s.sqft.toLocaleString('en-US')} sq ft`,
-    s.stories && (s.stories === 1 ? 'Ranch' : `${s.stories} stories`),
-  ].filter(Boolean);
-  return facts.length ? facts.join('<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>') : '';
-};
-
-const cards = models.map((model) => {
-  const cover = coverOf(model);
-  const floors = floorsOf(model).length;
-  const facts = cardFacts(model);
-  return `
-                <a href="/plans/${model.slug}.html" class="group block bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors">
-                    <div class="aspect-[4/3] w-full overflow-hidden bg-white flex items-center justify-center p-4">
-                        ${cover ? picture(cover.img, {
-                          alt: coverAlt(model, cover),
-                          cls: 'max-h-full w-auto object-contain',
-                        }) : '<span class="text-gray-400 text-sm">Drawings coming soon</span>'}
-                    </div>
-                    <div class="border-t border-gray-200 p-6">
-                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">${esc(model.name)}</h3>
-                        ${facts ? `<p class="text-sm text-[#0f172a] mt-3">${facts}</p>` : ''}
-                        <p class="text-sm text-gray-500 mt-1">${floors} floor plan${floors === 1 ? '' : 's'}</p>
-                        <span class="inline-block mt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f]">View plan &rarr;</span>
-                    </div>
-                </a>`;
-}).join('\n');
+/* The plan cards on /plans/ are the finder's cards (planCard above). */
 
 const indexHtml = head({
   title: 'Home Plans | Leavitt Building Group',
@@ -540,10 +757,8 @@ const indexHtml = head({
             Group and a 2-10 Home Buyer's Warranty.
         </p>
 
-        <h2 class="sr-only">Available plans</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-${cards}
-        </div>
+        <h2 class="text-2xl md:text-3xl font-serif text-[#0f172a] mb-8">Find your plan</h2>
+${finderHtml()}
 
 ${standardSection()}
 
@@ -566,6 +781,7 @@ ${standardSection()}
         </section>
 
     </main>
+${finderScript()}
 ` + foot();
 
 mkdirSync(OUT, { recursive: true });
@@ -620,6 +836,26 @@ console.log(`plans/index.html  (${models.length} models)`);
   console.log(patched
     ? `index.html  (${patched} plan image reference${patched === 1 ? '' : 's'} synced)`
     : 'index.html  (plan image references already correct)');
+}
+
+// ------------------------------------------------- homepage plan finder
+// index.html is hand-written, but the finder on it is generated here between
+// two markers, so its cards carry the same figures as /plans/ and a plan added
+// to plans.json appears on the homepage with the next build. The homepage shows
+// six matches at a time and points at /plans/ for the rest.
+{
+  const indexPath = join(ROOT, 'index.html');
+  const before = readFileSync(indexPath, 'utf8');
+  const between = (text, open, close, body) => {
+    const a = text.indexOf(open);
+    const b = text.indexOf(close);
+    if (a < 0 || b < 0 || b < a) throw new Error(`index.html: markers ${open} ... ${close} not found`);
+    return text.slice(0, a + open.length) + body + '\n        ' + text.slice(b);
+  };
+  let after = between(before, '<!-- plan-finder:start -->', '<!-- plan-finder:end -->', finderHtml({ cap: 6, base: '' }));
+  after = between(after, '<!-- plan-finder-script:start -->', '<!-- plan-finder-script:end -->', finderScript());
+  if (after !== before) writeFileSync(indexPath, after);
+  console.log(`index.html  (plan finder with ${models.length} plans)`);
 }
 
 // ------------------------------------------------- hand-written plan cards

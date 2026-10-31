@@ -144,11 +144,27 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
     // Any number the page actually presents as a square footage - in the prose
     // blurb as well as the spec table - has to be the one Leavitt gave. Matched
     // only where the words follow it, so the phone number, the copyright year
-    // and the MHBR licence are not mistaken for floor area.
-    const stray = [...doc.body.textContent.matchAll(/([\d,]{3,})\s*(?:living\s*)?(?:square feet|sq\.?\s*ft)/gi)]
+    // and the MHBR licence are not mistaken for floor area. The "Plans like
+    // this one" cards (October 2026) name other plans' figures; they are set
+    // aside here and each is checked against its own plan just below.
+    const own = doc.body.cloneNode(true);
+    const related = [...own.querySelectorAll('section')].find(sec => /Plans like this one/.test(sec.querySelector('h2')?.textContent || ''));
+    if (related) related.remove();
+    const stray = [...own.textContent.matchAll(/([\d,]{3,})\s*(?:living\s*)?(?:square feet|sq\.?\s*ft)/gi)]
       .map(x => +x[1].replace(/,/g, ''))
       .filter(n => n !== m.specs.sqft);
     ok(stray.length === 0, `${m.slug}: every square-footage figure is ${m.specs.sqft}${stray.length ? ' (found ' + [...new Set(stray)].join(', ') + ')' : ''}`);
+    {
+      const sec = [...doc.body.querySelectorAll('section')].find(sec => /Plans like this one/.test(sec.querySelector('h2')?.textContent || ''));
+      const cards = sec ? [...sec.querySelectorAll('.plan-card')] : [];
+      const wrong = cards.filter(card => {
+        const slug = (card.querySelector('a[href^="/plans/"]')?.getAttribute('href') || '').replace(/^\/plans\/|\.html$/g, '');
+        const other = models.find(x => x.slug === slug);
+        const want = other && other.specs.sqft && `${other.specs.sqftFrom ? 'From ' : ''}${other.specs.sqft.toLocaleString('en-US')} sq ft`;
+        return !other || other === m || (want && !card.textContent.includes(want));
+      }).map(card => card.querySelector('h3')?.textContent.trim());
+      ok(cards.length === 3 && wrong.length === 0, `${m.slug}: three other plans, each with its own figure${wrong.length ? ' (wrong: ' + wrong.join(', ') + ')' : ''}`);
+    }
 
     // No plan page shows a price (see "no price on the plans pages" below). A
     // price reappearing on a model page would quietly turn the plans back into

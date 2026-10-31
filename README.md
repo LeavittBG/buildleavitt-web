@@ -264,11 +264,30 @@ is not in this repository, so a small wording fix is made in the PDF itself:
 page content (the "J" was already in the embedded font), checked by rendering
 before and after. `plans.test.js` reads the PDF's text for that line.
 
-The three cards in the "Home plans" section of `index.html` are hand-written and
-point at three specific models. If you rename or remove one of those, update that
-section too. Their `width`/`height` attributes are not hand-maintained —
-`npm run plans:build` rewrites them from the generated images, so a changed crop
-cannot leave them stale.
+### The plan finder
+
+The "Find your plan" section of `index.html` and the card grid on `/plans/` are
+the same thing: three questions (stories, bedrooms, size) that narrow the plans
+as they are answered, with every plan as a card underneath. Both are generated
+by `npm run plans:build` — the homepage's between the `<!-- plan-finder:start -->`
+and `<!-- plan-finder:end -->` markers (and its script between
+`<!-- plan-finder-script:start -->` / `end`), so never edit between them by hand.
+Each card carries the figures it is matched on as `data-stories`, `data-beds`
+(the fewest bedrooms, so "4+" is 4) and `data-sqft`, straight from
+`src/plans.json`. All seventeen cards are in the page and the script only shows
+and hides them, so with scripts blocked the plans are still there: the homepage
+shows the six in `FEATURED` in `build-plans.mjs` and links to the rest, `/plans/`
+shows them all. The homepage shows six matches at most and its "Browse all"
+button becomes "See all N matching plans", pointing at `/plans/?stories=2&beds=4`,
+which opens already narrowed; `/plans/` keeps the answers in its address. When
+nothing fits, the finder says so and offers a custom home instead of an empty
+grid. "Start with this plan" on a card opens the contact form with the plan named
+and "Semi-Custom Home" chosen (on the homepage without a reload). Each plan page
+ends with three "Plans like this one": the same number of stories, nearest in
+size. `tests/plan-finder.test.js` checks all of this against the data.
+
+The three cards on `semi-custom-homes.html` are still hand-written; their facts
+line (`data-plan-facts`) is filled in by `npm run plans:build`.
 
 ## Business details
 
@@ -288,10 +307,20 @@ pages. The homepage service cards link to them (they used to open a pop-up).
 Each page's call to action opens the contact form with "Project Interest"
 already chosen: `/?interest=Custom%20Home%20Build#contact`. The semi-custom
 page shows three plan cards whose facts line (`data-plan-facts`) is filled in
-by `npm run plans:build`, like the homepage teaser. `tests/service-pages.test.js`
+by `npm run plans:build`. `tests/service-pages.test.js`
 checks the pages, the hand-off and that every link is at least 24px tall.
 
 ## Forms
+
+The contact form is in two steps since October 2026: first the project type and
+the budget range, as radio cards and chips, then name, email, phone and details.
+Both steps are in the markup inside the one `<form>` and show without script;
+the script shows one at a time and will not open step 2 until a project type and
+a budget are chosen. The field names and the Interest and Budget values are
+exactly what the old single-step form sent, so Netlify's submissions are
+unchanged. On phones a bar along the bottom (`#action-bar`, Call us / Get a
+Quote) appears once the hero has scrolled away and hides over the form and the
+footer. `tests/contact-steps.test.js` checks the fields, the steps and the bar.
 
 The contact form is a Netlify form. Netlify detects the fields from the
 deployed HTML, so every field it should record has to exist in `index.html` —

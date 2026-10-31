@@ -337,8 +337,11 @@
                 </p>
 
                 <div class="flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-8">
-                    <a href="#services" class="bg-[#c2a67a] text-[#0f172a] px-8 py-4 uppercase tracking-widest text-sm font-bold hover:bg-white transition-colors inline-flex items-center justify-center gap-2 whitespace-nowrap">
-                        What We Build <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-[18px] h-[18px]"><path d="m9 18 6-6-6-6"/></svg>
+                    <!-- The first thing a visitor can do is see the houses: the button opens the
+                         plan finder two screens down (October 2026). It used to read "What We
+                         Build" and scroll one screen to the three service cards. -->
+                    <a href="#plans" class="bg-[#c2a67a] text-[#0f172a] px-8 py-4 uppercase tracking-widest text-sm font-bold hover:bg-white transition-colors inline-flex items-center justify-center gap-2 whitespace-nowrap">
+                        Find your plan <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-[18px] h-[18px]"><path d="m9 18 6-6-6-6"/></svg>
                     </a>
                     <a href="tel:+18668326524" class="inline-block py-2 text-white/90 hover:text-[#c2a67a] transition-colors text-sm uppercase tracking-widest font-semibold text-center sm:text-left whitespace-nowrap">or call (866) 832-6524</a>
                 </div>
@@ -402,6 +405,452 @@
             </div>
         </div>
     </section>
+
+    <!-- A photo gallery used to sit above this: six photographs of The Storyteller
+         under "Inside a Leavitt home", repeated in the strip under Follow Our Builds.
+         They came off the site in September 2026 on the advice of Leavitt's realtor: one house
+         shown built read as though it were the only one, and its granite as dated.
+         When new photography arrives it can come back here, with a Gallery link in
+         both menus. -->
+    <!-- Find your plan -->
+    <!-- The plan finder (October 2026). It replaced a teaser of three plans that sat
+         eighth on the page: the renderings are the strongest thing the site has, so
+         they come straight after the services, and three questions narrow the
+         seventeen to the ones that fit. Everything between the markers is generated
+         by scripts/build-plans.mjs from src/plans.json, so the figures can never
+         differ from the plan pages and a new plan appears here with the next
+         `npm run plans:build`. Never edit between the markers by hand. The homepage
+         shows six matches at a time and points at /plans/ for the rest. -->
+    <section id="plans" class="py-24 md:py-32 px-6 bg-[#f8f9fa] border-t border-gray-200 overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12 md:mb-16">
+                <h2 class="text-3xl md:text-5xl font-light text-[#0f172a] mb-6">Find your plan.</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto text-lg">
+                    A starting point, not a catalogue. Each plan has been built before and can be adapted
+                    &mdash; elevation, room sizes, optional spaces &mdash; to your lot and the way you want to live.
+                    Answer a question or two and the list narrows to the plans that fit.
+                </p>
+            </div>
+        <!-- plan-finder:start -->
+        <div id="plan-finder" data-cap="6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+
+                <fieldset>
+                    <legend class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-3">How many stories?</legend>
+                    <div class="flex flex-wrap gap-2">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="finder-stories" value="" class="sr-only peer" checked>
+                            <span class="inline-block border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">Either</span>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="finder-stories" value="1" class="sr-only peer">
+                            <span class="inline-block border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">One story</span>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="finder-stories" value="2" class="sr-only peer">
+                            <span class="inline-block border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">Two stories</span>
+                        </label>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-3">Bedrooms</legend>
+                    <div class="flex flex-wrap gap-2">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="finder-beds" value="" class="sr-only peer" checked>
+                            <span class="inline-block border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">Any</span>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="finder-beds" value="3" class="sr-only peer">
+                            <span class="inline-block border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">3 or more</span>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="finder-beds" value="4" class="sr-only peer">
+                            <span class="inline-block border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">4 or more</span>
+                        </label>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-3">Living space, sq ft</legend>
+                    <div class="flex flex-wrap gap-2">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="finder-size" value="" class="sr-only peer" checked>
+                            <span class="inline-block border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">Any</span>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="finder-size" value="under-3000" class="sr-only peer">
+                            <span class="inline-block border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">Under 3,000</span>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="finder-size" value="3000-4000" class="sr-only peer">
+                            <span class="inline-block border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">3,000 to 4,000</span>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="finder-size" value="over-4000" class="sr-only peer">
+                            <span class="inline-block border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">Over 4,000</span>
+                        </label>
+                    </div>
+                </fieldset>
+            </div>
+
+            <p class="text-sm text-gray-600 mb-6" data-finder-status aria-live="polite">Six of our 17 plans, to start. Answer a question or two above and the list narrows.</p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col" data-plan="the-pioneer-i" data-stories="2" data-beds="4" data-sqft="4024" data-featured>
+                    <a href="/plans/the-pioneer-i.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="plans/img/the-pioneer-i-elevation.webp" type="image/webp"><img src="plans/img/the-pioneer-i-elevation.jpg" alt="The Pioneer I front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Pioneer I</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">4+ bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">3.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">From 4,024 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-pioneer-i.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Pioneer%20I&interest=Semi-Custom%20Home#contact" data-start-plan="The Pioneer I" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
+                    </div>
+                </div>
+
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col" data-plan="the-visionary" data-stories="2" data-beds="4" data-sqft="4282" data-featured>
+                    <a href="/plans/the-visionary.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="plans/img/the-visionary-elevation.webp" type="image/webp"><img src="plans/img/the-visionary-elevation.jpg" alt="The Visionary front elevation" width="1468" height="826" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Visionary</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">4+ bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">From 4,282 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-visionary.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Visionary&interest=Semi-Custom%20Home#contact" data-start-plan="The Visionary" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
+                    </div>
+                </div>
+
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col" data-plan="the-storyteller" data-stories="2" data-beds="4" data-sqft="3770" data-featured>
+                    <a href="/plans/the-storyteller.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="plans/img/the-storyteller-elevation.webp" type="image/webp"><img src="plans/img/the-storyteller-elevation.jpg" alt="The Storyteller front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Storyteller</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">4 bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">4.5 bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">3,770 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-storyteller.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Storyteller&interest=Semi-Custom%20Home#contact" data-start-plan="The Storyteller" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
+                    </div>
+                </div>
+
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col" data-plan="the-entrepreneur" data-stories="1" data-beds="3" data-sqft="2795" data-featured>
+                    <a href="/plans/the-entrepreneur.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="plans/img/the-entrepreneur-elevation.webp" type="image/webp"><img src="plans/img/the-entrepreneur-elevation.jpg" alt="The Entrepreneur front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Entrepreneur</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">3 bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2,795 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">Ranch</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-entrepreneur.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Entrepreneur&interest=Semi-Custom%20Home#contact" data-start-plan="The Entrepreneur" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
+                    </div>
+                </div>
+
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col" data-plan="the-craftsman" data-stories="2" data-beds="4" data-sqft="2626" data-featured>
+                    <a href="/plans/the-craftsman.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="plans/img/the-craftsman-elevation.webp" type="image/webp"><img src="plans/img/the-craftsman-elevation.jpg" alt="The Craftsman front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Craftsman</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">4 bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">From 2,626 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-craftsman.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Craftsman&interest=Semi-Custom%20Home#contact" data-start-plan="The Craftsman" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
+                    </div>
+                </div>
+
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col" data-plan="the-romantic" data-stories="2" data-beds="4" data-sqft="2778" data-featured>
+                    <a href="/plans/the-romantic.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="plans/img/the-romantic-elevation.webp" type="image/webp"><img src="plans/img/the-romantic-elevation.jpg" alt="The Romantic front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Romantic</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">4 bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">3.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">From 2,778 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-romantic.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Romantic&interest=Semi-Custom%20Home#contact" data-start-plan="The Romantic" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
+                    </div>
+                </div>
+
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col hidden" data-plan="the-daydreamer" data-stories="2" data-beds="4" data-sqft="2884">
+                    <a href="/plans/the-daydreamer.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="plans/img/the-daydreamer-elevation.webp" type="image/webp"><img src="plans/img/the-daydreamer-elevation.jpg" alt="The Daydreamer front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Daydreamer</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">4+ bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">From 2,884 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-daydreamer.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Daydreamer&interest=Semi-Custom%20Home#contact" data-start-plan="The Daydreamer" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
+                    </div>
+                </div>
+
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col hidden" data-plan="the-draftsman" data-stories="2" data-beds="3" data-sqft="3204">
+                    <a href="/plans/the-draftsman.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="plans/img/the-draftsman-elevation.webp" type="image/webp"><img src="plans/img/the-draftsman-elevation.jpg" alt="The Draftsman front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Draftsman</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">3+ bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">From 3,204 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-draftsman.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Draftsman&interest=Semi-Custom%20Home#contact" data-start-plan="The Draftsman" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
+                    </div>
+                </div>
+
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col hidden" data-plan="the-expressionist-i" data-stories="2" data-beds="3" data-sqft="4422">
+                    <a href="/plans/the-expressionist-i.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="plans/img/the-expressionist-i-elevation.webp" type="image/webp"><img src="plans/img/the-expressionist-i-elevation.jpg" alt="The Expressionist I front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Expressionist I</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">3+ bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">From 4,422 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-expressionist-i.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Expressionist%20I&interest=Semi-Custom%20Home#contact" data-start-plan="The Expressionist I" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
+                    </div>
+                </div>
+
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col hidden" data-plan="the-expressionist-ii" data-stories="2" data-beds="4" data-sqft="4288">
+                    <a href="/plans/the-expressionist-ii.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="plans/img/the-expressionist-ii-elevation.webp" type="image/webp"><img src="plans/img/the-expressionist-ii-elevation.jpg" alt="The Expressionist II front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Expressionist II</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">4+ bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">3.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">From 4,288 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-expressionist-ii.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Expressionist%20II&interest=Semi-Custom%20Home#contact" data-start-plan="The Expressionist II" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
+                    </div>
+                </div>
+
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col hidden" data-plan="the-illustrator" data-stories="2" data-beds="4" data-sqft="3791">
+                    <a href="/plans/the-illustrator.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="plans/img/the-illustrator-elevation.webp" type="image/webp"><img src="plans/img/the-illustrator-elevation.jpg" alt="The Illustrator front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Illustrator</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">4+ bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">From 3,791 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-illustrator.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Illustrator&interest=Semi-Custom%20Home#contact" data-start-plan="The Illustrator" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
+                    </div>
+                </div>
+
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col hidden" data-plan="the-impressionist" data-stories="2" data-beds="4" data-sqft="3540">
+                    <a href="/plans/the-impressionist.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="plans/img/the-impressionist-elevation.webp" type="image/webp"><img src="plans/img/the-impressionist-elevation.jpg" alt="The Impressionist front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Impressionist</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">4 bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">From 3,540 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-impressionist.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Impressionist&interest=Semi-Custom%20Home#contact" data-start-plan="The Impressionist" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
+                    </div>
+                </div>
+
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col hidden" data-plan="the-innovator" data-stories="2" data-beds="2" data-sqft="2330">
+                    <a href="/plans/the-innovator.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="plans/img/the-innovator-elevation.webp" type="image/webp"><img src="plans/img/the-innovator-elevation.jpg" alt="The Innovator front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Innovator</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">2+ bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2,330 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-innovator.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Innovator&interest=Semi-Custom%20Home#contact" data-start-plan="The Innovator" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
+                    </div>
+                </div>
+
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col hidden" data-plan="the-maestro" data-stories="2" data-beds="4" data-sqft="2884">
+                    <a href="/plans/the-maestro.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="plans/img/the-maestro-elevation.webp" type="image/webp"><img src="plans/img/the-maestro-elevation.jpg" alt="The Maestro front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Maestro</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">4+ bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">From 2,884 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-maestro.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Maestro&interest=Semi-Custom%20Home#contact" data-start-plan="The Maestro" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
+                    </div>
+                </div>
+
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col hidden" data-plan="the-novel" data-stories="2" data-beds="4" data-sqft="3900">
+                    <a href="/plans/the-novel.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="plans/img/the-novel-elevation.webp" type="image/webp"><img src="plans/img/the-novel-elevation.jpg" alt="The Novel front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Novel</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">4+ bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">From 3,900 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-novel.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Novel&interest=Semi-Custom%20Home#contact" data-start-plan="The Novel" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
+                    </div>
+                </div>
+
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col hidden" data-plan="the-pioneer-ii" data-stories="2" data-beds="4" data-sqft="4024">
+                    <a href="/plans/the-pioneer-ii.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="plans/img/the-pioneer-ii-elevation.webp" type="image/webp"><img src="plans/img/the-pioneer-ii-elevation.jpg" alt="The Pioneer II front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Pioneer II</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">4+ bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">3.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">From 4,024 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-pioneer-ii.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Pioneer%20II&interest=Semi-Custom%20Home#contact" data-start-plan="The Pioneer II" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
+                    </div>
+                </div>
+
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col hidden" data-plan="the-poet" data-stories="2" data-beds="3" data-sqft="5321">
+                    <a href="/plans/the-poet.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            <picture class="contents"><source srcset="plans/img/the-poet-elevation.webp" type="image/webp"><img src="plans/img/the-poet-elevation.jpg" alt="The Poet front elevation" width="1468" height="820" loading="lazy" decoding="async" class="w-full h-full object-cover"></picture>
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Poet</h3>
+                            <p class="text-sm text-[#0f172a] mt-2"><span class="whitespace-nowrap">3 bed <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2.5+ bath <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">From 5,321 sq ft <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span></span> <span class="whitespace-nowrap">2 stories</span></p>
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/the-poet.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="/?plan=The%20Poet&interest=Semi-Custom%20Home#contact" data-start-plan="The Poet" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hidden border border-gray-200 bg-white p-8 md:p-10" data-finder-empty>
+                <p class="text-xl font-serif text-[#0f172a] mb-3">Nothing on the shelf fits all three.</p>
+                <p class="text-gray-600 max-w-xl mb-6">That is not the end of it: every plan here is adjusted to the way you want to live, and we draw from scratch too. Loosen one answer, or tell us what you have in mind.</p>
+                <a href="/?interest=Custom%20Home%20Build#contact" class="inline-flex items-center gap-2 bg-[#0f172a] text-white px-8 py-4 uppercase tracking-[0.2em] font-bold text-xs hover:bg-[#c2a67a] hover:text-[#0f172a] transition-colors">Start a custom home</a>
+            </div>
+
+            <div class="text-center mt-12">
+                <a href="/plans/" data-finder-more class="inline-flex items-center gap-2 bg-[#0f172a] text-white px-8 py-4 uppercase tracking-[0.2em] font-bold text-xs hover:bg-[#c2a67a] hover:text-[#0f172a] transition-colors">
+                    Browse all 17 plans
+                </a>
+            </div>
+        </div>
+        <!-- plan-finder:end -->
+        </div>
+    </section>
+    <!-- plan-finder-script:start -->
+    <script>
+    (() => {
+        const root = document.getElementById('plan-finder');
+        if (!root) return;
+        const cap = Number(root.getAttribute('data-cap')) || Infinity;
+        const cards = [...root.querySelectorAll('[data-plan]')];
+        const total = cards.length;
+        const radios = [...root.querySelectorAll('input[type="radio"]')];
+        const status = root.querySelector('[data-finder-status]');
+        const empty = root.querySelector('[data-finder-empty]');
+        const more = root.querySelector('[data-finder-more]');
+        const KEYS = ['stories', 'beds', 'size'];
+        const idle = status ? status.textContent : '';
+        const band = (sqft) => (sqft < 3000 ? 'under-3000' : sqft <= 4000 ? '3000-4000' : 'over-4000');
+        const read = () => Object.fromEntries(KEYS.map((k) => {
+            const r = radios.find((x) => x.name === 'finder-' + k && x.checked);
+            return [k, r ? r.value : ''];
+        }));
+        const fits = (card, f) =>
+            (!f.stories || card.getAttribute('data-stories') === f.stories) &&
+            (!f.beds || Number(card.getAttribute('data-beds')) >= Number(f.beds)) &&
+            (!f.size || band(Number(card.getAttribute('data-sqft'))) === f.size);
+        const plural = (n, word) => n + ' ' + word + (n === 1 ? '' : 's');
+        const apply = () => {
+            const f = read();
+            const narrowed = KEYS.some((k) => f[k]);
+            let shown = 0, matched = 0;
+            for (const card of cards) {
+                const m = fits(card, f);
+                if (m) matched++;
+                const show = m && (narrowed ? shown < cap : (cap === Infinity || card.hasAttribute('data-featured')));
+                if (show) shown++;
+                card.classList.toggle('hidden', !show);
+            }
+            const q = new URLSearchParams();
+            KEYS.forEach((k) => { if (f[k]) q.set(k, f[k]); });
+            const qs = q.toString() ? '?' + q.toString() : '';
+            if (status) {
+                status.textContent = !narrowed ? idle
+                    : matched === 0 ? 'No plan matches all three answers.'
+                    : matched === shown ? plural(matched, 'plan') + (matched === 1 ? ' matches.' : ' match.')
+                    : 'Showing ' + shown + ' of the ' + plural(matched, 'plan') + ' that match.';
+            }
+            if (empty) empty.classList.toggle('hidden', !narrowed || matched > 0);
+            if (more) {
+                more.href = '/plans/' + qs;
+                more.textContent = narrowed && matched > shown ? 'See all ' + matched + ' matching plans' : 'Browse all ' + total + ' plans';
+            }
+            if (cap === Infinity && history.replaceState) history.replaceState(null, '', location.pathname + qs + location.hash);
+        };
+        let preset = false;
+        try {
+            const params = new URLSearchParams(location.search);
+            for (const k of KEYS) {
+                const v = params.get(k);
+                const r = v && radios.find((x) => x.name === 'finder-' + k && x.value === v);
+                if (r) { r.checked = true; preset = true; }
+            }
+        } catch (e) { /* malformed query string: start from "any" */ }
+        radios.forEach((r) => r.addEventListener('change', apply));
+        if (preset) apply();
+    })();
+    </script>
+        <!-- plan-finder-script:end -->
 
     <!-- Service Area Banner -->
     <section class="bg-[#0f172a] py-16 px-6 border-y border-[#1e293b] overflow-hidden">
@@ -649,72 +1098,6 @@
         </div>
     </section>
 
-    <!-- A photo gallery used to sit above this: six photographs of The Storyteller
-         under "Inside a Leavitt home", repeated in the strip under Follow Our Builds.
-         They came off in September 2026 on the advice of Leavitt's realtor: one house
-         shown built read as though it were the only one, and its granite as dated.
-         When new photography arrives it can come back here, with a Gallery link in
-         both menus. -->
-    <!-- Home Plans teaser -->
-    <!-- Three featured models only; the full set lives at /plans/, which is generated from
-         src/plans.json by `npm run plans`. If a featured model is renamed or removed there,
-         update the three cards below to match - they are hand-maintained. The facts line
-         under each name (data-plan-facts) is filled in from src/plans.json by
-         scripts/build-plans.mjs, so it can never disagree with the plan's own page. -->
-    <section id="plans" class="py-24 md:py-32 px-6 bg-white border-t border-gray-200 overflow-hidden">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-5xl font-light text-[#0f172a] mb-6">Home plans.</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto text-lg">
-                    A starting point, not a catalogue. Each plan has been built before and can be adapted
-                    &mdash; elevation, room sizes, optional spaces &mdash; to your lot and the way you want to live.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <a href="/plans/the-visionary.html" class="group block border border-gray-200 hover:border-[#c2a67a] transition-colors">
-                    <div class="aspect-[4/3] w-full flex items-center justify-center p-4 bg-white">
-                        <picture class="contents"><source srcset="plans/img/the-visionary-elevation.webp" type="image/webp"><img src="plans/img/the-visionary-elevation.jpg" alt="The Visionary front elevation" width="1468" height="826" loading="lazy" decoding="async" class="max-h-full w-auto object-contain"></picture>
-                    </div>
-                    <div class="border-t border-gray-200 p-6">
-                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Visionary</h3>
-                        <p class="text-sm text-[#0f172a] mt-3" data-plan-facts="the-visionary">4+ bed<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2.5+ bath<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>From 4,282 sq ft<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2 stories</p>
-                        <span class="inline-block mt-3 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f]">View plan &rarr;</span>
-                    </div>
-                </a>
-
-                <a href="/plans/the-craftsman.html" class="group block border border-gray-200 hover:border-[#c2a67a] transition-colors">
-                    <div class="aspect-[4/3] w-full flex items-center justify-center p-4 bg-white">
-                        <picture class="contents"><source srcset="plans/img/the-craftsman-elevation.webp" type="image/webp"><img src="plans/img/the-craftsman-elevation.jpg" alt="The Craftsman front elevation" width="1468" height="820" loading="lazy" decoding="async" class="max-h-full w-auto object-contain"></picture>
-                    </div>
-                    <div class="border-t border-gray-200 p-6">
-                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Craftsman</h3>
-                        <p class="text-sm text-[#0f172a] mt-3" data-plan-facts="the-craftsman">4 bed<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2.5+ bath<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>From 2,626 sq ft<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2 stories</p>
-                        <span class="inline-block mt-3 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f]">View plan &rarr;</span>
-                    </div>
-                </a>
-
-                <a href="/plans/the-entrepreneur.html" class="group block border border-gray-200 hover:border-[#c2a67a] transition-colors">
-                    <div class="aspect-[4/3] w-full flex items-center justify-center p-4 bg-white">
-                        <picture class="contents"><source srcset="plans/img/the-entrepreneur-elevation.webp" type="image/webp"><img src="plans/img/the-entrepreneur-elevation.jpg" alt="The Entrepreneur front elevation" width="1468" height="820" loading="lazy" decoding="async" class="max-h-full w-auto object-contain"></picture>
-                    </div>
-                    <div class="border-t border-gray-200 p-6">
-                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">The Entrepreneur</h3>
-                        <p class="text-sm text-[#0f172a] mt-3" data-plan-facts="the-entrepreneur">3 bed<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2.5+ bath<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>2,795 sq ft<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>Ranch</p>
-                        <span class="inline-block mt-3 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f]">View plan &rarr;</span>
-                    </div>
-                </a>
-            </div>
-
-            <div class="text-center mt-12">
-                <a href="/plans/" class="inline-flex items-center gap-2 bg-[#0f172a] text-white px-8 py-4 uppercase tracking-[0.2em] font-bold text-xs hover:bg-[#c2a67a] hover:text-[#0f172a] transition-colors">
-                    Browse all home plans
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-4 h-4 pointer-events-none"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                </a>
-            </div>
-        </div>
-    </section>
-
     <!-- Testimonials Section -->
     <section id="testimonials" class="py-24 md:py-32 px-6 bg-[#0f172a] border-t border-[#1e293b]">
         <div class="max-w-6xl mx-auto">
@@ -863,7 +1246,16 @@
 
                 <!-- Right Side: The Form -->
             <div class="bg-white p-8 md:p-12 shadow-xl shadow-gray-200/50 border border-gray-100">
-                    <form class="space-y-8" name="contact" method="POST" action="/success.html" data-netlify="true" netlify-honeypot="bot-field">
+                    <!-- Two steps (October 2026). The easy questions come first - what
+                         kind of project, and roughly what budget - as choices to tap, and
+                         name and email come last, once the visitor has already said what they
+                         want. Everything is one Netlify form: both steps are in the markup and
+                         visible without script, so Netlify still finds every field in the
+                         deployed page; the script only shows one step at a time. The field
+                         names (Name, Email, Phone, Interest, Budget, Details, Plan) and the
+                         Interest and Budget values are exactly what the old single-step form
+                         sent, so nothing changes in the submissions Netlify records. -->
+                    <form id="contact-form" class="space-y-8 scroll-mt-28" name="contact" method="POST" action="/success.html" data-netlify="true" netlify-honeypot="bot-field">
                         <input type="hidden" name="form-name" value="contact" />
 
                         <!-- Honeypot: hidden from people, filled in by bots. Netlify silently drops those submissions. -->
@@ -871,82 +1263,159 @@
                             <label>Don't fill this out if you're human: <input type="text" name="bot-field" tabindex="-1" autocomplete="off"></label>
                         </p>
 
-                        <!-- Set from ?plan=... when someone arrives from a page under /plans/. Netlify
-                             only records fields present in the deployed HTML, so this stays here empty
-                             rather than being injected by the script. -->
+                        <!-- Set from ?plan=... when someone arrives from a plan card or a page under
+                             /plans/. Netlify only records fields present in the deployed HTML, so this
+                             stays here empty rather than being injected by the script. -->
                         <input type="hidden" id="contact-plan" name="Plan" value="">
-                        <div id="contact-plan-note" class="hidden items-center justify-between gap-4 bg-[#f8f9fa] border-l-2 border-[#c2a67a] px-5 py-4">
-                            <p class="text-sm text-gray-600">
-                                Starting from <strong id="contact-plan-name" class="text-[#0f172a] font-medium"></strong>
-                            </p>
-                            <button type="button" id="contact-plan-clear" class="text-xs uppercase tracking-widest font-bold text-gray-500 hover:text-[#866f4f] transition-colors cursor-pointer shrink-0">
-                                Clear
+
+                        <fieldset id="contact-step-1" class="space-y-8">
+                            <legend class="sr-only">Step 1 of 2: what are you planning?</legend>
+                            <div class="flex flex-col-reverse sm:flex-row sm:items-baseline sm:justify-between gap-2 sm:gap-4" aria-hidden="true">
+                                <p class="text-2xl font-serif text-[#0f172a]">What are you planning?</p>
+                                <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 whitespace-nowrap">Step 1 of 2</p>
+                            </div>
+
+                            <div id="contact-plan-note" class="hidden items-center justify-between gap-4 bg-[#f8f9fa] border-l-2 border-[#c2a67a] px-5 py-4">
+                                <p class="text-sm text-gray-600">
+                                    Starting from <strong id="contact-plan-name" class="text-[#0f172a] font-medium"></strong>
+                                </p>
+                                <button type="button" id="contact-plan-clear" class="text-xs uppercase tracking-widest font-bold text-gray-500 hover:text-[#866f4f] transition-colors cursor-pointer shrink-0">
+                                    Clear
+                                </button>
+                            </div>
+
+                            <div class="space-y-3">
+                                <p id="contact-interest-label" class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500">Project Interest</p>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" role="radiogroup" aria-labelledby="contact-interest-label">
+                                <div>
+                                    <input type="radio" id="contact-interest-custom" name="Interest" value="Custom Home Build" class="sr-only peer" required>
+                                    <label for="contact-interest-custom" class="block h-full cursor-pointer border border-gray-300 bg-white px-5 py-4 transition-colors hover:border-[#0f172a] peer-checked:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:[&_span]:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">
+                                        <span class="block font-medium text-[#0f172a]">Custom home</span>
+                                        <span class="block text-sm text-gray-500 mt-1 leading-relaxed">From the ground up, on your lot or one we help you find.</span>
+                                    </label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="contact-interest-semi" name="Interest" value="Semi-Custom Home" class="sr-only peer">
+                                    <label for="contact-interest-semi" class="block h-full cursor-pointer border border-gray-300 bg-white px-5 py-4 transition-colors hover:border-[#0f172a] peer-checked:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:[&_span]:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">
+                                        <span class="block font-medium text-[#0f172a]">Semi-custom home</span>
+                                        <span class="block text-sm text-gray-500 mt-1 leading-relaxed">Start from one of our plans and make it yours.</span>
+                                    </label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="contact-interest-renovation" name="Interest" value="Large-Scale Renovation" class="sr-only peer">
+                                    <label for="contact-interest-renovation" class="block h-full cursor-pointer border border-gray-300 bg-white px-5 py-4 transition-colors hover:border-[#0f172a] peer-checked:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:[&_span]:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">
+                                        <span class="block font-medium text-[#0f172a]">Large-scale renovation</span>
+                                        <span class="block text-sm text-gray-500 mt-1 leading-relaxed">A whole-house transformation or structural remodel.</span>
+                                    </label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="contact-interest-addition" name="Interest" value="Home Addition" class="sr-only peer">
+                                    <label for="contact-interest-addition" class="block h-full cursor-pointer border border-gray-300 bg-white px-5 py-4 transition-colors hover:border-[#0f172a] peer-checked:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:[&_span]:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">
+                                        <span class="block font-medium text-[#0f172a]">Home addition</span>
+                                        <span class="block text-sm text-gray-500 mt-1 leading-relaxed">More room on the home you already love.</span>
+                                    </label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="contact-interest-other" name="Interest" value="Other / Unsure" class="sr-only peer">
+                                    <label for="contact-interest-other" class="block h-full cursor-pointer border border-gray-300 bg-white px-5 py-4 transition-colors hover:border-[#0f172a] peer-checked:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:[&_span]:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">
+                                        <span class="block font-medium text-[#0f172a]">Something else, or not sure yet</span>
+                                        <span class="block text-sm text-gray-500 mt-1 leading-relaxed">Tell us what you are thinking and we will point you the right way.</span>
+                                    </label>
+                                </div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3">
+                                <p id="contact-budget-label" class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500">Estimated Budget</p>
+                                <!-- The lowest bracket is deliberately $250k: projects below that are not
+                                     work we take on, so the list itself does the first round of qualifying. -->
+                                <div class="flex flex-wrap gap-2" role="radiogroup" aria-labelledby="contact-budget-label">
+                                <div>
+                                    <input type="radio" id="contact-budget-250" name="Budget" value="$250,000 &ndash; $500,000" class="sr-only peer" required>
+                                    <label for="contact-budget-250" class="inline-block cursor-pointer border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">$250,000 &ndash; $500,000</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="contact-budget-500" name="Budget" value="$500,000 &ndash; $750,000" class="sr-only peer">
+                                    <label for="contact-budget-500" class="inline-block cursor-pointer border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">$500,000 &ndash; $750,000</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="contact-budget-750" name="Budget" value="$750,000 &ndash; $1 million" class="sr-only peer">
+                                    <label for="contact-budget-750" class="inline-block cursor-pointer border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">$750,000 &ndash; $1 million</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="contact-budget-1m" name="Budget" value="$1 million &ndash; $2 million" class="sr-only peer">
+                                    <label for="contact-budget-1m" class="inline-block cursor-pointer border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">$1 million &ndash; $2 million</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="contact-budget-2m" name="Budget" value="$2 million and above" class="sr-only peer">
+                                    <label for="contact-budget-2m" class="inline-block cursor-pointer border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">$2 million and above</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="contact-budget-unsure" name="Budget" value="Not sure yet" class="sr-only peer">
+                                    <label for="contact-budget-unsure" class="inline-block cursor-pointer border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">Not sure yet</label>
+                                </div>
+                                </div>
+                                <p class="text-xs text-gray-500 pt-1">
+                                    A rough range is fine &mdash; it helps us point you to the right approach from the first
+                                    conversation.
+                                </p>
+                            </div>
+
+                            <p id="contact-step-error" class="hidden text-sm text-[#866f4f] font-medium border-l-2 border-[#c2a67a] pl-4" role="alert">Choose a project type and a budget range, then continue.</p>
+
+                            <button type="button" id="contact-continue" class="w-full bg-[#0f172a] text-white py-5 font-bold uppercase tracking-[0.2em] text-sm flex items-center justify-center gap-3 hover:bg-[#c2a67a] hover:text-[#0f172a] transition-colors duration-300 cursor-pointer">
+                                Continue
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-4 h-4 pointer-events-none"><path d="m9 18 6-6-6-6"/></svg>
                             </button>
-                        </div>
+                        </fieldset>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div class="space-y-2">
-                                <label for="contact-name" class="block text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500">Full Name</label>
-                                <input id="contact-name" type="text" name="Name" autocomplete="name" class="w-full border-b border-gray-300 py-3 text-[#0f172a] focus:outline-none focus:border-[#c2a67a] transition-colors bg-transparent placeholder-gray-500" required>
+                        <fieldset id="contact-step-2" class="space-y-8">
+                            <legend class="sr-only">Step 2 of 2: how do we reach you?</legend>
+                            <div class="flex flex-col-reverse sm:flex-row sm:items-baseline sm:justify-between gap-2 sm:gap-4" aria-hidden="true">
+                                <p class="text-2xl font-serif text-[#0f172a]">How do we reach you?</p>
+                                <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 whitespace-nowrap">Step 2 of 2</p>
                             </div>
-                            <div class="space-y-2">
-                                <label for="contact-email" class="block text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500">Email Address</label>
-                                <input id="contact-email" type="email" name="Email" autocomplete="email" class="w-full border-b border-gray-300 py-3 text-[#0f172a] focus:outline-none focus:border-[#c2a67a] transition-colors bg-transparent placeholder-gray-500" required>
+
+                            <div id="contact-summary" class="hidden items-center justify-between gap-4 bg-[#f8f9fa] border-l-2 border-[#c2a67a] px-5 py-4">
+                                <p id="contact-summary-text" class="text-sm text-gray-600"></p>
+                                <button type="button" id="contact-back" class="text-xs uppercase tracking-widest font-bold text-gray-500 hover:text-[#866f4f] transition-colors cursor-pointer shrink-0">
+                                    Change
+                                </button>
                             </div>
-                        </div>
 
-                        <div class="space-y-2">
-                            <label for="contact-phone" class="block text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500">
-                                Phone <span class="font-normal normal-case tracking-normal text-gray-400">(optional)</span>
-                            </label>
-                            <input id="contact-phone" type="tel" name="Phone" autocomplete="tel" class="w-full border-b border-gray-300 py-3 text-[#0f172a] focus:outline-none focus:border-[#c2a67a] transition-colors bg-transparent placeholder-gray-500">
-                        </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div class="space-y-2">
+                                    <label for="contact-name" class="block text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500">Full Name</label>
+                                    <input id="contact-name" type="text" name="Name" autocomplete="name" class="w-full border-b border-gray-300 py-3 text-[#0f172a] focus:outline-none focus:border-[#c2a67a] transition-colors bg-transparent placeholder-gray-500" required>
+                                </div>
+                                <div class="space-y-2">
+                                    <label for="contact-email" class="block text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500">Email Address</label>
+                                    <input id="contact-email" type="email" name="Email" autocomplete="email" class="w-full border-b border-gray-300 py-3 text-[#0f172a] focus:outline-none focus:border-[#c2a67a] transition-colors bg-transparent placeholder-gray-500" required>
+                                </div>
+                            </div>
 
-                        <div class="space-y-2">
-                            <label for="contact-interest" class="block text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500">Project Interest</label>
-                            <select id="contact-interest" name="Interest" class="w-full border-b border-gray-300 py-3 text-[#0f172a] focus:outline-none focus:border-[#c2a67a] bg-transparent transition-colors appearance-none cursor-pointer" required>
-                                <option value="" selected disabled>Please select&hellip;</option>
-                                <option>Custom Home Build</option>
-                                <option>Semi-Custom Home</option>
-                                <option>Large-Scale Renovation</option>
-                                <option>Home Addition</option>
-                                <option>Other / Unsure</option>
-                            </select>
-                        </div>
+                            <div class="space-y-2">
+                                <label for="contact-phone" class="block text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500">
+                                    Phone <span class="font-normal normal-case tracking-normal text-gray-400">(optional)</span>
+                                </label>
+                                <input id="contact-phone" type="tel" name="Phone" autocomplete="tel" class="w-full border-b border-gray-300 py-3 text-[#0f172a] focus:outline-none focus:border-[#c2a67a] transition-colors bg-transparent placeholder-gray-500">
+                            </div>
 
-                        <div class="space-y-2">
-                            <label for="contact-budget" class="block text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500">Estimated Budget</label>
-                            <!-- The lowest bracket is deliberately $250k: projects below that are not
-                                 work we take on, so the list itself does the first round of qualifying. -->
-                            <select id="contact-budget" name="Budget" class="w-full border-b border-gray-300 py-3 text-[#0f172a] focus:outline-none focus:border-[#c2a67a] bg-transparent transition-colors appearance-none cursor-pointer" required>
-                                <option value="" selected disabled>Please select&hellip;</option>
-                                <option>$250,000 &ndash; $500,000</option>
-                                <option>$500,000 &ndash; $750,000</option>
-                                <option>$750,000 &ndash; $1 million</option>
-                                <option>$1 million &ndash; $2 million</option>
-                                <option>$2 million and above</option>
-                                <option>Not sure yet</option>
-                            </select>
-                            <p class="text-xs text-gray-500 pt-1">
-                                A rough range is fine &mdash; it helps us point you to the right approach from the first
-                                conversation.
+                            <div class="space-y-2">
+                                <label for="contact-details" class="block text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500">Brief Project Details</label>
+                                <textarea id="contact-details" rows="4" name="Details" class="w-full border-b border-gray-300 py-3 text-[#0f172a] focus:outline-none focus:border-[#c2a67a] transition-colors bg-transparent resize-none placeholder-gray-500" placeholder="Tell us about your location, timeline, or vision..."></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full bg-[#0f172a] text-white py-5 font-bold uppercase tracking-[0.2em] text-sm flex items-center justify-center gap-3 hover:bg-[#c2a67a] hover:text-[#0f172a] transition-colors duration-300 group mt-4 cursor-pointer">
+                                Start the conversation
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform pointer-events-none"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg>
+                            </button>
+
+                            <p class="text-xs text-gray-500 leading-relaxed">
+                                We use your details only to respond to your inquiry. See our
+                                <a href="privacy.html" class="inline-block py-1 text-[#866f4f] font-medium hover:underline">Privacy Policy</a>.
                             </p>
-                        </div>
-
-                        <div class="space-y-2">
-                            <label for="contact-details" class="block text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500">Brief Project Details</label>
-                            <textarea id="contact-details" rows="4" name="Details" class="w-full border-b border-gray-300 py-3 text-[#0f172a] focus:outline-none focus:border-[#c2a67a] transition-colors bg-transparent resize-none placeholder-gray-500" placeholder="Tell us about your location, timeline, or vision..."></textarea>
-                        </div>
-
-                        <button type="submit" class="w-full bg-[#0f172a] text-white py-5 font-bold uppercase tracking-[0.2em] text-sm flex items-center justify-center gap-3 hover:bg-[#c2a67a] hover:text-[#0f172a] transition-colors duration-300 group mt-4 cursor-pointer">
-                            Submit Inquiry
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform pointer-events-none"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg>
-                        </button>
-
-                        <p class="text-xs text-gray-500 leading-relaxed">
-                            We use your details only to respond to your inquiry. See our
-                            <a href="privacy.html" class="inline-block py-1 text-[#866f4f] font-medium hover:underline">Privacy Policy</a>.
-                        </p>
+                        </fieldset>
                     </form>
                 </div>
 
@@ -1002,6 +1471,24 @@
             </div>
         </div>
     </footer>
+
+    <!-- Phone action bar (October 2026). On phones and tablets, once the hero has
+         scrolled away, a bar along the bottom keeps the two things a visitor on a
+         phone most often does - call, or go to the form - one tap away. It slides
+         out of the way over the contact section and the footer, and it is not
+         there at all from lg up, where the menu bar does this job. Off-screen
+         and invisible until the script shows it, so it never covers the hero. -->
+    <div id="action-bar" class="lg:hidden fixed inset-x-0 bottom-0 z-40 bg-[#0f172a]/95 backdrop-blur-md border-t border-white/10 translate-y-full invisible transition-transform duration-300" aria-hidden="true">
+        <div class="grid grid-cols-2">
+            <a href="tel:+18668326524" class="flex items-center justify-center gap-2 py-4 text-white text-xs font-bold uppercase tracking-widest hover:text-[#c2a67a] transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-4 h-4"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"/></svg>
+                Call us
+            </a>
+            <a href="#contact" class="flex items-center justify-center gap-2 py-4 bg-[#c2a67a] text-[#0f172a] text-xs font-bold uppercase tracking-widest hover:bg-white transition-colors">
+                Get a Quote
+            </a>
+        </div>
+    </div>
 
     <!-- Process Details Modal -->
     <div id="process-modal" role="dialog" aria-modal="true" aria-labelledby="process-modal-title" class="fixed inset-0 z-[100] bg-[#0f172a]/95 backdrop-blur-sm hidden flex items-center justify-center opacity-0 transition-opacity duration-300 px-6">
@@ -1101,44 +1588,129 @@
 
         document.getElementById('year').textContent = new Date().getFullYear();
 
-        // --- Plan hand-off: /plans/<model>.html links here as /?plan=The%20Visionary#contact ---
-        // The value is whatever is in the URL, so it is treated as untrusted: it is written with
-        // textContent (never innerHTML), restricted to the characters a model name can contain,
-        // and capped in length. A param that does not look like a model name is ignored.
+        // --- The contact form: the plan hand-off, the project type from the URL, and the two steps ---
+        // /plans/<model>.html and the plan cards link here as /?plan=The%20Visionary&interest=Semi-Custom%20Home#contact.
+        // Both values come from the URL, so they are treated as untrusted: the plan is written with
+        // textContent (never innerHTML), restricted to the characters a model name can contain, and
+        // capped in length; the interest has to match one of the radio values exactly, or is ignored.
         (() => {
+            const form = document.getElementById('contact-form');
             const field = document.getElementById('contact-plan');
             const note = document.getElementById('contact-plan-note');
             const name = document.getElementById('contact-plan-name');
             const clear = document.getElementById('contact-plan-clear');
-            if (!field || !note || !name || !clear) return;
+            if (!form || !field || !note || !name || !clear) return;
 
-            let plan = '';
-            try {
-                plan = (new URLSearchParams(window.location.search).get('plan') || '').trim();
-            } catch (e) { /* malformed query string - no plan */ }
+            const checked = (group) => form.querySelector(`input[name="${group}"]:checked`);
+            const choose = (group, value) => {
+                const radio = [...form.querySelectorAll(`input[name="${group}"]`)].find((r) => r.value === value);
+                if (radio) radio.checked = true;
+                return !!radio;
+            };
 
-            // The service pages link here with the "Project Interest" already chosen
-            // (/custom-homes.html -> /?interest=Custom%20Home%20Build#contact). Only an
-            // exact match for one of the options is accepted; anything else is ignored.
-            const interest = document.getElementById('contact-interest');
-            let wanted = '';
-            try {
-                wanted = (new URLSearchParams(window.location.search).get('interest') || '').trim();
-            } catch (e) { /* malformed query string - no interest */ }
-            if (interest && wanted && [...interest.options].some((o) => o.text === wanted)) interest.value = wanted;
-
-            if (!plan || plan.length > 60 || !/^[A-Za-z0-9 '&-]+$/.test(plan)) return;
-
-            field.value = plan;
-            name.textContent = plan;
-            note.classList.remove('hidden');
-            note.classList.add('flex');
-
+            const setPlan = (plan) => {
+                field.value = plan;
+                name.textContent = plan;
+                note.classList.remove('hidden');
+                note.classList.add('flex');
+            };
             clear.addEventListener('click', () => {
                 field.value = '';
                 note.classList.add('hidden');
                 note.classList.remove('flex');
             });
+
+            // The two steps. Both are in the markup and shown without script; with it,
+            // one at a time. Step 2 is reached only once a project type and a budget
+            // are chosen, and shows what was chosen with a way back to change it.
+            const step1 = document.getElementById('contact-step-1');
+            const step2 = document.getElementById('contact-step-2');
+            const next = document.getElementById('contact-continue');
+            const back = document.getElementById('contact-back');
+            const error = document.getElementById('contact-step-error');
+            const summary = document.getElementById('contact-summary');
+            const summaryText = document.getElementById('contact-summary-text');
+            const go = (n, scroll) => {
+                step1.classList.toggle('hidden', n !== 1);
+                step2.classList.toggle('hidden', n !== 2);
+                if (n === 2) {
+                    const parts = [checked('Interest')?.value, checked('Budget')?.value, field.value && `starting from ${field.value}`].filter(Boolean);
+                    summaryText.textContent = parts.join(' · ');
+                    summary.classList.remove('hidden');
+                    summary.classList.add('flex');
+                }
+                if (scroll) form.scrollIntoView({ block: 'start' });
+                if (n === 2) document.getElementById('contact-name').focus({ preventScroll: true });
+            };
+            next.addEventListener('click', () => {
+                if (!checked('Interest') || !checked('Budget')) {
+                    error.classList.remove('hidden');
+                    (checked('Interest') ? form.querySelector('input[name="Budget"]') : form.querySelector('input[name="Interest"]')).focus({ preventScroll: true });
+                    return;
+                }
+                error.classList.add('hidden');
+                go(2, true);
+            });
+            back.addEventListener('click', () => go(1, true));
+            form.addEventListener('change', (e) => {
+                if (e.target.name === 'Interest' || e.target.name === 'Budget') error.classList.add('hidden');
+            });
+            go(1, false);
+
+            let plan = '';
+            let wanted = '';
+            try {
+                const params = new URLSearchParams(window.location.search);
+                plan = (params.get('plan') || '').trim();
+                wanted = (params.get('interest') || '').trim();
+            } catch (e) { /* malformed query string - nothing chosen */ }
+
+            if (wanted) choose('Interest', wanted);
+            if (plan && plan.length <= 60 && /^[A-Za-z0-9 '&-]+$/.test(plan)) setPlan(plan);
+
+            // "Start with this plan" on the homepage's own plan cards: no reload, just the
+            // plan named, semi-custom chosen, and the form brought into view at step 1.
+            document.querySelectorAll('[data-start-plan]').forEach((a) => {
+                a.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    setPlan(a.getAttribute('data-start-plan'));
+                    choose('Interest', 'Semi-Custom Home');
+                    error.classList.add('hidden');
+                    go(1, false);
+                    document.getElementById('contact').scrollIntoView();
+                });
+            });
+        })();
+
+        // --- Phone action bar: shown once the hero is scrolled past, hidden over the form and footer ---
+        (() => {
+            const bar = document.getElementById('action-bar');
+            const hero = document.getElementById('hero');
+            const contact = document.getElementById('contact');
+            const footer = document.querySelector('footer');
+            if (!bar || !hero || !contact || !footer) return;
+            let pastHero = false;
+            const near = new Set();
+            const update = () => {
+                const show = pastHero && near.size === 0;
+                bar.classList.toggle('translate-y-full', !show);
+                bar.classList.toggle('invisible', !show);
+                bar.setAttribute('aria-hidden', String(!show));
+            };
+            if ('IntersectionObserver' in window) {
+                const io = new IntersectionObserver((entries) => {
+                    for (const en of entries) en.isIntersecting ? near.add(en.target) : near.delete(en.target);
+                    update();
+                });
+                io.observe(contact);
+                io.observe(footer);
+            }
+            const onScroll = () => {
+                pastHero = hero.getBoundingClientRect().bottom < window.innerHeight / 2;
+                update();
+            };
+            window.addEventListener('scroll', onScroll, { passive: true });
+            onScroll();
         })();
 
         // --- Shared Modal Behaviour (Escape to close, scroll lock, focus handling) ---
