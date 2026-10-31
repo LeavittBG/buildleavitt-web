@@ -297,3 +297,30 @@ def thin_walls(img, drop=(), grow=7, k=5):
     m &= ~B._rects_mask(grey.shape, drop)
     m = ndi.binary_closing(m, np.ones((3, 3), bool))
     return B._vectorize(m)
+
+
+def reuse_k(c, img, job_path, k, dx=0, dy=0, drop_text=()):
+    """reuse(), for a drawing that another brochure places at a different dpi: the other job's
+    module constant K is replaced by `k` before it draws, so its line weights and lettering come
+    out at this page's paper sizes (the drawing itself is the same picture, same px/ft)."""
+    import importlib.util, os, re, tempfile
+    from PIL import Image
+    im = Image.open(img).convert('RGB')
+    pad = Image.new('RGB', (im.width - min(dx, 0), im.height - min(dy, 0)), 'white')
+    pad.paste(im, (-min(dx, 0), -min(dy, 0)))
+    fn = os.path.join(tempfile.mkdtemp(), 'reuse.png')
+    pad.save(fn)
+    s = importlib.util.spec_from_file_location('reused_' + os.path.basename(job_path)[:-3], job_path)
+    m = importlib.util.module_from_spec(s)
+    s.loader.exec_module(m)
+    m.K = k
+    c2 = B.new(fn)
+    c2.K = B.K = k
+    m.draw(c2, fn)
+    parts = [p for p in c2.parts
+             if not (p.startswith('<text') and any(t in re.sub('<[^>]+>', '', p) for t in drop_text))]
+    c.add(f'<g transform="translate({min(dx, 0):g} {min(dy, 0):g})">')
+    for p in parts:
+        c.add(p)
+    c.add('</g>')
+    B.K = c.K = k

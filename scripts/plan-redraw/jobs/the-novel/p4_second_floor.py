@@ -44,8 +44,8 @@ def owners_shower(c):
 
 def towel_closet(c):
     c.line(1182, 712, 1182, 845, 0.45, color=B.NAVY, dash=c.dash(2.5, 1.6))
-    B.small(c, 1222, 768, 'TOWEL', size=3.4)
-    B.small(c, 1222, 790, 'CLOSET', size=3.4)
+    B.small(c, 1212, 768, 'TOWEL', size=3.4)
+    B.small(c, 1212, 790, 'CLOSET', size=3.4)
 
 
 def stair_start(c):
