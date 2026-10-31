@@ -1472,24 +1472,6 @@
         </div>
     </footer>
 
-    <!-- Phone action bar (October 2026). On phones and tablets, once the hero has
-         scrolled away, a bar along the bottom keeps the two things a visitor on a
-         phone most often does - call, or go to the form - one tap away. It slides
-         out of the way over the contact section and the footer, and it is not
-         there at all from lg up, where the menu bar does this job. Off-screen
-         and invisible until the script shows it, so it never covers the hero. -->
-    <div id="action-bar" class="lg:hidden fixed inset-x-0 bottom-0 z-40 bg-[#0f172a]/95 backdrop-blur-md border-t border-white/10 translate-y-full invisible transition-transform duration-300" aria-hidden="true">
-        <div class="grid grid-cols-2">
-            <a href="tel:+18668326524" class="flex items-center justify-center gap-2 py-4 text-white text-xs font-bold uppercase tracking-widest hover:text-[#c2a67a] transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-4 h-4"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"/></svg>
-                Call us
-            </a>
-            <a href="#contact" class="flex items-center justify-center gap-2 py-4 bg-[#c2a67a] text-[#0f172a] text-xs font-bold uppercase tracking-widest hover:bg-white transition-colors">
-                Get a Quote
-            </a>
-        </div>
-    </div>
-
     <!-- Process Details Modal -->
     <div id="process-modal" role="dialog" aria-modal="true" aria-labelledby="process-modal-title" class="fixed inset-0 z-[100] bg-[#0f172a]/95 backdrop-blur-sm hidden flex items-center justify-center opacity-0 transition-opacity duration-300 px-6">
         <div class="bg-white max-w-2xl w-full p-8 md:p-12 relative shadow-2xl border-t-4 border-[#c2a67a]">
@@ -1680,37 +1662,6 @@
                     document.getElementById('contact').scrollIntoView();
                 });
             });
-        })();
-
-        // --- Phone action bar: shown once the hero is scrolled past, hidden over the form and footer ---
-        (() => {
-            const bar = document.getElementById('action-bar');
-            const hero = document.getElementById('hero');
-            const contact = document.getElementById('contact');
-            const footer = document.querySelector('footer');
-            if (!bar || !hero || !contact || !footer) return;
-            let pastHero = false;
-            const near = new Set();
-            const update = () => {
-                const show = pastHero && near.size === 0;
-                bar.classList.toggle('translate-y-full', !show);
-                bar.classList.toggle('invisible', !show);
-                bar.setAttribute('aria-hidden', String(!show));
-            };
-            if ('IntersectionObserver' in window) {
-                const io = new IntersectionObserver((entries) => {
-                    for (const en of entries) en.isIntersecting ? near.add(en.target) : near.delete(en.target);
-                    update();
-                });
-                io.observe(contact);
-                io.observe(footer);
-            }
-            const onScroll = () => {
-                pastHero = hero.getBoundingClientRect().bottom < window.innerHeight / 2;
-                update();
-            };
-            window.addEventListener('scroll', onScroll, { passive: true });
-            onScroll();
         })();
 
         // --- Shared Modal Behaviour (Escape to close, scroll lock, focus handling) ---

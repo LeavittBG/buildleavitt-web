@@ -318,9 +318,7 @@ Both steps are in the markup inside the one `<form>` and show without script;
 the script shows one at a time and will not open step 2 until a project type and
 a budget are chosen. The field names and the Interest and Budget values are
 exactly what the old single-step form sent, so Netlify's submissions are
-unchanged. On phones a bar along the bottom (`#action-bar`, Call us / Get a
-Quote) appears once the hero has scrolled away and hides over the form and the
-footer. `tests/contact-steps.test.js` checks the fields, the steps and the bar.
+unchanged. `tests/contact-steps.test.js` checks the fields and the steps.
 
 The contact form is a Netlify form. Netlify detects the fields from the
 deployed HTML, so every field it should record has to exist in `index.html` —

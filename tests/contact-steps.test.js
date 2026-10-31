@@ -1,5 +1,5 @@
 /*
- * The contact form in two steps, and the phone action bar (October 2026).
+ * The contact form in two steps (October 2026).
  *
  * The form used to ask for everything at once - name and email at the top,
  * then two drop-downs and a note - under one "Submit Inquiry" button. Now the
@@ -15,10 +15,7 @@
  *  - both steps are in the page and shown without script; with it, one at a
  *    time, and step 2 cannot be reached until a project type and a budget are
  *    chosen;
- *  - ?plan= and ?interest= still land in the form, and show in the summary;
- *  - on a phone the Call / Get a Quote bar appears once the hero has gone,
- *    gets out of the way over the form and the footer, and does not exist on
- *    a desktop.
+ *  - ?plan= and ?interest= still land in the form, and show in the summary.
  */
 const { ROOT, launch, serveRepo } = require('./lib/env');
 const fs = require('fs');
@@ -51,9 +48,6 @@ const BUDGETS = ['$250,000 – $500,000', '$500,000 – $750,000', '$750,000 –
     ok(s1.querySelector('input[name="Interest"]') && s1.querySelector('input[name="Budget"]') && !s1.querySelector('input[name="Name"]')
       && s2.querySelector('input[name="Name"]') && s2.querySelector('input[name="Email"]') && s2.querySelector('button[type="submit"]'),
       'step 1 asks the project questions, step 2 asks for contact details and sends');
-    const bar = d.getElementById('action-bar');
-    ok(!!bar && /\blg:hidden\b/.test(bar.className) && bar.querySelector('a[href="tel:+18668326524"]') && bar.querySelector('a[href="#contact"]'),
-      'the phone action bar has the office line and the form, and is not there from lg up');
   }
 
   // ------------------------------------------------------------------ browser
@@ -123,43 +117,6 @@ const BUDGETS = ['$250,000 – $500,000', '$500,000 – $750,000', '$750,000 –
     ok(await visible(p, 'contact-step-1') && await visible(p, 'contact-step-2') && await p.locator('#contact-form button[type="submit"]').isVisible(),
       'both steps and the send button show with JS disabled');
     await ctx.close();
-  }
-
-  console.log('\n== the phone action bar ==');
-  {
-    const p = await b.newPage({ viewport: { width: 390, height: 844 } });
-    await p.goto(`${site.base}/`, { waitUntil: 'load' });
-    const state = () => p.evaluate(() => {
-      const bar = document.getElementById('action-bar');
-      const r = bar.getBoundingClientRect();
-      const cs = getComputedStyle(bar);
-      return { onScreen: cs.display !== 'none' && cs.visibility !== 'hidden' && r.top < innerHeight && r.height > 0, hidden: bar.getAttribute('aria-hidden'),
-        links: [...bar.querySelectorAll('a')].map((a) => Math.round(a.getBoundingClientRect().height)) };
-    });
-    const atTop = await state();
-    ok(!atTop.onScreen && atTop.hidden === 'true', 'over the hero the bar stays out of the way');
-    // The page scrolls smoothly (html { scroll-behavior: smooth }), so each move waits for the bar to settle.
-    const settle = async (id, want) => {
-      await p.evaluate((id) => document.getElementById(id).scrollIntoView(), id);
-      await p.waitForFunction((want) => (document.getElementById('action-bar').getAttribute('aria-hidden') === 'false') === want, want, { timeout: 5000 }).catch(() => {});
-      await p.waitForTimeout(400); // the slide takes 300ms
-    };
-    await settle('about', true);
-    const mid = await state();
-    ok(mid.onScreen && mid.hidden === 'false', 'past the hero it is on screen');
-    ok(mid.links.length === 2 && mid.links.every((h) => h >= 44), `both of its links are at least 44px tall (${mid.links.join(', ')})`);
-    await settle('contact', false);
-    ok(!(await state()).onScreen, 'over the contact form it slides away');
-    await p.evaluate(() => { document.querySelector('footer').id = document.querySelector('footer').id || 'page-footer'; });
-    await settle('page-footer', false);
-    ok(!(await state()).onScreen, 'and over the footer');
-    await p.close();
-    const d = await b.newPage({ viewport: { width: 1280, height: 900 } });
-    await d.goto(`${site.base}/`, { waitUntil: 'load' });
-    await d.evaluate(() => document.getElementById('about').scrollIntoView());
-    await d.waitForTimeout(400);
-    ok((await d.evaluate(() => getComputedStyle(document.getElementById('action-bar')).display)) === 'none', 'on a desktop there is no bar');
-    await d.close();
   }
 
   await site.close();
