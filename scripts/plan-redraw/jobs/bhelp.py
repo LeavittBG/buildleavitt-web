@@ -324,3 +324,131 @@ def reuse_k(c, img, job_path, k, dx=0, dy=0, drop_text=()):
         c.add(p)
     c.add('</g>')
     B.K = c.K = k
+
+
+# ---------------------------------------------------------------- listing-sheet plans (The Storyteller)
+# The Storyteller's plans are listing-sheet drawings, not the brochure CAD style: walls are solid
+# black bands, floors beige (baths teal), windows are thin framed white boxes set in the wall line,
+# and fixtures are drawn white with black hairlines. These read that style.
+
+def listing_wall_mask(img, k=7, drop=()):
+    """Solid black wall bands (thin linework removed by an opening of k px)."""
+    a, grey, navy = B.load(img)
+    lum = a.sum(-1) / 3.0
+    blk = lum < 70
+    W = ndi.binary_opening(blk, np.ones((k, k), bool))
+    if drop:
+        W &= ~B._rects_mask(blk.shape, drop)
+    return W
+
+
+def listing_windows(img, W, L=230, tmax=34, fill_min=0.8, drop=()):
+    """Windows: gaps in a wall line (closed by a straight closing of length L) whose width is
+    spanned by frame lines. Returns (window list for B.window_rot, mask of the window gaps)."""
+    a, grey, navy = B.load(img)
+    lum = a.sum(-1) / 3.0
+    dark = lum < 200
+    out, gmask = [], np.zeros(W.shape, bool)
+    dm = B._rects_mask(W.shape, drop) if drop else np.zeros(W.shape, bool)
+    for horiz in (True, False):
+        st = np.ones((1, L), bool) if horiz else np.ones((L, 1), bool)
+        C = ndi.binary_closing(W, st) & ~W & ~dm
+        lab, n = ndi.label(C)
+        for i, sl in enumerate(ndi.find_objects(lab)):
+            if sl is None:
+                continue
+            y0, y1, x0, x1 = sl[0].start, sl[0].stop, sl[1].start, sl[1].stop
+            t, ln = (y1 - y0, x1 - x0) if horiz else (x1 - x0, y1 - y0)
+            if not (6 <= t <= tmax) or ln < 18:
+                continue
+            blob = lab[sl] == i + 1
+            d = dark[sl] & blob
+            # every position along the gap must have frame ink across it (2+ dark pixels)
+            cover = (d.sum(axis=0) >= 2) if horiz else (d.sum(axis=1) >= 2)
+            if cover.mean() < fill_min or d.sum() > 0.6 * blob.sum():
+                continue
+            gmask[sl] |= blob
+            cx, cy = (x0 + x1) / 2.0, (y0 + y1) / 2.0
+            out.append(((cx, cy), float(ln), float(t), 0.0 if horiz else 90.0))
+    return out, gmask
+
+
+def listing_trace(img, k=7, drop=(), add=(), cut=(), win_drop=(), L=230):
+    """Walls (shapely, windows included as wall) and windows for a listing-sheet plan."""
+    from shapely.geometry import box as sbox
+    from shapely.ops import unary_union
+    W = listing_wall_mask(img, k, drop)
+    wins, gm = listing_windows(img, W, L=L, drop=win_drop)
+    geom = B._vectorize(ndi.binary_closing(W | gm, np.ones((3, 3), bool)))
+    extra = [sbox(*r) if isinstance(r, tuple) else r for r in add]
+    if extra:
+        geom = unary_union([geom] + extra)
+    if cut:
+        geom = geom.difference(unary_union([sbox(*r) for r in cut]))
+    return geom, wins
+
+
+def listing_lines(img, walls_geom, drop=(), dark=150):
+    """Linework of a listing sheet: neutral dark pixels (door leaves and swings, counters, fixtures,
+    stair treads) outside the walls; beige floors and teal bath floors are left out."""
+    a, grey, navy = B.load(img)
+    lum = a.sum(-1) / 3.0
+    sat = a.max(-1) - a.min(-1)
+    m = (lum < dark) & (sat < 30)
+    wm = np.zeros(m.shape, np.uint8)
+    for p in getattr(walls_geom, 'geoms', [walls_geom]):
+        if not p.is_empty:
+            cv2.fillPoly(wm, [np.array(p.exterior.coords, np.int32)], 1)
+            for h in p.interiors:
+                cv2.fillPoly(wm, [np.array(h.coords, np.int32)], 0)
+    m &= ~ndi.binary_dilation(wm.astype(bool), np.ones((5, 5), bool))
+    if drop:
+        m &= ~B._rects_mask(m.shape, drop)
+    m = ndi.binary_dilation(m, np.ones((2, 2), bool))
+    return B._contours_to_geom(m, eps=0.7, min_area=2)
+
+
+def listing_erase_text(img, rects, out=None, max_glyph=48, fill=(234, 234, 222), hard=()):
+    """Copy of a listing-sheet raster with its lettering removed: every dark component whose box
+    lies inside one of `rects` and is glyph-sized is painted over, so door swings and lines that
+    pass through a label survive. `hard` rects are cleared outright (for lettering that touches a
+    line; redraw that line by hand). Returns the new image path."""
+    from PIL import Image
+    a, grey, navy = B.load(img)
+    lum = a.sum(-1) / 3.0
+    sat = a.max(-1) - a.min(-1)
+    dark = (lum < 170) & (sat < 44)          # not the teal bath floors
+    lab, n = ndi.label(dark, np.ones((3, 3), bool))
+    b = a.copy()
+    for i, sl in enumerate(ndi.find_objects(lab)):
+        if sl is None:
+            continue
+        y0, y1, x0, x1 = sl[0].start, sl[0].stop, sl[1].start, sl[1].stop
+        if max(y1 - y0, x1 - x0) > max_glyph:
+            continue
+        if any(rx0 <= x0 and x1 <= rx1 and ry0 <= y0 and y1 <= ry1 for rx0, ry0, rx1, ry1 in rects):
+            m = ndi.binary_dilation(lab[sl] == i + 1, np.ones((5, 5), bool))
+            b[sl][m] = fill
+    for x0, y0, x1, y1 in hard:
+        b[int(y0):int(y1), int(x0):int(x1)] = fill
+    out = out or img[:-4] + '_notext.png'
+    Image.fromarray(b.astype(np.uint8)).save(out)
+    return out
+
+
+def ray_box(walls, x, y, L=3000):
+    """Nearest wall faces left, right, up and down of (x, y): (xl, xr, yu, yd)."""
+    from shapely.geometry import LineString
+    res = []
+    for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)):
+        hit = LineString([(x, y), (x + dx * L, y + dy * L)]).intersection(walls)
+        pts = []
+        for g in getattr(hit, 'geoms', [hit]):
+            if not g.is_empty and hasattr(g, 'coords'):
+                pts += list(g.coords)
+        if not pts:
+            res.append(None)
+            continue
+        p = min(pts, key=lambda q: (q[0] - x) ** 2 + (q[1] - y) ** 2)
+        res.append(p[0] if dx else p[1])
+    return tuple(res)
