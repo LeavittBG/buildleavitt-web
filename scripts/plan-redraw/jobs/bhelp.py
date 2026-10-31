@@ -464,3 +464,32 @@ def ray_box(walls, x, y, L=3000):
         p = min(pts, key=lambda q: (q[0] - x) ** 2 + (q[1] - y) ** 2)
         res.append(p[0] if dx else p[1])
     return tuple(res)
+
+
+def freestanding_tub(c, cx, cy, length_in=60, width_in=30, angle=0, drain_end=1, wall=None):
+    """Freestanding tub (Kyle, October 31, 2026): a stadium-shaped outline with an inner basin and a
+    drain dot, white-filled, navy lines. (cx, cy) is the tub's centre in image px; sizes in inches
+    (B.PXFT). angle in degrees (0 = long side along x). drain_end = +1 / -1 picks which end the
+    drain sits at."""
+    import math
+    k = B.PXFT / 12.0
+    L, W = length_in * k, width_in * k
+    a = math.radians(angle)
+    ca, sa = math.cos(a), math.sin(a)
+
+    def stadium(l, w, n=18):
+        r = w / 2.0
+        h = l / 2.0 - r
+        pts = []
+        for i in range(n + 1):                       # right cap
+            t = -math.pi / 2 + math.pi * i / n
+            pts.append((h + r * math.cos(t), r * math.sin(t)))
+        for i in range(n + 1):                       # left cap
+            t = math.pi / 2 + math.pi * i / n
+            pts.append((-h + r * math.cos(t), r * math.sin(t)))
+        return [(cx + u * ca - v * sa, cy + u * sa + v * ca) for u, v in pts]
+
+    c.polyline(stadium(L, W), w=0.5, color=B.NAVY, fill='#ffffff', close=True, join='round')
+    c.polyline(stadium(L - 5 * k, W - 5 * k), w=0.3, color=B.NAVY, close=True, join='round')
+    du = drain_end * (L / 2.0 - W / 2.0)
+    c.circle(cx + du * ca, cy + du * sa, 1.1 * k, sw=0.3, color=B.NAVY)

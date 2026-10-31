@@ -2,11 +2,14 @@
 
 Source raster 2498x2254 px at 421.7 dpi, about 38.0 px/ft (owner's bedroom 15'-8" = 595 px).
 Changed (Kyle, October 31, 2026): the owner's bath oval soaking tub and its separate corner
-shower become one large walk-in shower (about 9'-3" x 5'-7") with glass, a bench and a linear
-drain along the back wall; the tub's corner by the door is open floor. Hall bath keeps its
+shower became one walk-in shower; Kyle then asked for the shower slightly smaller with a
+freestanding tub added. Now: a walk-in shower about 6'-2" x 5'-7" in the right half (glass side
+and front with an open entry by the tub, bench, linear drain) and a 60" x 30" freestanding tub
+under the window in the left half, with the open floor in front of it. Hall bath keeps its
 tub/shower. Lettering re-set. The tray ceiling over the owner's bath is redrawn as printed.
 """
 import blib as B
+import bhelp
 
 PAGE, XREF = 4, 23
 B.K, B.PXFT = 421.7, 38.0
@@ -28,7 +31,8 @@ TEXT = [pad(r) for r in [
 OWNERS_BATH = [(1176, 364, 1657, 712)]
 WIN_DROP = [(1360, 1385, 1400, 1415), (290, 1425, 345, 1460)]
 
-SHOWER = (1290.0, 361.0, 1652.0, 573.0)
+SHOWER = (1415.0, 361.0, 1652.0, 573.0)
+TUB = (1293.0, 423.0)             # freestanding tub centre: under the window, left of the shower glass
 
 
 def bath_tray(c):
@@ -48,12 +52,13 @@ def owners_bath(c):
     k = B.PXFT / 12.0
     c.rect(x0, y0, x1 - x0, y1 - y0, sw=0, fill='#ffffff')
     c.line(x0, y0, x0, y1, 0.9, color=N)                    # glass side panel
-    c.line(x0 + 130, y1, x1, y1, 0.9, color=N)              # glass front, open entry at the left
-    c.line(x0, y1, x0 + 130, y1, 0.3, color=N, dash=c.dash(2, 1.5))
+    c.line(x0 + 95, y1, x1, y1, 0.9, color=N)               # glass front, 30" open entry at the left
+    c.line(x0, y1, x0 + 95, y1, 0.3, color=N, dash=c.dash(2, 1.5))
     c.rect(x0 + 30, y0 + 4 * k, x1 - x0 - 60 - 15 * k, 1.6 * k, sw=0.3, color=N)   # linear drain
     c.rect(x1 - 15 * k, y0 + 18, 15 * k, y1 - y0 - 36, sw=0.45, color=N, fill='#ffffff')   # bench
     B.small(c, x1 - 7.5 * k, (y0 + y1) / 2, 'BENCH', size=3.0, rotate=-90, color=B.GREY)
     B.small(c, (x0 + x1 - 15 * k) / 2, (y0 + y1) / 2 + 6, 'SHOWER', size=4.2)
+    bhelp.freestanding_tub(c, TUB[0], TUB[1], 60, 30, drain_end=-1)
 
 
 def labels(c):

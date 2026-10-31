@@ -3,15 +3,17 @@
 Source raster 2226x2051 px placed at 412.4 dpi, about 37.95 px/ft (same scale as the first floor).
 
 Changed (Kyle, October 31, 2026):
-  - owner's bath: the oval soaker tub on its chamfered deck between the two vanities becomes one
-    walk-in shower filling the deck (about 8'-5" x 4'-3"), glass front with an open entry, bench at
-    the right end, linear drain along the window wall
-  - the old corner shower stall, walled off from it, becomes a towel closet behind its door
+  - owner's bath (Kyle's follow-up): the oval soaker tub on its chamfered deck between the two
+    vanities becomes a 66" x 32" freestanding tub in that alcove, under the window, with no deck;
+    the corner stall stays a walk-in shower behind its existing door, redrawn clean with a linear
+    drain along the back wall (an earlier draft made the alcove a shower and the
+    stall a towel closet)
   - the stair's flared, round-ended start (seen from above) is squared to match the first floor
   - lettering re-set, room names centred
 Kept: the hall bath's tub; the cathedral-ceiling lines over the bath outside the shower.
 """
 import blib as B
+import bhelp
 
 PAGE, XREF = 4, 25
 B.K, B.PXFT = 412.4, 37.95
@@ -28,24 +30,21 @@ STAIR_START = [(690, 1150, 868, 1325)]
 WIN_DROP = [(1170, 1240, 1200, 1290)]
 
 
-def owners_shower(c):
+def owners_tub(c):
+    """Freestanding tub in the old deck alcove between the vanities (deck removed)."""
+    c.rect(1268, 401, 318, 171, sw=0, fill='#ffffff')
+    bhelp.freestanding_tub(c, 1427, 478, 66, 32, drain_end=-1)
+
+
+def corner_shower(c):
+    """The old corner stall kept as a walk-in shower behind its existing angled glass door."""
     N = B.NAVY
     k = B.PXFT / 12.0
-    x0, y0, x1, y1 = 1268.0, 401.0, 1586.0, 564.0
-    c.rect(x0, y0, x1 - x0, y1 - y0, sw=0, fill='#ffffff')
-    c.line(x0, y0, x0, y1, 0.45, color=N)
-    c.line(x1, y0, x1, y1, 0.45, color=N)
-    B.box(c, x1 - 15 * k, y0 + 2, x1, y1, sw=0.45)                      # bench, 15" deep
-    B.small(c, x1 - 7.5 * k, (y0 + y1) / 2, 'BENCH', size=3.0, color=B.GREY, rotate=-90)
-    c.rect(x0 + 12 * k, y0 + 5 * k, (x1 - x0) - 30 * k, 1.6 * k, sw=0.35, color=N)   # linear drain
-    c.line(x0 + 30 * k, y1, x1, y1, 1.1, color=N)                          # glass, open entry left
-    B.small(c, (x0 + x1 - 15 * k) / 2, (y0 + y1) / 2 + 6, 'SHOWER', size=3.8)
-
-
-def towel_closet(c):
-    c.line(1182, 712, 1182, 845, 0.45, color=B.NAVY, dash=c.dash(2.5, 1.6))
-    B.small(c, 1212, 768, 'TOWEL', size=3.4)
-    B.small(c, 1212, 790, 'CLOSET', size=3.4)
+    floor = [(1141, 708), (1212, 708), (1282, 776), (1284, 848), (1141, 848)]
+    c.polyline(floor, w=0, color=N, fill='#ffffff', close=True)
+    c.line(1216, 704, 1282, 768, 0.9, color=N)                              # angled glass, door line
+    c.rect(1141 + 4 * k, 724, 1.6 * k, 112, sw=0.35, color=N)              # linear drain, back wall
+    B.small(c, 1206, 790, 'SHOWER', size=3.4)
 
 
 def stair_start(c):
@@ -94,8 +93,8 @@ def draw(c, img):
     B.draw_geom(c, gr, B.OPT)
     B.draw_geom(c, nv, B.NAVY)
     B.draw_geom(c, B.hairlines(img, walls, drop), B.NAVY)
-    owners_shower(c)
-    towel_closet(c)
+    owners_tub(c)
+    corner_shower(c)
     stair_start(c)
     B.draw_plan_walls(c, walls, wins)
     labels(c)
