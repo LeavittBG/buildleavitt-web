@@ -8,6 +8,7 @@ optional bath keeps its tub and vanity.
 """
 import blib as B
 import found
+from shapely.ops import unary_union
 
 PAGE, XREF = 6, 34
 K, PXFT = 370.3, 32.1
@@ -61,6 +62,9 @@ def draw(c, img):
     B.K = c.K = K
     B.PXFT = PXFT
     walls, wins = B.trace(img, cut=COL_DROP, win_drop=COL_DROP)
+    # the hollow framed walls' thick corners read as tiny windows/walls: keep only real pieces
+    wins = [w for w in wins if w[1] >= 50]
+    walls = unary_union([p for p in getattr(walls, 'geoms', [walls]) if p.area > 1500])
     conc, _ = found.bands(img, drop=COL_DROP)
     B.draw_geom(c, conc, CONC)
     drop = TEXT + CIRC_DROP + COL_DROP
