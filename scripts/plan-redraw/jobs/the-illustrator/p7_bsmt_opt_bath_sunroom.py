@@ -28,4 +28,5 @@ def after(c):
 def draw(c, img):
     x, y, r = PIT
     bhelp.simple(c, img, 370.4, before=before, after=after,
-                 drop=TEXT + [(x - r - 5, y - r - 5, x + r + 5, y + r + 5)], auto_text=False)
+                 drop=TEXT + [(x - r - 5, y - r - 5, x + r + 5, y + r + 5)], auto_text=False,
+                 win_drop=[(95, 385, 225, 425)])     # an L of wall the window finder misreads

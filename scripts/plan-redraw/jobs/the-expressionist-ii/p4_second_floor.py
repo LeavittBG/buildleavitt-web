@@ -70,6 +70,7 @@ def labels(c):
     L(c, 794, 925, 'OPEN TO\nGALLERY\nBELOW', name_pt=5.6)
     L(c, 420, 1010, 'LOFT', '15\'-2" × 15\'-11"', '(OPTIONAL BEDROOM 4)')
     # the cathedral ridge (dashed, y 1010) crosses the middle: name and size above it, notes below
+    B.dashed(c, [(1598, 1011.5), (1885, 1011.5)], w=0.4)       # ridge line under the old lettering
     L(c, 1765, 968, "OWNER'S BEDROOM", '24\'-11" × 17\'-4"')
     S(c, 1765, 1036, 'OPT. TRAY CEILING', size=3.6, color=o)
     S(c, 1765, 1060, 'OPT. CATHEDRAL CEILING', size=3.6, color=o)
@@ -92,7 +93,7 @@ def labels(c):
 def draw(c, img):
     B.K = c.K = K
     B.PXFT = PXFT
-    walls, wins = B.trace(img)
+    walls, wins = B.trace(img, add=[(1495, 603, 1510, 740)])   # towel closet's side wall
     drop = TEXT + STAIR + TUB + OLD_SHOWER
     nv, gr = B.lineart(img, walls, drop=drop)
     B.draw_geom(c, gr, B.OPT)

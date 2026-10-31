@@ -282,3 +282,18 @@ def vlabel(c, x, y, name, size_txt=None, note=None, **kw):
     kw.setdefault('name_pt', 5.2)
     kw.setdefault('sub_pt', 4.3)
     B.label(c, x, y, name, size_txt, note, **kw)
+
+
+def thin_walls(img, drop=(), grow=7, k=5):
+    """Framed walls drawn thin (navy - narrow grey stripe - navy, about 8-10 px), which B.trace
+    misses because its 3x3 opening erases a 2 px grey stripe (The Expressionist II's basement
+    furring walls and columns). Any grey pixel, grown by `grow`, kept where it is ink, then
+    opened by k x k so lettering and single lines drop out. Returns a shape for B.trace(add=...)."""
+    a, grey, navy = B.load(img)
+    lum = a.sum(-1) / 3.0
+    ink = grey | navy | (lum < 150)
+    m = ndi.binary_dilation(grey, np.ones((grow, grow), bool)) & ink
+    m = ndi.binary_opening(m, np.ones((k, k), bool))
+    m &= ~B._rects_mask(grey.shape, drop)
+    m = ndi.binary_closing(m, np.ones((3, 3), bool))
+    return B._vectorize(m)
