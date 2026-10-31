@@ -124,3 +124,161 @@ def vignette(c, img, drop=(), band_drop=(), win_drop=(), add=(), cut=(), before=
     B.draw_plan_walls(c, walls, wins)
     if after:
         after(c)
+
+
+def text_boxes(img, walls=None, hmin=10, hmax=42, pad=4):
+    """Find the hand-lettered labels in a brochure raster (for drop rects): small navy glyph
+    components merged into words along a line (or down a column, for turned text).
+    Returns [(x0,y0,x1,y1)]. Review the result with show_boxes before trusting it."""
+    a, grey, navy = B.load(img)
+    lum = a.sum(-1) / 3.0
+    core = lum < 140
+    if walls is not None:
+        wm = np.zeros(core.shape, np.uint8)
+        for p in getattr(walls, 'geoms', [walls]):
+            if not p.is_empty:
+                cv2.fillPoly(wm, [np.array(p.exterior.coords, np.int32)], 1)
+        core &= ~ndi.binary_dilation(wm.astype(bool), np.ones((5, 5), bool))
+    lab, n = ndi.label(core, np.ones((3, 3), bool))
+    glyphs = []
+    for i, sl in enumerate(ndi.find_objects(lab)):
+        if sl is None:
+            continue
+        y0, y1, x0, x1 = sl[0].start, sl[0].stop, sl[1].start, sl[1].stop
+        h, w = y1 - y0, x1 - x0
+        big, small = max(h, w), min(h, w)
+        if not (hmin <= big <= hmax) or small < 4:
+            continue
+        if (lab[sl] == i + 1).mean() > 0.55 and small > 8:
+            continue
+        glyphs.append([x0, y0, x1, y1, h >= w * 0.7])
+    def merge(boxes, horiz):
+        changed = True
+        while changed:
+            changed = False
+            out = []
+            for b in boxes:
+                for o in out:
+                    if horiz:
+                        h = max(b[3] - b[1], o[3] - o[1])
+                        cy_ok = abs((b[1] + b[3]) - (o[1] + o[3])) / 2 < 0.45 * h or (b[1] >= o[1] - 3 and b[3] <= o[3] + 3)
+                        if cy_ok and b[0] <= o[2] + 0.9 * h and o[0] <= b[2] + 0.9 * h:
+                            break
+                    else:
+                        w = max(b[2] - b[0], o[2] - o[0])
+                        cx_ok = abs((b[0] + b[2]) - (o[0] + o[2])) / 2 < 0.45 * w or (b[0] >= o[0] - 3 and b[2] <= o[2] + 3)
+                        if cx_ok and b[1] <= o[3] + 0.9 * w and o[1] <= b[3] + 0.9 * w:
+                            break
+                else:
+                    out.append(b[:])
+                    continue
+                o[0], o[1], o[2], o[3] = min(o[0], b[0]), min(o[1], b[1]), max(o[2], b[2]), max(o[3], b[3])
+                changed = True
+            boxes = out
+        return boxes
+    hb = merge([g[:4] for g in glyphs], True)
+    res = []
+    singles = []
+    for x0, y0, x1, y1 in hb:
+        if (x1 - x0) >= 1.6 * (y1 - y0):
+            res.append((x0 - pad, y0 - pad, x1 + pad, y1 + pad))
+        else:
+            singles.append([x0, y0, x1, y1])
+    for x0, y0, x1, y1 in merge(singles, False):     # turned (vertical) words
+        if (y1 - y0) >= 1.6 * (x1 - x0):
+            res.append((x0 - pad, y0 - pad, x1 + pad, y1 + pad))
+    return res
+
+
+def show_boxes(img, boxes, out, scale=0.5):
+    from PIL import Image, ImageDraw
+    im = Image.open(img).convert('RGB')
+    d = ImageDraw.Draw(im)
+    for i, b in enumerate(boxes):
+        d.rectangle(b, outline=(220, 0, 0), width=3)
+        d.text((b[0], b[1] - 12), str(i), fill=(220, 0, 0))
+    im.resize((int(im.width * scale), int(im.height * scale))).save(out)
+
+
+def reuse(c, img, job_path, dx=0, dy=0, drop_text=()):
+    """Draw another model's job onto this image, for a drawing that is the same picture moved by
+    (dx, dy) px (this image = that one shifted: x_here = x_there + dx, y_here = y_there + dy).
+    The job runs on a copy of this image padded back to the other's frame, so everything it
+    traces comes from THIS picture; its output is shifted into place. <text> elements whose
+    content contains any of `drop_text` are left out (labels the other model has and this
+    one does not)."""
+    import importlib.util, os, re, tempfile
+    from PIL import Image
+    im = Image.open(img).convert('RGB')
+    pad = Image.new('RGB', (im.width - min(dx, 0) + max(dx, 0) * 0, im.height - min(dy, 0)), 'white')
+    pad.paste(im, (-min(dx, 0), -min(dy, 0)))
+    fn = os.path.join(tempfile.mkdtemp(), 'reuse.png')
+    pad.save(fn)
+    s = importlib.util.spec_from_file_location('reused_' + os.path.basename(job_path)[:-3], job_path)
+    m = importlib.util.module_from_spec(s)
+    s.loader.exec_module(m)
+    c2 = B.new(fn)
+    m.draw(c2, fn)
+    parts = [p for p in c2.parts
+             if not (p.startswith('<text') and any(t in re.sub('<[^>]+>', '', p) for t in drop_text))]
+    c.add(f'<g transform="translate({min(dx, 0):g} {min(dy, 0):g})">')
+    for p in parts:
+        c.add(p)
+    c.add('</g>')
+
+
+def auto_text_drop(img, walls, skip=(), grow=0.7):
+    """text_boxes() widened at both ends by `grow` x their height, to take in the thin glyphs
+    (1, ', -) the finder skips. `skip` = rects; boxes centred inside one are left alone."""
+    out = []
+    for x0, y0, x1, y1 in text_boxes(img, walls):
+        cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
+        if any(a <= cx <= c and b <= cy <= d for a, b, c, d in skip):
+            continue
+        h = min(x1 - x0, y1 - y0)
+        if (x1 - x0) >= (y1 - y0):
+            out.append((x0 - grow * h, y0 - 2, x1 + grow * h, y1 + 2))
+        else:
+            out.append((x0 - 2, y0 - grow * h, x1 + 2, y1 + grow * h))
+    return out
+
+
+def simple(c, img, k, after=None, before=None, drop=(), text_skip=(), win_drop=(), add=(), cut=(),
+           auto_text=True, trace_kw=None):
+    """A brochure drawing with no concrete bands: walls, windows, traced linework and hairlines,
+    lettering erased (auto-found plus `drop`), then `before` (hand-drawn items, under the walls)
+    and `after` (labels). k = the image's placement dpi (sets c.K and blib.K)."""
+    B.K = c.K = k
+    walls, wins = B.trace(img, win_drop=win_drop, add=add, cut=cut, **(trace_kw or {}))
+    d = list(drop) + (auto_text_drop(img, walls, text_skip) if auto_text else [])
+    nv, gr = B.lineart(img, walls, drop=d)
+    B.draw_geom(c, gr, B.OPT)
+    B.draw_geom(c, nv, B.NAVY)
+    B.draw_geom(c, B.hairlines(img, walls, d), B.NAVY)
+    if before:
+        before(c)
+    B.draw_plan_walls(c, walls, wins)
+    if after:
+        after(c)
+    return walls
+
+
+def light_walls(img, drop=()):
+    """Walls drawn with the lighter fill (206,209,212) some plans use for part of a floor (The
+    Pioneer II's owner's suite); B.trace only reads the standard grey. Returns a shape to pass to
+    B.trace(add=[...])."""
+    a, grey, navy = B.load(img)
+    r, g, b = a[..., 0], a[..., 1], a[..., 2]
+    light = (abs(r - 206) < 8) & (abs(g - 209) < 8) & (abs(b - 212) < 8)
+    light = ndi.binary_opening(light, np.ones((3, 3), bool))
+    m = ndi.binary_dilation(light, np.ones((9, 9), bool)) & (light | navy | (a.sum(-1) < 600))
+    m &= ~B._rects_mask(light.shape, drop)
+    m = ndi.binary_closing(m, np.ones((3, 3), bool))
+    return B._vectorize(m)
+
+
+def vlabel(c, x, y, name, size_txt=None, note=None, **kw):
+    """Room label at the smaller size used on option drawings."""
+    kw.setdefault('name_pt', 5.2)
+    kw.setdefault('sub_pt', 4.3)
+    B.label(c, x, y, name, size_txt, note, **kw)
