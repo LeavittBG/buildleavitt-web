@@ -28,6 +28,12 @@
     "is deliberately cropped OUT of the image (Leavitt asked for it off the site),",
     "so the label survives only as the image's alt text.",
     "",
+    "A page whose id starts with 'elevation-' is a second exterior: a photo",
+    "rendering of the same house with other finishes (Modern Brick, October 2026),",
+    "named by `image` with `crop: false` so the site shows the rendering itself.",
+    "scripts/add-elevation-pages.py sets it as that page of the brochure; re-run it",
+    "when a brochure PDF is replaced.",
+    "",
     "Models are listed in the order they appear at /plans/: alphabetical by the",
     "name after 'The'.",
     "",
@@ -98,6 +104,13 @@
           "page": 4,
           "id": "basement",
           "label": "Basement"
+        },
+        {
+          "page": 5,
+          "id": "elevation-modern-brick",
+          "label": "Modern Brick Elevation",
+          "image": "plans/the-craftsman-modern-brick.jpg",
+          "crop": false
         }
       ],
       "style": "Modern Farmhouse"
@@ -144,6 +157,13 @@
           "page": 6,
           "id": "basement-options",
           "label": "Basement Options"
+        },
+        {
+          "page": 7,
+          "id": "elevation-modern-brick",
+          "label": "Modern Brick Elevation",
+          "image": "plans/the-daydreamer-modern-brick.jpg",
+          "crop": false
         }
       ],
       "style": "Modern Farmhouse"
@@ -190,6 +210,13 @@
           "page": 6,
           "id": "basement-options",
           "label": "Basement Options"
+        },
+        {
+          "page": 7,
+          "id": "elevation-modern-brick",
+          "label": "Modern Brick Elevation",
+          "image": "plans/the-draftsman-modern-brick.jpg",
+          "crop": false
         }
       ],
       "style": "Modern Farmhouse"
@@ -231,6 +258,13 @@
           "page": 5,
           "id": "other-elevations",
           "label": "Elevations"
+        },
+        {
+          "page": 6,
+          "id": "elevation-modern-brick",
+          "label": "Modern Brick Elevation",
+          "image": "plans/the-entrepreneur-modern-brick.jpg",
+          "crop": false
         }
       ],
       "style": "Modern Farmhouse"
@@ -282,6 +316,13 @@
           "page": 7,
           "id": "basement-options",
           "label": "Basement Options"
+        },
+        {
+          "page": 8,
+          "id": "elevation-modern-brick",
+          "label": "Modern Brick Elevation",
+          "image": "plans/the-expressionist-i-modern-brick.jpg",
+          "crop": false
         }
       ],
       "style": "Modern Farmhouse"
@@ -333,6 +374,13 @@
           "page": 7,
           "id": "basement-options",
           "label": "Basement Options"
+        },
+        {
+          "page": 8,
+          "id": "elevation-modern-brick",
+          "label": "Modern Brick Elevation",
+          "image": "plans/the-expressionist-ii-modern-brick.jpg",
+          "crop": false
         }
       ],
       "style": "Modern Farmhouse"
@@ -384,6 +432,13 @@
           "page": 7,
           "id": "basement-options",
           "label": "Basement Options"
+        },
+        {
+          "page": 8,
+          "id": "elevation-modern-brick",
+          "label": "Modern Brick Elevation",
+          "image": "plans/the-illustrator-modern-brick.jpg",
+          "crop": false
         }
       ],
       "style": "Modern Farmhouse"
@@ -420,6 +475,13 @@
           "page": 4,
           "id": "basement",
           "label": "Basement"
+        },
+        {
+          "page": 5,
+          "id": "elevation-modern-brick",
+          "label": "Modern Brick Elevation",
+          "image": "plans/the-impressionist-modern-brick.jpg",
+          "crop": false
         }
       ],
       "style": "Modern Farmhouse"
@@ -461,6 +523,13 @@
           "page": 5,
           "id": "basement",
           "label": "Basement"
+        },
+        {
+          "page": 6,
+          "id": "elevation-modern-brick",
+          "label": "Modern Brick Elevation",
+          "image": "plans/the-innovator-modern-brick.jpg",
+          "crop": false
         }
       ],
       "style": "Modern Farmhouse"
@@ -502,6 +571,13 @@
           "page": 5,
           "id": "basement-options",
           "label": "Basement Options"
+        },
+        {
+          "page": 6,
+          "id": "elevation-modern-brick",
+          "label": "Modern Brick Elevation",
+          "image": "plans/the-maestro-modern-brick.jpg",
+          "crop": false
         }
       ],
       "style": "Modern Farmhouse"
@@ -548,6 +624,13 @@
           "page": 6,
           "id": "basement-options",
           "label": "Basement Options"
+        },
+        {
+          "page": 7,
+          "id": "elevation-modern-brick",
+          "label": "Modern Brick Elevation",
+          "image": "plans/the-novel-modern-brick.jpg",
+          "crop": false
         }
       ],
       "style": "Modern Farmhouse"
@@ -594,6 +677,13 @@
           "page": 6,
           "id": "basement-options",
           "label": "Basement Options"
+        },
+        {
+          "page": 7,
+          "id": "elevation-modern-brick",
+          "label": "Modern Brick Elevation",
+          "image": "plans/the-pioneer-i-modern-brick.jpg",
+          "crop": false
         }
       ],
       "style": "Modern Farmhouse"
@@ -640,6 +730,13 @@
           "page": 6,
           "id": "basement-options",
           "label": "Basement Options"
+        },
+        {
+          "page": 7,
+          "id": "elevation-modern-brick",
+          "label": "Modern Brick Elevation",
+          "image": "plans/the-pioneer-ii-modern-brick.jpg",
+          "crop": false
         }
       ],
       "style": "Modern Farmhouse"
@@ -681,6 +778,13 @@
           "page": 5,
           "id": "basement",
           "label": "Basement"
+        },
+        {
+          "page": 6,
+          "id": "elevation-modern-brick",
+          "label": "Modern Brick Elevation",
+          "image": "plans/the-poet-modern-brick.jpg",
+          "crop": false
         }
       ],
       "style": "Modern Farmhouse"
@@ -727,6 +831,13 @@
           "page": 6,
           "id": "basement-options",
           "label": "Basement Options"
+        },
+        {
+          "page": 7,
+          "id": "elevation-modern-brick",
+          "label": "Modern Brick Elevation",
+          "image": "plans/the-romantic-modern-brick.jpg",
+          "crop": false
         }
       ],
       "style": "Modern Farmhouse"
@@ -766,6 +877,13 @@
           "page": 4,
           "id": "basement",
           "label": "Basement"
+        },
+        {
+          "page": 5,
+          "id": "elevation-modern-brick",
+          "label": "Modern Brick Elevation",
+          "image": "plans/the-storyteller-modern-brick.jpg",
+          "crop": false
         }
       ],
       "_note": "Bath count is 4.5. The second-floor plan appears to show more because one bathroom is split into two labelled zones on the drawing - confirmed by Leavitt."
@@ -817,6 +935,13 @@
           "page": 7,
           "id": "basement-options",
           "label": "Basement Options"
+        },
+        {
+          "page": 8,
+          "id": "elevation-modern-brick",
+          "label": "Modern Brick Elevation",
+          "image": "plans/the-visionary-modern-brick.jpg",
+          "crop": false
         }
       ],
       "style": "Modern Farmhouse"

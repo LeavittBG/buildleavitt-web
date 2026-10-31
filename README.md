@@ -215,6 +215,56 @@ keeps the photo and the plan images it was built from). Its room dimensions are
 read off those plans, and the photographer's notice under each plan is cropped
 off, as the site always did. Since then it is a brochure model like any other.
 
+### A second exterior: Modern Brick
+
+Every cover shows its plan as a Modern Farmhouse. In October 2026 Kyle was told
+that a buyer who does not care for farmhouse style needs to see something else,
+so every plan gained a second exterior. He compared five on The Pioneer I
+(classic red brick with shutters, limewashed brick, charcoal brick, coastal
+shake and Craftsman) and chose charcoal brick: it reads as a current brick home
+and is plainly different from the white farmhouse.
+
+Each one is a photo rendering made from that plan's own cover rendering with
+Artlist (Nano Banana 2.1 image-to-image, 2K, 16:9), which keeps the camera, the
+house, every window, door, porch and garage door, the lawn and the light, and
+changes only the finishes. Every rendering was checked against its farmhouse
+rendering for windows, doors, gables, porch and garage, and redone if it changed
+the house. They are kept as `assets-src/plans/<slug>-modern-brick.jpg`. The
+prompt, for a retake (Kyle approves the cost of any retake first):
+
+> Keep this exact photograph: the same camera position, framing and lens; the
+> same house footprint, massing, roof lines, roof pitches and gables; every
+> window, door, porch, balcony and garage door in exactly the same number, size
+> and position; the same driveway, lawn, landscaping, trees, sky and warm
+> late-afternoon light. Do not add or remove any window, door, porch, dormer,
+> gable, chimney, garage door or wing.
+>
+> Change only the exterior style and materials, to a current modern brick home:
+> the first-floor front walls, any porch base and any garage front in dark
+> charcoal brick with light gray mortar (in place of the stone and the
+> first-floor siding); crisp white horizontal lap siding on the second floor and
+> in all the gables (no board and batten, no vertical siding, no shakes); white
+> trim; black window frames without grilles; no shutters; slim square white porch
+> columns in place of any wood or dark porch posts; any small roofs over the
+> porch, windows or garage doors in the same dark asphalt shingles as the main
+> roof (no metal roofs); no decorative gable trusses or brackets; a warm stained
+> wood front door; warm stained wood garage doors wherever there are garage
+> doors. Photorealistic architectural photograph.
+
+`scripts/add-elevation-pages.py` sets each rendering as the last page of its
+brochure, "Modern Brick Elevation", in the brochure template. It works from the
+page entry in `src/plans.json` (id `elevation-modern-brick`), which also names
+the rendering as the page's `image` with `crop: false`, so the site shows the
+rendering itself rather than a crop of the brochure page. The script replaces a
+page it made before, so when a brochure PDF is replaced, for instance with
+redrawn floor plans, set the entry's `page` to the new last page and run it
+again before `npm run plans`.
+
+On the plan page the rendering comes straight after the specs, ahead of the
+floor plans, with a link to it under the main photo; at the end of the drawings
+it would sit below every floor plan, where the buyer it is for has already
+left. `plans.test.js` checks both, and that every plan has one.
+
 ### Specs
 
 Specs live in `src/plans.json` and come from Leavitt's own figures. The pages

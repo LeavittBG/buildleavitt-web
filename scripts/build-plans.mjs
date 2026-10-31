@@ -247,7 +247,22 @@ const sheets = (model) => model.pages.map((p) => ({ ...p, img: images[model.slug
  * their own ("First Floor Options"), shown on the plan page as printed; the
  * card's "3 floor plans" counts only the floors themselves.
  */
-const isFloor = (s) => s.id !== 'elevation' && !/options|elevations/i.test(s.label);
+const isFloor = (s) => !s.id.startsWith('elevation') && !/options|elevations/i.test(s.label);
+
+/**
+ * The same plan with another exterior: a photo rendering made from the cover's,
+ * with the house kept and only the finishes changed (Modern Brick, October
+ * 2026). Its page id starts with "elevation-"; it is the last page of the
+ * brochure, but on the plan page it comes straight after the specs, ahead of
+ * the floor plans, so someone who does not care for the farmhouse cover sees it
+ * before deciding the plan is not for them.
+ */
+const isExterior = (s) => s.id.startsWith('elevation-');
+/* What each alternate exterior is, in one line under its heading and in its alt
+   text. Keep it to what the rendering shows; the brochure page says the same. */
+const EXTERIOR_NOTES = {
+  'elevation-modern-brick': 'charcoal brick and white lap siding, with black windows and stained wood doors',
+};
 const floorsOf = (model) => sheets(model).filter(isFloor);
 
 /**
@@ -569,6 +584,8 @@ for (const [i, model] of models.entries()) {
   const s = model.specs || {};
   const elevation = all.find((x) => x.id === 'elevation');
   const rest = all.filter((s) => s !== elevation);
+  const exteriors = rest.filter(isExterior);
+  const drawings = rest.filter((s) => !isExterior(s));
   const prev = models[(i - 1 + models.length) % models.length];
   const next = models[(i + 1) % models.length];
   // A model built from images has no brochure to download, so it offers none.
@@ -586,7 +603,28 @@ for (const [i, model] of models.entries()) {
                     </div>`;
   }).join('\n');
 
-  const sheetBlocks = rest.map((s) => `
+  // A rendering, not a sheet: shown edge to edge like the cover photo, with a
+  // line saying what it is instead of the note about dashed outlines.
+  for (const x of exteriors) {
+    if (!EXTERIOR_NOTES[x.id]) throw new Error(`${model.slug}: no EXTERIOR_NOTES entry for ${x.id}`);
+  }
+  const exteriorBlocks = exteriors.map((s) => `
+            <figure id="${s.id}" class="mb-16 scroll-mt-24">
+                <h2 class="text-2xl md:text-3xl font-serif text-[#0f172a] mb-2">${esc(s.label)}</h2>
+                <p class="text-gray-600 mb-6">The same floor plan, finished in ${esc(EXTERIOR_NOTES[s.id])}.</p>
+                ${picture(s.img, {
+                  alt: `${model.name} ${s.label.toLowerCase()} - the same house finished in ${EXTERIOR_NOTES[s.id]}`,
+                  cls: 'w-full h-auto bg-white border border-gray-200',
+                })}
+                <figcaption class="mt-3 text-sm text-gray-500 flex flex-wrap items-baseline justify-end gap-x-6 gap-y-1">
+                    <a href="/plans/img/${s.img.file}.${s.img.ext || 'png'}" target="_blank" rel="noopener"
+                       class="text-[#866f4f] font-medium hover:underline whitespace-nowrap py-1">
+                        Open full size<span class="sr-only"> image of the ${esc(model.name)} ${esc(s.label.toLowerCase())}</span>
+                    </a>
+                </figcaption>
+            </figure>`).join('\n');
+
+  const sheetBlocks = drawings.map((s) => `
             <figure class="mb-16">
                 <h2 class="text-2xl md:text-3xl font-serif text-[#0f172a] mb-6">${esc(s.label)}</h2>
                 ${picture(s.img, {
@@ -646,7 +684,11 @@ for (const [i, model] of models.entries()) {
               alt: `${model.name} front elevation - ${elevation.label}`,
               cls: 'w-full h-auto bg-white border border-gray-200',
               lazy: false,
-            })}
+            })}${exteriors.length ? `
+            <p class="mt-3 text-sm text-gray-600">
+                See this plan with a
+                ${exteriors.map((x) => `<a href="#${x.id}" class="text-[#866f4f] font-medium hover:underline py-1">${esc(x.label.replace(/ elevation$/i, '').toLowerCase())} exterior</a>`).join(' or ')}.
+            </p>` : ''}
         </div>` : ''}
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-16 mb-20">
@@ -685,6 +727,7 @@ ${specRows}
             </aside>
         </div>
 
+${exteriorBlocks}
         <h2 class="sr-only">Drawings</h2>
 ${sheetBlocks}
 
