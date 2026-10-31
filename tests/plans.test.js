@@ -365,6 +365,13 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
       `${m.slug}: Modern Brick shown before the floor plans`);
     ok(!!doc.querySelector('main a[href="#elevation-modern-brick"]'), `${m.slug}: linked from under the main photo`);
     ok(!fig || !/Dashed outlines/.test(fig.textContent), `${m.slug}: Modern Brick is not captioned as a floor plan`);
+    // With two exteriors the plan is no longer one style, so the line under its
+    // name and its Google description stopped calling it "a two-story Modern
+    // Farmhouse plan" (Kyle, October 31, 2026). The style names survive only as
+    // the pictures' alt text and the brick picture's own heading.
+    const desc = doc.querySelector('meta[name="description"]')?.getAttribute('content') || '';
+    ok(!/farmhouse/i.test(doc.body.textContent) && !/farmhouse/i.test(desc),
+      `${m.slug}: the page text and description name no single style`);
   }
 
   console.log('\n== search results and link previews ==');

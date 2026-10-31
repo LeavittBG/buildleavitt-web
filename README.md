@@ -270,7 +270,10 @@ again before `npm run plans`.
 On the plan page the rendering comes straight after the specs, ahead of the
 floor plans, with a link to it under the main photo; at the end of the drawings
 it would sit below every floor plan, where the buyer it is for has already
-left. `plans.test.js` checks both, and that every plan has one.
+left. `plans.test.js` checks both, and that every plan has one. Since a plan now
+comes in two exteriors, the line under its name and its Google description no
+longer name a style ("A two-story plan with 4+ bedrooms..."), and the models'
+`style` field was dropped from `src/plans.json`.
 
 ### Specs
 

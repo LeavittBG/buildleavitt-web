@@ -289,13 +289,14 @@ const blurb = (model) => {
   const s = model.specs || {};
   const beds = s.beds ? `${String(s.beds).replace('-', '–')} bedrooms` : '';
   const shape = s.stories === 1 ? 'single-story' : 'two-story';
-  const style = model.style ? `${model.style} ` : '';
   const sqft = s.sqft
     ? `${s.sqftFrom ? 'from ' : ''}${s.sqft.toLocaleString('en-US')} living square feet`
     : '';
   const garage = s.garage ? `a ${s.garage} garage` : '';
 
-  const head = [`A ${shape} ${style}plan`, beds && `with ${beds}`].filter(Boolean).join(' ');
+  // No style word: since October 31, 2026 every plan is shown in two exteriors
+  // (Modern Farmhouse and Modern Brick), so it is not one style's plan.
+  const head = [`A ${shape} plan`, beds && `with ${beds}`].filter(Boolean).join(' ');
   const tail = [sqft, garage].filter(Boolean).join(' and ');
   return tail ? `${head}, ${tail}.` : `${head}.`;
 };
@@ -313,12 +314,14 @@ const snippet = (model) => {
   const s = model.specs || {};
   const dash = (v) => String(v).replace('-', '–');
   const facts = [
-    [s.stories === 1 ? 'single-story' : s.stories === 2 ? 'two-story' : '', model.style].filter(Boolean).join(' '),
+    s.stories === 1 ? 'single-story' : s.stories === 2 ? 'two-story' : '',
     s.beds && `${dash(s.beds)} bedrooms`,
     s.baths && `${dash(s.baths)} baths`,
     s.sqft && `${s.sqftFrom ? 'from ' : ''}${s.sqft.toLocaleString('en-US')} sq ft`,
   ].filter(Boolean).join(', ');
-  const what = coverOf(model)?.id === 'elevation' ? 'Floor plans and elevation' : 'Floor plans';
+  const exteriors = sheets(model).filter((x) => x.id === 'elevation' || isExterior(x)).length;
+  const what = exteriors > 1 ? 'Floor plans and elevations'
+    : exteriors ? 'Floor plans and elevation' : 'Floor plans';
   return `${model.name} home plan${facts ? `: ${facts}` : ''}. ${what} by Leavitt Building Group.`;
 };
 

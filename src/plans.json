@@ -112,8 +112,7 @@
           "image": "plans/the-craftsman-modern-brick.jpg",
           "crop": false
         }
-      ],
-      "style": "Modern Farmhouse"
+      ]
     },
     {
       "slug": "the-daydreamer",
@@ -165,8 +164,7 @@
           "image": "plans/the-daydreamer-modern-brick.jpg",
           "crop": false
         }
-      ],
-      "style": "Modern Farmhouse"
+      ]
     },
     {
       "slug": "the-draftsman",
@@ -218,8 +216,7 @@
           "image": "plans/the-draftsman-modern-brick.jpg",
           "crop": false
         }
-      ],
-      "style": "Modern Farmhouse"
+      ]
     },
     {
       "slug": "the-entrepreneur",
@@ -266,8 +263,7 @@
           "image": "plans/the-entrepreneur-modern-brick.jpg",
           "crop": false
         }
-      ],
-      "style": "Modern Farmhouse"
+      ]
     },
     {
       "slug": "the-expressionist-i",
@@ -324,8 +320,7 @@
           "image": "plans/the-expressionist-i-modern-brick.jpg",
           "crop": false
         }
-      ],
-      "style": "Modern Farmhouse"
+      ]
     },
     {
       "slug": "the-expressionist-ii",
@@ -382,8 +377,7 @@
           "image": "plans/the-expressionist-ii-modern-brick.jpg",
           "crop": false
         }
-      ],
-      "style": "Modern Farmhouse"
+      ]
     },
     {
       "slug": "the-illustrator",
@@ -440,8 +434,7 @@
           "image": "plans/the-illustrator-modern-brick.jpg",
           "crop": false
         }
-      ],
-      "style": "Modern Farmhouse"
+      ]
     },
     {
       "slug": "the-impressionist",
@@ -483,8 +476,7 @@
           "image": "plans/the-impressionist-modern-brick.jpg",
           "crop": false
         }
-      ],
-      "style": "Modern Farmhouse"
+      ]
     },
     {
       "slug": "the-innovator",
@@ -531,8 +523,7 @@
           "image": "plans/the-innovator-modern-brick.jpg",
           "crop": false
         }
-      ],
-      "style": "Modern Farmhouse"
+      ]
     },
     {
       "slug": "the-maestro",
@@ -579,8 +570,7 @@
           "image": "plans/the-maestro-modern-brick.jpg",
           "crop": false
         }
-      ],
-      "style": "Modern Farmhouse"
+      ]
     },
     {
       "slug": "the-novel",
@@ -632,8 +622,7 @@
           "image": "plans/the-novel-modern-brick.jpg",
           "crop": false
         }
-      ],
-      "style": "Modern Farmhouse"
+      ]
     },
     {
       "slug": "the-pioneer-i",
@@ -685,8 +674,7 @@
           "image": "plans/the-pioneer-i-modern-brick.jpg",
           "crop": false
         }
-      ],
-      "style": "Modern Farmhouse"
+      ]
     },
     {
       "slug": "the-pioneer-ii",
@@ -738,8 +726,7 @@
           "image": "plans/the-pioneer-ii-modern-brick.jpg",
           "crop": false
         }
-      ],
-      "style": "Modern Farmhouse"
+      ]
     },
     {
       "slug": "the-poet",
@@ -786,8 +773,7 @@
           "image": "plans/the-poet-modern-brick.jpg",
           "crop": false
         }
-      ],
-      "style": "Modern Farmhouse"
+      ]
     },
     {
       "slug": "the-romantic",
@@ -839,13 +825,12 @@
           "image": "plans/the-romantic-modern-brick.jpg",
           "crop": false
         }
-      ],
-      "style": "Modern Farmhouse"
+      ]
     },
     {
       "slug": "the-storyteller",
       "name": "The Storyteller",
-      "summary": "A two-story Modern Farmhouse with 4 bedrooms, a first-floor in-law suite and a two-car garage, at 3,770 living square feet.",
+      "summary": "A two-story home with 4 bedrooms, a first-floor in-law suite and a two-car garage, at 3,770 living square feet.",
       "specs": {
         "beds": "4",
         "baths": "4.5",
@@ -856,7 +841,6 @@
         "garage": "2+ car",
         "bathsNote": "plus an optional full bath in the basement"
       },
-      "style": "Modern Farmhouse",
       "pages": [
         {
           "page": 1,
@@ -943,8 +927,7 @@
           "image": "plans/the-visionary-modern-brick.jpg",
           "crop": false
         }
-      ],
-      "style": "Modern Farmhouse"
+      ]
     }
   ]
 }
