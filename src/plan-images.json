@@ -544,7 +544,7 @@
       "file": "the-pioneer-i-first-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1532,
+      "height": 1531,
       "label": "First Floor"
     },
     "first-floor-options": {
@@ -558,14 +558,14 @@
       "file": "the-pioneer-i-second-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1514,
+      "height": 1512,
       "label": "Second Floor"
     },
     "basement": {
       "file": "the-pioneer-i-basement",
       "ext": "png",
       "width": 1498,
-      "height": 1426,
+      "height": 1425,
       "label": "Basement"
     },
     "basement-options": {
