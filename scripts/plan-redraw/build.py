@@ -32,6 +32,7 @@ import tempfile
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
 sys.path.insert(0, HERE)
+sys.path.insert(0, os.path.join(HERE, 'jobs'))   # shared job helpers (_bhelp.py)
 import blib as B          # noqa: E402
 import extract as X       # noqa: E402
 
@@ -55,7 +56,9 @@ def build(slug, work=None):
     os.makedirs(os.path.join(work, 'out'), exist_ok=True)
     found = {(p, x) for p, x, *_ in X.extract(src, work)}
     reps = []
+    defaults = (B.K, B.PXFT)
     for path in jobs:
+        B.K, B.PXFT = defaults          # a job may change them for its own image (480 dpi vignettes)
         job = load(path)
         img = os.path.join(work, f'p{job.PAGE}_x{job.XREF}.png')
         assert (job.PAGE, job.XREF) in found, f'{path}: page {job.PAGE} has no image {job.XREF}'
@@ -65,6 +68,7 @@ def build(slug, work=None):
         B.render(c, out)
         reps.append((job.PAGE, job.XREF, out))
         print('drew', os.path.relpath(path, ROOT), '->', out)
+    B.K, B.PXFT = defaults
     missing = found - {(p, x) for p, x, _ in reps}
     if missing:
         print('NOTE: images left as they were (no job):', sorted(missing))
