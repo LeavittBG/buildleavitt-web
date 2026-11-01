@@ -282,3 +282,214 @@ def vlabel(c, x, y, name, size_txt=None, note=None, **kw):
     kw.setdefault('name_pt', 5.2)
     kw.setdefault('sub_pt', 4.3)
     B.label(c, x, y, name, size_txt, note, **kw)
+
+
+def thin_walls(img, drop=(), grow=7, k=5):
+    """Framed walls drawn thin (navy - narrow grey stripe - navy, about 8-10 px), which B.trace
+    misses because its 3x3 opening erases a 2 px grey stripe (The Expressionist II's basement
+    furring walls and columns). Any grey pixel, grown by `grow`, kept where it is ink, then
+    opened by k x k so lettering and single lines drop out. Returns a shape for B.trace(add=...)."""
+    a, grey, navy = B.load(img)
+    lum = a.sum(-1) / 3.0
+    ink = grey | navy | (lum < 150)
+    m = ndi.binary_dilation(grey, np.ones((grow, grow), bool)) & ink
+    m = ndi.binary_opening(m, np.ones((k, k), bool))
+    m &= ~B._rects_mask(grey.shape, drop)
+    m = ndi.binary_closing(m, np.ones((3, 3), bool))
+    return B._vectorize(m)
+
+
+def reuse_k(c, img, job_path, k, dx=0, dy=0, drop_text=()):
+    """reuse(), for a drawing that another brochure places at a different dpi: the other job's
+    module constant K is replaced by `k` before it draws, so its line weights and lettering come
+    out at this page's paper sizes (the drawing itself is the same picture, same px/ft)."""
+    import importlib.util, os, re, tempfile
+    from PIL import Image
+    im = Image.open(img).convert('RGB')
+    pad = Image.new('RGB', (im.width - min(dx, 0), im.height - min(dy, 0)), 'white')
+    pad.paste(im, (-min(dx, 0), -min(dy, 0)))
+    fn = os.path.join(tempfile.mkdtemp(), 'reuse.png')
+    pad.save(fn)
+    s = importlib.util.spec_from_file_location('reused_' + os.path.basename(job_path)[:-3], job_path)
+    m = importlib.util.module_from_spec(s)
+    s.loader.exec_module(m)
+    m.K = k
+    c2 = B.new(fn)
+    c2.K = B.K = k
+    m.draw(c2, fn)
+    parts = [p for p in c2.parts
+             if not (p.startswith('<text') and any(t in re.sub('<[^>]+>', '', p) for t in drop_text))]
+    c.add(f'<g transform="translate({min(dx, 0):g} {min(dy, 0):g})">')
+    for p in parts:
+        c.add(p)
+    c.add('</g>')
+    B.K = c.K = k
+
+
+# ---------------------------------------------------------------- listing-sheet plans (The Storyteller)
+# The Storyteller's plans are listing-sheet drawings, not the brochure CAD style: walls are solid
+# black bands, floors beige (baths teal), windows are thin framed white boxes set in the wall line,
+# and fixtures are drawn white with black hairlines. These read that style.
+
+def listing_wall_mask(img, k=7, drop=()):
+    """Solid black wall bands (thin linework removed by an opening of k px)."""
+    a, grey, navy = B.load(img)
+    lum = a.sum(-1) / 3.0
+    blk = lum < 70
+    W = ndi.binary_opening(blk, np.ones((k, k), bool))
+    if drop:
+        W &= ~B._rects_mask(blk.shape, drop)
+    return W
+
+
+def listing_windows(img, W, L=230, tmax=34, fill_min=0.8, drop=()):
+    """Windows: gaps in a wall line (closed by a straight closing of length L) whose width is
+    spanned by frame lines. Returns (window list for B.window_rot, mask of the window gaps)."""
+    a, grey, navy = B.load(img)
+    lum = a.sum(-1) / 3.0
+    dark = lum < 200
+    out, gmask = [], np.zeros(W.shape, bool)
+    dm = B._rects_mask(W.shape, drop) if drop else np.zeros(W.shape, bool)
+    for horiz in (True, False):
+        st = np.ones((1, L), bool) if horiz else np.ones((L, 1), bool)
+        C = ndi.binary_closing(W, st) & ~W & ~dm
+        lab, n = ndi.label(C)
+        for i, sl in enumerate(ndi.find_objects(lab)):
+            if sl is None:
+                continue
+            y0, y1, x0, x1 = sl[0].start, sl[0].stop, sl[1].start, sl[1].stop
+            t, ln = (y1 - y0, x1 - x0) if horiz else (x1 - x0, y1 - y0)
+            if not (6 <= t <= tmax) or ln < 18:
+                continue
+            blob = lab[sl] == i + 1
+            d = dark[sl] & blob
+            # every position along the gap must have frame ink across it (2+ dark pixels)
+            cover = (d.sum(axis=0) >= 2) if horiz else (d.sum(axis=1) >= 2)
+            if cover.mean() < fill_min or d.sum() > 0.6 * blob.sum():
+                continue
+            gmask[sl] |= blob
+            cx, cy = (x0 + x1) / 2.0, (y0 + y1) / 2.0
+            out.append(((cx, cy), float(ln), float(t), 0.0 if horiz else 90.0))
+    return out, gmask
+
+
+def listing_trace(img, k=7, drop=(), add=(), cut=(), win_drop=(), L=230):
+    """Walls (shapely, windows included as wall) and windows for a listing-sheet plan."""
+    from shapely.geometry import box as sbox
+    from shapely.ops import unary_union
+    W = listing_wall_mask(img, k, drop)
+    wins, gm = listing_windows(img, W, L=L, drop=win_drop)
+    geom = B._vectorize(ndi.binary_closing(W | gm, np.ones((3, 3), bool)))
+    extra = [sbox(*r) if isinstance(r, tuple) else r for r in add]
+    if extra:
+        geom = unary_union([geom] + extra)
+    if cut:
+        geom = geom.difference(unary_union([sbox(*r) for r in cut]))
+    return geom, wins
+
+
+def listing_lines(img, walls_geom, drop=(), dark=150):
+    """Linework of a listing sheet: neutral dark pixels (door leaves and swings, counters, fixtures,
+    stair treads) outside the walls; beige floors and teal bath floors are left out."""
+    a, grey, navy = B.load(img)
+    lum = a.sum(-1) / 3.0
+    sat = a.max(-1) - a.min(-1)
+    m = (lum < dark) & (sat < 30)
+    wm = np.zeros(m.shape, np.uint8)
+    for p in getattr(walls_geom, 'geoms', [walls_geom]):
+        if not p.is_empty:
+            cv2.fillPoly(wm, [np.array(p.exterior.coords, np.int32)], 1)
+            for h in p.interiors:
+                cv2.fillPoly(wm, [np.array(h.coords, np.int32)], 0)
+    m &= ~ndi.binary_dilation(wm.astype(bool), np.ones((5, 5), bool))
+    if drop:
+        m &= ~B._rects_mask(m.shape, drop)
+    m = ndi.binary_dilation(m, np.ones((2, 2), bool))
+    return B._contours_to_geom(m, eps=0.7, min_area=14)     # drops JPEG speckle on the teal floors
+
+
+def listing_erase_text(img, rects, out=None, max_glyph=48, fill=(234, 234, 222), hard=()):
+    """Copy of a listing-sheet raster with its lettering removed: every dark component whose box
+    lies inside one of `rects` and is glyph-sized is painted over, so door swings and lines that
+    pass through a label survive. `hard` rects are cleared outright (for lettering that touches a
+    line; redraw that line by hand). Returns the new image path."""
+    from PIL import Image
+    a, grey, navy = B.load(img)
+    lum = a.sum(-1) / 3.0
+    sat = a.max(-1) - a.min(-1)
+    dark = (lum < 120) & (sat < 44)          # glyph cores only: not the teal floors or their JPEG noise
+    lab, n = ndi.label(dark, np.ones((3, 3), bool))
+    b = a.copy()
+    for i, sl in enumerate(ndi.find_objects(lab)):
+        if sl is None:
+            continue
+        y0, y1, x0, x1 = sl[0].start, sl[0].stop, sl[1].start, sl[1].stop
+        if max(y1 - y0, x1 - x0) > max_glyph:
+            continue
+        if any(rx0 <= x0 and x1 <= rx1 and ry0 <= y0 and y1 <= ry1 for rx0, ry0, rx1, ry1 in rects):
+            m = ndi.binary_dilation(lab[sl] == i + 1, np.ones((5, 5), bool))
+            b[sl][m] = fill
+    # faint leftovers (apostrophes, antialiased edges) as small whole components
+    faint = (b.sum(-1) / 3.0 < 175) & ((b.max(-1) - b.min(-1)) < 60)
+    lab2, n2 = ndi.label(faint, np.ones((3, 3), bool))
+    for i, sl in enumerate(ndi.find_objects(lab2)):
+        if sl is None:
+            continue
+        y0, y1, x0, x1 = sl[0].start, sl[0].stop, sl[1].start, sl[1].stop
+        comp = lab2[sl] == i + 1
+        if max(y1 - y0, x1 - x0) > max_glyph or (b[sl][comp].sum(-1) / 3.0).mean() < 70:
+            continue                     # too big, or solid black linework: not a glyph remnant
+        if any(rx0 <= x0 and x1 <= rx1 and ry0 <= y0 and y1 <= ry1 for rx0, ry0, rx1, ry1 in rects):
+            b[sl][ndi.binary_dilation(comp, np.ones((3, 3), bool))] = fill
+    for x0, y0, x1, y1 in hard:
+        b[int(y0):int(y1), int(x0):int(x1)] = fill
+    out = out or img[:-4] + '_notext.png'
+    Image.fromarray(b.astype(np.uint8)).save(out)
+    return out
+
+
+def ray_box(walls, x, y, L=3000):
+    """Nearest wall faces left, right, up and down of (x, y): (xl, xr, yu, yd)."""
+    from shapely.geometry import LineString
+    res = []
+    for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)):
+        hit = LineString([(x, y), (x + dx * L, y + dy * L)]).intersection(walls)
+        pts = []
+        for g in getattr(hit, 'geoms', [hit]):
+            if not g.is_empty and hasattr(g, 'coords'):
+                pts += list(g.coords)
+        if not pts:
+            res.append(None)
+            continue
+        p = min(pts, key=lambda q: (q[0] - x) ** 2 + (q[1] - y) ** 2)
+        res.append(p[0] if dx else p[1])
+    return tuple(res)
+
+
+def freestanding_tub(c, cx, cy, length_in=60, width_in=30, angle=0, drain_end=1, wall=None):
+    """Freestanding tub (Kyle, October 31, 2026): a stadium-shaped outline with an inner basin and a
+    drain dot, white-filled, navy lines. (cx, cy) is the tub's centre in image px; sizes in inches
+    (B.PXFT). angle in degrees (0 = long side along x). drain_end = +1 / -1 picks which end the
+    drain sits at."""
+    import math
+    k = B.PXFT / 12.0
+    L, W = length_in * k, width_in * k
+    a = math.radians(angle)
+    ca, sa = math.cos(a), math.sin(a)
+
+    def stadium(l, w, n=18):
+        r = w / 2.0
+        h = l / 2.0 - r
+        pts = []
+        for i in range(n + 1):                       # right cap
+            t = -math.pi / 2 + math.pi * i / n
+            pts.append((h + r * math.cos(t), r * math.sin(t)))
+        for i in range(n + 1):                       # left cap
+            t = math.pi / 2 + math.pi * i / n
+            pts.append((-h + r * math.cos(t), r * math.sin(t)))
+        return [(cx + u * ca - v * sa, cy + u * sa + v * ca) for u, v in pts]
+
+    c.polyline(stadium(L, W), w=0.5, color=B.NAVY, fill='#ffffff', close=True, join='round')
+    c.polyline(stadium(L - 5 * k, W - 5 * k), w=0.3, color=B.NAVY, close=True, join='round')
+    du = drain_end * (L / 2.0 - W / 2.0)
+    c.circle(cx + du * ca, cy + du * sa, 1.1 * k, sw=0.3, color=B.NAVY)
