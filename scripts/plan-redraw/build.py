@@ -26,6 +26,7 @@ import glob
 import importlib.util
 import os
 import shutil
+import subprocess
 import sys
 import tempfile
 
@@ -73,6 +74,11 @@ def build(slug, work=None):
     if missing:
         print('NOTE: images left as they were (no job):', sorted(missing))
     B.swap(src, reps, dst)
+    # The original brochure has no Modern Brick page (README, "A second exterior: Modern
+    # Brick"); it was added to the end of every brochure afterwards. Put it back, or the
+    # redrawn brochure loses it. Needs the Cinzel and Montserrat TTFs that script names.
+    subprocess.run([sys.executable, os.path.join(ROOT, 'scripts', 'add-elevation-pages.py'), slug],
+                   check=True)
     print('wrote', os.path.relpath(dst, ROOT), f'(renders and side-by-sides in {work})')
     for p, x, out in reps:
         B.side_by_side(os.path.join(work, f'p{p}_x{x}.png'), out, out[:-4] + '_vs_original.png',
