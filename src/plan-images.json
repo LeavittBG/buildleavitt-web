@@ -27,6 +27,13 @@
       "width": 1502,
       "height": 1682,
       "label": "Basement"
+    },
+    "elevation-modern-brick": {
+      "file": "the-craftsman-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-daydreamer": {
@@ -71,6 +78,13 @@
       "width": 1498,
       "height": 1610,
       "label": "Basement Options"
+    },
+    "elevation-modern-brick": {
+      "file": "the-daydreamer-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-draftsman": {
@@ -115,6 +129,13 @@
       "width": 1380,
       "height": 1664,
       "label": "Basement Options"
+    },
+    "elevation-modern-brick": {
+      "file": "the-draftsman-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-entrepreneur": {
@@ -152,6 +173,13 @@
       "width": 1493,
       "height": 1308,
       "label": "Elevations"
+    },
+    "elevation-modern-brick": {
+      "file": "the-entrepreneur-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-expressionist-i": {
@@ -203,6 +231,13 @@
       "width": 1290,
       "height": 1066,
       "label": "Basement Options"
+    },
+    "elevation-modern-brick": {
+      "file": "the-expressionist-i-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-expressionist-ii": {
@@ -254,6 +289,13 @@
       "width": 1470,
       "height": 1042,
       "label": "Basement Options"
+    },
+    "elevation-modern-brick": {
+      "file": "the-expressionist-ii-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-illustrator": {
@@ -305,6 +347,13 @@
       "width": 1338,
       "height": 1104,
       "label": "Basement Options"
+    },
+    "elevation-modern-brick": {
+      "file": "the-illustrator-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-impressionist": {
@@ -335,6 +384,13 @@
       "width": 1500,
       "height": 1627,
       "label": "Basement"
+    },
+    "elevation-modern-brick": {
+      "file": "the-impressionist-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-innovator": {
@@ -372,6 +428,13 @@
       "width": 1500,
       "height": 1644,
       "label": "Basement"
+    },
+    "elevation-modern-brick": {
+      "file": "the-innovator-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-maestro": {
@@ -409,6 +472,13 @@
       "width": 1300,
       "height": 1136,
       "label": "Basement Options"
+    },
+    "elevation-modern-brick": {
+      "file": "the-maestro-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-novel": {
@@ -453,6 +523,13 @@
       "width": 1384,
       "height": 1240,
       "label": "Basement Options"
+    },
+    "elevation-modern-brick": {
+      "file": "the-novel-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-pioneer-i": {
@@ -497,6 +574,13 @@
       "width": 1494,
       "height": 1691,
       "label": "Basement Options"
+    },
+    "elevation-modern-brick": {
+      "file": "the-pioneer-i-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-pioneer-ii": {
@@ -541,6 +625,13 @@
       "width": 1494,
       "height": 1675,
       "label": "Basement Options"
+    },
+    "elevation-modern-brick": {
+      "file": "the-pioneer-ii-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-poet": {
@@ -578,6 +669,13 @@
       "width": 1500,
       "height": 1580,
       "label": "Basement"
+    },
+    "elevation-modern-brick": {
+      "file": "the-poet-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-romantic": {
@@ -622,6 +720,13 @@
       "width": 1350,
       "height": 1180,
       "label": "Basement Options"
+    },
+    "elevation-modern-brick": {
+      "file": "the-romantic-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-storyteller": {
@@ -652,6 +757,13 @@
       "width": 1498,
       "height": 1255,
       "label": "Basement"
+    },
+    "elevation-modern-brick": {
+      "file": "the-storyteller-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-visionary": {
@@ -703,6 +815,13 @@
       "width": 1486,
       "height": 1104,
       "label": "Basement Options"
+    },
+    "elevation-modern-brick": {
+      "file": "the-visionary-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   }
 }

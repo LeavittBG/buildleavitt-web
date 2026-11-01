@@ -345,6 +345,35 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
       `${m.slug}: ${m.pages.length} images generated`);
   }
 
+  console.log('\n== every plan offers a second exterior ==');
+  // October 2026: every cover showed the plan as a Modern Farmhouse, and Kyle was
+  // told a buyer who does not care for farmhouse style needs to see something
+  // else. Each plan now has a Modern Brick rendering of the same house: the last
+  // page of its brochure, and on its plan page straight after the specs with a
+  // link to it under the main photo. At the end of the drawings it would sit
+  // below every floor plan, where the buyer it is for has already left.
+  for (const m of models) {
+    const brick = m.pages.find((p) => p.id === 'elevation-modern-brick');
+    ok(!!brick && fs.existsSync(path.join(ROOT, 'assets-src', brick.image || '')),
+      `${m.slug}: has a Modern Brick rendering in assets-src`);
+    if (!brick) continue;
+    ok(brick.page === Math.max(...m.pages.map((p) => p.page)), `${m.slug}: Modern Brick is the brochure's last page`);
+    const doc = new JSDOM(fs.readFileSync(path.join(ROOT, `plans/${m.slug}.html`), 'utf8')).window.document;
+    const fig = doc.getElementById('elevation-modern-brick');
+    const firstFloor = [...doc.querySelectorAll('figure h2')].find((h) => /floor/i.test(h.textContent));
+    ok(!!fig && !!firstFloor && !!(fig.compareDocumentPosition(firstFloor) & 4 /* FOLLOWING */),
+      `${m.slug}: Modern Brick shown before the floor plans`);
+    ok(!!doc.querySelector('main a[href="#elevation-modern-brick"]'), `${m.slug}: linked from under the main photo`);
+    ok(!fig || !/Dashed outlines/.test(fig.textContent), `${m.slug}: Modern Brick is not captioned as a floor plan`);
+    // With two exteriors the plan is no longer one style, so the line under its
+    // name and its Google description stopped calling it "a two-story Modern
+    // Farmhouse plan" (Kyle, October 31, 2026). The style names survive only as
+    // the pictures' alt text and the brick picture's own heading.
+    const desc = doc.querySelector('meta[name="description"]')?.getAttribute('content') || '';
+    ok(!/farmhouse/i.test(doc.body.textContent) && !/farmhouse/i.test(desc),
+      `${m.slug}: the page text and description name no single style`);
+  }
+
   console.log('\n== search results and link previews ==');
   // Google cuts a description off at about 155 characters. These used to run to
   // 217-231 and lose the bedrooms and square footage - the part people choose a
