@@ -11,7 +11,7 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
   const rm = await b.newContext({ viewport: { width: 1280, height: 900 }, reducedMotion: 'reduce' });
   const p1 = await rm.newPage();
   await p1.goto(path); await p1.waitForTimeout(700);
-  ok(await p1.locator('h1').evaluate((h) => getComputedStyle(h).opacity === '1' && h.innerText.includes('Across the Region.')),
+  ok(await p1.locator('h1').evaluate((h) => getComputedStyle(h).opacity === '1' && h.innerText.includes('Across Harford County.')),
      '[reduced-motion] headline shown at once');
   await p1.screenshot({ path: OUT + '/shot-reduced.png' });
 

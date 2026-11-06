@@ -40,6 +40,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://buildleavitt.com/"},{"@type":"ListItem","position":2,"name":"Home Plans","item":"https://buildleavitt.com/plans/"},{"@type":"ListItem","position":3,"name":"The Innovator","item":"https://buildleavitt.com/plans/the-innovator.html"}]}</script>
 </head>
 <body class="bg-[#fcfcfc] text-gray-900 font-sans">
     <!-- Google Tag Manager (noscript) -->
@@ -136,6 +137,11 @@
                     Every Leavitt home includes
                     <a href="/plans/#included" class="text-[#866f4f] font-medium hover:underline">the Leavitt Standard</a>
                     &mdash; quartz, Andersen&reg; windows, 9&rsquo; ceilings and more, at no upgrade cost.
+                </p>
+                <p class="text-sm text-gray-600 mt-4">
+                    Building from one of our plans is our
+                    <a href="/semi-custom-homes.html" class="inline-block py-1 text-[#866f4f] font-medium hover:underline">semi-custom home</a>
+                    process: the plan adapted to your lot, about 6 to 8 months to complete.
                 </p>
                 <p class="text-sm text-gray-600 mt-4">
                     Prefer to talk it through?
@@ -287,20 +293,29 @@
 
     </main>
 
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://buildleavitt.com/"},{"@type":"ListItem","position":2,"name":"Home Plans","item":"https://buildleavitt.com/plans/"},{"@type":"ListItem","position":3,"name":"The Innovator","item":"https://buildleavitt.com/plans/the-innovator.html"}]}</script>
-
     <footer class="bg-[#0f172a] text-gray-400 py-10 px-6">
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
             <p class="text-sm">&copy; <span id="year">2026</span> Leavitt Building Group. All Rights Reserved.</p>
-            <div class="flex gap-6 text-sm uppercase tracking-wider font-semibold">
-                <a href="/" class="hover:text-white transition-colors">Home</a>
-                <a href="/plans/" class="hover:text-white transition-colors">Plans</a>
-                <a href="/privacy.html" class="hover:text-white transition-colors">Privacy</a>
-                <a href="/terms.html" class="hover:text-white transition-colors">Terms</a>
-                <a href="https://connect.buildleavitt.com" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">Client Login</a>
-            </div>
+            <!-- The menu bar stays as Kyle set it, so the footer links the three service
+                 pages on every page (tests/seo.test.js); the hand-written pages carry the
+                 same two rows. -->
+            <nav aria-label="Footer" class="flex flex-col items-center md:items-end gap-y-1 text-sm uppercase tracking-wider font-semibold">
+                <div class="flex flex-wrap items-baseline justify-center md:justify-end gap-x-6">
+                    <span class="text-[11px] tracking-[0.2em] text-[#c2a67a]">Services</span>
+                    <a href="/custom-homes.html" class="inline-block py-2 hover:text-white transition-colors">Custom Homes</a>
+                    <a href="/semi-custom-homes.html" class="inline-block py-2 hover:text-white transition-colors">Semi-Custom Homes</a>
+                    <a href="/renovations.html" class="inline-block py-2 hover:text-white transition-colors">Renovations</a>
+                </div>
+                <div class="flex flex-wrap justify-center md:justify-end gap-x-6">
+                    <a href="/" class="inline-block py-2 hover:text-white transition-colors">Home</a>
+                    <a href="/plans/" class="inline-block py-2 hover:text-white transition-colors">Plans</a>
+                    <a href="/privacy.html" class="inline-block py-2 hover:text-white transition-colors">Privacy</a>
+                    <a href="/terms.html" class="inline-block py-2 hover:text-white transition-colors">Terms</a>
+                    <a href="https://connect.buildleavitt.com" target="_blank" rel="noopener noreferrer" class="inline-block py-2 hover:text-white transition-colors">Client Login</a>
+                </div>
+            </nav>
         </div>
-        <address class="max-w-6xl mx-auto mt-6 not-italic text-sm text-center md:text-left"><span class="whitespace-nowrap">217 E. Jarrettsville Rd., Suite 3,</span> <span class="whitespace-nowrap">Forest Hill, MD 21050</span><span class="mx-2" aria-hidden="true">&middot;</span><a href="tel:+18668326524" class="whitespace-nowrap hover:text-white transition-colors">(866) 832-6524</a></address>
+        <address class="max-w-6xl mx-auto mt-6 not-italic text-sm text-center md:text-left"><span class="whitespace-nowrap">217 E. Jarrettsville Rd., Suite 3,</span> <span class="whitespace-nowrap">Forest Hill, MD 21050</span><span class="mx-2" aria-hidden="true">&middot;</span><a href="tel:+18668326524" class="inline-block py-1 whitespace-nowrap hover:text-white transition-colors">(866) 832-6524</a></address>
         <p class="max-w-6xl mx-auto mt-1 text-sm text-center md:text-left"><span class="block sm:inline">Monday&ndash;Friday 8&nbsp;a.m.&ndash;5&nbsp;p.m.</span><span class="hidden sm:inline mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span><wbr><span class="whitespace-nowrap">Saturday by appointment<span class="mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>Closed Sunday</span></p>
         <p class="max-w-6xl mx-auto mt-2 text-xs text-gray-500 tracking-wider text-center md:text-left">MHBR 9796 | MHIC 161316 | PAHIC 212160</p>
     </footer>

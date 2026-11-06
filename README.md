@@ -40,6 +40,17 @@ fetching them, because text width decides several of the layout checks. If
 you change the Google Fonts URL in the pages, run `npm run test:fonts` to
 refresh that copy.
 
+`tests/seo.test.js` is the one file that opens no browser: it reads the pages
+with jsdom and checks what search engines are told. Structured data parses on
+every page; every visible breadcrumb matches its BreadcrumbList; each service
+page describes its service and repeats the business (name, address, phone)
+exactly as the homepage does; the towns on the homepage band are the `City`
+entries in the structured data; `/plans/` lists every plan; every footer links
+the three services; every file the hero's `srcset` names exists; and
+`netlify.toml` sets the cache and security headers. `markup.test.js` also
+holds every indexable page to a title of at most 70 characters and a
+description of 70–155, repeated in the preview tags.
+
 One check in `plans.test.js` reads the brochure PDFs with `pdftotext`
 (`brew install poppler` on a Mac). Without it that check is skipped and says
 so; the rest still run.
@@ -94,6 +105,12 @@ served. Everything the site actually loads is generated from them and committed.
 ```
 npm run images     # resize + WebP the photography in assets-src/
 ```
+
+The two hero crops are also written at smaller widths (`hero-home-1280`,
+`hero-home-1920`, `hero-home-phone-800`, `hero-home-phone-1200`, JPEG and WebP)
+for the hero's `srcset`, so a phone is not sent the 2560-pixel file. The widths
+are the `srcset` lists in `TARGETS` in `scripts/optimize-images.mjs`; the files
+are committed like the rest.
 
 ## Icons
 
@@ -359,6 +376,13 @@ change, change them in all of those places; `markup.test.js` fails if the hours
 on any page stop matching the structured data. Saturday is by appointment,
 which the structured data has no way to say, so it lists Monday–Friday only.
 
+The three service pages repeat the name, address, phone and logo in a compact
+business node with the same `@id` as the homepage's, so Google can read each
+page on its own; `tests/seo.test.js` fails if the copy drifts. The towns listed
+under each county on the homepage's service-area band are repeated as `City`
+entries in the homepage's `areaServed`; change both together, the same test
+compares them.
+
 ## Service pages
 
 `custom-homes.html`, `semi-custom-homes.html` and `renovations.html` are
@@ -369,6 +393,24 @@ already chosen: `/?interest=Custom%20Home%20Build#contact`. The semi-custom
 page shows three plan cards whose facts line (`data-plan-facts`) is filled in
 by `npm run plans:build`. `tests/service-pages.test.js`
 checks the pages, the hand-off and that every link is at least 24px tall.
+
+Each service page's head carries a BreadcrumbList (matching the visible
+breadcrumb), a Service whose provider is the business, and the compact business
+node described under Business details. Each has a "Where we build" section that
+names the towns in the five counties, and links to the other services and to
+the plans. Every footer on the site, the plan pages' included, has a Services
+row linking the three pages; the menu bar is Kyle's and does not change.
+
+## Response headers
+
+`netlify.toml` sets `X-Content-Type-Options`, `Referrer-Policy` and
+`Permissions-Policy` on every response, and a one-week `Cache-Control` on
+`/plans/img/`, `/plans/pdf/` and `/media/`. The HTML and `dist/styles.css` keep
+Netlify's default (`max-age=0, must-revalidate`), because their names never
+change and an edit has to show at once. The cached paths hold files that are
+replaced in place under the same name (a redrawn brochure, a retaken
+rendering), so the age stays short and is never `immutable`.
+`tests/seo.test.js` checks the blocks.
 
 ## Forms
 

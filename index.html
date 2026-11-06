@@ -11,7 +11,7 @@
     })(window,document,'script','dataLayer','GTM-PHGFM247');</script>
     <!-- End Google Tag Manager -->
 
-    <title>Custom Home Builder Serving Harford &amp; Surrounding Counties | Leavitt Building Group</title>
+    <title>Harford County, MD Custom Home Builder | Leavitt Building Group</title>
     
     <!-- SEO & Social Media Meta Tags -->
     <meta name="description" content="Custom home builder serving Harford and surrounding counties in Maryland and southern PA. Custom and semi-custom homes and large-scale renovations.">
@@ -21,7 +21,7 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Leavitt Building Group">
     <meta property="og:url" content="https://buildleavitt.com/">
-    <meta property="og:title" content="Custom Home Builder Serving Harford &amp; Surrounding Counties | Leavitt Building Group">
+    <meta property="og:title" content="Harford County, MD Custom Home Builder | Leavitt Building Group">
     <meta property="og:description" content="Custom home builder serving Harford and surrounding counties in Maryland and southern PA. Custom and semi-custom homes and large-scale renovations.">
     <meta property="og:image" content="https://buildleavitt.com/plans/img/the-visionary-elevation.jpg">
     <meta property="og:image:width" content="1468">
@@ -31,7 +31,7 @@
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://buildleavitt.com/">
-    <meta name="twitter:title" content="Custom Home Builder Serving Harford &amp; Surrounding Counties | Leavitt Building Group">
+    <meta name="twitter:title" content="Harford County, MD Custom Home Builder | Leavitt Building Group">
     <meta name="twitter:description" content="Custom home builder serving Harford and surrounding counties in Maryland and southern PA. Custom and semi-custom homes and large-scale renovations.">
     <meta name="twitter:image" content="https://buildleavitt.com/plans/img/the-visionary-elevation.jpg">
     <meta name="twitter:image:alt" content="The Visionary, a home plan by Leavitt Building Group.">
@@ -86,7 +86,32 @@
         { "@type": "AdministrativeArea", "name": "Carroll County, MD" },
         { "@type": "AdministrativeArea", "name": "Cecil County, MD" },
         { "@type": "AdministrativeArea", "name": "Anne Arundel County, MD" },
-        { "@type": "AdministrativeArea", "name": "Southern Pennsylvania" }
+        { "@type": "AdministrativeArea", "name": "Southern Pennsylvania" },
+        { "@type": "City", "name": "Bel Air, MD" },
+        { "@type": "City", "name": "Fallston, MD" },
+        { "@type": "City", "name": "Forest Hill, MD" },
+        { "@type": "City", "name": "Jarrettsville, MD" },
+        { "@type": "City", "name": "Abingdon, MD" },
+        { "@type": "City", "name": "Havre de Grace, MD" },
+        { "@type": "City", "name": "Aberdeen, MD" },
+        { "@type": "City", "name": "Street, MD" },
+        { "@type": "City", "name": "Whiteford, MD" },
+        { "@type": "City", "name": "Darlington, MD" },
+        { "@type": "City", "name": "Monkton, MD" },
+        { "@type": "City", "name": "Phoenix, MD" },
+        { "@type": "City", "name": "Parkton, MD" },
+        { "@type": "City", "name": "Kingsville, MD" },
+        { "@type": "City", "name": "Perry Hall, MD" },
+        { "@type": "City", "name": "Towson, MD" },
+        { "@type": "City", "name": "Westminster, MD" },
+        { "@type": "City", "name": "Hampstead, MD" },
+        { "@type": "City", "name": "Manchester, MD" },
+        { "@type": "City", "name": "Elkton, MD" },
+        { "@type": "City", "name": "North East, MD" },
+        { "@type": "City", "name": "Rising Sun, MD" },
+        { "@type": "City", "name": "Annapolis, MD" },
+        { "@type": "City", "name": "Severna Park, MD" },
+        { "@type": "City", "name": "Crofton, MD" }
       ],
       "founder": { "@type": "Person", "name": "Kyle Leavitt", "jobTitle": "President" },
       "openingHoursSpecification": [
@@ -112,9 +137,9 @@
         "@type": "OfferCatalog",
         "name": "Construction Services",
         "itemListElement": [
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Custom Ground-Up Home Construction" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Semi-Custom Homes" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Large-Scale Renovations" } }
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "@id": "https://buildleavitt.com/custom-homes.html#service", "name": "Custom Home Building", "url": "https://buildleavitt.com/custom-homes.html" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "@id": "https://buildleavitt.com/semi-custom-homes.html#service", "name": "Semi-Custom Homes", "url": "https://buildleavitt.com/semi-custom-homes.html" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "@id": "https://buildleavitt.com/renovations.html#service", "name": "Large-Scale Renovations & Additions", "url": "https://buildleavitt.com/renovations.html" } }
         ]
       }
     }
@@ -297,12 +322,20 @@
              on tall phones (Kyle, October 16, 2026). The hero keeps the first screen
              by stretching the navy below the copy instead. -->
         <div class="relative w-full aspect-[4400/2688] lg:aspect-auto lg:absolute lg:inset-0">
+            <!-- Three widths of each crop (npm run images writes them from assets-src/), so a
+                 phone downloads a fraction of what a 4K screen does. The browser settles the
+                 media query before it reads a srcset, so below lg only the phone crop's files
+                 are candidates; sizes is 100vw because the picture always spans the screen. -->
             <picture class="contents">
-                <source media="(max-width: 1023px)" srcset="hero-home-phone.webp" type="image/webp">
-                <source media="(max-width: 1023px)" srcset="hero-home-phone.jpg">
-                <source srcset="hero-home.webp" type="image/webp">
+                <source media="(max-width: 1023px)" type="image/webp" sizes="100vw"
+                        srcset="hero-home-phone-800.webp 800w, hero-home-phone-1200.webp 1200w, hero-home-phone.webp 1600w">
+                <source media="(max-width: 1023px)" sizes="100vw"
+                        srcset="hero-home-phone-800.jpg 800w, hero-home-phone-1200.jpg 1200w, hero-home-phone.jpg 1600w">
+                <source type="image/webp" sizes="100vw"
+                        srcset="hero-home-1280.webp 1280w, hero-home-1920.webp 1920w, hero-home.webp 2560w">
                 <img
-                src="hero-home.jpg"
+                src="hero-home.jpg" sizes="100vw"
+                srcset="hero-home-1280.jpg 1280w, hero-home-1920.jpg 1920w, hero-home.jpg 2560w"
                 alt="The Pioneer I, one of Leavitt Building Group's home plans, in late-afternoon light"
                 width="2560" height="1086" fetchpriority="high"
                 class="absolute inset-0 w-full h-full object-cover object-center lg:object-[40%_50%]"
@@ -329,7 +362,7 @@
 
                 <h1 class="text-[7.4vw] sm:text-5xl md:text-6xl lg:text-7xl font-light text-white leading-[1.08] mb-8 tracking-tighter">
                     <span class="hero-line">Crafting Custom Homes</span>
-                    <span class="hero-line">Across the Region.</span>
+                    <span class="hero-line">Across Harford County.</span>
                 </h1>
 
                 <p class="text-base md:text-lg text-gray-300 mb-8 md:mb-10 max-w-xl leading-relaxed">
@@ -866,6 +899,17 @@
                 Anne Arundel County <span class="text-gray-600 mx-2">|</span> 
                 Southern PA
             </p>
+            <!-- The towns in each county (Kyle, November 6, 2026), so a search from Bel Air
+                 or Fallston has something to match. The business structured data in the head
+                 lists the same towns as City entries; tests/seo.test.js checks the two agree,
+                 so change them together. -->
+            <ul data-towns class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-x-8 gap-y-6 text-center lg:text-left text-sm text-gray-400 leading-relaxed">
+                <li><strong class="block text-white font-semibold mb-1">Harford County</strong>Bel Air, Fallston, Forest Hill, Jarrettsville, Abingdon, Havre de Grace, Aberdeen, Street, Whiteford and Darlington</li>
+                <li><strong class="block text-white font-semibold mb-1">Baltimore County</strong>Monkton, Phoenix, Parkton, Kingsville, Perry Hall and Towson</li>
+                <li><strong class="block text-white font-semibold mb-1">Carroll County</strong>Westminster, Hampstead and Manchester</li>
+                <li><strong class="block text-white font-semibold mb-1">Cecil County</strong>Elkton, North East and Rising Sun</li>
+                <li><strong class="block text-white font-semibold mb-1">Anne Arundel County</strong>Annapolis, Severna Park and Crofton</li>
+            </ul>
         </div>
     </section>
 
@@ -1463,11 +1507,23 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-5 h-5"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
                     </a>
                 </div>
-                <div class="flex gap-6 text-sm uppercase tracking-wider font-semibold">
-                    <a href="privacy.html" class="inline-block py-2 hover:text-white transition-colors">Privacy</a>
-                    <a href="terms.html" class="inline-block py-2 hover:text-white transition-colors">Terms</a>
-                    <a href="https://connect.buildleavitt.com" target="_blank" rel="noopener noreferrer" class="inline-block py-2 hover:text-white transition-colors">Client Login</a>
-                </div>
+                <!-- The menu bar is Kyle's and stays as it is, so the footer is where every
+                     page links the three service pages (tests/seo.test.js). The same two
+                     rows are in every other footer and in build-plans.mjs. -->
+                <nav aria-label="Footer" class="flex flex-col items-center md:items-end gap-y-1 text-sm uppercase tracking-wider font-semibold">
+                    <div class="flex flex-wrap items-baseline justify-center md:justify-end gap-x-6">
+                        <span class="text-[11px] tracking-[0.2em] text-[#c2a67a]">Services</span>
+                        <a href="/custom-homes.html" class="inline-block py-2 hover:text-white transition-colors">Custom Homes</a>
+                        <a href="/semi-custom-homes.html" class="inline-block py-2 hover:text-white transition-colors">Semi-Custom Homes</a>
+                        <a href="/renovations.html" class="inline-block py-2 hover:text-white transition-colors">Renovations</a>
+                    </div>
+                    <div class="flex flex-wrap justify-center md:justify-end gap-x-6">
+                        <a href="/plans/" class="inline-block py-2 hover:text-white transition-colors">Plans</a>
+                        <a href="privacy.html" class="inline-block py-2 hover:text-white transition-colors">Privacy</a>
+                        <a href="terms.html" class="inline-block py-2 hover:text-white transition-colors">Terms</a>
+                        <a href="https://connect.buildleavitt.com" target="_blank" rel="noopener noreferrer" class="inline-block py-2 hover:text-white transition-colors">Client Login</a>
+                    </div>
+                </nav>
             </div>
         </div>
     </footer>

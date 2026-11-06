@@ -134,7 +134,13 @@ const NOTE_FOR = { sqft: 'sqftNote', baths: 'bathsNote' };
  * page is shared on Facebook, in a text message or anywhere else that reads
  * Open Graph tags. JPEG or PNG, not WebP, which some of those still ignore.
  */
-const head = ({ title, description, canonical, image }) => `<!DOCTYPE html>
+/*
+ * One <script type="application/ld+json"> per object, for the head. "<" is
+ * written as \u003c so nothing in the data can close the script element.
+ */
+const ld = (o) => `\n    <script type="application/ld+json">${JSON.stringify(o).replace(/</g, '\\u003c')}</script>`;
+
+const head = ({ title, description, canonical, image, jsonLd = [] }) => `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -175,7 +181,7 @@ const head = ({ title, description, canonical, image }) => `<!DOCTYPE html>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">${jsonLd.map(ld).join('')}
 </head>
 <body class="bg-[#fcfcfc] text-gray-900 font-sans">
     <!-- Google Tag Manager (noscript) -->
@@ -204,15 +210,26 @@ const foot = () => `
     <footer class="bg-[#0f172a] text-gray-400 py-10 px-6">
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
             <p class="text-sm">&copy; <span id="year">2026</span> Leavitt Building Group. All Rights Reserved.</p>
-            <div class="flex gap-6 text-sm uppercase tracking-wider font-semibold">
-                <a href="/" class="hover:text-white transition-colors">Home</a>
-                <a href="/plans/" class="hover:text-white transition-colors">Plans</a>
-                <a href="/privacy.html" class="hover:text-white transition-colors">Privacy</a>
-                <a href="/terms.html" class="hover:text-white transition-colors">Terms</a>
-                <a href="https://connect.buildleavitt.com" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">Client Login</a>
-            </div>
+            <!-- The menu bar stays as Kyle set it, so the footer links the three service
+                 pages on every page (tests/seo.test.js); the hand-written pages carry the
+                 same two rows. -->
+            <nav aria-label="Footer" class="flex flex-col items-center md:items-end gap-y-1 text-sm uppercase tracking-wider font-semibold">
+                <div class="flex flex-wrap items-baseline justify-center md:justify-end gap-x-6">
+                    <span class="text-[11px] tracking-[0.2em] text-[#c2a67a]">Services</span>
+                    <a href="/custom-homes.html" class="inline-block py-2 hover:text-white transition-colors">Custom Homes</a>
+                    <a href="/semi-custom-homes.html" class="inline-block py-2 hover:text-white transition-colors">Semi-Custom Homes</a>
+                    <a href="/renovations.html" class="inline-block py-2 hover:text-white transition-colors">Renovations</a>
+                </div>
+                <div class="flex flex-wrap justify-center md:justify-end gap-x-6">
+                    <a href="/" class="inline-block py-2 hover:text-white transition-colors">Home</a>
+                    <a href="/plans/" class="inline-block py-2 hover:text-white transition-colors">Plans</a>
+                    <a href="/privacy.html" class="inline-block py-2 hover:text-white transition-colors">Privacy</a>
+                    <a href="/terms.html" class="inline-block py-2 hover:text-white transition-colors">Terms</a>
+                    <a href="https://connect.buildleavitt.com" target="_blank" rel="noopener noreferrer" class="inline-block py-2 hover:text-white transition-colors">Client Login</a>
+                </div>
+            </nav>
         </div>
-        <address class="max-w-6xl mx-auto mt-6 not-italic text-sm text-center md:text-left"><span class="whitespace-nowrap">217 E. Jarrettsville Rd., Suite 3,</span> <span class="whitespace-nowrap">Forest Hill, MD 21050</span><span class="mx-2" aria-hidden="true">&middot;</span><a href="tel:+18668326524" class="whitespace-nowrap hover:text-white transition-colors">(866) 832-6524</a></address>
+        <address class="max-w-6xl mx-auto mt-6 not-italic text-sm text-center md:text-left"><span class="whitespace-nowrap">217 E. Jarrettsville Rd., Suite 3,</span> <span class="whitespace-nowrap">Forest Hill, MD 21050</span><span class="mx-2" aria-hidden="true">&middot;</span><a href="tel:+18668326524" class="inline-block py-1 whitespace-nowrap hover:text-white transition-colors">(866) 832-6524</a></address>
         <p class="max-w-6xl mx-auto mt-1 text-sm text-center md:text-left"><span class="block sm:inline">Monday&ndash;Friday 8&nbsp;a.m.&ndash;5&nbsp;p.m.</span><span class="hidden sm:inline mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span><wbr><span class="whitespace-nowrap">Saturday by appointment<span class="mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>Closed Sunday</span></p>
         <p class="max-w-6xl mx-auto mt-2 text-xs text-gray-500 tracking-wider text-center md:text-left">MHBR 9796 | MHIC 161316 | PAHIC 212160</p>
     </footer>
@@ -366,6 +383,25 @@ const cardFacts = (model) => {
  * of these plans is the semi-custom path. The visitor can change either.
  */
 const startHref = (model) => `/?plan=${encodeURIComponent(model.name)}&interest=Semi-Custom%20Home#contact`;
+
+/*
+ * Structured data for the generated pages. A BreadcrumbList repeats the visible
+ * breadcrumb item for item (tests/seo.test.js compares them); the ItemList on
+ * /plans/ names every plan page in order. Both go in the head through head().
+ */
+const breadcrumbs = (items) => ({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: items.map(([name, url], i) => ({ '@type': 'ListItem', position: i + 1, name, item: `${SITE}${url}` })),
+});
+const planList = () => ({
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Home plans by Leavitt Building Group',
+  numberOfItems: models.length,
+  itemListOrder: 'https://schema.org/ItemListOrderAscending',
+  itemListElement: models.map((m, i) => ({ '@type': 'ListItem', position: i + 1, name: m.name, url: `${SITE}/plans/${m.slug}.html` })),
+});
 
 // ------------------------------------------------------------- plan finder
 /*
@@ -648,21 +684,12 @@ for (const [i, model] of models.entries()) {
                 </figcaption>
             </figure>`).join('\n');
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
-      { '@type': 'ListItem', position: 2, name: 'Home Plans', item: `${SITE}/plans/` },
-      { '@type': 'ListItem', position: 3, name: model.name, item: `${SITE}/plans/${model.slug}.html` },
-    ],
-  };
-
   const html = head({
     title: `${model.name} | Home Plans | Leavitt Building Group`,
     description,
     canonical: `/plans/${model.slug}.html`,
     image: shareImage(model),
+    jsonLd: [breadcrumbs([['Home', '/'], ['Home Plans', '/plans/'], [model.name, `/plans/${model.slug}.html`]])],
   }) + `
     <main class="max-w-6xl mx-auto px-6 py-14 md:py-20">
 
@@ -724,6 +751,11 @@ ${specRows}
                     &mdash; quartz, Andersen&reg; windows, 9&rsquo; ceilings and more, at no upgrade cost.
                 </p>
                 <p class="text-sm text-gray-600 mt-4">
+                    Building from one of our plans is our
+                    <a href="/semi-custom-homes.html" class="inline-block py-1 text-[#866f4f] font-medium hover:underline">semi-custom home</a>
+                    process: the plan adapted to your lot, about 6 to 8 months to complete.
+                </p>
+                <p class="text-sm text-gray-600 mt-4">
                     Prefer to talk it through?
                     <a href="tel:+18668326524" class="text-[#866f4f] font-medium hover:underline">(866) 832-6524</a>
                 </p>
@@ -755,8 +787,6 @@ ${similarTo(model).map((m) => planCard(m, { finder: false })).join('\n')}
         </nav>
 
     </main>
-
-    <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
 ` + foot();
 
   writeFileSync(join(OUT, `${model.slug}.html`), html);
@@ -768,13 +798,14 @@ ${similarTo(model).map((m) => planCard(m, { finder: false })).join('\n')}
 /* The plan cards on /plans/ are the finder's cards (planCard above). */
 
 const indexHtml = head({
-  title: 'Home Plans | Leavitt Building Group',
+  title: 'Home Plans for Harford County, MD | Leavitt Building Group',
   description:
     `${models.length} home plans from Leavitt Building Group, a custom home builder serving Harford ` +
     'and surrounding counties. Elevations, floor plans and brochures for each.',
   canonical: '/plans/',
   // The Visionary leads the plans on the home page, so it leads the preview too.
   image: shareImage(models.find((m) => m.slug === 'the-visionary')),
+  jsonLd: [breadcrumbs([['Home', '/'], ['Home Plans', '/plans/']]), planList()],
 }) + `
     <main class="max-w-6xl mx-auto px-6 py-14 md:py-20">
 
@@ -788,7 +819,7 @@ const indexHtml = head({
             Home plans.
         </h1>
         <p class="text-gray-600 text-lg max-w-2xl mb-4">
-            We build fully custom. But a blank page is a difficult place to begin, so here is
+            We build <a href="/custom-homes.html" class="inline-block py-1 text-[#866f4f] font-medium hover:underline">fully custom homes</a>. But a blank page is a difficult place to begin, so here is
             somewhere to start &mdash; plans we have built before, each one adapted to your lot and
             the way you want to live. Change the elevation, the room sizes, the optional spaces;
             or bring us something else entirely.
@@ -798,7 +829,7 @@ const indexHtml = head({
             in-law suites, conservatories, sunrooms, extended garages and finished lower levels.
         </p>
         <p class="text-gray-600 max-w-2xl mb-14">
-            A home built from one of these plans takes about 6 to 8 months to complete, depending on
+            A <a href="/semi-custom-homes.html" class="inline-block py-1 text-[#866f4f] font-medium hover:underline">semi-custom home</a> built from one of these plans takes about 6 to 8 months to complete, depending on
             the changes made to it. Every home comes with a one-year warranty from Leavitt Building
             Group and a 2-10 Home Buyer's Warranty.
         </p>

@@ -31,3 +31,33 @@
 # files - invisible on the page, but readable by a search engine. The
 # re-rendered set is clean: each PDF now contains only its own name. So they are
 # indexable again, and the header is gone.
+
+# Response headers (November 2026). Netlify's default for everything else stays:
+# "public, max-age=0, must-revalidate" with an ETag, which the HTML and
+# dist/styles.css need because neither is content-hashed, so a change has to
+# show at once. The plan renderings, brochures and the video are large and
+# change rarely, so a returning visitor may keep them for a week. Not longer,
+# and never `immutable`: a changed file keeps its name here (hero-home.jpg was
+# replaced in place in October 2026, the brochures with every redraw).
+# tests/seo.test.js checks these blocks.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+[[headers]]
+  for = "/plans/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/plans/pdf/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/media/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
