@@ -446,5 +446,34 @@ console.log("\n== opening hours agree, on every page ==");
   ok(wrong.length === 0, `all ${pages.length} pages show "${HOURS}"` + (wrong.length ? " - " + wrong.join(" | ") : ""));
 }
 
+// --- search result titles and descriptions ---
+// The homepage title ran to 83 characters and the renovations title to 82, so
+// Google cut both off before the company name, and three service descriptions
+// ran to 163-190 characters and lost their last clause. Google shows about 60
+// to 70 characters of a title and 155 of a description. The link-preview tags
+// repeat both, so they must change together. The plan pages are held to 155 in
+// plans.test.js; this covers every page.
+console.log("\n== titles and descriptions fit a search result ==");
+{
+  const pages = ["index.html", "custom-homes.html", "semi-custom-homes.html", "renovations.html", "privacy.html", "terms.html", "success.html", "404.html",
+    ...fs.readdirSync(path.join(ROOT, "plans")).filter((f) => f.endsWith(".html")).map((f) => "plans/" + f)];
+  const bad = [];
+  let checked = 0;
+  for (const f of pages) {
+    const doc = new JSDOM(fs.readFileSync(path.join(ROOT, f), "utf8")).window.document;
+    if (/noindex/.test(doc.querySelector('meta[name="robots"]')?.getAttribute("content") || "")) continue;
+    checked++;
+    const title = doc.title.trim();
+    const desc = (doc.querySelector('meta[name="description"]')?.getAttribute("content") || "").trim();
+    const og = (p) => doc.querySelector(`meta[property="og:${p}"]`)?.getAttribute("content");
+    const tw = (p) => doc.querySelector(`meta[name="twitter:${p}"]`)?.getAttribute("content");
+    if (!title || title.length > 70) bad.push(`${f}: title is ${title.length} characters`);
+    if (desc.length < 70 || desc.length > 155) bad.push(`${f}: description is ${desc.length} characters`);
+    if (og("title") !== undefined && (og("title") !== title || tw("title") !== title)) bad.push(`${f}: og/twitter title differs from <title>`);
+    if (og("description") !== undefined && (og("description") !== desc || tw("description") !== desc)) bad.push(`${f}: og/twitter description differs from the description`);
+  }
+  ok(checked >= 7 && bad.length === 0, `every indexable page (${checked}) has a title of at most 70 characters and a description of 70-155, repeated in its preview tags` + (bad.length ? " - " + bad.join(" | ") : ""));
+}
+
 console.log(fail === 0 ? '\nAll checks passed.' : `\n${fail} check(s) failed.`);
 process.exit(fail ? 1 : 0);
