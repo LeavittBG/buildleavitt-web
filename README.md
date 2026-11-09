@@ -401,6 +401,169 @@ names the towns in the five counties, and links to the other services and to
 the plans. Every footer on the site, the plan pages' included, has a Services
 row linking the three pages; the menu bar is Kyle's and does not change.
 
+## Leavitt Connect
+
+Leavitt Connect is Leavitt's own app for homeowners, at
+`https://connect.buildleavitt.com`. It opens in the phone's browser and is not
+in an app store. The site uses it in two ways: as the sign-in link for current
+clients ("Client Login"), and as a selling point for buyers.
+
+### Where it appears
+
+- **Client Login** links to `https://connect.buildleavitt.com` in a new tab:
+  - at the end of the homepage's desktop menu bar, after a fine rule, small;
+  - in the header of the plan pages and the three service pages, from tablet
+    width up;
+  - in the phone menu;
+  - in the footer of every page.
+
+  On the homepage it is white while the menu bar is transparent over the hero
+  photo, and gold once the bar turns navy.
+- **Homepage section `#leavitt-connect`**, after the process steps. It has:
+  - the heading "Leavitt Connect." and an introduction;
+  - the homebuyer tour video, with a written transcript underneath;
+  - six features, each with a "See it in the video" button: schedule,
+    selections, change orders signed online, inspections / punch lists /
+    documents, "nothing to download, no password", and email updates;
+  - "Let's talk about your home", the office line and a sign-in link.
+- **"Follow the build from your phone."** on `custom-homes.html` and
+  `semi-custom-homes.html`. It is a short paragraph linking to
+  `/#leavitt-connect`. The semi-custom page also lists Leavitt Connect among
+  what is the same for custom and semi-custom builds.
+- **The homepage questions:** the project-manager answer, and its FAQPage
+  structured data, say homeowners follow the build in Leavitt Connect.
+- **`terms.html`** says the portal is Leavitt's own service and the terms
+  apply there.
+
+### History
+
+| Date | Pull request | What changed |
+|---|---|---|
+| Aug 5, 2026 | early commit | "Client Login" added to the header and phone menu. It pointed at `builderpro.com/login`, an unrelated company's site. |
+| Sep 22 | #12 | Client Login pointed at Leavitt's own portal, connect.buildleavitt.com. The terms stopped calling the portal someone else's service. |
+| Sep 27 | #26 | Client Login moved to the footer and the phone menu. On small laptops it wrapped onto two lines in the desktop bar. |
+| Oct 7–8 | #38 | Kyle wanted it back at the top. It returned small and set apart after "Get a Quote", and on the plan-page header. The same pull request added the homepage section and the video. |
+| Oct 11 | #40 | The video's `uploadDate` was given a time and timezone, after Search Console flagged the bare date. |
+| Oct 16 | #42–#46 | The service pages gained the "Follow the build from your phone." paragraph. The video buttons got taller tap targets (`py-2`). Client Login turned white over the new daylight hero photo. |
+| Oct 31 | #51 | The homepage sections were reordered. Leavitt Connect stayed directly after the process steps. |
+
+### Wording rule
+
+Kyle's rule: every claim is true and can be checked. Never say or imply Leavitt
+is the only builder with an app. "Our own app, built for Leavitt homeowners"
+and "one more way building with Leavitt is different" are his approved phrases.
+
+The facts come from two sources:
+- **Kyle's list (October 5, 2026):** schedule and what's next, selections,
+  change orders signed online by every homeowner on the home, inspections
+  passed, walk-through punch lists with photos, documents, sign-in by emailed
+  code or Face ID, and short email updates, never a flood.
+- **The video's narration**, which gives more detail.
+
+Kyle confirmed on October 7–8, 2026 that:
+- the app is not in an app store, which is why the page says "nothing to
+  download";
+- biometric sign-in works on iPhone and Android, which is why it says "Face ID
+  or your fingerprint".
+
+The six features keep Kyle's short approved wording. A longer version taken
+from the narration was offered and not adopted.
+
+`markup.test.js` checks the `#leavitt-connect` section:
+- all six features are there;
+- the change-order line says every homeowner signs;
+- it links to the sign-in, the office line and the contact form;
+- nothing says "only … builder/app", "first builder/app", "unique",
+  "unlike any", "no other", an app store or "download the app".
+
+The check reads that section only. The service-page paragraphs and the
+question answer are not scanned, so keep them to the same facts by hand.
+
+### The video
+
+- **Source.** The source files are in Kyle's Google Drive, under
+  `Builder Pro App/Tutorial videos`:
+  - `Leavitt Connect - Homebuyers.mp4`: 1:48, 1920×1080, 38 MB;
+  - `Leavitt Connect - Homebuyers (captions).srt`;
+  - `Chapters for YouTube.txt`;
+  - the narration scripts.
+
+  The same folder has tutorials for homeowners, realtors, office staff and
+  trade partners; none of them is on the site. The video shows a made-up demo
+  home, Lot 12 Maple Hollow, so stills from it are safe to use.
+- **Why it is hosted here and not on YouTube.** YouTube can run ads, possibly
+  a competitor's, on any video from a channel outside its Partner Program.
+  Viewers without YouTube Premium would see them, and a new channel cannot
+  switch them off.
+- **Files in `media/`:**
+  - `leavitt-connect-homebuyers.mp4`, the 5.3 MB web copy;
+  - `leavitt-connect-homebuyers.vtt`, the captions;
+  - `leavitt-connect-poster.webp`, the cover still.
+
+  Netlify caches `/media/` for one week (`netlify.toml`). The files are
+  replaced in place under the same names, so the cache is never longer than
+  that and never `immutable`.
+- **Loading.** The `<video>` has `preload="none"`, so nothing downloads until
+  play is pressed. Captions are a `<track>` the viewer turns on.
+- **The cover still** is the schedule screen at 0:39.5. The "home at a glance"
+  screen was rejected because it shows a demo price ($742,500), which could be
+  read as a real Leavitt price.
+- **The transcript** under the video is the captions, word for word, in six
+  paragraphs.
+- **The six buttons** start at 0:35, 0:42, 0:50, 1:10, 0:18 and 1:25, each the
+  start of the caption where that feature is described. A small script waits
+  for the video's metadata, then seeks and plays.
+- **The line under the video** reads only "A sample home: the names and
+  numbers aren't real." Kyle kept it short on October 8, 2026. Someone watching
+  without sound never hears the narration say the same thing at 0:11.
+- **Structured data.** A `VideoObject` in the homepage's JSON-LD names the
+  file, poster, 1:48 duration and
+  `uploadDate` `2026-10-08T15:19:04-04:00`. Google needs a full date and time
+  with a timezone.
+
+#### Replacing the video
+
+1. **Get the new MP4 from Drive.** The Drive connector returns files as text,
+   which is too large for a video. Kyle sets the one file to "Anyone with the
+   link" for a few minutes. Download it with
+   `curl -L "https://drive.usercontent.google.com/download?id=<id>&export=download&confirm=t"`,
+   then he sets it back.
+2. **Re-encode it:**
+   `ffmpeg -i in.mp4 -c:v libx264 -preset slow -crf 26 -tune stillimage -pix_fmt yuv420p -movflags +faststart -c:a aac -b:a 64k -ac 1 media/leavitt-connect-homebuyers.mp4`.
+   Before choosing, compare the smallest on-screen text against the original.
+   At CRF 26 it looked the same; at 30 it softened.
+3. **Make the captions.** Turn the `.srt` into WebVTT: add a `WEBVTT` header
+   and change the comma in each timestamp to a dot.
+4. **Choose a cover still** with no demo prices. Write it as WebP with sharp.
+5. **Update the page.** Rewrite the transcript paragraphs from the new
+   captions. Move each button's `data-seek` to the caption where its feature
+   starts. Update the `VideoObject`'s `duration` and `uploadDate`.
+6. **Run `node tests/connect-video.test.js`.** It checks:
+   - nothing downloads before play;
+   - the file is under 8 MB, with its index (`moov`) before the data;
+   - it runs 1:48;
+   - the captions fit the video, and the transcript has every caption;
+   - every button starts on a caption and plays from its moment;
+   - the `VideoObject` matches the files.
+
+   Headless Chromium cannot decode H.264, so the button check plays the blank
+   WebM in `tests/fixtures/blank-108s.webm`, served with byte ranges as
+   Netlify serves the real file. A different length means changing the
+   1:48 checks and that fixture.
+
+### Open items
+
+- **A demo markup figure in the video.** At about 0:55 the sample change order
+  shows "Overhead & profit (30%)". The video and the line under it say the
+  numbers aren't real, but a viewer who pauses could read it as Leavitt's
+  markup. It was pointed out to Kyle on October 8, 2026 and he has not decided.
+  The fix is re-recording that screen.
+- **Unreviewed wording.** Kyle has not reviewed the service pages' wording,
+  the Leavitt Connect paragraph included (see "Service pages").
+- **Video sharing in Drive.** The source video is shared with "Leavitt Building
+  Group", meaning buildleavitt.com accounts. Kyle is the only one, so he kept
+  it. If employee accounts are added, they will be able to open it.
+
 ## Response headers
 
 `netlify.toml` sets `X-Content-Type-Options`, `Referrer-Policy` and
