@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-Marketing site for Leavitt Building Group, a custom home builder in Forest Hill, MD. Static hand-written HTML plus a Tailwind stylesheet, deployed by Netlify from `main`. README.md has the full background; this file is the working summary.
+Marketing site for Leavitt Building Group, a custom home builder in Forest Hill, MD. Static hand-written HTML plus a Tailwind stylesheet, deployed by Netlify from `main`. README.md has the full background; this file is the working summary. `HANDOFF.md` Part A says where the current website work stands (what is done, the open audit items, the questions waiting on Kyle, the next steps); read it at the start of a session.
 
 ## Commands
 
@@ -59,6 +59,7 @@ Specs and square footage come only from Leavitt's own figures, never estimates. 
   - `fonts.js`: serves the real web fonts from `tests/fixtures/fonts/`, because text width decides several layout checks.
 - **`seo.test.js`** reads the files with jsdom only, no browser, so it runs in seconds: structured data parses on every page, breadcrumbs match, the service pages' Service and business nodes, the towns, the `/plans/` ItemList, the footer Services links, the hero srcset files and the `netlify.toml` headers. `markup.test.js` holds every indexable page to a title of at most 70 characters and a description of 70–155, repeated exactly in the `og:` and `twitter:` tags.
 - **Structure of a test file:** each one starts with a comment saying what past bug it guards against. Keep that pattern for new tests, and confirm a new check fails against the old behavior before relying on it.
+- **Never pin a check to a pixel figure one machine measured.** GitHub's browser draws text a pixel differently from the sandbox's: on November 10, 2026 a new check required a logo "at least 90px" wide, the sandbox's own measurement, GitHub drew it 89px, and the pull request's test run failed with nothing wrong on the site. Compare two states of the same page (with and without the thing under test), or leave a few pixels of margin.
 - **Timing:** nothing on the homepage animates on load any more, so tests can measure as soon as fonts are ready. `hero-wrap.test.js` reads each `.hero-line`'s line boxes with a Range to confirm the headline stays on two lines. The page scrolls smoothly (`html { scroll-behavior: smooth }`), so a test that scrolls and then measures waits for the position with `waitForFunction`, not a fixed delay (`plan-finder.test.js`, `contact-steps.test.js`).
 
 ## Decisions and history (September–October 2026)
@@ -66,9 +67,10 @@ Specs and square footage come only from Leavitt's own figures, never estimates. 
 What Kyle Leavitt (the owner) decided while reviewing the site with Claude, so later sessions do not reopen it. Pull requests #18–#31.
 
 ### How changes are made
-- Every change goes through a pull request from `claude/leavitt-website-review-79vqny`. Kyle checks the Netlify deploy preview and says "merge". After merging, reset that branch to `main` and confirm the change on buildleavitt.com.
+- Every change goes through a pull request from the branch the session is given (each cloud session now gets its own `claude/...` branch; the early ones all used `claude/leavitt-website-review-79vqny`). Kyle checks the Netlify deploy preview and says "merge". After merging, bring that branch level with `main` and confirm the change on buildleavitt.com.
+- **Audit work (November 2026):** Kyle approves items by number from the audit list in `HANDOFF.md` Part A. A session has one branch, so several approved items go up as one pull request with one commit per item, each with its own guarding test, so any one can be dropped. Send him a before-and-after picture of anything visible. Merge only on his word.
 - Explain changes in plain language. When Kyle asks for an overview before a push, wait for his go-ahead.
-- This sandbox cannot reach facebook.com, googletagmanager.com, Netlify deploy previews or Kyle's computer. Files from him come through Google Drive (`LBG Home Brochures`) or chat attachments.
+- The cloud sandbox cannot reach Kyle's computer; files from him come through Google Drive (`LBG Home Brochures`) or chat attachments. It could not reach facebook.com, googletagmanager.com or Netlify deploy previews either until late 2026; as of November 10, 2026 it reaches all three, the live site and Google Analytics. That is why anything that opens the pages in a browser must block Google's tag hosts (see Tests): a page loaded here now counts as a real visit. Checking the live site with `curl` sends nothing to Analytics.
 
 ### Content decisions
 - **Leave homepage pricing alone.** The one exception, at Kyle's request (October 28, 2026): the starting-price sentence came out of the "What is included in the price?" answer, once no price was left on the site.
@@ -128,7 +130,7 @@ What Kyle Leavitt (the owner) decided while reviewing the site with Claude, so l
 
 ## Job pricing app (October 2026)
 
-Kyle also has a private job-pricing app, **Leavitt Job Pricing**, built with Claude in October 2026. It is a claude.ai Artifact with the artifact's database behind it, pinned in his sidebar; it is not part of this site. `HANDOFF.md` has the full picture. Rules every session must keep:
+Kyle also has a private job-pricing app, **Leavitt Job Pricing**, built with Claude in October 2026. It is a claude.ai Artifact with the artifact's database behind it, pinned in his sidebar; it is not part of this site. Part B of `HANDOFF.md` has the full picture (Part A is the website's own hand-off; a website session rewrites Part A and never edits Part B). Rules every session must keep:
 
 - **This repository is public. Nothing of the app goes in it:** no page, scripts, tests, seed data, backups, screenshots, prices, margins, fees, client or vendor names. `HANDOFF.md` and this section are the only trace, and both stay figure-free. `netlify.toml` deletes `HANDOFF.md` from the deploy and `markup.test.js` checks that; any other non-site file added at the root goes on the same list.
 - **Where it lives:** find the artifact with the Artifact tool's `list` action (title "Leavitt Job Pricing"). Read its page before publishing; its database is read and written with `ArtifactData`. The editable sources are in the zip Kyle holds (`leavitt-job-pricing-source-2026-10-14.zip`); ask him for it, and work on it in the scratchpad, never in this tree.
