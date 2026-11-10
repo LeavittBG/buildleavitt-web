@@ -12,11 +12,15 @@
  * (service-pages.test.js), so nothing stopped a 16px link on any other page.
  *
  * This measures every link, button and <summary> a visitor can see, on every
- * page, at two phone widths and one tablet width, in three states: as the page
- * loads, with every closed <details> opened (the homepage's answers and the
- * video transcript hide links until they are tapped), and with the phone menu
- * open. The widths stop at tablet: the homepage's desktop menu links are 20px
- * tall and the menu is left as it is (Kyle's standing rule).
+ * page, at two phone widths, a tablet upright and on its side, and a laptop,
+ * in three states: as the page loads, with every closed <details> opened (the
+ * homepage's answers and the video transcript hide links until they are
+ * tapped), and with the phone menu open. The two wide sizes are there because
+ * a tablet on its side and a touch-screen laptop get the homepage's desktop
+ * menu, whose four links (Services, Plans, About, Process) were 20px tall.
+ * The first version of this check stopped at 768px and left them, the menu
+ * being Kyle's call; he approved raising them the same day. They gained
+ * height and nothing else: the bar looks exactly as it did.
  *
  * A link inside a sentence gets its height from padding on the inline box,
  * which makes the target taller without moving the lines around it. Text is
@@ -33,8 +37,9 @@ let fail = 0;
 const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) fail++; };
 
 const MIN = 24;
-// Two phones and a tablet: the screens that are touched rather than clicked.
-const WIDTHS = [360, 390, 768];
+// Two phones, a tablet upright (768) and on its side (1024), and a laptop:
+// 1024 and up is where the homepage shows its desktop menu.
+const WIDTHS = [360, 390, 768, 1024, 1280];
 const PLANS = JSON.parse(fs.readFileSync(path.join(ROOT, 'src', 'plans.json'), 'utf8')).models.map((m) => `/plans/${m.slug}.html`);
 const PAGES = ['/', '/custom-homes.html', '/semi-custom-homes.html', '/renovations.html', '/privacy.html', '/terms.html',
   '/success.html', '/404.html', '/plans/', ...PLANS];
@@ -110,7 +115,7 @@ const measure = (min) => {
   console.log('\n== what was covered ==');
   ok(PLANS.length >= 17, `every plan page was measured (${PLANS.length})`);
   ok(pagesWithDetails >= 1, `the closed sections were opened and measured (${pagesWithDetails} page)`);
-  ok(menusOpened >= WIDTHS.length, `the phone menu was opened and measured (${menusOpened} times)`);
+  ok(menusOpened >= 3, `the phone menu was opened and measured (${menusOpened} times)`);
 
   await b.close();
   await site.close();

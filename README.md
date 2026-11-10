@@ -401,8 +401,8 @@ already chosen: `/?interest=Custom%20Home%20Build#contact`. The semi-custom
 page shows three plan cards whose facts line (`data-plan-facts`) is filled in
 by `npm run plans:build`. `tests/service-pages.test.js`
 checks the pages, the hand-off and that every link is at least 24px tall;
-`tests/tap-targets.test.js` holds every other page to the same 24px on phones
-and tablets.
+`tests/tap-targets.test.js` holds every other page to the same 24px on phones,
+tablets and laptops.
 
 Each service page's head carries a BreadcrumbList (matching the visible
 breadcrumb), a Service whose provider is the business, and the compact business

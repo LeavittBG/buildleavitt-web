@@ -257,10 +257,14 @@
                      clip "Get a Quote" clean off the page. Tablets get the mobile menu, which
                      holds the same links. -->
                 <div class="hidden lg:flex items-center space-x-5 xl:space-x-10">
-                    <a href="#services" class="text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors whitespace-nowrap">Services</a>
-                    <a href="/plans/" class="text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors whitespace-nowrap">Plans</a>
-                    <a href="#about" class="text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors whitespace-nowrap">About</a>
-                    <a href="#process" class="text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors whitespace-nowrap">Process</a>
+                    <!-- py-2 on the four links makes each 36px tall to tap (they were 20px,
+                         under the 24px a touch screen needs; a tablet on its side gets this
+                         menu). The row is centred in a taller bar, so nothing moves
+                         (November 2026; tests/tap-targets.test.js). -->
+                    <a href="#services" class="py-2 text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors whitespace-nowrap">Services</a>
+                    <a href="/plans/" class="py-2 text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors whitespace-nowrap">Plans</a>
+                    <a href="#about" class="py-2 text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors whitespace-nowrap">About</a>
+                    <a href="#process" class="py-2 text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors whitespace-nowrap">Process</a>
                     <a href="#contact" class="bg-[#c2a67a] text-[#0f172a] px-6 py-3 text-xs lg:text-sm uppercase tracking-widest font-bold hover:bg-white transition-colors">
                         Get a Quote
                     </a>
