@@ -39,8 +39,16 @@ const measure = (tel) => {
   const shown = (el) => { const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0 && getComputedStyle(el).visibility !== 'hidden'; };
   const links = [...bar.querySelectorAll(`a[href="${tel}"]`)].filter(shown);
   const a = links[0];
-  const logo = bar.querySelector('img').getBoundingClientRect();
-  const out = { count: links.length, logoW: Math.round(logo.width), overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth, fixed: getComputedStyle(bar).position === 'fixed' };
+  const logoEl = bar.querySelector('img');
+  const logo = logoEl.getBoundingClientRect();
+  // The same logo with every phone link in the bar taken out of the layout:
+  // what the logo would get if the number were not there at all.
+  const all = [...bar.querySelectorAll(`a[href="${tel}"]`)];
+  const was = all.map((el) => el.style.display);
+  all.forEach((el) => { el.style.display = 'none'; });
+  const logoAlone = Math.round(logoEl.getBoundingClientRect().width);
+  all.forEach((el, i) => { el.style.display = was[i]; });
+  const out = { count: links.length, logoW: Math.round(logo.width), logoAlone, overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth, fixed: getComputedStyle(bar).position === 'fixed' };
   if (!a) return out;
   const r = a.getBoundingClientRect();
   // The words a visitor reads, and the words a screen reader is given.
@@ -82,13 +90,19 @@ const measure = (tel) => {
       ok(iconOnly || r.lines === 1, `${at}: the number stays on one line (${r.lines})`);
       ok(r.left >= 0 && r.right <= w && r.overflow <= 0, `${at}: inside the screen, with no sideways scroll (${r.left}-${r.right}, overflow ${r.overflow}px)`);
       ok(r.top >= 0 && r.bottom <= 200, `${at}: at the top of the page (${r.top}-${r.bottom}px)`);
-      // The wordmark is 4.1 times as wide as it is tall; under about 125px its
-      // second line cannot be read. The number must not be paid for with the logo.
-      // (Away from the homepage the logo was already down to 90px on a 320px
-      // screen, beside Plans and Get a Quote, before the number arrived; there
-      // the check is only that it has not lost any more.)
-      const room = path !== '/' && w < 360 ? 90 : 125;
-      ok(r.logoW >= room, `${at}: the logo keeps its room (${r.logoW}px wide, at least ${room})`);
+      // The number must not be paid for with the logo. Two checks. First, the
+      // logo is as wide as it would be with the number taken out, whatever that
+      // width is: away from the homepage the logo shares its row with Plans and
+      // Get a Quote, so its exact width depends on how wide this machine draws
+      // their letters. (The first version of this check named a figure, 90px at
+      // 320px wide; GitHub's browser drew it 89px and the check failed there
+      // while passing here.) Second, where there is real room to lose, a floor:
+      // the wordmark is 4.1 times as wide as it is tall, and under about 125px
+      // its second line cannot be read. The inner pages on a 320px screen were
+      // already under that before the number arrived, so the floor is for the
+      // homepage (whose logo is a fixed size) and for screens of 360px and up.
+      ok(r.logoW >= r.logoAlone - 1, `${at}: the number takes no room from the logo (${r.logoW}px wide, ${r.logoAlone}px without the number)`);
+      if (path === '/' || w >= 360) ok(r.logoW >= 125, `${at}: the logo is wide enough to read (${r.logoW}px wide)`);
       if (path === '/') {
         // The homepage bar is fixed: the number is still there, and still white
         // on the bar's navy, once the hero has scrolled away.
