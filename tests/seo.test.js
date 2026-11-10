@@ -203,5 +203,30 @@ console.log('\n== netlify.toml sets cache and security headers ==');
   ok(!blocks.some((b) => b.for === '/*' && b.values['Cache-Control']), 'HTML and dist/styles.css keep Netlify\'s default must-revalidate (no site-wide Cache-Control)');
 }
 
+// --- "build on your lot" is said where a search engine looks first ---
+// Kyle wants the site found for "build on your lot" and "custom home builder
+// Maryland" (November 10, 2026). The audit that day found the first phrase
+// only inside a closed answer and on a form card on the homepage, and once,
+// far down, on two service pages: never in a title, a main heading or a
+// description, the three places a search engine weighs most. The custom homes
+// page now says it in all three, in words Kyle approved. He asked that the
+// description keep the other half of the offer too: no lot yet, and Leavitt
+// helps find one. The homepage title keeps Harford County, so the county is
+// not lost from the titles now that this page's title names Maryland instead.
+console.log('\n== the custom homes page says "build on your lot" in its title, heading and description ==');
+{
+  const doc = docs['custom-homes.html'];
+  const title = doc.querySelector('title')?.textContent || '';
+  const h1 = (doc.querySelector('h1')?.textContent || '').replace(/\s+/g, ' ').trim();
+  const desc = doc.querySelector('meta[name="description"]')?.getAttribute('content') || '';
+  ok(/build on your lot/i.test(title) && /custom home builder/i.test(title) && /\bMaryland\b/.test(title),
+    `the title says "build on your lot", "custom home builder" and Maryland ("${title}")`);
+  ok(/\bon your lot\b/i.test(h1), `the main heading says "on your lot" ("${h1}")`);
+  ok(/^build on your lot/i.test(desc) && /\bMaryland\b/.test(desc), `the description opens with "build on your lot" and names Maryland ("${desc}")`);
+  ok(/help you find one/i.test(desc), 'the description keeps the other option: Leavitt helps find a lot');
+  const homeTitle = docs['index.html'].querySelector('title')?.textContent || '';
+  ok(/Harford County/.test(homeTitle), `the homepage title still names Harford County ("${homeTitle}")`);
+}
+
 console.log(fail === 0 ? '\nAll checks passed.' : `\n${fail} check(s) failed.`);
 process.exit(fail ? 1 : 0);
