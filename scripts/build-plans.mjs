@@ -104,7 +104,7 @@ ${items.map(([title, detail]) => `                            <li class="flex ga
                 </div>
 
                 <p class="mt-12 text-sm text-gray-500">
-                    <a href="/plans/pdf/leavitt-standard.pdf" target="_blank" rel="noopener" class="text-[#866f4f] font-medium hover:underline">Download the Leavitt Standard (PDF)</a>
+                    <a href="/plans/pdf/leavitt-standard.pdf" target="_blank" rel="noopener" class="py-2 text-[#866f4f] font-medium hover:underline">Download the Leavitt Standard (PDF)</a>
                     &mdash; handy for comparing against another builder&rsquo;s quote.
                 </p>
             </div>
@@ -693,7 +693,7 @@ for (const [i, model] of models.entries()) {
                          unreadable. Opening the image itself is the zero-JavaScript way to
                          let someone pinch and zoom it. -->
                     <a href="/plans/img/${s.img.file}.${s.img.ext || 'png'}" target="_blank" rel="noopener"
-                       class="text-[#866f4f] font-medium hover:underline whitespace-nowrap">
+                       class="text-[#866f4f] font-medium hover:underline whitespace-nowrap py-1">
                         Open full size<span class="sr-only"> image of the ${esc(model.name)} ${esc(s.label.toLowerCase())}</span>
                     </a>
                 </figcaption>
@@ -709,9 +709,9 @@ for (const [i, model] of models.entries()) {
     <main class="max-w-6xl mx-auto px-6 py-14 md:py-20">
 
         <nav aria-label="Breadcrumb" class="mb-10 text-sm text-gray-500">
-            <a href="/" class="hover:text-[#866f4f]">Home</a>
+            <a href="/" class="inline-block py-1 hover:text-[#866f4f]">Home</a>
             <span class="mx-2" aria-hidden="true">/</span>
-            <a href="/plans/" class="hover:text-[#866f4f]">Home Plans</a>
+            <a href="/plans/" class="inline-block py-1 hover:text-[#866f4f]">Home Plans</a>
             <span class="mx-2" aria-hidden="true">/</span>
             <span class="text-[#0f172a]">${esc(model.name)}</span>
         </nav>
@@ -732,7 +732,7 @@ for (const [i, model] of models.entries()) {
             })}${exteriors.length ? `
             <p class="mt-3 text-sm text-gray-600">
                 See this plan with a
-                ${exteriors.map((x) => `<a href="#${x.id}" class="text-[#866f4f] font-medium hover:underline py-1">${esc(x.label.replace(/ elevation$/i, '').toLowerCase())} exterior</a>`).join(' or ')}.
+                ${exteriors.map((x) => `<a href="#${x.id}" class="py-2 text-[#866f4f] font-medium hover:underline">${esc(x.label.replace(/ elevation$/i, '').toLowerCase())} exterior</a>`).join(' or ')}.
             </p>` : ''}
         </div>` : ''}
 
@@ -762,7 +762,7 @@ ${specRows}
                 <p class="text-xs text-gray-500 mt-4">Opens the full brochure for ${esc(model.name)} in a new tab.</p>` : ''}
                 <p class="text-sm text-gray-600 mt-6 pt-6 border-t border-gray-200">
                     Every Leavitt home includes
-                    <a href="/plans/#included" class="text-[#866f4f] font-medium hover:underline">the Leavitt Standard</a>
+                    <a href="/plans/#included" class="py-2 text-[#866f4f] font-medium hover:underline">the Leavitt Standard</a>
                     &mdash; quartz, Andersen&reg; windows, 9&rsquo; ceilings and more, at no upgrade cost.
                 </p>
                 <p class="text-sm text-gray-600 mt-4">
@@ -772,7 +772,7 @@ ${specRows}
                 </p>
                 <p class="text-sm text-gray-600 mt-4">
                     Prefer to talk it through?
-                    <a href="tel:+14436139750" class="text-[#866f4f] font-medium hover:underline">(443) 613-9750</a>
+                    <a href="tel:+14436139750" class="inline-block py-1 text-[#866f4f] font-medium hover:underline">(443) 613-9750</a>
                 </p>
             </aside>
         </div>
@@ -794,7 +794,7 @@ ${similarTo(model).map((m) => planCard(m, { finder: false })).join('\n')}
                 <span class="block text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-1">Previous plan</span>
                 <span class="text-lg text-[#0f172a] group-hover:text-[#866f4f] transition-colors">${esc(prev.name)}</span>
             </a>
-            <a href="/plans/" class="self-center text-[#866f4f] uppercase tracking-widest font-bold text-xs hover:underline">All plans</a>
+            <a href="/plans/" class="self-center py-2 text-[#866f4f] uppercase tracking-widest font-bold text-xs hover:underline">All plans</a>
             <a href="/plans/${next.slug}.html" class="group sm:text-right">
                 <span class="block text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-1">Next plan</span>
                 <span class="text-lg text-[#0f172a] group-hover:text-[#866f4f] transition-colors">${esc(next.name)}</span>
@@ -825,7 +825,7 @@ const indexHtml = head({
     <main class="max-w-6xl mx-auto px-6 py-14 md:py-20">
 
         <nav aria-label="Breadcrumb" class="mb-10 text-sm text-gray-500">
-            <a href="/" class="hover:text-[#866f4f]">Home</a>
+            <a href="/" class="inline-block py-1 hover:text-[#866f4f]">Home</a>
             <span class="mx-2" aria-hidden="true">/</span>
             <span class="text-[#0f172a]">Home Plans</span>
         </nav>
