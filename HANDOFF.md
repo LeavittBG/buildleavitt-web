@@ -17,15 +17,23 @@ Read `CLAUDE.md` first: it has the rules, the commands and every decision. This 
 
 On November 10, 2026 Kyle asked for a full audit of the site (speed, local SEO, mobile, lead capture, trust, accessibility and broken links), then fixes made one at a time, each reviewed before it goes live. He is new to coding: plain language, no jargon. He approves audit items by number. The business as he described it: a Maryland custom home builder founded in 2011, building custom homes on lots clients already own, plus semi-custom homes; phone (443) 613-9750. The phrases he wants to rank for are "custom home builder Maryland" and "build on your lot".
 
-## A2. Done, merged and live
+## A2. Done
 
-Pull request #58, merged November 10, 2026 and confirmed on buildleavitt.com. `CLAUDE.md` records each decision.
+**Merged and live.** Pull request #58, merged November 10, 2026 and confirmed on buildleavitt.com. `CLAUDE.md` records each decision.
 
 - **Item 4:** the tests can no longer reach Google Analytics (`launch()` in `tests/lib/env.js`; `tests/analytics-off.test.js`).
 - **Item 1:** the phone number is in the bar at the top of every page (`tests/header-phone.test.js`).
 - **Item 5:** the licence numbers are readable (footer line and hero line; `tests/colour-contrast.test.js`).
 
-Nothing is in progress. No pull request is open except the one that carries this file. The working tree is clean.
+Pull request #59 carried the first version of this file and merged the same day.
+
+**Pull request #60**, from branch `claude/lucid-feynman-u8ep8j`. Kyle saw its deploy preview and its before-and-after pictures and said "merge" on November 10, 2026. This version of the file travels with it, so on `main` it has merged; A6 step 1 says how to confirm it on the live site if that is in doubt. One commit each:
+
+- **Notes corrected:** `CLAUDE.md` and this part were checked line by line against the files, the history and the live site. The site was right; a handful of lines in the notes were not.
+- **Item 11:** every link, button and "tap to open" line is at least 24px tall, on every page, from a 360px phone to a laptop (`tests/tap-targets.test.js`). The fixed ones are 28px or more. The homepage's four desktop menu links were the last of them: Kyle approved raising those separately, and the bar did not change by a pixel.
+- **Item 2(a):** `custom-homes.html` says "build on your lot" in its title, main heading and description, in words Kyle chose (`tests/seo.test.js`; the words are in `CLAUDE.md`, under Content decisions).
+
+The full suite passed on that branch and in GitHub's own run: 22 test files.
 
 ## A3. The audit list and what is left
 
@@ -34,22 +42,22 @@ Numbers are the ones Kyle was given; use them with him.
 | # | Finding | Status / what it needs |
 |---|---|---|
 | 1 | No phone number at the top of any page | Done |
-| 2 | "Build on your lot" has no heading or page. It appears only inside a closed question and on a form card | Not started. (a) Work it into the `custom-homes.html` title, heading and description: wording needs Kyle's approval first. (b) A dedicated page: needs Kyle's facts on how a lot is evaluated |
+| 2 | "Build on your lot" has no heading or page. On the homepage it appears only inside a closed question and on a form card; the custom and semi-custom pages say it once each, under "The practical questions" | (a) Done in #60: the `custom-homes.html` title, heading and description. (b) A dedicated page: not started, needs Kyle's facts on how a lot is evaluated |
 | 3 | No real project photos; every house picture is a rendering, plus one before/after pair | Waiting on Kyle's photographs. The gallery was removed on purpose (see `CLAUDE.md`) |
 | 4 | Tests loaded the live Google tag | Done |
 | 5 | Licence numbers were the faintest text on the site | Done |
 | 6 | Plan renderings come in one size: 1468px wide, 200–310 KB each, shown in cards about 400px wide. WebP is no smaller than JPEG for them. A 640px copy measured about 46 KB, a 960px copy about 94 KB | Not started. Needs extra sizes from `scripts/extract-plans.mjs`, a `srcset` from `scripts/build-plans.mjs` (and the hand-written cards on the semi-custom page), and tests |
 | 7 | The old (866) 832-6524 number is still in the Leavitt Connect video: on the closing card and spoken, 1:39.9 to 1:45.6, so also in the captions and the homepage transcript | Not started. Either trim the ending (ffmpeg is in the sandbox) and update the captions, transcript, the `VideoObject` duration and the two tests that know about it, or Kyle re-records. Ask whether the old number still rings |
-| 8 | "Maryland" is rarely spelled out; `/plans/` has no location words; the semi-custom title has no location | Not started. Wording needs approval. The November 6 choice to target Harford County first stands; this adds to it |
+| 8 | "Maryland" is rarely spelled out (never on `/plans/`, whose title and description do say "Harford County, MD" but whose visible text names no place above the footer); the semi-custom title has no location | Not started. Wording needs approval. The November 6 choice to target Harford County first stands; this adds to it |
 | 9 | No mention of insurance; the founding year appears nowhere; "20+ Years of Excellence" may read as conflicting with a 2011 founding | Needs Kyle's facts. Never invent them |
 | 10 | The three testimonials name no source and do not link to Google reviews | Needs Kyle to say where they came from |
-| 11 | Small tap targets on phones. Plan pages: breadcrumbs 17px tall, the phone link in "Interested in this plan?" 17px, "Open full size image" 20px, "All plans" 16px. `/plans/`: the Leavitt Standard PDF link 17px. Homepage: "Read the transcript" 17px. 404: the phone link 17px. "View plan" and "Start with this plan" are 25px | Not started. Mostly in `scripts/build-plans.mjs`. The 24px check exists only for the service pages (`service-pages.test.js`) |
+| 11 | Small tap targets on phones. Plan pages: breadcrumbs 17px tall, the phone link in "Interested in this plan?" 17px, "Open full size image" 20px, "All plans" 16px. `/plans/`: the Leavitt Standard PDF link 17px. The `/plans/` breadcrumb is 17px too. Homepage: "Read the transcript" 17px, and two links inside sentences, "Leavitt Connect" and "the Leavitt Standard", 20px. 404: the phone link 17px. "View plan" and "Start with this plan" are 25px | Done in #60, every page and every width, the homepage's desktop menu links included |
 | 12 | Away from the homepage, phones get no menu: only Plans and Get a Quote | Not started. Touches the menu, so it is Kyle's call |
 | 13 | Tiny text: 9px caption under Kyle's photo, 10px Before/After labels, 11px "Read More", "View plan" and the small labels | Not started |
-| 14 | The homepage has no "skip to content" link and no main-content landmark (nor do `success.html` and `404.html`); the form fields' focus highlight is faint | Not started |
+| 14 | No page has a "skip to content" link; the homepage, `success.html` and `404.html` have no main-content landmark either (the other pages do); the form fields' focus highlight is faint | Not started |
 | 15 | The hero, logo, Kyle's photo and the before/after pair have no cache lifetime | Not started. A one-week header in `netlify.toml`, never `immutable` (see `CLAUDE.md`) |
 | 16 | Fonts load from Google | Deferred by Kyle on November 6 |
-| 17 | Housekeeping: the logo file is 1200px wide for a slot of at most 328px; the homepage logo has a leftover `onerror` fallback to an outside placeholder site; image descriptions on all 17 plan pages still say "Modern Farmhouse"; `foundingDate` is missing from the business data | Not started |
+| 17 | Housekeeping: the logo file is 1200px wide for a slot of at most 328px; four homepage pictures (the logo, Kyle's photo and the Before and After pair) have a leftover `onerror` fallback to an outside placeholder site, placehold.co; image descriptions on all 17 plan pages still say "Modern Farmhouse"; `foundingDate` is missing from the business data | Not started |
 
 Found in good order, so do not re-audit: compression and HTTPS on the live site, titles and descriptions, one main heading per page, the business markup, sitemap, robots.txt, no sideways scrolling at 360 and 390px, no "Creative Home Co" anywhere, no broken links (1,608 checked), and a Tag Manager container that holds only Google Analytics.
 
@@ -70,12 +78,15 @@ Found in good order, so do not re-audit: compression and HTTPS on the live site,
 - Speed was measured locally (page weight, layout shift). Real-visitor Core Web Vitals were not; they are in Search Console.
 - The Semrush account had no API units, so there are no search-volume figures behind the SEO items.
 - The audit's measuring scripts lived in the session's scratch folder and are gone. The figures that matter are in the table above.
+- Google shows a new title and description only after it next reads the page, which can take days or weeks. Nothing has been checked in Search Console for "build on your lot" yet.
+- The custom homes title ends "| Leavitt", not the full company name, so that both phrases fit. Every other title ends "| Leavitt Building Group".
+- Other links inside sentences on the service pages use `inline-block py-1`, which makes their line of text 8px taller than its neighbours. Item 11 used padding alone for sentence links so no line moved; the service pages were not changed to match.
 
 ## A6. The exact next three steps
 
-1. Ask Kyle which item numbers he wants next. Suggested to him: 2(a) and 11. Start nothing until he names them.
-2. For 2(a): put the proposed title, heading and description for `custom-homes.html` to him in chat, in full, and edit only after he approves the words. Titles are at most 70 characters, descriptions 70 to 155, each repeated in the `og:` and `twitter:` tags (`markup.test.js`).
-3. For 11: write a check that every link on a plan page and on `/plans/` is at least 24px tall on a phone, watch it fail, then raise the links in `scripts/build-plans.mjs` and run `npm run plans:build && npm run build && npm test`. One commit per item, a draft pull request, a before-and-after picture for Kyle, and merge only when he says "merge".
+1. If there is any doubt that #60 is live, confirm it with `curl` (which sends nothing to Analytics): the title of buildleavitt.com/custom-homes.html reads "Build on Your Lot: Custom Home Builder in Maryland | Leavitt", and the "Home" link in a plan page's breadcrumb carries `inline-block py-1`. Start the next work from the latest `main`.
+2. Ask Kyle which item numbers he wants next. Start nothing until he names them. The ones that need no wording and no facts from him: 15 (a one-week cache lifetime for the hero, logo and photos in `netlify.toml`), 14 (a "skip to content" link and a main landmark), 13 (tiny text) and the housekeeping in 17. Item 6 (smaller copies of the plan renderings) is the largest speed gain left.
+3. For anything that changes words (item 8, more of item 2): put the proposed words to him in full first, with the current words beside them, and edit only after he chooses. Titles are at most 70 characters, descriptions 70 to 155, each repeated in the `og:` and `twitter:` tags, and a service page's description is repeated in its `Service` data (`markup.test.js`, `seo.test.js`). One commit per item, each with a check that was seen failing first, a draft pull request, a before-and-after picture for Kyle.
 
 ---
 

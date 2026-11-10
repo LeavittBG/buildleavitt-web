@@ -257,10 +257,14 @@
                      clip "Get a Quote" clean off the page. Tablets get the mobile menu, which
                      holds the same links. -->
                 <div class="hidden lg:flex items-center space-x-5 xl:space-x-10">
-                    <a href="#services" class="text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors whitespace-nowrap">Services</a>
-                    <a href="/plans/" class="text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors whitespace-nowrap">Plans</a>
-                    <a href="#about" class="text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors whitespace-nowrap">About</a>
-                    <a href="#process" class="text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors whitespace-nowrap">Process</a>
+                    <!-- py-2 on the four links makes each 36px tall to tap (they were 20px,
+                         under the 24px a touch screen needs; a tablet on its side gets this
+                         menu). The row is centred in a taller bar, so nothing moves
+                         (November 2026; tests/tap-targets.test.js). -->
+                    <a href="#services" class="py-2 text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors whitespace-nowrap">Services</a>
+                    <a href="/plans/" class="py-2 text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors whitespace-nowrap">Plans</a>
+                    <a href="#about" class="py-2 text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors whitespace-nowrap">About</a>
+                    <a href="#process" class="py-2 text-gray-300 hover:text-white text-xs lg:text-sm uppercase tracking-widest font-semibold transition-colors whitespace-nowrap">Process</a>
                     <a href="#contact" class="bg-[#c2a67a] text-[#0f172a] px-6 py-3 text-xs lg:text-sm uppercase tracking-widest font-bold hover:bg-white transition-colors">
                         Get a Quote
                     </a>
@@ -1079,9 +1083,9 @@
                     <track kind="captions" src="media/leavitt-connect-homebuyers.vtt" srclang="en" label="English">
                 </video>
                 <figcaption class="mt-4 text-sm text-gray-500">A sample home: the names and numbers aren&rsquo;t real.</figcaption>
-                <details class="mt-4 border-t border-gray-200 pt-4 text-gray-600">
-                    <summary class="cursor-pointer text-[11px] font-bold uppercase tracking-widest text-[#0f172a] hover:underline underline-offset-4">Read the transcript</summary>
-                    <div class="mt-4 space-y-3 leading-relaxed max-w-3xl">
+                <details class="mt-4 border-t border-gray-200 pt-2 text-gray-600">
+                    <summary class="cursor-pointer py-2 text-[11px] font-bold uppercase tracking-widest text-[#0f172a] hover:underline underline-offset-4">Read the transcript</summary>
+                    <div class="mt-2 space-y-3 leading-relaxed max-w-3xl">
                     <p>When you build with Leavitt Building Group, you get Leavitt Connect: your new home, on your phone, from the first day of construction to closing. Here&rsquo;s a two-minute look at what you&rsquo;ll see. It&rsquo;s a sample home, so the names and numbers aren&rsquo;t real.</p>
                     <p>There&rsquo;s no password to remember. You sign in with a code we email you, or with Face ID. Your home page shows where the build is now, what&rsquo;s next, your price with every change included, and key dates like closing.</p>
                     <p>The full schedule is there, phase by phase, and Leavitt keeps it current as the job moves. Every finish and fixture you&rsquo;ve chosen is in one place, with the date you signed off.</p>
@@ -1238,21 +1242,21 @@
                         <h3 class="text-lg md:text-xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">Who will I deal with during the build?</h3>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="faq-chevron w-5 h-5 shrink-0 text-[#c2a67a] transition-transform"><path d="m6 9 6 6 6-6"/></svg>
                     </summary>
-                    <p class="pb-6 text-gray-600 leading-relaxed max-w-3xl">Each home has a dedicated project manager who looks after its construction and is your point of contact throughout. Kyle Leavitt walks every job site himself, and you follow the schedule, selections, inspections and change orders in <a href="#leavitt-connect" class="text-[#0f172a] font-medium underline underline-offset-4 decoration-[#c2a67a] hover:text-[#c2a67a] transition-colors">Leavitt Connect</a>, our homeowner app.</p>
+                    <p class="pb-6 text-gray-600 leading-relaxed max-w-3xl">Each home has a dedicated project manager who looks after its construction and is your point of contact throughout. Kyle Leavitt walks every job site himself, and you follow the schedule, selections, inspections and change orders in <a href="#leavitt-connect" class="py-1 text-[#0f172a] font-medium underline underline-offset-4 decoration-[#c2a67a] hover:text-[#c2a67a] transition-colors">Leavitt Connect</a>, our homeowner app.</p>
                 </details>
                 <details class="faq-item border-t border-gray-200 group">
                     <summary class="flex items-center justify-between gap-6 py-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
                         <h3 class="text-lg md:text-xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">What is included in the price?</h3>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="faq-chevron w-5 h-5 shrink-0 text-[#c2a67a] transition-transform"><path d="m6 9 6 6 6-6"/></svg>
                     </summary>
-                    <p class="pb-6 text-gray-600 leading-relaxed max-w-3xl">Every home includes <a href="/plans/#included" class="text-[#0f172a] font-medium underline underline-offset-4 decoration-[#c2a67a] hover:text-[#c2a67a] transition-colors">the Leavitt Standard</a>: 9-foot ceilings, quartz countertops, Andersen windows, hardwood or luxury vinyl plank flooring, a finished and painted garage and more, at no upgrade cost.</p>
+                    <p class="pb-6 text-gray-600 leading-relaxed max-w-3xl">Every home includes <a href="/plans/#included" class="py-1 text-[#0f172a] font-medium underline underline-offset-4 decoration-[#c2a67a] hover:text-[#c2a67a] transition-colors">the Leavitt Standard</a>: 9-foot ceilings, quartz countertops, Andersen windows, hardwood or luxury vinyl plank flooring, a finished and painted garage and more, at no upgrade cost.</p>
                 </details>
                 <details class="faq-item border-t border-gray-200 group">
                     <summary class="flex items-center justify-between gap-6 py-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
                         <h3 class="text-lg md:text-xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">Can I change one of your plans?</h3>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="faq-chevron w-5 h-5 shrink-0 text-[#c2a67a] transition-transform"><path d="m6 9 6 6 6-6"/></svg>
                     </summary>
-                    <p class="pb-6 text-gray-600 leading-relaxed max-w-3xl">Yes. Every plan is a starting point. The elevation, room sizes and optional spaces are adjusted to your lot and the way you want to live, and you choose the finishes, fixtures, cabinetry and flooring. <a href="/plans/" class="text-[#0f172a] font-medium underline underline-offset-4 decoration-[#c2a67a] hover:text-[#c2a67a] transition-colors">See the plans</a>.</p>
+                    <p class="pb-6 text-gray-600 leading-relaxed max-w-3xl">Yes. Every plan is a starting point. The elevation, room sizes and optional spaces are adjusted to your lot and the way you want to live, and you choose the finishes, fixtures, cabinetry and flooring. <a href="/plans/" class="py-1 text-[#0f172a] font-medium underline underline-offset-4 decoration-[#c2a67a] hover:text-[#c2a67a] transition-colors">See the plans</a>.</p>
                 </details>
                 <details class="faq-item border-t border-gray-200 group">
                     <summary class="flex items-center justify-between gap-6 py-5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
