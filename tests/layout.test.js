@@ -37,11 +37,13 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
   ok(Math.abs(m.kyleW - m.kyleH) <= 1, `kyle.jpg still square (${m.kyleW}x${m.kyleH})`);
   ok(m.baImgW === m.baW && m.baImgH === m.baH, `before/after images fill the slider (${m.baImgW}x${m.baImgH} in ${m.baW}x${m.baH})`);
 
-  // The hero fills the first screen, so "What We Build" scrolls to something
-  // that was not already in view - when it stopped at 730px the next section
-  // showed underneath and the button moved the page a couple of inches. On a
-  // desktop the photograph is behind the copy; on phones and tablets it sits
-  // above it as a banner. Either way the button is on the first screen.
+  // The hero fills the first screen, so its button scrolls to something that
+  // was not already in view - when it stopped at 730px the next section showed
+  // underneath and the button moved the page a couple of inches. On a desktop
+  // the photograph is behind the copy; on phones and tablets it sits above it
+  // as a banner. Either way the button is on the first screen. The button is
+  // "Find your plan" and opens the plan finder (October 2026); it used to be
+  // "What We Build", one screen down to the service cards.
   for (const [w, h] of [[1920, 1000], [1280, 800], [1024, 768], [768, 1024], [390, 844], [360, 640]]) {
     const page = await b.newPage({ viewport: { width: w, height: h } });
     await serveFonts(page);
@@ -52,7 +54,7 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
       const hero = box(document.getElementById('hero'));
       const img = box(document.querySelector('#hero img'));
       const h1 = box(document.querySelector('#hero h1'));
-      const btn = box(document.querySelector('#hero a[href="#services"]'));
+      const btn = box(document.querySelector('#hero a[href="#plans"]'));
       return { heroH: Math.round(hero.height), servicesTop: Math.round(box(document.getElementById('services')).top),
         imgW: Math.round(img.width), imgTop: Math.round(img.top), imgBottom: Math.round(img.bottom), imgH: Math.round(img.height),
         h1Top: Math.round(h1.top), btnBottom: Math.round(btn.bottom) };
@@ -62,26 +64,29 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
     ok(r.imgW === w, `${label}: photo spans the full width (${r.imgW}px)`);
     if (w >= 1024) ok(r.imgTop === 0 && r.imgH === r.heroH, `${label}: photo fills the whole hero, behind the copy`);
     else ok(r.imgBottom <= r.h1Top, `${label}: photo sits above the copy as a banner`);
-    ok(r.btnBottom <= h, `${label}: "What We Build" is on the first screen (bottom at ${r.btnBottom}px)`);
+    ok(r.btnBottom <= h, `${label}: "Find your plan" is on the first screen (bottom at ${r.btnBottom}px)`);
     await page.close();
   }
   // The desktop menu bar must sit on one line. Between 1024 and ~1100px wide
   // "Client Login" and "Get a Quote" used to wrap onto two lines each, and
   // Client Login was moved down to the footer. Kyle wanted it back at the top
   // (October 7, 2026), so it returned smaller, set apart after Get a Quote.
-  // Nothing may wrap, and the bar must not run off the right edge.
+  // Nothing may wrap, and the bar must not run off the right edge. Since
+  // November 2026 the phone number sits above Client Login in that last place,
+  // so the two are inside a block of their own: every link in the bar is
+  // checked, not only the bar's direct children.
   for (const w of [1024, 1060, 1100, 1180, 1280, 1440, 1920]) {
     const page = await b.newPage({ viewport: { width: w, height: 800 } });
     await serveFonts(page);
     await page.goto(FILE_ROOT + 'index.html');
     await page.evaluate(() => document.fonts.ready);
-    const wrapped = await page.evaluate(() => [...document.querySelectorAll('#main-nav .lg\\:flex > a')].filter((a) => {
+    const wrapped = await page.evaluate(() => [...document.querySelectorAll('#main-nav .lg\\:flex a')].filter((a) => {
       const t = [...a.childNodes].find((n) => n.nodeType === 3 && n.textContent.trim());
       const r = document.createRange(); r.selectNodeContents(t);
       return new Set([...r.getClientRects()].filter((x) => x.width > 0).map((x) => Math.round(x.top))).size > 1;
     }).map((a) => a.textContent.trim()));
     ok(wrapped.length === 0, `${w}px: every menu bar link fits on one line` + (wrapped.length ? ' - wrapped: ' + wrapped.join(', ') : ''));
-    const right = await page.evaluate(() => Math.max(...[...document.querySelectorAll('#main-nav .lg\\:flex > a')].map((a) => a.getBoundingClientRect().right)));
+    const right = await page.evaluate(() => Math.max(...[...document.querySelectorAll('#main-nav .lg\\:flex a')].map((a) => a.getBoundingClientRect().right)));
     ok(right <= w - 16, `${w}px: the menu bar ends inside the page (right edge ${Math.round(right)}px)`);
     await page.close();
   }
@@ -98,6 +103,9 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
   }
   // The plan pages carry the same link in their header from tablet width up,
   // beside Plans and Get a Quote. It must not push them onto two lines.
+  // Since November 2026 the phone number is there too, directly above Client
+  // Login: Plans, Get a Quote and that pair still make one row, each link on
+  // one line, and nothing runs off the page.
   // Plan pages load /dist/styles.css from the site root, so they are served.
   const site = await serveRepo();
   for (const w of [768, 1024, 1440]) {
@@ -106,16 +114,24 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
     await page.goto(site.base + '/plans/the-poet.html');
     await page.evaluate(() => document.fonts.ready);
     const r = await page.evaluate(() => {
-      const links = [...document.querySelectorAll('header nav[aria-label="Main"] a')];
+      const nav = document.querySelector('header nav[aria-label="Main"]');
+      const box = (el) => el.getBoundingClientRect();
+      const links = [...nav.querySelectorAll('a')].filter((a) => box(a).width > 0);
       const login = links.find((a) => a.href.includes('connect.buildleavitt.com'));
+      const phone = links.find((a) => a.getAttribute('href') === 'tel:+14436139750');
+      // The row is the nav's own children: Plans, Get a Quote, and the block
+      // holding the number and Client Login. One row = one vertical centre.
+      const mids = [...nav.children].filter((el) => box(el).width > 0).map((el) => box(el).top + box(el).height / 2);
       return {
-        login: !!login && login.getBoundingClientRect().width > 0,
-        tops: new Set(links.map((a) => Math.round(a.getBoundingClientRect().top + a.getBoundingClientRect().height / 2))).size,
-        tall: links.some((a) => a.getBoundingClientRect().height > 60),
-        right: Math.max(...links.map((a) => a.getBoundingClientRect().right)),
+        login: !!login, phone: !!phone,
+        rowSpread: Math.round(Math.max(...mids) - Math.min(...mids)),
+        stacked: !!login && !!phone && box(phone).bottom <= box(login).top + 1,
+        tall: links.some((a) => box(a).height > 60),
+        right: Math.round(Math.max(...links.map((a) => box(a).right))),
       };
     });
-    ok(r.login && r.tops === 1 && !r.tall && r.right <= w - 16, `plan page ${w}px: Client Login shows in the header, all on one line (${JSON.stringify(r)})`);
+    ok(r.login && r.phone && r.rowSpread <= 1 && r.stacked && !r.tall && r.right <= w - 16,
+      `plan page ${w}px: the phone number and Client Login show in the header, in one row with Plans and Get a Quote (${JSON.stringify(r)})`);
     await page.close();
   }
   await site.close();

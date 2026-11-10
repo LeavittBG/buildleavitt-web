@@ -35,10 +35,17 @@ const WEBP = { quality: 80, effort: 6 };
 const PNG = { compressionLevel: 9 };
 const NAVY = { r: 15, g: 23, b: 42, alpha: 1 };
 
-/** Max width each image is served at (roughly 2x its largest CSS display size). */
+/**
+ * Max width each image is served at (roughly 2x its largest CSS display size).
+ *
+ * An entry may also list smaller widths (`srcset`). Each is written beside the
+ * full-size file as <stem>-<width>.jpg plus .webp, for a srcset in the HTML, so
+ * a phone is not sent the 2560-pixel hero: before November 2026 every visitor
+ * downloaded it, 424 KB of WebP on a 390-pixel screen.
+ */
 const TARGETS = {
-  'hero-home.jpg': 2560,
-  'hero-home-phone.jpg': 1600,
+  'hero-home.jpg': { width: 2560, srcset: [1280, 1920] }, // fills the screen from lg up
+  'hero-home-phone.jpg': { width: 1600, srcset: [800, 1200] }, // the banner below lg
   'kyle.jpg': 928,
   'Before.jpg': 1800,
   'After.jpg': 1800,
@@ -63,7 +70,8 @@ const skipped = [];
 
 console.log('source'.padEnd(46) + 'primary'.padStart(11) + 'webp'.padStart(14) + '   saving');
 
-for (const [name, width] of Object.entries(TARGETS)) {
+for (const [name, spec] of Object.entries(TARGETS)) {
+  const { width, srcset = [] } = typeof spec === 'number' ? { width: spec } : spec;
   const src = join(SRC, name);
   if (!existsSync(src)) {
     console.error(`  ! ${name} not found in assets-src/ - skipping`);
@@ -99,6 +107,23 @@ for (const [name, width] of Object.entries(TARGETS)) {
       (keep ? kb(webp.length) : '        --   ') +
       (keep ? `  -${(saving * 100).toFixed(0)}%` : '   (skipped)')
   );
+
+  // The smaller widths for a srcset, each encoded from the original too.
+  for (const w of srcset) {
+    const stem = name.replace(/\.(jpe?g|png)$/i, '');
+    const ext = name.match(/\.(jpe?g|png)$/i)[0];
+    const small = sharp(src).rotate().resize({ width: w, withoutEnlargement: true });
+    const smallPrimary = await (isPng ? small.clone().png(PNG) : small.clone().jpeg(JPEG)).toBuffer();
+    await writeFile(join(ROOT, `${stem}-${w}${ext}`), smallPrimary);
+    const smallWebp = await small.clone().webp(WEBP).toBuffer();
+    await writeFile(join(ROOT, `${stem}-${w}.webp`), smallWebp);
+    totalPrimary += smallPrimary.length;
+    totalWebp += smallWebp.length;
+    console.log(
+      `${stem}-${w}${ext}`.padEnd(46) + kb(smallPrimary.length) + kb(smallWebp.length) +
+        `  -${((1 - smallWebp.length / smallPrimary.length) * 100).toFixed(0)}%`
+    );
+  }
 }
 
 // --- Favicons, all derived from the one oversized source icon ---

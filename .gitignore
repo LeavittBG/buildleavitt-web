@@ -4,3 +4,7 @@ node_modules/
 
 # Screenshots left behind by the test suite
 tests/.output/
+
+# Plan redraw: fonts installed locally and Python caches
+scripts/plan-redraw/fonts/
+__pycache__/

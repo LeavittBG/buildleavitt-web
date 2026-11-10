@@ -39,7 +39,8 @@ const PAGES = [
     const chosen = cta.map((a) => decodeURIComponent(new URL(a.href, 'https://buildleavitt.com').searchParams.get('interest')));
     ok(cta.length > 0 && chosen.every((c) => c === interest) && cta.every((a) => a.getAttribute('href').endsWith('#contact')),
        `${file}: its call to action opens the contact form with "${interest}" chosen (${[...new Set(chosen)].join(', ') || 'none'})`);
-    const option = [...home.querySelectorAll('#contact-interest option')].some((o) => o.textContent.trim() === interest);
+    // Project Interest is a set of radio cards since October 2026 (it was a <select>).
+    const option = [...home.querySelectorAll('input[name="Interest"]')].some((o) => o.value === interest);
     ok(option, `${file}: "${interest}" is one of the form's Project Interest options`);
     // Every root-relative asset and page it points at exists.
     const refs = [...d.querySelectorAll('img[src], source[srcset], link[rel=stylesheet][href], a[href^="/"]')]
@@ -105,7 +106,7 @@ const PAGES = [
     await p.waitForURL(/#contact$/);
     await p.waitForTimeout(300);
     const r = await p.evaluate(() => ({
-      interest: document.getElementById('contact-interest').value,
+      interest: ((document.querySelector('input[name="Interest"]:checked') || {}).value || ''),
       plan: document.getElementById('contact-plan').value,
       note: document.getElementById('contact-plan-note').classList.contains('hidden'),
     }));
@@ -113,11 +114,11 @@ const PAGES = [
     ok(r.plan === '' && r.note, 'and no plan is named, since none was chosen');
     // A value that is not one of the options is ignored, never written anywhere.
     await p.goto(`${site.base}/?interest=${encodeURIComponent('<script>alert(1)</script>')}#contact`, { waitUntil: 'load' });
-    const bad = await p.evaluate(() => document.getElementById('contact-interest').value);
+    const bad = await p.evaluate(() => ((document.querySelector('input[name="Interest"]:checked') || {}).value || ''));
     ok(bad === '', `an interest that is not an option leaves the form untouched (got "${bad}")`);
     // Both parameters together, as a plan page could send them.
     await p.goto(`${site.base}/?plan=The%20Poet&interest=Semi-Custom%20Home#contact`, { waitUntil: 'load' });
-    const both = await p.evaluate(() => ({ interest: document.getElementById('contact-interest').value, plan: document.getElementById('contact-plan').value }));
+    const both = await p.evaluate(() => ({ interest: ((document.querySelector('input[name="Interest"]:checked') || {}).value || ''), plan: document.getElementById('contact-plan').value }));
     ok(both.interest === 'Semi-Custom Home' && both.plan === 'The Poet', `plan and interest work together (${JSON.stringify(both)})`);
     await p.close();
   }

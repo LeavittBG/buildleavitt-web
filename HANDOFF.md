@@ -1,3 +1,97 @@
+# Handoff
+
+This file holds two separate hand-offs. They have nothing to do with each other.
+
+- **Part A, the website** (this repository): where current work on buildleavitt.com stands. Rewritten at the end of each website session.
+- **Part B, Leavitt Job Pricing**: Kyle's private pricing app, which is not in this repository. Written October 14, 2026 and left exactly as it was. A website session never edits Part B.
+
+The repository is public, so neither part holds prices, margins, fees, client names or vendor names.
+
+---
+
+# Part A — The website: where things stand (November 10, 2026)
+
+Read `CLAUDE.md` first: it has the rules, the commands and every decision. This part is only the state of the work in progress.
+
+## A1. Goal of the current work
+
+On November 10, 2026 Kyle asked for a full audit of the site (speed, local SEO, mobile, lead capture, trust, accessibility and broken links), then fixes made one at a time, each reviewed before it goes live. He is new to coding: plain language, no jargon. He approves audit items by number. The business as he described it: a Maryland custom home builder founded in 2011, building custom homes on lots clients already own, plus semi-custom homes; phone (443) 613-9750. The phrases he wants to rank for are "custom home builder Maryland" and "build on your lot".
+
+## A2. Done
+
+**Merged and live.** Pull request #58, merged November 10, 2026 and confirmed on buildleavitt.com. `CLAUDE.md` records each decision.
+
+- **Item 4:** the tests can no longer reach Google Analytics (`launch()` in `tests/lib/env.js`; `tests/analytics-off.test.js`).
+- **Item 1:** the phone number is in the bar at the top of every page (`tests/header-phone.test.js`).
+- **Item 5:** the licence numbers are readable (footer line and hero line; `tests/colour-contrast.test.js`).
+
+Pull request #59 carried the first version of this file and merged the same day.
+
+**Pull request #60**, from branch `claude/lucid-feynman-u8ep8j`. Kyle saw its deploy preview and its before-and-after pictures and said "merge" on November 10, 2026. This version of the file travels with it, so on `main` it has merged; A6 step 1 says how to confirm it on the live site if that is in doubt. One commit each:
+
+- **Notes corrected:** `CLAUDE.md` and this part were checked line by line against the files, the history and the live site. The site was right; a handful of lines in the notes were not.
+- **Item 11:** every link, button and "tap to open" line is at least 24px tall, on every page, from a 360px phone to a laptop (`tests/tap-targets.test.js`). The fixed ones are 28px or more. The homepage's four desktop menu links were the last of them: Kyle approved raising those separately, and the bar did not change by a pixel.
+- **Item 2(a):** `custom-homes.html` says "build on your lot" in its title, main heading and description, in words Kyle chose (`tests/seo.test.js`; the words are in `CLAUDE.md`, under Content decisions).
+
+The full suite passed on that branch and in GitHub's own run: 22 test files.
+
+## A3. The audit list and what is left
+
+Numbers are the ones Kyle was given; use them with him.
+
+| # | Finding | Status / what it needs |
+|---|---|---|
+| 1 | No phone number at the top of any page | Done |
+| 2 | "Build on your lot" has no heading or page. On the homepage it appears only inside a closed question and on a form card; the custom and semi-custom pages say it once each, under "The practical questions" | (a) Done in #60: the `custom-homes.html` title, heading and description. (b) A dedicated page: not started, needs Kyle's facts on how a lot is evaluated |
+| 3 | No real project photos; every house picture is a rendering, plus one before/after pair | Waiting on Kyle's photographs. The gallery was removed on purpose (see `CLAUDE.md`) |
+| 4 | Tests loaded the live Google tag | Done |
+| 5 | Licence numbers were the faintest text on the site | Done |
+| 6 | Plan renderings come in one size: 1468px wide, 200–310 KB each, shown in cards about 400px wide. WebP is no smaller than JPEG for them. A 640px copy measured about 46 KB, a 960px copy about 94 KB | Not started. Needs extra sizes from `scripts/extract-plans.mjs`, a `srcset` from `scripts/build-plans.mjs` (and the hand-written cards on the semi-custom page), and tests |
+| 7 | The old (866) 832-6524 number is still in the Leavitt Connect video: on the closing card and spoken, 1:39.9 to 1:45.6, so also in the captions and the homepage transcript | Not started. Either trim the ending (ffmpeg is in the sandbox) and update the captions, transcript, the `VideoObject` duration and the two tests that know about it, or Kyle re-records. Ask whether the old number still rings |
+| 8 | "Maryland" is rarely spelled out (never on `/plans/`, whose title and description do say "Harford County, MD" but whose visible text names no place above the footer); the semi-custom title has no location | Not started. Wording needs approval. The November 6 choice to target Harford County first stands; this adds to it |
+| 9 | No mention of insurance; the founding year appears nowhere; "20+ Years of Excellence" may read as conflicting with a 2011 founding | Needs Kyle's facts. Never invent them |
+| 10 | The three testimonials name no source and do not link to Google reviews | Needs Kyle to say where they came from |
+| 11 | Small tap targets on phones. Plan pages: breadcrumbs 17px tall, the phone link in "Interested in this plan?" 17px, "Open full size image" 20px, "All plans" 16px. `/plans/`: the Leavitt Standard PDF link 17px. The `/plans/` breadcrumb is 17px too. Homepage: "Read the transcript" 17px, and two links inside sentences, "Leavitt Connect" and "the Leavitt Standard", 20px. 404: the phone link 17px. "View plan" and "Start with this plan" are 25px | Done in #60, every page and every width, the homepage's desktop menu links included |
+| 12 | Away from the homepage, phones get no menu: only Plans and Get a Quote | Not started. Touches the menu, so it is Kyle's call |
+| 13 | Tiny text: 9px caption under Kyle's photo, 10px Before/After labels, 11px "Read More", "View plan" and the small labels | Not started |
+| 14 | No page has a "skip to content" link; the homepage, `success.html` and `404.html` have no main-content landmark either (the other pages do); the form fields' focus highlight is faint | Not started |
+| 15 | The hero, logo, Kyle's photo and the before/after pair have no cache lifetime | Not started. A one-week header in `netlify.toml`, never `immutable` (see `CLAUDE.md`) |
+| 16 | Fonts load from Google | Deferred by Kyle on November 6 |
+| 17 | Housekeeping: the logo file is 1200px wide for a slot of at most 328px; four homepage pictures (the logo, Kyle's photo and the Before and After pair) have a leftover `onerror` fallback to an outside placeholder site, placehold.co; image descriptions on all 17 plan pages still say "Modern Farmhouse"; `foundingDate` is missing from the business data | Not started |
+
+Found in good order, so do not re-audit: compression and HTTPS on the live site, titles and descriptions, one main heading per page, the business markup, sitemap, robots.txt, no sideways scrolling at 360 and 390px, no "Creative Home Co" anywhere, no broken links (1,608 checked), and a Tag Manager container that holds only Google Analytics.
+
+## A4. Questions waiting on Kyle
+
+1. Insurance: what may the site state? (item 9)
+2. Is "20+ years" his own experience, and may the site say "founded 2011"? (item 9)
+3. Does (866) 832-6524 still ring? Trim the video ending or re-record it? (item 7)
+4. Where did the three testimonials come from, and may they link to the Google profile? (item 10)
+5. Are there real photographs of finished homes? (item 3)
+6. How does Leavitt evaluate a client's lot? Needed before a "build on your lot" page is written. (item 2b)
+
+## A5. Known issues and things not verified
+
+- Google Analytics may hold page views and `generate_lead` events from hostname `127.0.0.1` dated before the block went in. On November 10 this session's own audit loaded the live tag about 30 times, and one full test run, before that was noticed.
+- Kyle was told of an optional change in GA that needs no code: make the `generate_lead` rule "page_location contains buildleavitt.com/success", so deploy previews and test addresses can never count. Not confirmed done.
+- Away from the homepage, on a 320px-wide phone, the logo is squeezed to about 90px by Plans and Get a Quote. It was like that before the phone number went in and was left alone.
+- Speed was measured locally (page weight, layout shift). Real-visitor Core Web Vitals were not; they are in Search Console.
+- The Semrush account had no API units, so there are no search-volume figures behind the SEO items.
+- The audit's measuring scripts lived in the session's scratch folder and are gone. The figures that matter are in the table above.
+- Google shows a new title and description only after it next reads the page, which can take days or weeks. Nothing has been checked in Search Console for "build on your lot" yet.
+- The custom homes title ends "| Leavitt", not the full company name, so that both phrases fit. Every other title ends "| Leavitt Building Group".
+- Other links inside sentences on the service pages use `inline-block py-1`, which makes their line of text 8px taller than its neighbours. Item 11 used padding alone for sentence links so no line moved; the service pages were not changed to match.
+
+## A6. The exact next three steps
+
+1. If there is any doubt that #60 is live, confirm it with `curl` (which sends nothing to Analytics): the title of buildleavitt.com/custom-homes.html reads "Build on Your Lot: Custom Home Builder in Maryland | Leavitt", and the "Home" link in a plan page's breadcrumb carries `inline-block py-1`. Start the next work from the latest `main`.
+2. Ask Kyle which item numbers he wants next. Start nothing until he names them. The ones that need no wording and no facts from him: 15 (a one-week cache lifetime for the hero, logo and photos in `netlify.toml`), 14 (a "skip to content" link and a main landmark), 13 (tiny text) and the housekeeping in 17. Item 6 (smaller copies of the plan renderings) is the largest speed gain left.
+3. For anything that changes words (item 8, more of item 2): put the proposed words to him in full first, with the current words beside them, and edit only after he chooses. Titles are at most 70 characters, descriptions 70 to 155, each repeated in the `og:` and `twitter:` tags, and a service page's description is repeated in its `Service` data (`markup.test.js`, `seo.test.js`). One commit per item, each with a check that was seen failing first, a draft pull request, a before-and-after picture for Kyle.
+
+---
+
+# Part B — Leavitt Job Pricing
+
 # Leavitt Job Pricing — handoff
 
 Written October 14, 2026 for whoever continues the job-pricing app in a new session with no access to the chat that built it. Read this first, then the pricing-app section at the end of `CLAUDE.md`.
@@ -52,7 +146,7 @@ Users: Kyle only, so far. The artifact's `user` capability records who edited wh
 - **Figures only from Leavitt's own data.** Every default dollar amount in the database came from Kyle's budgets, quotes, price sheets or an official fee schedule. Nothing is estimated or invented. A line with no usable figure shows as missing and asks for a number or a bid rather than guessing.
 - **Project types.** Kyle: "an addition still requires permits. It may also require tying into a septic." So additions keep the permit lines, get septic/water/electrical tie-in, demolition, matching and interior-patch checklist items (`add-*` ids), and drop whole-house lines (well, driveway, construction loan) by default. Rates for an addition come from past additions first, then from new-home jobs flagged as a fallback; a borrowed whole-house lump sum is shown as missing instead of being applied to a small job.
 - **Brand look, no template effects.** Same rules as the website: content visible from first paint, no loaders or animations, Leavitt navy and gold, Inter and Playfair Display. Dark mode follows the system.
-- **Bedrooms, baths and garage** on the plan presets match the brochure covers exactly; square footage and starting prices are the website's published figures.
+- **Bedrooms, baths and garage** on the plan presets match the brochure covers exactly; square footage came from the website's plan data (`src/plans.json`). The starting prices were copied from it in October 2026; since October 26, 2026 the website holds no prices, so the app's database is the only copy besides Leavitt's price sheet.
 - **Public repository rule (established while building):** nothing of the app, its data, backups or figures goes into this repository. Only this handoff and the `CLAUDE.md` rules.
 
 ### Tried and failed (and what fixed it)

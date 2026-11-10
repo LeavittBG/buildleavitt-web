@@ -12,6 +12,10 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
   await p.goto(FILE_ROOT + 'index.html');
   await p.waitForTimeout(4200);
 
+  // The plan finder keeps eleven of its seventeen cards hidden until a
+  // question is answered (October 2026). Show them all, so their images are
+  // held to the same checks as the rest.
+  await p.evaluate(() => document.querySelectorAll('#plan-finder [data-plan]').forEach((c) => c.classList.remove('hidden')));
   // Scroll through so lazy images load; without this currentSrc is empty.
   await p.evaluate(async () => {
     for (let y = 0; y < document.body.scrollHeight; y += 300) {

@@ -223,8 +223,14 @@ console.log("\n== contact details are real ==");
   // 555-01xx is the reserved fictional range; example.com/.org likewise.
   const fake = all.match(/\(?\d{3}\)?[ -]?555-01\d\d|example\.(com|org|net)/g) || [];
   ok(fake.length === 0, "no fictional 555 numbers or example.com addresses" + (fake.length ? ": " + [...new Set(fake)].join(", ") : ""));
-  const nums = [...new Set(all.match(/\(\d{3}\)\s?\d{3}-\d{4}/g) || [])];
-  ok(nums.every(x => x.replace(/\D/g, "") === "8668326524"),
+  // The Leavitt Connect transcript repeats the video's captions word for word
+  // (connect-video.test.js checks that), and the narrator gives the old (866)
+  // number at 1:39. That sentence quotes the audio, so it is not a contact
+  // detail and is left out here; every other printed number must be the real one.
+  const transcript = /<details[^>]*>\s*<summary[^>]*>Read the transcript<\/summary>[\s\S]*?<\/details>/;
+  ok(transcript.test(all), "the Leavitt Connect transcript is found (its spoken number is the one exemption)");
+  const nums = [...new Set(all.replace(transcript, "").match(/\(\d{3}\)\s?\d{3}-\d{4}/g) || [])];
+  ok(nums.every(x => x.replace(/\D/g, "") === "4436139750"),
      "every displayed phone number is the real one: " + nums.join(", "));
 }
 
@@ -301,7 +307,7 @@ console.log("\n== Leavitt Connect section ==");
     const missing = need.filter((w) => !titles.some((t) => t.toLowerCase().includes(w)));
     ok(missing.length === 0, `all six features are described (${titles.length} found)` + (missing.length ? ' - missing: ' + missing.join(', ') : ''));
     ok(/every homeowner on the home signs/i.test(text), 'change orders say every homeowner on the home signs');
-    ok(!!sec.querySelector('a[href="https://connect.buildleavitt.com"]') && !!sec.querySelector('a[href="tel:+18668326524"]') && !!sec.querySelector('a[href="#contact"]'),
+    ok(!!sec.querySelector('a[href="https://connect.buildleavitt.com"]') && !!sec.querySelector('a[href="tel:+14436139750"]') && !!sec.querySelector('a[href="#contact"]'),
        'it links to the sign-in, the office line and the contact form');
   }
 }
@@ -333,6 +339,11 @@ console.log("\n== questions and their structured data agree ==");
   const missing = facts.filter((f) => !text.includes(f));
   ok(missing.length === 0, "the answers carry Kyle's facts as he gave them" + (missing.length ? ' - missing: ' + missing.join(', ') : ''));
   ok(!/warranty package/i.test(html), 'the vague "warranty package" wording is gone from the homepage');
+  // "What is included in the price?" ended with the starting-price qualifier
+  // until October 28, 2026. Once the price came off /plans/ it described a
+  // figure no visitor could see, and Kyle had it taken out.
+  ok(!/starting price/i.test(text) && !/starting price/i.test(JSON.stringify(ld || {})),
+    'no "starting price" sentence in the answers or their structured data');
 }
 
 // --- Facebook ---
@@ -439,6 +450,35 @@ console.log("\n== opening hours agree, on every page ==");
     if (text !== HOURS) wrong.push(`${f}: "${text}"`);
   }
   ok(wrong.length === 0, `all ${pages.length} pages show "${HOURS}"` + (wrong.length ? " - " + wrong.join(" | ") : ""));
+}
+
+// --- search result titles and descriptions ---
+// The homepage title ran to 83 characters and the renovations title to 82, so
+// Google cut both off before the company name, and three service descriptions
+// ran to 163-190 characters and lost their last clause. Google shows about 60
+// to 70 characters of a title and 155 of a description. The link-preview tags
+// repeat both, so they must change together. The plan pages are held to 155 in
+// plans.test.js; this covers every page.
+console.log("\n== titles and descriptions fit a search result ==");
+{
+  const pages = ["index.html", "custom-homes.html", "semi-custom-homes.html", "renovations.html", "privacy.html", "terms.html", "success.html", "404.html",
+    ...fs.readdirSync(path.join(ROOT, "plans")).filter((f) => f.endsWith(".html")).map((f) => "plans/" + f)];
+  const bad = [];
+  let checked = 0;
+  for (const f of pages) {
+    const doc = new JSDOM(fs.readFileSync(path.join(ROOT, f), "utf8")).window.document;
+    if (/noindex/.test(doc.querySelector('meta[name="robots"]')?.getAttribute("content") || "")) continue;
+    checked++;
+    const title = doc.title.trim();
+    const desc = (doc.querySelector('meta[name="description"]')?.getAttribute("content") || "").trim();
+    const og = (p) => doc.querySelector(`meta[property="og:${p}"]`)?.getAttribute("content");
+    const tw = (p) => doc.querySelector(`meta[name="twitter:${p}"]`)?.getAttribute("content");
+    if (!title || title.length > 70) bad.push(`${f}: title is ${title.length} characters`);
+    if (desc.length < 70 || desc.length > 155) bad.push(`${f}: description is ${desc.length} characters`);
+    if (og("title") !== undefined && (og("title") !== title || tw("title") !== title)) bad.push(`${f}: og/twitter title differs from <title>`);
+    if (og("description") !== undefined && (og("description") !== desc || tw("description") !== desc)) bad.push(`${f}: og/twitter description differs from the description`);
+  }
+  ok(checked >= 7 && bad.length === 0, `every indexable page (${checked}) has a title of at most 70 characters and a description of 70-155, repeated in its preview tags` + (bad.length ? " - " + bad.join(" | ") : ""));
 }
 
 console.log(fail === 0 ? '\nAll checks passed.' : `\n${fail} check(s) failed.`);

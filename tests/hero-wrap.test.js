@@ -3,7 +3,7 @@ const { chromium } = require('playwright');
 const { serveFonts } = require('./lib/fonts');
 /*
  * The headline must read as two lines at every width - "Crafting Custom Homes"
- * then "Across the Region." - never "Homes" stranded on a line of its own, and
+ * then "Across Harford County." - never "Homes" stranded on a line of its own, and
  * never wider than the page. Each .hero-line is measured as the browser laid
  * it out: the text's own line boxes, one rect per line it occupies.
  */
@@ -27,7 +27,7 @@ const probe = () => {
 };
 (async () => {
   const b = await launch();
-  const WANT = 'Crafting Custom Homes | Across the Region.';
+  const WANT = 'Crafting Custom Homes | Across Harford County.';
   let bad = 0;
   const widths = [320, 360, 375, 390, 414, 480, 540, 600, 640, 700, 768, 820, 900, 1000, 1024, 1100, 1180, 1280, 1366, 1440, 1536, 1600, 1728, 1920, 2200, 2560];
   for (const w of widths) {

@@ -11,22 +11,29 @@
       "file": "the-craftsman-first-floor",
       "ext": "png",
       "width": 1501,
-      "height": 1702,
+      "height": 1703,
       "label": "First Floor"
     },
     "second-floor": {
       "file": "the-craftsman-second-floor",
       "ext": "png",
       "width": 1498,
-      "height": 1478,
+      "height": 1480,
       "label": "Second Floor"
     },
     "basement": {
       "file": "the-craftsman-basement",
       "ext": "png",
       "width": 1502,
-      "height": 1684,
+      "height": 1682,
       "label": "Basement"
+    },
+    "elevation-modern-brick": {
+      "file": "the-craftsman-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-daydreamer": {
@@ -41,7 +48,7 @@
       "file": "the-daydreamer-first-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1620,
+      "height": 1622,
       "label": "First Floor"
     },
     "first-floor-options": {
@@ -62,7 +69,7 @@
       "file": "the-daydreamer-basement",
       "ext": "png",
       "width": 1498,
-      "height": 1545,
+      "height": 1544,
       "label": "Basement"
     },
     "basement-options": {
@@ -71,6 +78,13 @@
       "width": 1498,
       "height": 1610,
       "label": "Basement Options"
+    },
+    "elevation-modern-brick": {
+      "file": "the-daydreamer-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-draftsman": {
@@ -85,7 +99,7 @@
       "file": "the-draftsman-first-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1652,
+      "height": 1653,
       "label": "First Floor"
     },
     "first-floor-options": {
@@ -99,7 +113,7 @@
       "file": "the-draftsman-second-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1513,
+      "height": 1516,
       "label": "Second Floor"
     },
     "basement": {
@@ -115,6 +129,13 @@
       "width": 1380,
       "height": 1664,
       "label": "Basement Options"
+    },
+    "elevation-modern-brick": {
+      "file": "the-draftsman-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-entrepreneur": {
@@ -129,7 +150,7 @@
       "file": "the-entrepreneur-first-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1668,
+      "height": 1665,
       "label": "First Floor"
     },
     "first-floor-options": {
@@ -143,7 +164,7 @@
       "file": "the-entrepreneur-basement",
       "ext": "png",
       "width": 1499,
-      "height": 1640,
+      "height": 1642,
       "label": "Basement"
     },
     "other-elevations": {
@@ -152,6 +173,13 @@
       "width": 1493,
       "height": 1308,
       "label": "Elevations"
+    },
+    "elevation-modern-brick": {
+      "file": "the-entrepreneur-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-expressionist-i": {
@@ -166,7 +194,7 @@
       "file": "the-expressionist-i-first-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1578,
+      "height": 1577,
       "label": "First Floor"
     },
     "first-floor-options": {
@@ -180,7 +208,7 @@
       "file": "the-expressionist-i-second-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1502,
+      "height": 1503,
       "label": "Second Floor"
     },
     "second-floor-options": {
@@ -203,6 +231,13 @@
       "width": 1290,
       "height": 1066,
       "label": "Basement Options"
+    },
+    "elevation-modern-brick": {
+      "file": "the-expressionist-i-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-expressionist-ii": {
@@ -217,7 +252,7 @@
       "file": "the-expressionist-ii-first-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1593,
+      "height": 1592,
       "label": "First Floor"
     },
     "first-floor-options": {
@@ -231,7 +266,7 @@
       "file": "the-expressionist-ii-second-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1530,
+      "height": 1531,
       "label": "Second Floor"
     },
     "second-floor-options": {
@@ -254,6 +289,13 @@
       "width": 1470,
       "height": 1042,
       "label": "Basement Options"
+    },
+    "elevation-modern-brick": {
+      "file": "the-expressionist-ii-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-illustrator": {
@@ -268,7 +310,7 @@
       "file": "the-illustrator-first-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1595,
+      "height": 1591,
       "label": "First Floor"
     },
     "first-floor-options": {
@@ -305,6 +347,13 @@
       "width": 1338,
       "height": 1104,
       "label": "Basement Options"
+    },
+    "elevation-modern-brick": {
+      "file": "the-illustrator-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-impressionist": {
@@ -325,16 +374,23 @@
     "second-floor": {
       "file": "the-impressionist-second-floor",
       "ext": "png",
-      "width": 1294,
-      "height": 1431,
+      "width": 1295,
+      "height": 1443,
       "label": "Second Floor"
     },
     "basement": {
       "file": "the-impressionist-basement",
       "ext": "png",
       "width": 1500,
-      "height": 1627,
+      "height": 1641,
       "label": "Basement"
+    },
+    "elevation-modern-brick": {
+      "file": "the-impressionist-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-innovator": {
@@ -349,7 +405,7 @@
       "file": "the-innovator-first-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1652,
+      "height": 1648,
       "label": "First Floor"
     },
     "first-floor-options": {
@@ -362,7 +418,7 @@
     "optional-second-floor": {
       "file": "the-innovator-optional-second-floor",
       "ext": "png",
-      "width": 1256,
+      "width": 1254,
       "height": 1442,
       "label": "Optional Second Floor"
     },
@@ -370,8 +426,15 @@
       "file": "the-innovator-basement",
       "ext": "png",
       "width": 1500,
-      "height": 1644,
+      "height": 1646,
       "label": "Basement"
+    },
+    "elevation-modern-brick": {
+      "file": "the-innovator-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-maestro": {
@@ -386,21 +449,21 @@
       "file": "the-maestro-first-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1674,
+      "height": 1676,
       "label": "First Floor"
     },
     "second-floor": {
       "file": "the-maestro-second-floor",
       "ext": "png",
       "width": 1501,
-      "height": 1633,
+      "height": 1635,
       "label": "Second Floor"
     },
     "basement": {
       "file": "the-maestro-basement",
       "ext": "png",
       "width": 1498,
-      "height": 1462,
+      "height": 1461,
       "label": "Basement"
     },
     "basement-options": {
@@ -409,6 +472,13 @@
       "width": 1300,
       "height": 1136,
       "label": "Basement Options"
+    },
+    "elevation-modern-brick": {
+      "file": "the-maestro-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-novel": {
@@ -444,7 +514,7 @@
       "file": "the-novel-basement",
       "ext": "png",
       "width": 1498,
-      "height": 1492,
+      "height": 1494,
       "label": "Basement"
     },
     "basement-options": {
@@ -453,6 +523,13 @@
       "width": 1384,
       "height": 1240,
       "label": "Basement Options"
+    },
+    "elevation-modern-brick": {
+      "file": "the-novel-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-pioneer-i": {
@@ -467,7 +544,7 @@
       "file": "the-pioneer-i-first-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1532,
+      "height": 1531,
       "label": "First Floor"
     },
     "first-floor-options": {
@@ -481,14 +558,14 @@
       "file": "the-pioneer-i-second-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1514,
+      "height": 1512,
       "label": "Second Floor"
     },
     "basement": {
       "file": "the-pioneer-i-basement",
       "ext": "png",
       "width": 1498,
-      "height": 1426,
+      "height": 1425,
       "label": "Basement"
     },
     "basement-options": {
@@ -497,6 +574,13 @@
       "width": 1494,
       "height": 1691,
       "label": "Basement Options"
+    },
+    "elevation-modern-brick": {
+      "file": "the-pioneer-i-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-pioneer-ii": {
@@ -511,7 +595,7 @@
       "file": "the-pioneer-ii-first-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1515,
+      "height": 1516,
       "label": "First Floor"
     },
     "first-floor-options": {
@@ -525,14 +609,14 @@
       "file": "the-pioneer-ii-second-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1516,
+      "height": 1517,
       "label": "Second Floor"
     },
     "basement": {
       "file": "the-pioneer-ii-basement",
       "ext": "png",
       "width": 1498,
-      "height": 1382,
+      "height": 1384,
       "label": "Basement"
     },
     "basement-options": {
@@ -541,6 +625,13 @@
       "width": 1494,
       "height": 1675,
       "label": "Basement Options"
+    },
+    "elevation-modern-brick": {
+      "file": "the-pioneer-ii-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-poet": {
@@ -555,7 +646,7 @@
       "file": "the-poet-first-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1592,
+      "height": 1593,
       "label": "First Floor"
     },
     "first-floor-options": {
@@ -569,7 +660,7 @@
       "file": "the-poet-second-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1542,
+      "height": 1544,
       "label": "Second Floor"
     },
     "basement": {
@@ -578,6 +669,13 @@
       "width": 1500,
       "height": 1580,
       "label": "Basement"
+    },
+    "elevation-modern-brick": {
+      "file": "the-poet-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-romantic": {
@@ -592,7 +690,7 @@
       "file": "the-romantic-first-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1580,
+      "height": 1578,
       "label": "First Floor"
     },
     "first-floor-options": {
@@ -606,14 +704,14 @@
       "file": "the-romantic-second-floor",
       "ext": "png",
       "width": 1369,
-      "height": 1523,
+      "height": 1522,
       "label": "Second Floor"
     },
     "basement": {
       "file": "the-romantic-basement",
       "ext": "png",
       "width": 1498,
-      "height": 1423,
+      "height": 1426,
       "label": "Basement"
     },
     "basement-options": {
@@ -622,6 +720,13 @@
       "width": 1350,
       "height": 1180,
       "label": "Basement Options"
+    },
+    "elevation-modern-brick": {
+      "file": "the-romantic-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-storyteller": {
@@ -636,22 +741,29 @@
       "file": "the-storyteller-first-floor",
       "ext": "png",
       "width": 1498,
-      "height": 1649,
+      "height": 1650,
       "label": "First Floor"
     },
     "second-floor": {
       "file": "the-storyteller-second-floor",
       "ext": "png",
-      "width": 1492,
-      "height": 1556,
+      "width": 1490,
+      "height": 1557,
       "label": "Second Floor"
     },
     "basement": {
       "file": "the-storyteller-basement",
       "ext": "png",
       "width": 1498,
-      "height": 1255,
+      "height": 1256,
       "label": "Basement"
+    },
+    "elevation-modern-brick": {
+      "file": "the-storyteller-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   },
   "the-visionary": {
@@ -666,7 +778,7 @@
       "file": "the-visionary-first-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1653,
+      "height": 1651,
       "label": "First Floor"
     },
     "first-floor-options": {
@@ -680,7 +792,7 @@
       "file": "the-visionary-second-floor",
       "ext": "png",
       "width": 1499,
-      "height": 1523,
+      "height": 1520,
       "label": "Second Floor"
     },
     "second-floor-options": {
@@ -694,7 +806,7 @@
       "file": "the-visionary-basement",
       "ext": "png",
       "width": 1498,
-      "height": 1494,
+      "height": 1492,
       "label": "Basement"
     },
     "basement-options": {
@@ -703,6 +815,13 @@
       "width": 1486,
       "height": 1104,
       "label": "Basement Options"
+    },
+    "elevation-modern-brick": {
+      "file": "the-visionary-elevation-modern-brick",
+      "ext": "jpg",
+      "width": 1600,
+      "height": 893,
+      "label": "Modern Brick Elevation"
     }
   }
 }

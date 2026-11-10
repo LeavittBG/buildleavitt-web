@@ -61,10 +61,10 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
         const cs = getComputedStyle(n), b = n.getBoundingClientRect();
         return cs.position === 'fixed' && b.width >= innerWidth && b.height >= innerHeight && cs.visibility !== 'hidden' && cs.display !== 'none';
       }).map((n) => n.id || n.tagName);
-      return { hidden, cover, h1: seen(document.querySelector('h1')), cta: seen(document.querySelector('#hero a[href="#services"]')) };
+      return { hidden, cover, h1: seen(document.querySelector('h1')), cta: seen(document.querySelector('#hero a[href="#plans"]')) };
     });
     ok(r.cover.length === 0, `nothing covers the page while it loads (${r.cover.join(', ') || 'none'})`);
-    ok(r.h1 === 1 && r.cta === 1, `headline and "What We Build" are fully visible at first paint (${r.h1}, ${r.cta})`);
+    ok(r.h1 === 1 && r.cta === 1, `headline and "Find your plan" are fully visible at first paint (${r.h1}, ${r.cta})`);
     ok(r.hidden.length === 0, `no heading, text, link or form anywhere starts hidden` + (r.hidden.length ? ' - ' + r.hidden.slice(0, 5).join(' | ') : ''));
     await ctx.close();
   }

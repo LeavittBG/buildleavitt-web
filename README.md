@@ -31,7 +31,7 @@ Each file in `tests/` loads the real pages in a headless Chrome and checks
 something that has actually gone wrong on this site before — the headline
 breaking onto the wrong lines, words not painting on one Windows machine,
 content left hidden when a script failed, the site rendering in the wrong typeface,
-prices or square footage drifting from Leavitt's figures. The comment at the
+square footage drifting from Leavitt's figures, a price reappearing on the plans. The comment at the
 top of each file says what it guards against and why. Run `npm test` before
 merging anything that touches the markup, the stylesheet or the plans data.
 
@@ -39,6 +39,25 @@ The tests serve the real web fonts from `tests/fixtures/fonts/` rather than
 fetching them, because text width decides several of the layout checks. If
 you change the Google Fonts URL in the pages, run `npm run test:fonts` to
 refresh that copy.
+
+The tests never reach Google Analytics. Every page carries the live Tag
+Manager container, and until November 2026 a test run let it load: page views
+went to the real Analytics property from `127.0.0.1`, and one test opens the
+thank-you page, whose page view Analytics counts as a lead. `launch()` in
+`tests/lib/env.js` now refuses Google's tag and analytics hosts on every page
+a test opens, and `tests/analytics-off.test.js` checks that it does. Always get
+the browser from `launch()`, never from Playwright directly.
+
+`tests/seo.test.js` is the one file that opens no browser: it reads the pages
+with jsdom and checks what search engines are told. Structured data parses on
+every page; every visible breadcrumb matches its BreadcrumbList; each service
+page describes its service and repeats the business (name, address, phone)
+exactly as the homepage does; the towns on the homepage band are the `City`
+entries in the structured data; `/plans/` lists every plan; every footer links
+the three services; every file the hero's `srcset` names exists; and
+`netlify.toml` sets the cache and security headers. `markup.test.js` also
+holds every indexable page to a title of at most 70 characters and a
+description of 70–155, repeated in the preview tags.
 
 One check in `plans.test.js` reads the brochure PDFs with `pdftotext`
 (`brew install poppler` on a Mac). Without it that check is skipped and says
@@ -132,6 +151,12 @@ served. Everything the site actually loads is generated from them and committed.
 ```
 npm run images     # resize + WebP the photography in assets-src/
 ```
+
+The two hero crops are also written at smaller widths (`hero-home-1280`,
+`hero-home-1920`, `hero-home-phone-800`, `hero-home-phone-1200`, JPEG and WebP)
+for the hero's `srcset`, so a phone is not sent the 2560-pixel file. The widths
+are the `srcset` lists in `TARGETS` in `scripts/optimize-images.mjs`; the files
+are committed like the rest.
 
 ## Icons
 
@@ -253,6 +278,66 @@ keeps the photo and the plan images it was built from). Its room dimensions are
 read off those plans, and the photographer's notice under each plan is cropped
 off, as the site always did. Since then it is a brochure model like any other.
 
+### A second exterior: Modern Brick
+
+Every cover shows its plan as a Modern Farmhouse. In October 2026 Kyle was told
+that a buyer who does not care for farmhouse style needs to see something else,
+so every plan gained a second exterior. He compared five on The Pioneer I
+(classic red brick with shutters, limewashed brick, charcoal brick, coastal
+shake and Craftsman) and chose charcoal brick: it reads as a current brick home
+and is plainly different from the white farmhouse.
+
+Each one is a photo rendering made from that plan's own cover rendering with
+Artlist (Nano Banana 2.1 image-to-image, 2K, 16:9), which keeps the camera, the
+house, every window, door, porch and garage door, the lawn and the light, and
+changes only the finishes. Every rendering was checked against its farmhouse
+rendering for windows, doors, gables, porch and garage, and redone if it changed
+the house. Kyle then had the garage doors made black on the eight plans whose
+garage faces the street (Pioneer I and II, Craftsman, Illustrator, Impressionist,
+Innovator, Maestro, Romantic), so they sit back in the dark brick and the
+stained front door is the one warm accent; that was a second, targeted edit of
+each rendering ("Change only the garage doors: make them satin black, keeping
+exactly the same door design..."). They are kept as
+`assets-src/plans/<slug>-modern-brick.jpg`. The first prompt, for a retake
+(Kyle approves the cost of any retake first), followed on those eight by the
+garage-door edit:
+
+> Keep this exact photograph: the same camera position, framing and lens; the
+> same house footprint, massing, roof lines, roof pitches and gables; every
+> window, door, porch, balcony and garage door in exactly the same number, size
+> and position; the same driveway, lawn, landscaping, trees, sky and warm
+> late-afternoon light. Do not add or remove any window, door, porch, dormer,
+> gable, chimney, garage door or wing.
+>
+> Change only the exterior style and materials, to a current modern brick home:
+> the first-floor front walls, any porch base and any garage front in dark
+> charcoal brick with light gray mortar (in place of the stone and the
+> first-floor siding); crisp white horizontal lap siding on the second floor and
+> in all the gables (no board and batten, no vertical siding, no shakes); white
+> trim; black window frames without grilles; no shutters; slim square white porch
+> columns in place of any wood or dark porch posts; any small roofs over the
+> porch, windows or garage doors in the same dark asphalt shingles as the main
+> roof (no metal roofs); no decorative gable trusses or brackets; a warm stained
+> wood front door; warm stained wood garage doors wherever there are garage
+> doors. Photorealistic architectural photograph.
+
+`scripts/add-elevation-pages.py` sets each rendering as the last page of its
+brochure, "Modern Brick Elevation", in the brochure template. It works from the
+page entry in `src/plans.json` (id `elevation-modern-brick`), which also names
+the rendering as the page's `image` with `crop: false`, so the site shows the
+rendering itself rather than a crop of the brochure page. The script replaces a
+page it made before, so when a brochure PDF is replaced, for instance with
+redrawn floor plans, set the entry's `page` to the new last page and run it
+again before `npm run plans`.
+
+On the plan page the rendering comes straight after the specs, ahead of the
+floor plans, with a link to it under the main photo; at the end of the drawings
+it would sit below every floor plan, where the buyer it is for has already
+left. `plans.test.js` checks both, and that every plan has one. Since a plan now
+comes in two exteriors, the line under its name and its Google description no
+longer name a style ("A two-story plan with 4+ bedrooms..."), and the models'
+`style` field was dropped from `src/plans.json`.
+
 ### Specs
 
 Specs live in `src/plans.json` and come from Leavitt's own figures. The pages
@@ -265,26 +350,27 @@ Bedrooms, baths and garage are copied from the figures printed on each
 brochure's cover ("4+ bedrooms, 2.5+ baths, 2+ car garage"). They used to be the
 price sheet's ranges, which disagreed with the brochure a visitor could download
 from the same page, so a test now reads every cover and fails if a page shows
-anything else. Square footage and price are not on the covers and still come
-from the price sheet.
+anything else. Square footage is not on the covers and still comes from the
+price sheet.
 
 `sqft` is living square footage. `sqftFrom: true` means Leavitt's sheet said
 "starting at", and the page renders "From 2,626" rather than a flat figure;
 two models are exact and have it `false`. Keep that distinction — it is the
 difference between a starting price and a promise.
 
-`price` works the same way, with `priceFrom`. The qualifier printed beside it —
+There are no prices in the data. Until October 26, 2026 each model carried its
+starting price (`price`, `priceFrom`, dated by `pricesAsOf`), and the collection
+page showed one, "Pricing starts at" the lowest of them, with the qualifier
 *"Starting price is for the home with all standard features included, and does
-not include the homesite"* — is not decoration: `build-plans.mjs` prints it
-beside every price on the site, and it has to keep travelling with them. It used
-to say "without any optional features added", after Leavitt's price sheet; the
-realtor pointed out that made the house sound bare when the Leavitt Standard
-already includes so much, so it now says what is included and links to that
-list. `pricesAsOf` dates the list and is printed with it. A test fails if any
-dollar figure on a page is not the one in the data, or if the qualifier goes
-missing.
+not include the homesite"*. Kyle took the figure off the page and then had the
+prices deleted from `src/plans.json`, because this repository is public: a
+figure kept in the data was still published to anyone reading the code. Older
+commits still hold the September 2026 figures. If a price ever goes back on a
+page, the qualifier goes with it. A test fails if a dollar figure or "starting
+price" wording appears on any plan page, or if any key in the data has "price"
+in its name.
 
-`sqftNote`, `bathsNote` and `priceNote` print a qualifying line under a figure,
+`sqftNote` and `bathsNote` print a qualifying line under a figure,
 for cases one number cannot carry honestly — The Storyteller gains 70 sq ft with
 the three-car garage, and has an optional basement full bath on top of its 4.5.
 
@@ -295,13 +381,36 @@ The "what's included in every home" list at `/plans/#included` is built from the
 searchable and readable on a phone. The printable sheet lives at
 `assets-src/leavitt-standard.pdf` and is copied to `plans/pdf/` by
 `npm run plans:images`; the section links to it. Edit the array and the PDF
-together so they do not drift.
+together so they do not drift. The PDF was made with WeasyPrint and its source
+is not in this repository, so a small wording fix is made in the PDF itself:
+"TGI" became "TJI" on October 27, 2026 by swapping one letter's glyph in its
+page content (the "J" was already in the embedded font), checked by rendering
+before and after. `plans.test.js` reads the PDF's text for that line.
 
-The three cards in the "Home plans" section of `index.html` are hand-written and
-point at three specific models. If you rename or remove one of those, update that
-section too. Their `width`/`height` attributes are not hand-maintained —
-`npm run plans:build` rewrites them from the generated images, so a changed crop
-cannot leave them stale.
+### The plan finder
+
+The "Find your plan" section of `index.html` and the card grid on `/plans/` are
+the same thing: three questions (stories, bedrooms, size) that narrow the plans
+as they are answered, with every plan as a card underneath. Both are generated
+by `npm run plans:build` — the homepage's between the `<!-- plan-finder:start -->`
+and `<!-- plan-finder:end -->` markers (and its script between
+`<!-- plan-finder-script:start -->` / `end`), so never edit between them by hand.
+Each card carries the figures it is matched on as `data-stories`, `data-beds`
+(the fewest bedrooms, so "4+" is 4) and `data-sqft`, straight from
+`src/plans.json`. All seventeen cards are in the page and the script only shows
+and hides them, so with scripts blocked the plans are still there: the homepage
+shows the six in `FEATURED` in `build-plans.mjs` and links to the rest, `/plans/`
+shows them all. The homepage shows six matches at most and its "Browse all"
+button becomes "See all N matching plans", pointing at `/plans/?stories=2&beds=4`,
+which opens already narrowed; `/plans/` keeps the answers in its address. When
+nothing fits, the finder says so and offers a custom home instead of an empty
+grid. "Start with this plan" on a card opens the contact form with the plan named
+and "Semi-Custom Home" chosen (on the homepage without a reload). Each plan page
+ends with three "Plans like this one": the same number of stories, nearest in
+size. `tests/plan-finder.test.js` checks all of this against the data.
+
+The three cards on `semi-custom-homes.html` are still hand-written; their facts
+line (`data-plan-facts`) is filled in by `npm run plans:build`.
 
 ## Business details
 
@@ -313,6 +422,13 @@ change, change them in all of those places; `markup.test.js` fails if the hours
 on any page stop matching the structured data. Saturday is by appointment,
 which the structured data has no way to say, so it lists Monday–Friday only.
 
+The three service pages repeat the name, address, phone and logo in a compact
+business node with the same `@id` as the homepage's, so Google can read each
+page on its own; `tests/seo.test.js` fails if the copy drifts. The towns listed
+under each county on the homepage's service-area band are repeated as `City`
+entries in the homepage's `areaServed`; change both together, the same test
+compares them.
+
 ## Service pages
 
 `custom-homes.html`, `semi-custom-homes.html` and `renovations.html` are
@@ -321,10 +437,38 @@ pages. The homepage service cards link to them (they used to open a pop-up).
 Each page's call to action opens the contact form with "Project Interest"
 already chosen: `/?interest=Custom%20Home%20Build#contact`. The semi-custom
 page shows three plan cards whose facts line (`data-plan-facts`) is filled in
-by `npm run plans:build`, like the homepage teaser. `tests/service-pages.test.js`
-checks the pages, the hand-off and that every link is at least 24px tall.
+by `npm run plans:build`. `tests/service-pages.test.js`
+checks the pages, the hand-off and that every link is at least 24px tall;
+`tests/tap-targets.test.js` holds every other page to the same 24px on phones,
+tablets and laptops.
+
+Each service page's head carries a BreadcrumbList (matching the visible
+breadcrumb), a Service whose provider is the business, and the compact business
+node described under Business details. Each has a "Where we build" section that
+names the towns in the five counties, and links to the other services and to
+the plans. Every footer on the site, the plan pages' included, has a Services
+row linking the three pages; the menu bar is Kyle's and does not change.
+
+## Response headers
+
+`netlify.toml` sets `X-Content-Type-Options`, `Referrer-Policy` and
+`Permissions-Policy` on every response, and a one-week `Cache-Control` on
+`/plans/img/`, `/plans/pdf/` and `/media/`. The HTML and `dist/styles.css` keep
+Netlify's default (`max-age=0, must-revalidate`), because their names never
+change and an edit has to show at once. The cached paths hold files that are
+replaced in place under the same name (a redrawn brochure, a retaken
+rendering), so the age stays short and is never `immutable`.
+`tests/seo.test.js` checks the blocks.
 
 ## Forms
+
+The contact form is in two steps since October 2026: first the project type and
+the budget range, as radio cards and chips, then name, email, phone and details.
+Both steps are in the markup inside the one `<form>` and show without script;
+the script shows one at a time and will not open step 2 until a project type and
+a budget are chosen. The field names and the Interest and Budget values are
+exactly what the old single-step form sent, so Netlify's submissions are
+unchanged. `tests/contact-steps.test.js` checks the fields and the steps.
 
 The contact form is a Netlify form. Netlify detects the fields from the
 deployed HTML, so every field it should record has to exist in `index.html` —

@@ -18,7 +18,7 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
   await page.waitForTimeout(500);
 
   ok(errors.length === 0, 'no uncaught JS errors' + (errors.length ? ': ' + errors.join(' | ') : ''));
-  ok((await page.locator('h1').innerText()).replace(/\s+/g, ' ').trim() === 'Crafting Custom Homes Across the Region.',
+  ok((await page.locator('h1').innerText()).replace(/\s+/g, ' ').trim() === 'Crafting Custom Homes Across Harford County.',
      'hero headline is on the page as plain text');
 
   // Service cards are plain links to the service pages (no pop-up any more), so

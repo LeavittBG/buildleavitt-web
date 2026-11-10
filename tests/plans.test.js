@@ -128,7 +128,7 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
       const known = v !== null && v !== undefined && v !== '';
 
       // Where the data carries a qualifier, the page has to show it.
-      const NOTE_FOR = { sqft: 'sqftNote', baths: 'bathsNote', price: 'priceNote' };
+      const NOTE_FOR = { sqft: 'sqftNote', baths: 'bathsNote' };
       const wantNote = m.specs[NOTE_FOR[key]];
       if (wantNote) ok(note === wantNote, `${m.slug}: ${dts[0]} note reads "${wantNote}" (got "${note}")`);
 
@@ -144,31 +144,49 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
     // Any number the page actually presents as a square footage - in the prose
     // blurb as well as the spec table - has to be the one Leavitt gave. Matched
     // only where the words follow it, so the phone number, the copyright year
-    // and the MHBR licence are not mistaken for floor area.
-    const stray = [...doc.body.textContent.matchAll(/([\d,]{3,})\s*(?:living\s*)?(?:square feet|sq\.?\s*ft)/gi)]
+    // and the MHBR licence are not mistaken for floor area. The "Plans like
+    // this one" cards (October 2026) name other plans' figures; they are set
+    // aside here and each is checked against its own plan just below.
+    const own = doc.body.cloneNode(true);
+    const related = [...own.querySelectorAll('section')].find(sec => /Plans like this one/.test(sec.querySelector('h2')?.textContent || ''));
+    if (related) related.remove();
+    const stray = [...own.textContent.matchAll(/([\d,]{3,})\s*(?:living\s*)?(?:square feet|sq\.?\s*ft)/gi)]
       .map(x => +x[1].replace(/,/g, ''))
       .filter(n => n !== m.specs.sqft);
     ok(stray.length === 0, `${m.slug}: every square-footage figure is ${m.specs.sqft}${stray.length ? ' (found ' + [...new Set(stray)].join(', ') + ')' : ''}`);
+    {
+      const sec = [...doc.body.querySelectorAll('section')].find(sec => /Plans like this one/.test(sec.querySelector('h2')?.textContent || ''));
+      const cards = sec ? [...sec.querySelectorAll('.plan-card')] : [];
+      const wrong = cards.filter(card => {
+        const slug = (card.querySelector('a[href^="/plans/"]')?.getAttribute('href') || '').replace(/^\/plans\/|\.html$/g, '');
+        const other = models.find(x => x.slug === slug);
+        const want = other && other.specs.sqft && `${other.specs.sqftFrom ? 'From ' : ''}${other.specs.sqft.toLocaleString('en-US')} sq ft`;
+        return !other || other === m || (want && !card.textContent.includes(want));
+      }).map(card => card.querySelector('h3')?.textContent.trim());
+      ok(cards.length === 3 && wrong.length === 0, `${m.slug}: three other plans, each with its own figure${wrong.length ? ' (wrong: ' + wrong.join(', ') + ')' : ''}`);
+    }
 
-    // Per-model prices are deliberately not published: the collection carries one
-    // anchor and the model pages carry none. A price reappearing on a model page
-    // would quietly turn the plans back into a price list.
+    // No plan page shows a price (see "no price on the plans pages" below). A
+    // price reappearing on a model page would quietly turn the plans back into
+    // a price list.
     const money = [...doc.body.textContent.matchAll(/\$([\d,]+)/g)].map(x => x[0]);
     ok(money.length === 0,
       `${m.slug}: no price on the model page${money.length ? ' (found ' + [...new Set(money)].join(', ') + ')' : ''}`);
   }
 
-  console.log('\n== one price anchor, on the collection only ==');
+  console.log('\n== no price on the plans pages ==');
   {
     const idx = new JSDOM(fs.readFileSync(path.join(ROOT, 'plans/index.html'), 'utf8')).window.document;
-    const figures = [...idx.body.textContent.matchAll(/\$([\d,]+)/g)].map(x => +x[1].replace(/,/g, ''));
-    ok(figures.length === 1, `exactly one price on the collection page (found ${figures.length})`);
-
-    // It has to be the cheapest model, or "starts at" is not true. Derived from
-    // the data so adding a cheaper model updates it automatically.
-    const lowest = Math.min(...models.map(m => m.specs?.price).filter(Boolean));
-    ok(figures[0] === lowest,
-      `the anchor is the lowest price in the data ($${lowest.toLocaleString('en-US')}, got $${(figures[0] ?? 0).toLocaleString('en-US')})`);
+    // Until October 26, 2026 the collection page carried one price, "Pricing
+    // starts at" the lowest figure in plans.json, with its qualifier underneath.
+    // Kyle took it off. A dollar figure coming back here would put prices on the
+    // site without his say, and the qualifier left behind on its own would
+    // describe a price that is no longer there.
+    const figures = [...idx.body.textContent.matchAll(/\$[\d,]+/g)].map(x => x[0]);
+    ok(figures.length === 0,
+      `no price on the collection page${figures.length ? ' (found ' + [...new Set(figures)].join(', ') + ')' : ''}`);
+    ok(!/starting price|pricing starts/i.test(idx.body.textContent),
+      'no "starting price" wording on the collection page');
 
     // The Storyteller's card used to be the only one with a photograph and a
     // "Built - photographed" label, which read as though it were the only house
@@ -182,19 +200,20 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
       ok(!!card && !/\$/.test(card.textContent), `${m.slug}: card shows no price`);
     }
 
-    // The qualifier used to say "without any optional features added", after
-    // Leavitt's price sheet. Leavitt's realtor pointed out that it made the house
-    // sound bare when the Leavitt Standard already includes so much, so it now
-    // says the standard features are included - and links to the list of them.
-    ok(/with all standard features included/i.test(idx.body.textContent),
-      'the anchor carries the "starting price" qualifier');
-    const stdLink = [...idx.querySelectorAll('a')].find((a) => /all standard features/i.test(a.textContent));
-    ok(!!stdLink && stdLink.getAttribute('href') === '#included' && !!idx.getElementById('included'),
-      'the qualifier links to the list of standard features on the same page');
-    ok(/do(es)? not include the homesite/i.test(idx.body.textContent),
-      'the anchor says the homesite is excluded');
-    const asOf = plansJson.pricesAsOf;
-    if (asOf) ok(idx.body.textContent.includes(asOf), `the anchor is dated (${asOf})`);
+    // The same day Kyle had the prices taken out of src/plans.json too. They
+    // had stayed there "as Leavitt's record", but this repository is public, so
+    // a figure kept in the data was still published to anyone reading the code.
+    const data = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plans.json'), 'utf8'));
+    const priceKeys = [];
+    const walk = (v) => {
+      if (v && typeof v === 'object') for (const [k, x] of Object.entries(v)) {
+        if (/price/i.test(k)) priceKeys.push(k);
+        walk(x);
+      }
+    };
+    walk(data);
+    ok(priceKeys.length === 0,
+      `no price in src/plans.json${priceKeys.length ? ` (found ${priceKeys.length}: ${[...new Set(priceKeys)].join(', ')})` : ''}`);
   }
 
   console.log('\n== the elevation caption is off the site ==');
@@ -228,8 +247,20 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
       ok(items.length === 16, `all 16 standard items are listed (found ${items.length})`);
       ok(/Andersen/.test(sec.textContent) && /Advantech/.test(sec.textContent),
         'brand names from the sheet survive');
+      // Leavitt installs TJI joists (Weyerhaeuser's I-joist). The list and the
+      // PDF both said "TGI" until Kyle caught it on October 27, 2026.
+      ok(/\bTJI floor joists\b/i.test(sec.textContent) && !/\bTGI\b/.test(sec.textContent),
+        'the floor joists are TJI, not TGI');
     }
     ok(fs.existsSync(path.join(ROOT, 'plans/pdf/leavitt-standard.pdf')), 'the Leavitt Standard PDF is published');
+    // The PDF is edited by hand alongside STANDARD in build-plans.mjs, so check
+    // the same correction reached it, in the source and the published copy.
+    const { spawnSync } = require('child_process');
+    for (const pdf of ['assets-src/leavitt-standard.pdf', 'plans/pdf/leavitt-standard.pdf']) {
+      const text = spawnSync('pdftotext', [path.join(ROOT, pdf), '-'], { encoding: 'utf8' });
+      if (text.error) { console.log(`  SKIP  pdftotext is not installed, so ${pdf} cannot be read`); continue; }
+      ok(/\bTJI Floor Joists\b/i.test(text.stdout) && !/\bTGI\b/.test(text.stdout), `${pdf}: the floor joists are TJI, not TGI`);
+    }
     // Every model page should point at it.
     for (const m of models) {
       const doc = new JSDOM(fs.readFileSync(path.join(ROOT, `plans/${m.slug}.html`), 'utf8')).window.document;
@@ -279,8 +310,8 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
   // Until October 2026 the plan pages showed the price sheet's ranges ("4–5
   // bedrooms, 3–6 baths") beside a downloadable brochure whose cover printed
   // "4+ bedrooms, 2.5+ baths". Leavitt chose the brochure's figures, so each
-  // page has to show exactly what its cover prints. Square footage and price
-  // are not on the covers and still come from the price sheet.
+  // page has to show exactly what its cover prints. Square footage is not on
+  // the covers and still comes from the price sheet.
   if (spawnSync('pdftotext', ['-v']).error) {
     console.log('  SKIP  pdftotext is not installed, so the brochure covers cannot be read');
   } else {
@@ -312,6 +343,35 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
     }
     ok(Object.keys(images[m.slug]).length === m.pages.length,
       `${m.slug}: ${m.pages.length} images generated`);
+  }
+
+  console.log('\n== every plan offers a second exterior ==');
+  // October 2026: every cover showed the plan as a Modern Farmhouse, and Kyle was
+  // told a buyer who does not care for farmhouse style needs to see something
+  // else. Each plan now has a Modern Brick rendering of the same house: the last
+  // page of its brochure, and on its plan page straight after the specs with a
+  // link to it under the main photo. At the end of the drawings it would sit
+  // below every floor plan, where the buyer it is for has already left.
+  for (const m of models) {
+    const brick = m.pages.find((p) => p.id === 'elevation-modern-brick');
+    ok(!!brick && fs.existsSync(path.join(ROOT, 'assets-src', brick.image || '')),
+      `${m.slug}: has a Modern Brick rendering in assets-src`);
+    if (!brick) continue;
+    ok(brick.page === Math.max(...m.pages.map((p) => p.page)), `${m.slug}: Modern Brick is the brochure's last page`);
+    const doc = new JSDOM(fs.readFileSync(path.join(ROOT, `plans/${m.slug}.html`), 'utf8')).window.document;
+    const fig = doc.getElementById('elevation-modern-brick');
+    const firstFloor = [...doc.querySelectorAll('figure h2')].find((h) => /floor/i.test(h.textContent));
+    ok(!!fig && !!firstFloor && !!(fig.compareDocumentPosition(firstFloor) & 4 /* FOLLOWING */),
+      `${m.slug}: Modern Brick shown before the floor plans`);
+    ok(!!doc.querySelector('main a[href="#elevation-modern-brick"]'), `${m.slug}: linked from under the main photo`);
+    ok(!fig || !/Dashed outlines/.test(fig.textContent), `${m.slug}: Modern Brick is not captioned as a floor plan`);
+    // With two exteriors the plan is no longer one style, so the line under its
+    // name and its Google description stopped calling it "a two-story Modern
+    // Farmhouse plan" (Kyle, October 31, 2026). The style names survive only as
+    // the pictures' alt text and the brick picture's own heading.
+    const desc = doc.querySelector('meta[name="description"]')?.getAttribute('content') || '';
+    ok(!/farmhouse/i.test(doc.body.textContent) && !/farmhouse/i.test(desc),
+      `${m.slug}: the page text and description name no single style`);
   }
 
   console.log('\n== search results and link previews ==');

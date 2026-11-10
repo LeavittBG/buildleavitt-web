@@ -32,42 +32,15 @@ const GTM = 'GTM-PHGFM247';
 
 const plansData = JSON.parse(readFileSync(join(ROOT, 'src', 'plans.json'), 'utf8'));
 const { models } = plansData;
-const PRICES_AS_OF = plansData.pricesAsOf || '';
 
-/** A starting price, or null where Leavitt has not given one. */
-const money = (n) => '$' + n.toLocaleString('en-US');
-
-/**
- * The lowest starting price across the models, for the one figure the site shows.
- *
- * Per-model prices are deliberately NOT published. Leavitt's reasoning: the
- * business is fully custom, and a menu of prices beside each plan reads like a
- * production builder's price list rather than a starting point. One anchor at
- * the top of the collection still does the useful half of the job - it tells
- * someone whether they are in the right place before they fill in a form.
- *
- * Derived rather than typed, so it stays true to the data. `price` stays in
- * plans.json as Leavitt's own record and as the source of this number.
+/*
+ * No price is shown on the plan pages, and plans.json holds none. Until
+ * October 26, 2026 the collection page carried one, "Pricing starts at" the
+ * lowest figure in plans.json, with its qualifier (the standard features
+ * included, the homesite not); the model pages and cards carried none. Kyle
+ * took it off, and the same day had the per-model prices taken out of
+ * plans.json, because this repository is public.
  */
-const fromPrice = Math.min(...models.map((m) => m.specs?.price).filter(Boolean));
-
-/**
- * The qualifiers that have to travel with that figure.
- *
- * This used to say the price was "for the home without any optional features
- * added", after Leavitt's price sheet ("starting at means without additional
- * options"). Leavitt's realtor pointed out that it made the house sound bare,
- * when the Leavitt Standard already includes what other builders sell as
- * upgrades; it now says the standard features are included, and links to the
- * list of them further down this page. The homesite exclusion matters more
- * still - it is the first thing a buyer assumes either way, and assuming wrong
- * is the difference between this figure and the real cost of a house.
- */
-const priceNote = (extra = '') =>
-  `Starting price is for the home with ` +
-  `<a href="#included" class="text-[#866f4f] font-medium hover:underline">all standard features</a> ` +
-  `included, and does not include the homesite` +
-  (PRICES_AS_OF ? `. Current as of ${PRICES_AS_OF}` : '') + `.${extra}`;
 const images = JSON.parse(readFileSync(join(ROOT, 'src', 'plan-images.json'), 'utf8'));
 
 const esc = (s) => String(s)
@@ -103,7 +76,7 @@ const STANDARD = [
     ['Finished &amp; painted garage', 'insulated walls and service door'],
     ['Customer-owned propane tank', 'topped off at move-in'],
     ['75&rsquo; &times; 10&rsquo; asphalt drive', 'includes 30&rsquo; &times; 30&rsquo; parking pad and 10&rsquo; &times; 10&rsquo; turnaround'],
-    ['Structural integrity', 'TGI floor joists and Advantech&reg; subflooring, glued and screwed'],
+    ['Structural integrity', 'TJI floor joists and Advantech&reg; subflooring, glued and screwed'],
   ]],
 ];
 
@@ -131,7 +104,7 @@ ${items.map(([title, detail]) => `                            <li class="flex ga
                 </div>
 
                 <p class="mt-12 text-sm text-gray-500">
-                    <a href="/plans/pdf/leavitt-standard.pdf" target="_blank" rel="noopener" class="text-[#866f4f] font-medium hover:underline">Download the Leavitt Standard (PDF)</a>
+                    <a href="/plans/pdf/leavitt-standard.pdf" target="_blank" rel="noopener" class="py-2 text-[#866f4f] font-medium hover:underline">Download the Leavitt Standard (PDF)</a>
                     &mdash; handy for comparing against another builder&rsquo;s quote.
                 </p>
             </div>
@@ -154,14 +127,20 @@ const SPECS = [
 ];
 
 /** Specs whose value can carry a qualifying line underneath it. */
-const NOTE_FOR = { sqft: 'sqftNote', baths: 'bathsNote', price: 'priceNote' };
+const NOTE_FOR = { sqft: 'sqftNote', baths: 'bathsNote' };
 
 /*
  * image: { url, width, height, alt } - the picture a link preview shows when a
  * page is shared on Facebook, in a text message or anywhere else that reads
  * Open Graph tags. JPEG or PNG, not WebP, which some of those still ignore.
  */
-const head = ({ title, description, canonical, image }) => `<!DOCTYPE html>
+/*
+ * One <script type="application/ld+json"> per object, for the head. "<" is
+ * written as \u003c so nothing in the data can close the script element.
+ */
+const ld = (o) => `\n    <script type="application/ld+json">${JSON.stringify(o).replace(/</g, '\\u003c')}</script>`;
+
+const head = ({ title, description, canonical, image, jsonLd = [] }) => `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -202,7 +181,7 @@ const head = ({ title, description, canonical, image }) => `<!DOCTYPE html>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">${jsonLd.map(ld).join('')}
 </head>
 <body class="bg-[#fcfcfc] text-gray-900 font-sans">
     <!-- Google Tag Manager (noscript) -->
@@ -218,12 +197,27 @@ const head = ({ title, description, canonical, image }) => `<!DOCTYPE html>
             <nav aria-label="Main" class="flex items-center gap-6 md:gap-8 text-xs md:text-sm uppercase tracking-widest font-semibold">
                 <a href="/plans/" class="inline-block py-2 text-gray-300 hover:text-white transition-colors">Plans</a>
                 <a href="/#contact" class="bg-[#c2a67a] text-[#0f172a] px-5 py-3 hover:bg-white transition-colors">Get a Quote</a>
-                <a href="https://connect.buildleavitt.com" target="_blank" rel="noopener noreferrer" class="hidden md:flex items-center gap-2 py-2 border-l border-white/20 pl-6 md:pl-8 text-xs text-[#c2a67a] hover:text-white transition-colors whitespace-nowrap">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-4 h-4"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                    Client Login
-                </a>
+                <!-- The phone number, and under it Client Login, after a fine rule: the
+                     same pair, in the same place, as the homepage's menu bar. -->
+                <div class="hidden md:flex flex-col items-start border-l border-white/20 pl-6 md:pl-8">
+                    <a href="tel:+14436139750" class="flex items-center gap-2 py-1 text-xs xl:text-sm text-white hover:text-[#c2a67a] transition-colors whitespace-nowrap">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-4 h-4"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                        (443) 613-9750
+                    </a>
+                    <a href="https://connect.buildleavitt.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 py-1 text-xs text-[#c2a67a] hover:text-white transition-colors whitespace-nowrap">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-4 h-4"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        Client Login
+                    </a>
+                </div>
             </nav>
         </div>
+        <!-- On phones the bar has no room for the number, so it has a line of its own
+             under the bar, edge to edge (the negative margins cancel the header's
+             padding): one tap to call, at the top of the page (November 2026). -->
+        <a href="tel:+14436139750" class="md:hidden -mx-6 -mb-6 mt-6 flex items-center justify-center gap-2 border-t border-white/10 py-3 text-xs uppercase tracking-widest font-semibold text-white hover:text-[#c2a67a] transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-4 h-4 text-[#c2a67a]"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            Call (443) 613-9750
+        </a>
     </header>
 `;
 
@@ -231,17 +225,28 @@ const foot = () => `
     <footer class="bg-[#0f172a] text-gray-400 py-10 px-6">
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
             <p class="text-sm">&copy; <span id="year">2026</span> Leavitt Building Group. All Rights Reserved.</p>
-            <div class="flex gap-6 text-sm uppercase tracking-wider font-semibold">
-                <a href="/" class="hover:text-white transition-colors">Home</a>
-                <a href="/plans/" class="hover:text-white transition-colors">Plans</a>
-                <a href="/privacy.html" class="hover:text-white transition-colors">Privacy</a>
-                <a href="/terms.html" class="hover:text-white transition-colors">Terms</a>
-                <a href="https://connect.buildleavitt.com" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">Client Login</a>
-            </div>
+            <!-- The menu bar stays as Kyle set it, so the footer links the three service
+                 pages on every page (tests/seo.test.js); the hand-written pages carry the
+                 same two rows. -->
+            <nav aria-label="Footer" class="flex flex-col items-center md:items-end gap-y-1 text-sm uppercase tracking-wider font-semibold">
+                <div class="flex flex-wrap items-baseline justify-center md:justify-end gap-x-6">
+                    <span class="text-[11px] tracking-[0.2em] text-[#c2a67a]">Services</span>
+                    <a href="/custom-homes.html" class="inline-block py-2 hover:text-white transition-colors">Custom Homes</a>
+                    <a href="/semi-custom-homes.html" class="inline-block py-2 hover:text-white transition-colors">Semi-Custom Homes</a>
+                    <a href="/renovations.html" class="inline-block py-2 hover:text-white transition-colors">Renovations</a>
+                </div>
+                <div class="flex flex-wrap justify-center md:justify-end gap-x-6">
+                    <a href="/" class="inline-block py-2 hover:text-white transition-colors">Home</a>
+                    <a href="/plans/" class="inline-block py-2 hover:text-white transition-colors">Plans</a>
+                    <a href="/privacy.html" class="inline-block py-2 hover:text-white transition-colors">Privacy</a>
+                    <a href="/terms.html" class="inline-block py-2 hover:text-white transition-colors">Terms</a>
+                    <a href="https://connect.buildleavitt.com" target="_blank" rel="noopener noreferrer" class="inline-block py-2 hover:text-white transition-colors">Client Login</a>
+                </div>
+            </nav>
         </div>
-        <address class="max-w-6xl mx-auto mt-6 not-italic text-sm text-center md:text-left"><span class="whitespace-nowrap">217 E. Jarrettsville Rd., Suite 3,</span> <span class="whitespace-nowrap">Forest Hill, MD 21050</span><span class="mx-2" aria-hidden="true">&middot;</span><a href="tel:+18668326524" class="whitespace-nowrap hover:text-white transition-colors">(866) 832-6524</a></address>
+        <address class="max-w-6xl mx-auto mt-6 not-italic text-sm text-center md:text-left"><span class="whitespace-nowrap">217 E. Jarrettsville Rd., Suite 3,</span> <span class="whitespace-nowrap">Forest Hill, MD 21050</span><span class="mx-2" aria-hidden="true">&middot;</span><a href="tel:+14436139750" class="inline-block py-1 whitespace-nowrap hover:text-white transition-colors">(443) 613-9750</a></address>
         <p class="max-w-6xl mx-auto mt-1 text-sm text-center md:text-left"><span class="block sm:inline">Monday&ndash;Friday 8&nbsp;a.m.&ndash;5&nbsp;p.m.</span><span class="hidden sm:inline mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span><wbr><span class="whitespace-nowrap">Saturday by appointment<span class="mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>Closed Sunday</span></p>
-        <p class="max-w-6xl mx-auto mt-2 text-xs text-gray-500 tracking-wider text-center md:text-left">MHBR 9796 | MHIC 161316 | PAHIC 212160</p>
+        <p class="max-w-6xl mx-auto mt-2 text-xs text-gray-400 tracking-wider text-center md:text-left">MHBR 9796 | MHIC 161316 | PAHIC 212160</p>
     </footer>
 
     <script>
@@ -254,11 +259,14 @@ const foot = () => `
 /**
  * <picture> with the WebP first and the PNG as the fallback, carrying the real
  * pixel size so the browser reserves the space before the image loads.
+ * `base` is "/" on the plan pages, which live a directory down, and "" on the
+ * homepage, whose paths are relative (several tests open index.html straight
+ * from disk, where "/plans/img/..." would resolve to the root of the machine).
  */
-const picture = (img, { alt, cls, lazy = true }) => {
+const picture = (img, { alt, cls, lazy = true, base = '/' }) => {
   const a = lazy ? ' loading="lazy" decoding="async"' : ' decoding="async"';
-  return `<picture class="contents"><source srcset="/plans/img/${img.file}.webp" type="image/webp">` +
-    `<img src="/plans/img/${img.file}.${img.ext || 'png'}" alt="${esc(alt)}" width="${img.width}" height="${img.height}"${a} class="${cls}"></picture>`;
+  return `<picture class="contents"><source srcset="${base}plans/img/${img.file}.webp" type="image/webp">` +
+    `<img src="${base}plans/img/${img.file}.${img.ext || 'png'}" alt="${esc(alt)}" width="${img.width}" height="${img.height}"${a} class="${cls}"></picture>`;
 };
 
 /** Every sheet this model has, in the order they are shown. */
@@ -271,7 +279,22 @@ const sheets = (model) => model.pages.map((p) => ({ ...p, img: images[model.slug
  * their own ("First Floor Options"), shown on the plan page as printed; the
  * card's "3 floor plans" counts only the floors themselves.
  */
-const isFloor = (s) => s.id !== 'elevation' && !/options|elevations/i.test(s.label);
+const isFloor = (s) => !s.id.startsWith('elevation') && !/options|elevations/i.test(s.label);
+
+/**
+ * The same plan with another exterior: a photo rendering made from the cover's,
+ * with the house kept and only the finishes changed (Modern Brick, October
+ * 2026). Its page id starts with "elevation-"; it is the last page of the
+ * brochure, but on the plan page it comes straight after the specs, ahead of
+ * the floor plans, so someone who does not care for the farmhouse cover sees it
+ * before deciding the plan is not for them.
+ */
+const isExterior = (s) => s.id.startsWith('elevation-');
+/* What each alternate exterior is, in one line under its heading and in its alt
+   text. Keep it to what the rendering shows; the brochure page says the same. */
+const EXTERIOR_NOTES = {
+  'elevation-modern-brick': 'charcoal brick and white lap siding, with black windows and a stained wood front door',
+};
 const floorsOf = (model) => sheets(model).filter(isFloor);
 
 /**
@@ -298,13 +321,14 @@ const blurb = (model) => {
   const s = model.specs || {};
   const beds = s.beds ? `${String(s.beds).replace('-', '–')} bedrooms` : '';
   const shape = s.stories === 1 ? 'single-story' : 'two-story';
-  const style = model.style ? `${model.style} ` : '';
   const sqft = s.sqft
     ? `${s.sqftFrom ? 'from ' : ''}${s.sqft.toLocaleString('en-US')} living square feet`
     : '';
   const garage = s.garage ? `a ${s.garage} garage` : '';
 
-  const head = [`A ${shape} ${style}plan`, beds && `with ${beds}`].filter(Boolean).join(' ');
+  // No style word: since October 31, 2026 every plan is shown in two exteriors
+  // (Modern Farmhouse and Modern Brick), so it is not one style's plan.
+  const head = [`A ${shape} plan`, beds && `with ${beds}`].filter(Boolean).join(' ');
   const tail = [sqft, garage].filter(Boolean).join(' and ');
   return tail ? `${head}, ${tail}.` : `${head}.`;
 };
@@ -322,12 +346,14 @@ const snippet = (model) => {
   const s = model.specs || {};
   const dash = (v) => String(v).replace('-', '–');
   const facts = [
-    [s.stories === 1 ? 'single-story' : s.stories === 2 ? 'two-story' : '', model.style].filter(Boolean).join(' '),
+    s.stories === 1 ? 'single-story' : s.stories === 2 ? 'two-story' : '',
     s.beds && `${dash(s.beds)} bedrooms`,
     s.baths && `${dash(s.baths)} baths`,
     s.sqft && `${s.sqftFrom ? 'from ' : ''}${s.sqft.toLocaleString('en-US')} sq ft`,
   ].filter(Boolean).join(', ');
-  const what = coverOf(model)?.id === 'elevation' ? 'Floor plans and elevation' : 'Floor plans';
+  const exteriors = sheets(model).filter((x) => x.id === 'elevation' || isExterior(x)).length;
+  const what = exteriors > 1 ? 'Floor plans and elevations'
+    : exteriors ? 'Floor plans and elevation' : 'Floor plans';
   return `${model.name} home plan${facts ? `: ${facts}` : ''}. ${what} by Leavitt Building Group.`;
 };
 
@@ -344,12 +370,276 @@ const shareImage = (model) => {
   };
 };
 
+/**
+ * The facts a visitor compares plans by, on the card itself, so choosing one
+ * does not mean opening all seventeen. The same figures the plan page prints
+ * ("4+", "2.5+", "From 4,282"), so the tests that hold every figure to the data
+ * apply here too. No price (see the note at the top).
+ */
+const cardFacts = (model) => {
+  const s = model.specs || {};
+  const dash = (v) => String(v).replace('-', '&ndash;');
+  const facts = [
+    s.beds && `${dash(s.beds)} bed`,
+    s.baths && `${dash(s.baths)} bath`,
+    s.sqft && `${s.sqftFrom ? 'From ' : ''}${s.sqft.toLocaleString('en-US')} sq ft`,
+    s.stories && (s.stories === 1 ? 'Ranch' : `${s.stories} stories`),
+  ].filter(Boolean);
+  // Each fact is kept on one line with its separator, and the line may only
+  // break between facts: "2 / stories" split across lines once, and with no
+  // break anywhere the whole line ran out of its card on a phone.
+  return facts.map((f, i) => `<span class="whitespace-nowrap">${f}${i < facts.length - 1
+    ? ' <span class="text-gray-300 mx-1" aria-hidden="true">&middot;</span><span class="sr-only">, </span>' : ''}</span>`).join(' ');
+};
+
+/**
+ * Where "Start with this plan" goes: the homepage form, with the plan named
+ * and "Semi-Custom Home" chosen as the project type, since starting from one
+ * of these plans is the semi-custom path. The visitor can change either.
+ */
+const startHref = (model) => `/?plan=${encodeURIComponent(model.name)}&interest=Semi-Custom%20Home#contact`;
+
+/*
+ * Structured data for the generated pages. A BreadcrumbList repeats the visible
+ * breadcrumb item for item (tests/seo.test.js compares them); the ItemList on
+ * /plans/ names every plan page in order. Both go in the head through head().
+ */
+const breadcrumbs = (items) => ({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: items.map(([name, url], i) => ({ '@type': 'ListItem', position: i + 1, name, item: `${SITE}${url}` })),
+});
+const planList = () => ({
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Home plans by Leavitt Building Group',
+  numberOfItems: models.length,
+  itemListOrder: 'https://schema.org/ItemListOrderAscending',
+  itemListElement: models.map((m, i) => ({ '@type': 'ListItem', position: i + 1, name: m.name, url: `${SITE}/plans/${m.slug}.html` })),
+});
+
+// ------------------------------------------------------------- plan finder
+/*
+ * The plan finder: three questions (stories, bedrooms, size) that narrow the
+ * plans as they are answered, on the homepage and at the top of /plans/. It
+ * exists because seventeen plans is too many to compare by opening each one,
+ * and because a visitor who has narrowed to two or three plans is a visitor
+ * with a next step: "Start with this plan" hands the choice to the contact
+ * form.
+ *
+ * Everything the finder matches on comes from src/plans.json, carried on each
+ * card as data attributes, so a figure can never differ from the plan's own
+ * page. The cards are all in the HTML; the script only shows and hides them,
+ * so with scripts blocked every plan is still there (the homepage shows its
+ * featured six and links to the rest). The script itself is written once here
+ * and placed on both pages.
+ */
+
+/* The six plans the homepage shows before a question is answered, in order.
+   The Pioneer I leads because it is the house in the hero photograph; the rest
+   spread across sizes and include the ranch. */
+const FEATURED = ['the-pioneer-i', 'the-visionary', 'the-storyteller', 'the-entrepreneur', 'the-craftsman', 'the-romantic'];
+
+/* The "bedrooms" figure on a cover is a floor ("4+") or an exact count ("3");
+   either way its first number is the fewest bedrooms the plan has. */
+const minBeds = (beds) => parseInt(String(beds), 10) || 0;
+
+/* Size bands for the third question. The bands are on the starting figure,
+   the only one Leavitt gives. */
+const SIZE_BANDS = [
+  ['under-3000', 'Under 3,000'],
+  ['3000-4000', '3,000 to 4,000'],
+  ['over-4000', 'Over 4,000'],
+];
+
+const FINDER_QUESTIONS = [
+  ['stories', 'How many stories?', [['', 'Either'], ['1', 'One story'], ['2', 'Two stories']]],
+  ['beds', 'Bedrooms', [['', 'Any'], ['3', '3 or more'], ['4', '4 or more']]],
+  ['size', 'Living space, sq ft', [['', 'Any'], ...SIZE_BANDS]],
+];
+
+/**
+ * One plan as a card: the rendering edge to edge, the name, the facts line,
+ * and two ways on - the plan's page, or the contact form with the plan named.
+ */
+const planCard = (model, { featured = false, finder = true, base = '/' } = {}) => {
+  const s = model.specs || {};
+  const cover = coverOf(model);
+  const facts = cardFacts(model);
+  const data = finder
+    ? ` data-plan="${model.slug}" data-stories="${s.stories ?? ''}" data-beds="${minBeds(s.beds)}" data-sqft="${s.sqft ?? ''}"${featured ? ' data-featured' : ''}`
+    : '';
+  return `
+                <div class="plan-card group bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors flex flex-col${finder && !featured ? ' hidden' : ''}"${data}>
+                    <a href="/plans/${model.slug}.html" class="block">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-gray-100">
+                            ${cover ? picture(cover.img, {
+                              alt: coverAlt(model, cover),
+                              cls: 'w-full h-full object-cover',
+                              base,
+                            }) : '<span class="block p-6 text-gray-400 text-sm">Drawings coming soon</span>'}
+                        </div>
+                        <div class="px-6 pt-5">
+                            <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">${esc(model.name)}</h3>
+                            ${facts ? `<p class="text-sm text-[#0f172a] mt-2">${facts}</p>` : ''}
+                        </div>
+                    </a>
+                    <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+                        <a href="/plans/${model.slug}.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="${startHref(model)}" data-start-plan="${esc(model.name)}" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
+                    </div>
+                </div>`;
+};
+
+/**
+ * The finder itself: the questions, the status line, the cards and the empty
+ * state. `cap` is how many matches the page shows before pointing at /plans/;
+ * the homepage shows six, /plans/ shows them all.
+ */
+const finderHtml = ({ cap, base = '/' } = {}) => {
+  const capped = Number.isFinite(cap);
+  const questions = FINDER_QUESTIONS.map(([key, legend, options]) => `
+                <fieldset>
+                    <legend class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-3">${legend}</legend>
+                    <div class="flex flex-wrap gap-2">
+${options.map(([value, label], i) => `                        <label class="cursor-pointer">
+                            <input type="radio" name="finder-${key}" value="${value}" class="sr-only peer"${i === 0 ? ' checked' : ''}>
+                            <span class="inline-block border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">${label}</span>
+                        </label>`).join('\n')}
+                    </div>
+                </fieldset>`).join('\n');
+
+  const cards = models.map((m) => planCard(m, { featured: !capped || FEATURED.includes(m.slug), base }));
+  const ordered = capped
+    ? [...FEATURED.map((slug) => models.findIndex((m) => m.slug === slug)), ...models.map((_, i) => i).filter((i) => !FEATURED.includes(models[i].slug))]
+        .map((i) => cards[i])
+    : cards;
+
+  return `
+        <div id="plan-finder"${capped ? ` data-cap="${cap}"` : ''}>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+${questions}
+            </div>
+
+            <p class="text-sm text-gray-600 mb-6" data-finder-status aria-live="polite">${capped
+              ? `Six of our ${models.length} plans, to start. Answer a question or two above and the list narrows.`
+              : `All ${models.length} plans. Answer a question or two above and the list narrows.`}</p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+${ordered.join('\n')}
+            </div>
+
+            <div class="hidden border border-gray-200 bg-white p-8 md:p-10" data-finder-empty>
+                <p class="text-xl font-serif text-[#0f172a] mb-3">Nothing on the shelf fits all three.</p>
+                <p class="text-gray-600 max-w-xl mb-6">That is not the end of it: every plan here is adjusted to the way you want to live, and we draw from scratch too. Loosen one answer, or tell us what you have in mind.</p>
+                <a href="/?interest=Custom%20Home%20Build#contact" class="inline-flex items-center gap-2 bg-[#0f172a] text-white px-8 py-4 uppercase tracking-[0.2em] font-bold text-xs hover:bg-[#c2a67a] hover:text-[#0f172a] transition-colors">Start a custom home</a>
+            </div>
+${capped ? `
+            <div class="text-center mt-12">
+                <a href="/plans/" data-finder-more class="inline-flex items-center gap-2 bg-[#0f172a] text-white px-8 py-4 uppercase tracking-[0.2em] font-bold text-xs hover:bg-[#c2a67a] hover:text-[#0f172a] transition-colors">
+                    Browse all ${models.length} plans
+                </a>
+            </div>` : ''}
+        </div>`;
+};
+
+/*
+ * The finder's script. No framework, no fetch: the cards are already on the
+ * page, so this reads the three answers and shows the cards that fit. On
+ * /plans/ the answers are also kept in the address (?stories=1&beds=4), so a
+ * narrowed list can be shared or arrived at from the homepage's "See all"
+ * link; on the homepage the address is left alone, because ?plan= belongs to
+ * the contact form there.
+ */
+const finderScript = () => `
+    <script>
+    (() => {
+        const root = document.getElementById('plan-finder');
+        if (!root) return;
+        const cap = Number(root.getAttribute('data-cap')) || Infinity;
+        const cards = [...root.querySelectorAll('[data-plan]')];
+        const total = cards.length;
+        const radios = [...root.querySelectorAll('input[type="radio"]')];
+        const status = root.querySelector('[data-finder-status]');
+        const empty = root.querySelector('[data-finder-empty]');
+        const more = root.querySelector('[data-finder-more]');
+        const KEYS = ['stories', 'beds', 'size'];
+        const idle = status ? status.textContent : '';
+        const band = (sqft) => (sqft < 3000 ? 'under-3000' : sqft <= 4000 ? '3000-4000' : 'over-4000');
+        const read = () => Object.fromEntries(KEYS.map((k) => {
+            const r = radios.find((x) => x.name === 'finder-' + k && x.checked);
+            return [k, r ? r.value : ''];
+        }));
+        const fits = (card, f) =>
+            (!f.stories || card.getAttribute('data-stories') === f.stories) &&
+            (!f.beds || Number(card.getAttribute('data-beds')) >= Number(f.beds)) &&
+            (!f.size || band(Number(card.getAttribute('data-sqft'))) === f.size);
+        const plural = (n, word) => n + ' ' + word + (n === 1 ? '' : 's');
+        const apply = () => {
+            const f = read();
+            const narrowed = KEYS.some((k) => f[k]);
+            let shown = 0, matched = 0;
+            for (const card of cards) {
+                const m = fits(card, f);
+                if (m) matched++;
+                const show = m && (narrowed ? shown < cap : (cap === Infinity || card.hasAttribute('data-featured')));
+                if (show) shown++;
+                card.classList.toggle('hidden', !show);
+            }
+            const q = new URLSearchParams();
+            KEYS.forEach((k) => { if (f[k]) q.set(k, f[k]); });
+            const qs = q.toString() ? '?' + q.toString() : '';
+            if (status) {
+                status.textContent = !narrowed ? idle
+                    : matched === 0 ? 'No plan matches all three answers.'
+                    : matched === shown ? plural(matched, 'plan') + (matched === 1 ? ' matches.' : ' match.')
+                    : 'Showing ' + shown + ' of the ' + plural(matched, 'plan') + ' that match.';
+            }
+            if (empty) empty.classList.toggle('hidden', !narrowed || matched > 0);
+            if (more) {
+                more.href = '/plans/' + qs;
+                more.textContent = narrowed && matched > shown ? 'See all ' + matched + ' matching plans' : 'Browse all ' + total + ' plans';
+            }
+            if (cap === Infinity && history.replaceState) history.replaceState(null, '', location.pathname + qs + location.hash);
+        };
+        let preset = false;
+        try {
+            const params = new URLSearchParams(location.search);
+            for (const k of KEYS) {
+                const v = params.get(k);
+                const r = v && radios.find((x) => x.name === 'finder-' + k && x.value === v);
+                if (r) { r.checked = true; preset = true; }
+            }
+        } catch (e) { /* malformed query string: start from "any" */ }
+        radios.forEach((r) => r.addEventListener('change', apply));
+        if (preset) apply();
+    })();
+    </script>`;
+
+/**
+ * Three plans like this one: the same number of stories where possible, then
+ * the nearest in size. For the plan page, so a visitor who is close but not
+ * sold has somewhere to go besides the alphabetical neighbours.
+ */
+const similarTo = (model) => {
+  const s = model.specs || {};
+  return models
+    .filter((m) => m !== model)
+    .map((m) => ({ m, d: Math.abs((m.specs?.sqft || 0) - (s.sqft || 0)) + (m.specs?.stories === s.stories ? 0 : 100000) }))
+    .sort((a, b) => a.d - b.d)
+    .slice(0, 3)
+    .map((x) => x.m);
+};
+
 // ---------------------------------------------------------------- model pages
 
 for (const [i, model] of models.entries()) {
   const all = sheets(model);
-  const elevation = all.find((s) => s.id === 'elevation');
+  const s = model.specs || {};
+  const elevation = all.find((x) => x.id === 'elevation');
   const rest = all.filter((s) => s !== elevation);
+  const exteriors = rest.filter(isExterior);
+  const drawings = rest.filter((s) => !isExterior(s));
   const prev = models[(i - 1 + models.length) % models.length];
   const next = models[(i + 1) % models.length];
   // A model built from images has no brochure to download, so it offers none.
@@ -367,7 +657,28 @@ for (const [i, model] of models.entries()) {
                     </div>`;
   }).join('\n');
 
-  const sheetBlocks = rest.map((s) => `
+  // A rendering, not a sheet: shown edge to edge like the cover photo, with a
+  // line saying what it is instead of the note about dashed outlines.
+  for (const x of exteriors) {
+    if (!EXTERIOR_NOTES[x.id]) throw new Error(`${model.slug}: no EXTERIOR_NOTES entry for ${x.id}`);
+  }
+  const exteriorBlocks = exteriors.map((s) => `
+            <figure id="${s.id}" class="mb-16 scroll-mt-24">
+                <h2 class="text-2xl md:text-3xl font-serif text-[#0f172a] mb-2">${esc(s.label)}</h2>
+                <p class="text-gray-600 mb-6">The same floor plan, finished in ${esc(EXTERIOR_NOTES[s.id])}.</p>
+                ${picture(s.img, {
+                  alt: `${model.name} ${s.label.toLowerCase()} - the same house finished in ${EXTERIOR_NOTES[s.id]}`,
+                  cls: 'w-full h-auto bg-white border border-gray-200',
+                })}
+                <figcaption class="mt-3 text-sm text-gray-500 flex flex-wrap items-baseline justify-end gap-x-6 gap-y-1">
+                    <a href="/plans/img/${s.img.file}.${s.img.ext || 'png'}" target="_blank" rel="noopener"
+                       class="text-[#866f4f] font-medium hover:underline whitespace-nowrap py-1">
+                        Open full size<span class="sr-only"> image of the ${esc(model.name)} ${esc(s.label.toLowerCase())}</span>
+                    </a>
+                </figcaption>
+            </figure>`).join('\n');
+
+  const sheetBlocks = drawings.map((s) => `
             <figure class="mb-16">
                 <h2 class="text-2xl md:text-3xl font-serif text-[#0f172a] mb-6">${esc(s.label)}</h2>
                 ${picture(s.img, {
@@ -382,34 +693,25 @@ for (const [i, model] of models.entries()) {
                          unreadable. Opening the image itself is the zero-JavaScript way to
                          let someone pinch and zoom it. -->
                     <a href="/plans/img/${s.img.file}.${s.img.ext || 'png'}" target="_blank" rel="noopener"
-                       class="text-[#866f4f] font-medium hover:underline whitespace-nowrap">
+                       class="text-[#866f4f] font-medium hover:underline whitespace-nowrap py-1">
                         Open full size<span class="sr-only"> image of the ${esc(model.name)} ${esc(s.label.toLowerCase())}</span>
                     </a>
                 </figcaption>
             </figure>`).join('\n');
-
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
-      { '@type': 'ListItem', position: 2, name: 'Home Plans', item: `${SITE}/plans/` },
-      { '@type': 'ListItem', position: 3, name: model.name, item: `${SITE}/plans/${model.slug}.html` },
-    ],
-  };
 
   const html = head({
     title: `${model.name} | Home Plans | Leavitt Building Group`,
     description,
     canonical: `/plans/${model.slug}.html`,
     image: shareImage(model),
+    jsonLd: [breadcrumbs([['Home', '/'], ['Home Plans', '/plans/'], [model.name, `/plans/${model.slug}.html`]])],
   }) + `
     <main class="max-w-6xl mx-auto px-6 py-14 md:py-20">
 
         <nav aria-label="Breadcrumb" class="mb-10 text-sm text-gray-500">
-            <a href="/" class="hover:text-[#866f4f]">Home</a>
+            <a href="/" class="inline-block py-1 hover:text-[#866f4f]">Home</a>
             <span class="mx-2" aria-hidden="true">/</span>
-            <a href="/plans/" class="hover:text-[#866f4f]">Home Plans</a>
+            <a href="/plans/" class="inline-block py-1 hover:text-[#866f4f]">Home Plans</a>
             <span class="mx-2" aria-hidden="true">/</span>
             <span class="text-[#0f172a]">${esc(model.name)}</span>
         </nav>
@@ -427,7 +729,11 @@ for (const [i, model] of models.entries()) {
               alt: `${model.name} front elevation - ${elevation.label}`,
               cls: 'w-full h-auto bg-white border border-gray-200',
               lazy: false,
-            })}
+            })}${exteriors.length ? `
+            <p class="mt-3 text-sm text-gray-600">
+                See this plan with a
+                ${exteriors.map((x) => `<a href="#${x.id}" class="py-2 text-[#866f4f] font-medium hover:underline">${esc(x.label.replace(/ elevation$/i, '').toLowerCase())} exterior</a>`).join(' or ')}.
+            </p>` : ''}
         </div>` : ''}
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-16 mb-20">
@@ -445,7 +751,7 @@ ${specRows}
 
             <aside class="bg-white border border-gray-200 p-8 h-fit">
                 <h2 class="text-xl font-serif text-[#0f172a] mb-4">Interested in this plan?</h2>
-                <a href="/?plan=${encodeURIComponent(model.name)}#contact"
+                <a href="${startHref(model)}"
                    class="block w-full text-center bg-[#0f172a] text-white px-6 py-4 uppercase tracking-[0.2em] font-bold text-xs hover:bg-[#c2a67a] hover:text-[#0f172a] transition-colors mb-4">
                     Start with this plan
                 </a>
@@ -456,25 +762,39 @@ ${specRows}
                 <p class="text-xs text-gray-500 mt-4">Opens the full brochure for ${esc(model.name)} in a new tab.</p>` : ''}
                 <p class="text-sm text-gray-600 mt-6 pt-6 border-t border-gray-200">
                     Every Leavitt home includes
-                    <a href="/plans/#included" class="text-[#866f4f] font-medium hover:underline">the Leavitt Standard</a>
+                    <a href="/plans/#included" class="py-2 text-[#866f4f] font-medium hover:underline">the Leavitt Standard</a>
                     &mdash; quartz, Andersen&reg; windows, 9&rsquo; ceilings and more, at no upgrade cost.
                 </p>
                 <p class="text-sm text-gray-600 mt-4">
+                    Building from one of our plans is our
+                    <a href="/semi-custom-homes.html" class="inline-block py-1 text-[#866f4f] font-medium hover:underline">semi-custom home</a>
+                    process: the plan adapted to your lot, about 6 to 8 months to complete.
+                </p>
+                <p class="text-sm text-gray-600 mt-4">
                     Prefer to talk it through?
-                    <a href="tel:+18668326524" class="text-[#866f4f] font-medium hover:underline">(866) 832-6524</a>
+                    <a href="tel:+14436139750" class="inline-block py-1 text-[#866f4f] font-medium hover:underline">(443) 613-9750</a>
                 </p>
             </aside>
         </div>
 
+${exteriorBlocks}
         <h2 class="sr-only">Drawings</h2>
 ${sheetBlocks}
+
+        <section class="border-t border-gray-200 pt-12 mb-16">
+            <h2 class="text-2xl md:text-3xl font-serif text-[#0f172a] mb-2">Plans like this one</h2>
+            <p class="text-gray-600 mb-8">${s.stories === 1 ? 'Other plans' : 'Other two-story plans'} close in size to ${esc(model.name)}.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+${similarTo(model).map((m) => planCard(m, { finder: false })).join('\n')}
+            </div>
+        </section>
 
         <nav aria-label="Other plans" class="border-t border-gray-200 pt-10 flex flex-col sm:flex-row justify-between gap-6 text-sm">
             <a href="/plans/${prev.slug}.html" class="group">
                 <span class="block text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-1">Previous plan</span>
                 <span class="text-lg text-[#0f172a] group-hover:text-[#866f4f] transition-colors">${esc(prev.name)}</span>
             </a>
-            <a href="/plans/" class="self-center text-[#866f4f] uppercase tracking-widest font-bold text-xs hover:underline">All plans</a>
+            <a href="/plans/" class="self-center py-2 text-[#866f4f] uppercase tracking-widest font-bold text-xs hover:underline">All plans</a>
             <a href="/plans/${next.slug}.html" class="group sm:text-right">
                 <span class="block text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-1">Next plan</span>
                 <span class="text-lg text-[#0f172a] group-hover:text-[#866f4f] transition-colors">${esc(next.name)}</span>
@@ -482,8 +802,6 @@ ${sheetBlocks}
         </nav>
 
     </main>
-
-    <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
 ` + foot();
 
   writeFileSync(join(OUT, `${model.slug}.html`), html);
@@ -492,58 +810,22 @@ ${sheetBlocks}
 
 // ----------------------------------------------------------------- index page
 
-/**
- * The facts a visitor compares plans by, on the card itself, so choosing one
- * does not mean opening all seventeen. The same figures the plan page prints
- * ("4+", "2.5+", "From 4,282"), so the tests that hold every figure to the data
- * apply here too. Price stays off the cards (see fromPrice above).
- */
-const cardFacts = (model) => {
-  const s = model.specs || {};
-  const dash = (v) => String(v).replace('-', '&ndash;');
-  const facts = [
-    s.beds && `${dash(s.beds)} bed`,
-    s.baths && `${dash(s.baths)} bath`,
-    s.sqft && `${s.sqftFrom ? 'From ' : ''}${s.sqft.toLocaleString('en-US')} sq ft`,
-    s.stories && (s.stories === 1 ? 'Ranch' : `${s.stories} stories`),
-  ].filter(Boolean);
-  return facts.length ? facts.join('<span class="text-gray-300 mx-2" aria-hidden="true">&middot;</span><span class="sr-only">, </span>') : '';
-};
-
-const cards = models.map((model) => {
-  const cover = coverOf(model);
-  const floors = floorsOf(model).length;
-  const facts = cardFacts(model);
-  return `
-                <a href="/plans/${model.slug}.html" class="group block bg-white border border-gray-200 hover:border-[#c2a67a] transition-colors">
-                    <div class="aspect-[4/3] w-full overflow-hidden bg-white flex items-center justify-center p-4">
-                        ${cover ? picture(cover.img, {
-                          alt: coverAlt(model, cover),
-                          cls: 'max-h-full w-auto object-contain',
-                        }) : '<span class="text-gray-400 text-sm">Drawings coming soon</span>'}
-                    </div>
-                    <div class="border-t border-gray-200 p-6">
-                        <h3 class="text-2xl font-serif text-[#0f172a] group-hover:text-[#866f4f] transition-colors">${esc(model.name)}</h3>
-                        ${facts ? `<p class="text-sm text-[#0f172a] mt-3">${facts}</p>` : ''}
-                        <p class="text-sm text-gray-500 mt-1">${floors} floor plan${floors === 1 ? '' : 's'}</p>
-                        <span class="inline-block mt-4 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f]">View plan &rarr;</span>
-                    </div>
-                </a>`;
-}).join('\n');
+/* The plan cards on /plans/ are the finder's cards (planCard above). */
 
 const indexHtml = head({
-  title: 'Home Plans | Leavitt Building Group',
+  title: 'Home Plans for Harford County, MD | Leavitt Building Group',
   description:
     `${models.length} home plans from Leavitt Building Group, a custom home builder serving Harford ` +
     'and surrounding counties. Elevations, floor plans and brochures for each.',
   canonical: '/plans/',
   // The Visionary leads the plans on the home page, so it leads the preview too.
   image: shareImage(models.find((m) => m.slug === 'the-visionary')),
+  jsonLd: [breadcrumbs([['Home', '/'], ['Home Plans', '/plans/']]), planList()],
 }) + `
     <main class="max-w-6xl mx-auto px-6 py-14 md:py-20">
 
         <nav aria-label="Breadcrumb" class="mb-10 text-sm text-gray-500">
-            <a href="/" class="hover:text-[#866f4f]">Home</a>
+            <a href="/" class="inline-block py-1 hover:text-[#866f4f]">Home</a>
             <span class="mx-2" aria-hidden="true">/</span>
             <span class="text-[#0f172a]">Home Plans</span>
         </nav>
@@ -552,7 +834,7 @@ const indexHtml = head({
             Home plans.
         </h1>
         <p class="text-gray-600 text-lg max-w-2xl mb-4">
-            We build fully custom. But a blank page is a difficult place to begin, so here is
+            We build <a href="/custom-homes.html" class="inline-block py-1 text-[#866f4f] font-medium hover:underline">fully custom homes</a>. But a blank page is a difficult place to begin, so here is
             somewhere to start &mdash; plans we have built before, each one adapted to your lot and
             the way you want to live. Change the elevation, the room sizes, the optional spaces;
             or bring us something else entirely.
@@ -561,25 +843,14 @@ const indexHtml = head({
             Every sheet shows the optional features available for that model in dashed outline:
             in-law suites, conservatories, sunrooms, extended garages and finished lower levels.
         </p>
-        <p class="text-gray-600 max-w-2xl mb-8">
-            A home built from one of these plans takes about 6 to 8 months to complete, depending on
+        <p class="text-gray-600 max-w-2xl mb-14">
+            A <a href="/semi-custom-homes.html" class="inline-block py-1 text-[#866f4f] font-medium hover:underline">semi-custom home</a> built from one of these plans takes about 6 to 8 months to complete, depending on
             the changes made to it. Every home comes with a one-year warranty from Leavitt Building
             Group and a 2-10 Home Buyer's Warranty.
         </p>
 
-        <!-- One anchor for the whole collection rather than a price beside each plan: enough for
-             a visitor to know whether they are in the right place, without reading as a price
-             list. ${'$'}{fromPrice} is the lowest figure in plans.json, so it cannot drift. -->
-        <p class="border-l-2 border-[#c2a67a] pl-6 mb-4">
-            <span class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 block mb-1">The collection</span>
-            <span class="text-2xl md:text-3xl font-light text-[#0f172a]">Pricing starts at ${money(fromPrice)}</span>
-        </p>
-        <p class="text-sm text-gray-500 max-w-2xl mb-14">${priceNote(' A fully custom home is priced to its own drawings &mdash; talk to us about your homesite and what you have in mind.')}</p>
-
-        <h2 class="sr-only">Available plans</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-${cards}
-        </div>
+        <h2 class="text-2xl md:text-3xl font-serif text-[#0f172a] mb-8">Find your plan</h2>
+${finderHtml()}
 
 ${standardSection()}
 
@@ -595,13 +866,14 @@ ${standardSection()}
                 <a href="/#contact" class="bg-[#c2a67a] text-[#0f172a] px-8 py-4 uppercase tracking-[0.2em] font-bold text-xs hover:bg-white transition-colors text-center">
                     Start the conversation
                 </a>
-                <a href="tel:+18668326524" class="border border-white/20 px-8 py-4 uppercase tracking-[0.2em] font-bold text-xs hover:bg-white hover:text-[#0f172a] transition-colors text-center">
-                    (866) 832-6524
+                <a href="tel:+14436139750" class="border border-white/20 px-8 py-4 uppercase tracking-[0.2em] font-bold text-xs hover:bg-white hover:text-[#0f172a] transition-colors text-center">
+                    (443) 613-9750
                 </a>
             </div>
         </section>
 
     </main>
+${finderScript()}
 ` + foot();
 
 mkdirSync(OUT, { recursive: true });
@@ -656,6 +928,26 @@ console.log(`plans/index.html  (${models.length} models)`);
   console.log(patched
     ? `index.html  (${patched} plan image reference${patched === 1 ? '' : 's'} synced)`
     : 'index.html  (plan image references already correct)');
+}
+
+// ------------------------------------------------- homepage plan finder
+// index.html is hand-written, but the finder on it is generated here between
+// two markers, so its cards carry the same figures as /plans/ and a plan added
+// to plans.json appears on the homepage with the next build. The homepage shows
+// six matches at a time and points at /plans/ for the rest.
+{
+  const indexPath = join(ROOT, 'index.html');
+  const before = readFileSync(indexPath, 'utf8');
+  const between = (text, open, close, body) => {
+    const a = text.indexOf(open);
+    const b = text.indexOf(close);
+    if (a < 0 || b < 0 || b < a) throw new Error(`index.html: markers ${open} ... ${close} not found`);
+    return text.slice(0, a + open.length) + body + '\n        ' + text.slice(b);
+  };
+  let after = between(before, '<!-- plan-finder:start -->', '<!-- plan-finder:end -->', finderHtml({ cap: 6, base: '' }));
+  after = between(after, '<!-- plan-finder-script:start -->', '<!-- plan-finder-script:end -->', finderScript());
+  if (after !== before) writeFileSync(indexPath, after);
+  console.log(`index.html  (plan finder with ${models.length} plans)`);
 }
 
 // ------------------------------------------------- hand-written plan cards
