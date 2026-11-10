@@ -33,7 +33,9 @@ Pull request #59 carried the first version of this file and merged the same day.
 - **Item 11:** every link, button and "tap to open" line is at least 24px tall, on every page, from a 360px phone to a laptop (`tests/tap-targets.test.js`). The fixed ones are 28px or more. The homepage's four desktop menu links were the last of them: Kyle approved raising those separately, and the bar did not change by a pixel.
 - **Item 2(a):** `custom-homes.html` says "build on your lot" in its title, main heading and description, in words Kyle chose (`tests/seo.test.js`; the words are in `CLAUDE.md`, under Content decisions).
 
-The full suite passed on that branch and in GitHub's own run: 22 test files.
+The full suite passed on that branch and in GitHub's own run: 22 test files. It was confirmed on buildleavitt.com the same evening.
+
+**Pull request #47, the nightly site watch.** Written on October 24, 2026 and then left open and unnoticed; brought up to date on November 10 at Kyle's request, for him to review. This version of the file travels with it, so on `main` it has merged. It changes nothing on the site. Every night GitHub compares every published file on buildleavitt.com with `main`, reads the Tag Manager container, and checks the domain's DNS and HTTPS; a difference opens a GitHub issue that emails Kyle (`scripts/watch-site.mjs`, `.github/workflows/watch-site.yml`, `tests/watch-site.test.js`; `CLAUDE.md` and the README's "Site watch" section explain it). Run against the live site on November 10: no differences in any of the four checks, 299 files compared.
 
 ## A3. The audit list and what is left
 
@@ -83,6 +85,8 @@ Found in good order, so do not re-audit: compression and HTTPS on the live site,
 - Other links inside sentences on the service pages use `inline-block py-1`, which makes their line of text 8px taller than its neighbours. Item 11 used padding alone for sentence links so no line moved; the service pages were not changed to match.
 
 ## A6. The exact next three steps
+
+Before them, two small things. List the open pull requests at the start of a session, all of them and not only the newest: #47 sat open for seventeen days because nobody looked. And once #47 is on `main`, run the watch once by hand (on GitHub: Actions, **Site watch**, **Run workflow**) and see it finish green; the nightly schedule starts the following night.
 
 1. If there is any doubt that #60 is live, confirm it with `curl` (which sends nothing to Analytics): the title of buildleavitt.com/custom-homes.html reads "Build on Your Lot: Custom Home Builder in Maryland | Leavitt", and the "Home" link in a plan page's breadcrumb carries `inline-block py-1`. Start the next work from the latest `main`.
 2. Ask Kyle which item numbers he wants next. Start nothing until he names them. The ones that need no wording and no facts from him: 15 (a one-week cache lifetime for the hero, logo and photos in `netlify.toml`), 14 (a "skip to content" link and a main landmark), 13 (tiny text) and the housekeeping in 17. Item 6 (smaller copies of the plan renderings) is the largest speed gain left.
