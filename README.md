@@ -88,8 +88,11 @@ runs `scripts/watch-site.mjs`, which:
 
 - downloads every file Netlify publishes and compares it, byte for byte, with
   what is on `main`. The only difference it accepts is the rewrite Netlify
-  makes to the contact form's opening tag when it wires the form up. A form
-  pointed anywhere else is reported, because that is how leads get stolen;
+  makes to the contact form's opening tag when it wires the form up. The watch
+  works that rewrite out from the committed tag (Netlify drops its own two
+  attributes, sorts the rest, uses single quotes and shortens the action), so
+  restyling the form needs no change here. A form pointed anywhere else is
+  reported, because that is how leads get stolen;
 - reads the live Tag Manager container (`GTM-PHGFM247`): its version, the
   kinds of tags and variables in it, and every web address it mentions. Tag
   Manager is the one place code can be added to every page without touching
@@ -117,6 +120,10 @@ locally, `node scripts/watch-site.mjs`, which needs no `npm install`.
 `tests/watch-site.test.js` checks that the watch notices a changed page, a
 redirected form and a tampered container, and does not cry wolf about the
 form rewrite.
+
+One thing GitHub does on its own: in a public repository it switches scheduled
+runs off after 60 days with no activity in the repository, and emails first.
+If that happens, Actions, **Site watch**, **Enable workflow** turns it back on.
 
 ## Fonts
 

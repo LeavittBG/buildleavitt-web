@@ -10,7 +10,9 @@
  *     file Netlify publishes (the files git tracks, minus the ones netlify.toml
  *     deletes from the deploy) is downloaded and compared with the committed
  *     copy. The one difference accepted is Netlify's own rewrite of the contact
- *     form's opening tag, which it makes when it wires the form up.
+ *     form's opening tag, which it makes when it wires the form up; what that
+ *     rewrite must look like is worked out from the committed tag (see
+ *     netlifyFormTag), so restyling the form does not set the watch off.
  *  2. The Tag Manager container the pages load (GTM-PHGFM247) still has the
  *     version, the kinds of tags and variables, and the web addresses it had
  *     when BASELINE below was last reviewed. Tag Manager is the one place code
@@ -45,19 +47,12 @@ const USER_AGENT = 'buildleavitt-site-watch (https://github.com/LeavittBG/buildl
 
 /*
  * What the site is supposed to look like from outside. Reviewed October 24,
- * 2026. Change it only to record a change that was made on purpose.
+ * 2026, and again November 10, 2026, when the Tag Manager container, the DNS
+ * and the HTTPS answers were all found exactly as first recorded. Change it
+ * only to record a change that was made on purpose.
  */
 export const BASELINE = {
   site: 'https://buildleavitt.com',
-
-  // Netlify rewrites the contact form's opening tag when it wires the form up:
-  // it drops its own attributes, sorts the rest and shortens the action. The
-  // live tag is accepted in place of the committed one; any other form tag is
-  // reported, because a form pointed at another address is how leads get stolen.
-  form: {
-    repo: '<form class="space-y-8" name="contact" method="POST" action="/success.html" data-netlify="true" netlify-honeypot="bot-field">',
-    live: "<form action='/success' class='space-y-8' method='POST' name='contact'>",
-  },
 
   gtm: {
     container: 'GTM-PHGFM247',
@@ -132,11 +127,61 @@ export function siteFiles(root = ROOT) {
   });
 }
 
-/** Netlify's rewrite of the contact form tag, undone, so the page can be compared. */
-export function acceptNetlifyForm(live, form = BASELINE.form) {
-  const text = live.toString('utf8');
-  if (!text.includes(form.live)) return live;
-  return Buffer.from(text.replace(form.live, form.repo), 'utf8');
+/*
+ * Netlify rewrites the opening tag of a form it handles (one marked
+ * data-netlify="true") when it wires the form up. The rule, read off the live
+ * site twice, before and after the two-step form of October 31, 2026 changed
+ * the tag: its own two attributes are dropped, the rest are sorted by name and
+ * quoted with single quotes, and the action loses its ".html".
+ *
+ *   committed  <form id="contact-form" class="space-y-8 scroll-mt-28" name="contact"
+ *                    method="POST" action="/success.html" data-netlify="true"
+ *                    netlify-honeypot="bot-field">
+ *   served     <form action='/success' class='space-y-8 scroll-mt-28'
+ *                    id='contact-form' method='POST' name='contact'>
+ *
+ * The first version of this watch kept both tags as fixed text. The form's
+ * tag then changed in an ordinary redesign and the fixed text was wrong: every
+ * night would have reported the homepage as tampered with. Working the served
+ * tag out from the committed one means a restyled form passes, while a form
+ * whose action or anything else is not what the repository says still fails,
+ * because a form pointed at another address is how leads get stolen.
+ *
+ * Returns null for a tag this rule cannot be sure of (a value with a quote in
+ * it); such a page is then compared as it is, and reported if it differs.
+ */
+const NETLIFY_ATTRS = new Set(['data-netlify', 'netlify-honeypot']);
+export function netlifyFormTag(committedTag) {
+  const inner = (committedTag.match(/^<form\b([^>]*)>$/) || [])[1];
+  if (inner === undefined) return null;
+  const attrs = [...inner.matchAll(/([^\s"'=<>\/]+)="([^"]*)"/g)].map((m) => [m[1], m[2]]);
+  // Everything in the tag must be a name="value" pair, or the rule is not known.
+  if (inner.replace(/([^\s"'=<>\/]+)="([^"]*)"/g, '').trim() !== '') return null;
+  if (attrs.some(([, value]) => value.includes("'"))) return null;
+  return '<form ' + attrs
+    .filter(([name]) => !NETLIFY_ATTRS.has(name.toLowerCase()))
+    .map(([name, value]) => [name, name.toLowerCase() === 'action' ? value.replace(/\.html$/, '') : value])
+    .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
+    .map(([name, value]) => `${name}='${value}'`)
+    .join(' ') + '>';
+}
+
+const NETLIFY_FORM = /<form\b[^>]*\bdata-netlify="true"[^>]*>/g;
+
+/**
+ * Netlify's rewrite of each form tag it handles, undone, so the page can be
+ * compared with the committed copy. `expected` is that committed copy.
+ */
+export function acceptNetlifyForm(live, expected) {
+  const committedTags = expected.toString('utf8').match(NETLIFY_FORM) || [];
+  if (!committedTags.length) return live;
+  let text = live.toString('utf8');
+  let changed = false;
+  for (const tag of committedTags) {
+    const served = netlifyFormTag(tag);
+    if (served && text.includes(served)) { text = text.replace(served, () => tag); changed = true; }
+  }
+  return changed ? Buffer.from(text, 'utf8') : live;
 }
 
 const TEXT_FILE = /\.(html|css|js|mjs|json|xml|txt|vtt|svg|webmanifest)$/i;
@@ -153,7 +198,7 @@ export function describeDifference(file, expected, live) {
     if (a[i] !== b[i]) { count++; if (first < 0) first = i; }
   }
   const cut = (s) => (s === undefined ? '(no such line)' : s.length > 200 ? s.slice(0, 200) + '…' : s);
-  return `${count} line${count === 1 ? '' : 's'} differ, first at line ${first + 1}:\n` +
+  return `${count} line${count === 1 ? ' differs' : 's differ'}, first at line ${first + 1}:\n` +
     `  repository: ${cut(a[first])}\n  live:       ${cut(b[first])}`;
 }
 
@@ -161,7 +206,7 @@ export function describeDifference(file, expected, live) {
  * Download every published file and compare it with the committed copy.
  * Returns { problems, checked, total, bytes }.
  */
-export async function checkSite({ site = BASELINE.site, root = ROOT, files, fetchImpl = fetch, concurrency = 8, form = BASELINE.form } = {}) {
+export async function checkSite({ site = BASELINE.site, root = ROOT, files, fetchImpl = fetch, concurrency = 8 } = {}) {
   files = files || siteFiles(root);
   const base = site.replace(/\/$/, '');
   const differs = [];
@@ -189,7 +234,7 @@ export async function checkSite({ site = BASELINE.site, root = ROOT, files, fetc
       let live = Buffer.from(await res.arrayBuffer());
       checked++;
       bytes += live.length;
-      if (/\.html$/i.test(file)) live = acceptNetlifyForm(live, form);
+      if (/\.html$/i.test(file)) live = acceptNetlifyForm(live, expected);
       if (!live.equals(expected)) {
         differs.push(problem('site', `${file}: the live copy differs from the repository`, describeDifference(file, expected, live)));
       }
