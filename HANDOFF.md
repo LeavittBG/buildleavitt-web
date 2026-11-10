@@ -25,7 +25,7 @@ Pull request #58, merged November 10, 2026 and confirmed on buildleavitt.com. `C
 - **Item 1:** the phone number is in the bar at the top of every page (`tests/header-phone.test.js`).
 - **Item 5:** the licence numbers are readable (footer line and hero line; `tests/colour-contrast.test.js`).
 
-Nothing is in progress. No pull request is open except the one that carries this file. The working tree is clean.
+Pull request #59 carried the first version of this file and merged the same day.
 
 ## A3. The audit list and what is left
 
@@ -34,22 +34,22 @@ Numbers are the ones Kyle was given; use them with him.
 | # | Finding | Status / what it needs |
 |---|---|---|
 | 1 | No phone number at the top of any page | Done |
-| 2 | "Build on your lot" has no heading or page. It appears only inside a closed question and on a form card | Not started. (a) Work it into the `custom-homes.html` title, heading and description: wording needs Kyle's approval first. (b) A dedicated page: needs Kyle's facts on how a lot is evaluated |
+| 2 | "Build on your lot" has no heading or page. On the homepage it appears only inside a closed question and on a form card; the custom and semi-custom pages say it once each, under "The practical questions" | Not started. (a) Work it into the `custom-homes.html` title, heading and description: wording needs Kyle's approval first. (b) A dedicated page: needs Kyle's facts on how a lot is evaluated |
 | 3 | No real project photos; every house picture is a rendering, plus one before/after pair | Waiting on Kyle's photographs. The gallery was removed on purpose (see `CLAUDE.md`) |
 | 4 | Tests loaded the live Google tag | Done |
 | 5 | Licence numbers were the faintest text on the site | Done |
 | 6 | Plan renderings come in one size: 1468px wide, 200–310 KB each, shown in cards about 400px wide. WebP is no smaller than JPEG for them. A 640px copy measured about 46 KB, a 960px copy about 94 KB | Not started. Needs extra sizes from `scripts/extract-plans.mjs`, a `srcset` from `scripts/build-plans.mjs` (and the hand-written cards on the semi-custom page), and tests |
 | 7 | The old (866) 832-6524 number is still in the Leavitt Connect video: on the closing card and spoken, 1:39.9 to 1:45.6, so also in the captions and the homepage transcript | Not started. Either trim the ending (ffmpeg is in the sandbox) and update the captions, transcript, the `VideoObject` duration and the two tests that know about it, or Kyle re-records. Ask whether the old number still rings |
-| 8 | "Maryland" is rarely spelled out; `/plans/` has no location words; the semi-custom title has no location | Not started. Wording needs approval. The November 6 choice to target Harford County first stands; this adds to it |
+| 8 | "Maryland" is rarely spelled out (never on `/plans/`, whose title and description do say "Harford County, MD" but whose visible text names no place above the footer); the semi-custom title has no location | Not started. Wording needs approval. The November 6 choice to target Harford County first stands; this adds to it |
 | 9 | No mention of insurance; the founding year appears nowhere; "20+ Years of Excellence" may read as conflicting with a 2011 founding | Needs Kyle's facts. Never invent them |
 | 10 | The three testimonials name no source and do not link to Google reviews | Needs Kyle to say where they came from |
-| 11 | Small tap targets on phones. Plan pages: breadcrumbs 17px tall, the phone link in "Interested in this plan?" 17px, "Open full size image" 20px, "All plans" 16px. `/plans/`: the Leavitt Standard PDF link 17px. Homepage: "Read the transcript" 17px. 404: the phone link 17px. "View plan" and "Start with this plan" are 25px | Not started. Mostly in `scripts/build-plans.mjs`. The 24px check exists only for the service pages (`service-pages.test.js`) |
+| 11 | Small tap targets on phones. Plan pages: breadcrumbs 17px tall, the phone link in "Interested in this plan?" 17px, "Open full size image" 20px, "All plans" 16px. `/plans/`: the Leavitt Standard PDF link 17px. The `/plans/` breadcrumb is 17px too. Homepage: "Read the transcript" 17px, and two links inside sentences, "Leavitt Connect" and "the Leavitt Standard", 20px. 404: the phone link 17px. "View plan" and "Start with this plan" are 25px | Not started. Mostly in `scripts/build-plans.mjs`. The 24px check exists only for the service pages (`service-pages.test.js`) |
 | 12 | Away from the homepage, phones get no menu: only Plans and Get a Quote | Not started. Touches the menu, so it is Kyle's call |
 | 13 | Tiny text: 9px caption under Kyle's photo, 10px Before/After labels, 11px "Read More", "View plan" and the small labels | Not started |
-| 14 | The homepage has no "skip to content" link and no main-content landmark (nor do `success.html` and `404.html`); the form fields' focus highlight is faint | Not started |
+| 14 | No page has a "skip to content" link; the homepage, `success.html` and `404.html` have no main-content landmark either (the other pages do); the form fields' focus highlight is faint | Not started |
 | 15 | The hero, logo, Kyle's photo and the before/after pair have no cache lifetime | Not started. A one-week header in `netlify.toml`, never `immutable` (see `CLAUDE.md`) |
 | 16 | Fonts load from Google | Deferred by Kyle on November 6 |
-| 17 | Housekeeping: the logo file is 1200px wide for a slot of at most 328px; the homepage logo has a leftover `onerror` fallback to an outside placeholder site; image descriptions on all 17 plan pages still say "Modern Farmhouse"; `foundingDate` is missing from the business data | Not started |
+| 17 | Housekeeping: the logo file is 1200px wide for a slot of at most 328px; four homepage pictures (the logo, Kyle's photo and the Before and After pair) have a leftover `onerror` fallback to an outside placeholder site, placehold.co; image descriptions on all 17 plan pages still say "Modern Farmhouse"; `foundingDate` is missing from the business data | Not started |
 
 Found in good order, so do not re-audit: compression and HTTPS on the live site, titles and descriptions, one main heading per page, the business markup, sitemap, robots.txt, no sideways scrolling at 360 and 390px, no "Creative Home Co" anywhere, no broken links (1,608 checked), and a Tag Manager container that holds only Google Analytics.
 
