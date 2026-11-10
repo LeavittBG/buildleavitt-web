@@ -14,6 +14,14 @@
  * lg up it is white and held to two lines over the dark trees; and "Client
  * Login" in the transparent menu bar was gold on pale sky, so it is white
  * until the page scrolls and the bar turns navy.
+ *
+ * And the licence numbers (November 2026). "MHBR 9796 | MHIC 161316 | PAHIC
+ * 212160" closes every page, and it was the faintest text on the site: grey
+ * #6b7280 on the navy footer, 3.7:1 where small text needs 4.5:1. The licence
+ * line under the hero copy was 10px on phones and 11px on desktop. For a
+ * builder these numbers are a reason to trust the company, so they have to be
+ * readable: the footer line is now the footer's own grey (7:1), and the hero
+ * line is 12px, a shade lighter where it lies over the photograph.
  *   node tests/colour-contrast.test.js
  */
 const { ROOT, launch, serveRepo } = require('./lib/env');
@@ -109,6 +117,68 @@ const contrast = (a, b) => { const [hi, lo] = [lum(a), lum(b)].sort((x, y) => y 
       'rgb(194, 166, 122)', { timeout: 3000 }).catch(() => {});
     const scrolled = await p.evaluate(loginColor);
     ok(/194, 166, 122/.test(scrolled), `${width}px: Client Login is gold once the bar turns navy (${scrolled})`);
+    await p.close();
+  }
+
+  // The licence numbers at the foot of every page, including the two pages
+  // that have no footer proper (the thank-you page and the 404).
+  console.log('\n== the licence numbers can be read ==');
+  const LICENCES = 'MHBR 9796 | MHIC 161316 | PAHIC 212160';
+  for (const file of [...PAGES, 'success.html', '404.html']) {
+    const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
+    await serveFonts(p);
+    await p.goto(`${site.base}/${file}`, { waitUntil: 'load' });
+    await p.evaluate(() => document.fonts.ready);
+    const found = await p.evaluate((want) => {
+      const parse = (c) => { const m = c.match(/rgba?\(([^)]+)\)/); if (!m) return null; const n = m[1].split(/[\s,\/]+/).map(Number); return n.length === 4 && n[3] === 0 ? null : n.slice(0, 3); };
+      return [...document.querySelectorAll('body *')]
+        .filter((el) => [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.replace(/\s+/g, ' ').includes(want)))
+        .map((el) => {
+          const cs = getComputedStyle(el);
+          let bg = null;
+          for (let a = el; a && !bg; a = a.parentElement) bg = parse(getComputedStyle(a).backgroundColor);
+          return { color: parse(cs.color), bg: bg || [255, 255, 255], size: parseFloat(cs.fontSize) };
+        });
+    }, LICENCES);
+    const line = found[0];
+    const ratio = line ? contrast(line.color, line.bg) : 0;
+    ok(found.length === 1 && ratio >= 4.5 && line.size >= 12,
+      `${file}: the licence line is at least 4.5:1 and 12px` +
+      (line ? ` (${ratio.toFixed(2)}:1, ${line.size}px, rgb(${line.color}) on rgb(${line.bg}))` : ` (found ${found.length})`));
+    await p.close();
+  }
+
+  // The licence line under the hero copy: on phones it is on the navy below the
+  // banner, on desktop it lies over the lawn of the photograph. Judged against
+  // what is really behind it: the words are hidden, their box photographed, and
+  // the text colour compared with the brightest hundredth of those pixels.
+  console.log('\n== index.html hero, the licence line ==');
+  const sharp = require('sharp');
+  for (const [width, height] of [[390, 844], [768, 1024], [1024, 768], [1440, 900], [1920, 1080]]) {
+    const p = await b.newPage({ viewport: { width, height } });
+    await serveFonts(p);
+    await p.goto(`${site.base}/index.html`, { waitUntil: 'load' });
+    await p.evaluate(() => document.fonts.ready);
+    await p.waitForFunction(() => { const i = document.querySelector('#hero img'); return i.complete && i.naturalWidth > 0; });
+    const r = await p.evaluate(() => {
+      const row = [...document.querySelectorAll('#hero span')].find((s) => /MHBR 9796/.test(s.textContent)).parentElement;
+      const cs = getComputedStyle(row);
+      const color = cs.color.match(/[\d.]+/g).slice(0, 3).map(Number);
+      const size = parseFloat(cs.fontSize);
+      const boxes = [...row.children].map((c) => c.getBoundingClientRect());
+      row.style.color = 'transparent';
+      const x = Math.min(...boxes.map((q) => q.left)), y = Math.min(...boxes.map((q) => q.top));
+      return { color, size, words: row.textContent.replace(/\s+/g, ' ').trim(),
+        clip: { x: Math.floor(x), y: Math.ceil(y), width: Math.ceil(Math.max(...boxes.map((q) => q.right)) - x), height: Math.floor(Math.max(...boxes.map((q) => q.bottom)) - y) } };
+    });
+    const { data } = await sharp(await p.screenshot({ clip: r.clip })).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+    const behind = [];
+    for (let i = 0; i < data.length; i += 3) behind.push(lum([data[i], data[i + 1], data[i + 2]]));
+    behind.sort((x, y) => x - y);
+    const bright = behind[Math.floor(behind.length * 0.99)];
+    const ratio = (Math.max(lum(r.color), bright) + 0.05) / (Math.min(lum(r.color), bright) + 0.05);
+    ok(/Licensed in MD & PA/.test(r.words) && /MHBR 9796/.test(r.words) && r.size >= 12 && ratio >= 4.5,
+      `${width}x${height}: the hero licence line is at least 12px and 4.5:1 against what is behind it (${r.size}px, ${ratio.toFixed(2)}:1)`);
     await p.close();
   }
 

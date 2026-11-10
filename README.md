@@ -40,6 +40,14 @@ fetching them, because text width decides several of the layout checks. If
 you change the Google Fonts URL in the pages, run `npm run test:fonts` to
 refresh that copy.
 
+The tests never reach Google Analytics. Every page carries the live Tag
+Manager container, and until November 2026 a test run let it load: page views
+went to the real Analytics property from `127.0.0.1`, and one test opens the
+thank-you page, whose page view Analytics counts as a lead. `launch()` in
+`tests/lib/env.js` now refuses Google's tag and analytics hosts on every page
+a test opens, and `tests/analytics-off.test.js` checks that it does. Always get
+the browser from `launch()`, never from Playwright directly.
+
 `tests/seo.test.js` is the one file that opens no browser: it reads the pages
 with jsdom and checks what search engines are told. Structured data parses on
 every page; every visible breadcrumb matches its BreadcrumbList; each service

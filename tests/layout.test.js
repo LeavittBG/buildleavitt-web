@@ -71,19 +71,22 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
   // "Client Login" and "Get a Quote" used to wrap onto two lines each, and
   // Client Login was moved down to the footer. Kyle wanted it back at the top
   // (October 7, 2026), so it returned smaller, set apart after Get a Quote.
-  // Nothing may wrap, and the bar must not run off the right edge.
+  // Nothing may wrap, and the bar must not run off the right edge. Since
+  // November 2026 the phone number sits above Client Login in that last place,
+  // so the two are inside a block of their own: every link in the bar is
+  // checked, not only the bar's direct children.
   for (const w of [1024, 1060, 1100, 1180, 1280, 1440, 1920]) {
     const page = await b.newPage({ viewport: { width: w, height: 800 } });
     await serveFonts(page);
     await page.goto(FILE_ROOT + 'index.html');
     await page.evaluate(() => document.fonts.ready);
-    const wrapped = await page.evaluate(() => [...document.querySelectorAll('#main-nav .lg\\:flex > a')].filter((a) => {
+    const wrapped = await page.evaluate(() => [...document.querySelectorAll('#main-nav .lg\\:flex a')].filter((a) => {
       const t = [...a.childNodes].find((n) => n.nodeType === 3 && n.textContent.trim());
       const r = document.createRange(); r.selectNodeContents(t);
       return new Set([...r.getClientRects()].filter((x) => x.width > 0).map((x) => Math.round(x.top))).size > 1;
     }).map((a) => a.textContent.trim()));
     ok(wrapped.length === 0, `${w}px: every menu bar link fits on one line` + (wrapped.length ? ' - wrapped: ' + wrapped.join(', ') : ''));
-    const right = await page.evaluate(() => Math.max(...[...document.querySelectorAll('#main-nav .lg\\:flex > a')].map((a) => a.getBoundingClientRect().right)));
+    const right = await page.evaluate(() => Math.max(...[...document.querySelectorAll('#main-nav .lg\\:flex a')].map((a) => a.getBoundingClientRect().right)));
     ok(right <= w - 16, `${w}px: the menu bar ends inside the page (right edge ${Math.round(right)}px)`);
     await page.close();
   }
@@ -100,6 +103,9 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
   }
   // The plan pages carry the same link in their header from tablet width up,
   // beside Plans and Get a Quote. It must not push them onto two lines.
+  // Since November 2026 the phone number is there too, directly above Client
+  // Login: Plans, Get a Quote and that pair still make one row, each link on
+  // one line, and nothing runs off the page.
   // Plan pages load /dist/styles.css from the site root, so they are served.
   const site = await serveRepo();
   for (const w of [768, 1024, 1440]) {
@@ -108,16 +114,24 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
     await page.goto(site.base + '/plans/the-poet.html');
     await page.evaluate(() => document.fonts.ready);
     const r = await page.evaluate(() => {
-      const links = [...document.querySelectorAll('header nav[aria-label="Main"] a')];
+      const nav = document.querySelector('header nav[aria-label="Main"]');
+      const box = (el) => el.getBoundingClientRect();
+      const links = [...nav.querySelectorAll('a')].filter((a) => box(a).width > 0);
       const login = links.find((a) => a.href.includes('connect.buildleavitt.com'));
+      const phone = links.find((a) => a.getAttribute('href') === 'tel:+14436139750');
+      // The row is the nav's own children: Plans, Get a Quote, and the block
+      // holding the number and Client Login. One row = one vertical centre.
+      const mids = [...nav.children].filter((el) => box(el).width > 0).map((el) => box(el).top + box(el).height / 2);
       return {
-        login: !!login && login.getBoundingClientRect().width > 0,
-        tops: new Set(links.map((a) => Math.round(a.getBoundingClientRect().top + a.getBoundingClientRect().height / 2))).size,
-        tall: links.some((a) => a.getBoundingClientRect().height > 60),
-        right: Math.max(...links.map((a) => a.getBoundingClientRect().right)),
+        login: !!login, phone: !!phone,
+        rowSpread: Math.round(Math.max(...mids) - Math.min(...mids)),
+        stacked: !!login && !!phone && box(phone).bottom <= box(login).top + 1,
+        tall: links.some((a) => box(a).height > 60),
+        right: Math.round(Math.max(...links.map((a) => box(a).right))),
       };
     });
-    ok(r.login && r.tops === 1 && !r.tall && r.right <= w - 16, `plan page ${w}px: Client Login shows in the header, all on one line (${JSON.stringify(r)})`);
+    ok(r.login && r.phone && r.rowSpread <= 1 && r.stacked && !r.tall && r.right <= w - 16,
+      `plan page ${w}px: the phone number and Client Login show in the header, in one row with Plans and Get a Quote (${JSON.stringify(r)})`);
     await page.close();
   }
   await site.close();
