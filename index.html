@@ -244,9 +244,11 @@
                 <!-- Logo Area -->
                 <!-- The wordmark is 1200x293, so every 10px of height costs 41px of width. At
                      h-20 it is 328px wide, which is what used to shove the nav links off the
-                     right edge below 1280px. It steps up with the breakpoints instead. -->
+                     right edge below 1280px. It steps up with the breakpoints instead. Under
+                     360px (the narrowest phones) it drops to h-9, 147px wide, so the call
+                     button and the menu button both fit beside it. -->
                 <div class="flex-shrink-0 flex items-center cursor-pointer">
-                    <picture class="contents"><source srcset="Gold.webp" type="image/webp"><img src="Gold.png" alt="Leavitt Building Group Logo" width="1200" height="293" class="h-12 sm:h-16 lg:h-16 xl:h-20 w-auto object-contain" onerror="this.src='https://placehold.co/200x80/0f172a/c2a67a?text=LBG'"></picture>
+                    <picture class="contents"><source srcset="Gold.webp" type="image/webp"><img src="Gold.png" alt="Leavitt Building Group Logo" width="1200" height="293" class="h-12 max-[359px]:h-9 sm:h-16 lg:h-16 xl:h-20 w-auto object-contain" onerror="this.src='https://placehold.co/200x80/0f172a/c2a67a?text=LBG'"></picture>
                 </div>
 
                 <!-- Desktop Nav -->
@@ -262,20 +264,38 @@
                     <a href="#contact" class="bg-[#c2a67a] text-[#0f172a] px-6 py-3 text-xs lg:text-sm uppercase tracking-widest font-bold hover:bg-white transition-colors">
                         Get a Quote
                     </a>
-                    <!-- Client Login sits apart from the menu, after a fine rule, smaller and
-                         in gold: it is for people already building with Leavitt, so it is easy
-                         to find at the top without competing with Get a Quote. While the bar is
-                         still transparent over the hero it is white instead: the daylight photo
-                         puts pale sky behind it, and gold on sky could not be read (October 2026).
-                         Once the page scrolls and the bar turns navy, it is gold again. -->
-                    <a href="https://connect.buildleavitt.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 border-l border-white/20 pl-5 xl:pl-10 text-[#c2a67a] hover:text-white [.bg-transparent_&]:text-white [.bg-transparent_&]:hover:text-[#c2a67a] text-xs uppercase tracking-widest font-semibold transition-colors whitespace-nowrap">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-4 h-4"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                        Client Login
-                    </a>
+                    <!-- After a fine rule, set apart from the menu: the phone number, and under
+                         it Client Login. The number (November 2026) is here so that it is at the
+                         top of the page however far the visitor has scrolled; it is white, the
+                         one thing in this corner meant for someone who is not yet a client.
+                         Client Login is smaller and in gold: it is for people already building
+                         with Leavitt, easy to find without competing with Get a Quote. While the
+                         bar is still transparent over the hero it is white too: the daylight
+                         photo puts pale sky behind it, and gold on sky could not be read
+                         (October 2026). Once the page scrolls and the bar turns navy, it is
+                         gold again. The two are stacked because the bar has no width left for
+                         a seventh item at 1024px. -->
+                    <div class="flex flex-col items-start border-l border-white/20 pl-5 xl:pl-10">
+                        <a href="tel:+14436139750" class="flex items-center gap-2 py-1 text-white hover:text-[#c2a67a] text-xs xl:text-sm uppercase tracking-widest font-semibold transition-colors whitespace-nowrap">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-4 h-4"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            (443) 613-9750
+                        </a>
+                        <a href="https://connect.buildleavitt.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 py-1 text-[#c2a67a] hover:text-white [.bg-transparent_&]:text-white [.bg-transparent_&]:hover:text-[#c2a67a] text-xs uppercase tracking-widest font-semibold transition-colors whitespace-nowrap">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-4 h-4"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            Client Login
+                        </a>
+                    </div>
                 </div>
 
-                <!-- Mobile menu button -->
-                <div class="lg:hidden flex items-center">
+                <!-- Call button and mobile menu button -->
+                <div class="lg:hidden flex items-center gap-1 sm:gap-3">
+                    <!-- One tap to call, in the bar that stays at the top as the page scrolls
+                         (November 2026). On phones it is the icon alone, the same 44x44 as the
+                         menu button; from tablet width the number is written out beside it. -->
+                    <a href="tel:+14436139750" aria-label="Call Leavitt Building Group at (443) 613-9750" class="w-11 h-11 sm:w-auto sm:px-2 flex items-center justify-center gap-2 text-white hover:text-[#c2a67a] text-sm uppercase tracking-widest font-semibold whitespace-nowrap">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-6 h-6 sm:w-4 sm:h-4 pointer-events-none"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                        <span class="hidden sm:inline">(443) 613-9750</span>
+                    </a>
                     <!-- Explicit size keeps this a 44x44 tap target even if the icon CDN
                          fails: an un-hydrated inline <i> would otherwise collapse to 0x0. -->
                     <button id="mobile-menu-btn" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-menu" class="w-11 h-11 -mr-2 flex items-center justify-center text-white hover:text-[#c2a67a]">
