@@ -32,9 +32,34 @@ function chromiumPath() {
   return undefined;
 }
 
+/*
+ * Hosts no test may reach: Google Tag Manager and Analytics. Every page carries
+ * the live container, and a test that lets it load sends page views to
+ * Leavitt's real Analytics property. A page view of the thank-you page counts
+ * there as a lead (generate_lead), and fonts.test.js opens that page, so until
+ * November 2026 a pull request's test run could be recorded as a lead.
+ */
+const ANALYTICS = /^https?:\/\/([a-z0-9-]+\.)*(googletagmanager\.com|google-analytics\.com|analytics\.google\.com|doubleclick\.net|googleadservices\.com|googlesyndication\.com)\//i;
+
+/*
+ * Every test gets its browser here, and every page that browser opens refuses
+ * the hosts above before the request leaves the machine. browser.newPage()
+ * makes its context through newContext(), so wrapping that one method covers
+ * both. 'blockedbyclient' is what analytics-off.test.js looks for: a refusal by
+ * the tests, which is not the same as the network happening to be down. A test
+ * that adds its own route still wins, as the newest route always does, but none
+ * of them lets these hosts through.
+ */
 async function launch(options = {}) {
   const { chromium } = require('playwright');
-  return chromium.launch({ ...options, executablePath: chromiumPath() });
+  const browser = await chromium.launch({ ...options, executablePath: chromiumPath() });
+  const newContext = browser.newContext.bind(browser);
+  browser.newContext = async (...args) => {
+    const context = await newContext(...args);
+    await context.route(ANALYTICS, (route) => route.abort('blockedbyclient'));
+    return context;
+  };
+  return browser;
 }
 
 /*
