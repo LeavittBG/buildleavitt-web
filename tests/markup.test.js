@@ -223,8 +223,14 @@ console.log("\n== contact details are real ==");
   // 555-01xx is the reserved fictional range; example.com/.org likewise.
   const fake = all.match(/\(?\d{3}\)?[ -]?555-01\d\d|example\.(com|org|net)/g) || [];
   ok(fake.length === 0, "no fictional 555 numbers or example.com addresses" + (fake.length ? ": " + [...new Set(fake)].join(", ") : ""));
-  const nums = [...new Set(all.match(/\(\d{3}\)\s?\d{3}-\d{4}/g) || [])];
-  ok(nums.every(x => x.replace(/\D/g, "") === "8668326524"),
+  // The Leavitt Connect transcript repeats the video's captions word for word
+  // (connect-video.test.js checks that), and the narrator gives the old (866)
+  // number at 1:39. That sentence quotes the audio, so it is not a contact
+  // detail and is left out here; every other printed number must be the real one.
+  const transcript = /<details[^>]*>\s*<summary[^>]*>Read the transcript<\/summary>[\s\S]*?<\/details>/;
+  ok(transcript.test(all), "the Leavitt Connect transcript is found (its spoken number is the one exemption)");
+  const nums = [...new Set(all.replace(transcript, "").match(/\(\d{3}\)\s?\d{3}-\d{4}/g) || [])];
+  ok(nums.every(x => x.replace(/\D/g, "") === "4436139750"),
      "every displayed phone number is the real one: " + nums.join(", "));
 }
 
@@ -301,7 +307,7 @@ console.log("\n== Leavitt Connect section ==");
     const missing = need.filter((w) => !titles.some((t) => t.toLowerCase().includes(w)));
     ok(missing.length === 0, `all six features are described (${titles.length} found)` + (missing.length ? ' - missing: ' + missing.join(', ') : ''));
     ok(/every homeowner on the home signs/i.test(text), 'change orders say every homeowner on the home signs');
-    ok(!!sec.querySelector('a[href="https://connect.buildleavitt.com"]') && !!sec.querySelector('a[href="tel:+18668326524"]') && !!sec.querySelector('a[href="#contact"]'),
+    ok(!!sec.querySelector('a[href="https://connect.buildleavitt.com"]') && !!sec.querySelector('a[href="tel:+14436139750"]') && !!sec.querySelector('a[href="#contact"]'),
        'it links to the sign-in, the office line and the contact form');
   }
 }
