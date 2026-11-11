@@ -33,11 +33,13 @@ Pull request #59 carried the first version of this file and merged the same day.
 - **Item 11:** every link, button and "tap to open" line is at least 24px tall, on every page, from a 360px phone to a laptop (`tests/tap-targets.test.js`). The fixed ones are 28px or more. The homepage's four desktop menu links were the last of them: Kyle approved raising those separately, and the bar did not change by a pixel.
 - **Item 2(a):** `custom-homes.html` says "build on your lot" in its title, main heading and description, in words Kyle chose (`tests/seo.test.js`; the words are in `CLAUDE.md`, under Content decisions).
 
-The full suite passed on that branch and in GitHub's own run: 22 test files. It was confirmed on buildleavitt.com the same evening.
+The full suite passed on that branch and in GitHub's own run: 22 test files then, 23 once the site watch's own test came in with #47. It was confirmed on buildleavitt.com the same evening.
 
 **Pull request #47, the nightly site watch.** Written on October 24, 2026 and then left open and unnoticed; brought up to date on November 10 at Kyle's request, and merged on his word that evening. It changes nothing on the site. Every night GitHub compares every published file on buildleavitt.com with `main`, reads the Tag Manager container, and checks the domain's DNS and HTTPS; a difference opens a GitHub issue that emails Kyle (`scripts/watch-site.mjs`, `.github/workflows/watch-site.yml`, `tests/watch-site.test.js`; `CLAUDE.md` and the README's "Site watch" section explain it). Run against the live site on November 10: no differences in any of the four checks, 299 files compared. Straight after the merge it was run once by hand on GitHub (Actions, **Site watch**) and finished green in under a minute; the nightly schedule runs from that night on.
 
-**Where that leaves things.** Nothing is in progress and no pull request is open. Both pull requests were confirmed on buildleavitt.com. Kyle has named the next items (A6).
+**Pull request #61** carried the version of this file that closed the November 10 session (notes only) and merged the same evening.
+
+**Where that left things.** Nothing in progress and no pull request open. Both pull requests were confirmed on buildleavitt.com. Kyle had named the next items (A6).
 
 ## A3. The audit list and what is left
 
@@ -50,7 +52,7 @@ Numbers are the ones Kyle was given; use them with him.
 | 3 | No real project photos; every house picture is a rendering, plus one before/after pair | Waiting on Kyle's photographs. The gallery was removed on purpose (see `CLAUDE.md`) |
 | 4 | Tests loaded the live Google tag | Done |
 | 5 | Licence numbers were the faintest text on the site | Done |
-| 6 | Plan renderings come in one size: 1468px wide, 200–310 KB each, shown in cards about 400px wide. WebP is no smaller than JPEG for them. A 640px copy measured about 46 KB, a 960px copy about 94 KB | Not started. Needs extra sizes from `scripts/extract-plans.mjs`, a `srcset` from `scripts/build-plans.mjs` (and the hand-written cards on the semi-custom page), and tests |
+| 6 | Plan renderings come in one size: the main pictures 1468px wide (about 190–280 KB each), the Modern Brick ones 1600px wide (about 220–315 KB), shown in cards about 400px wide. WebP is no smaller than JPEG for them. A 640px copy measured about 46 KB, a 960px copy about 94 KB | Not started. Needs extra sizes from `scripts/extract-plans.mjs`, a `srcset` from `scripts/build-plans.mjs` (and the hand-written cards on the semi-custom page), and tests |
 | 7 | The old (866) 832-6524 number is still in the Leavitt Connect video: on the closing card and spoken, 1:39.9 to 1:45.6, so also in the captions and the homepage transcript | Not started. Either trim the ending (ffmpeg is in the sandbox) and update the captions, transcript, the `VideoObject` duration and the two tests that know about it, or Kyle re-records. Ask whether the old number still rings |
 | 8 | "Maryland" is rarely spelled out (never on `/plans/`, whose title and description do say "Harford County, MD" but whose visible text names no place above the footer); the semi-custom title has no location | Not started. Wording needs approval. The November 6 choice to target Harford County first stands; this adds to it |
 | 9 | No mention of insurance; the founding year appears nowhere; "20+ Years of Excellence" may read as conflicting with a 2011 founding | Needs Kyle's facts. Never invent them |
@@ -73,6 +75,7 @@ Found in good order, so do not re-audit: compression and HTTPS on the live site,
 4. Where did the three testimonials come from, and may they link to the Google profile? (item 10)
 5. Are there real photographs of finished homes? (item 3)
 6. How does Leavitt evaluate a client's lot? Needed before a "build on your lot" page is written. (item 2b)
+7. The Leavitt Connect video: at about 0:55 the sample change order shows an overhead-and-profit percentage that a viewer who pauses could take for Leavitt's markup. Re-record that screen or leave it? Asked on October 8, 2026 and still open; it had dropped off this list because the notes recording it never reached `main` (see `CLAUDE.md`, "How changes are made"). The same video ends on the old phone number (question 3), so one re-recording would settle both.
 
 ## A5. Known issues and things not verified
 
@@ -96,7 +99,7 @@ Kyle asked for **items 15, 14, 13, 17 and 6** on November 10, 2026, then handed 
    - **14, skip link and landmark.** No page has a "skip to content" link. The homepage, `success.html` and `404.html` have no `<main>`; the other pages do. The form fields' focus highlight is faint.
    - **13, tiny text.** On the homepage: one 9px caption under Kyle's photo, four uses of 10px (the Before and After labels among them), and 64 uses of 11px (Read More, View plan, the finder's labels). Raising the 11px text changes how the plan cards lay out, so it needs pictures.
    - **17, housekeeping.** Four homepage pictures (the logo, Kyle's photo, Before, After) have an `onerror` fallback to placehold.co. `Gold.png` is 1200 by 293 for a slot at most 328px wide; the business data names that file as the logo, so keep its address working. "Modern Farmhouse" is still in the main picture's description (alt text) on all seventeen plan pages, and `plans.test.js` keeps it there on purpose ("caption kept in alt text for screen readers"), so that check changes with it. `foundingDate` waits on Kyle's answer to question 2 in A4; do not invent it.
-   - **6, smaller plan pictures.** Every rendering is 1468px wide (about 190 to 280 KB; the Modern Brick ones up to 313 KB) and is shown in cards about 400px wide. The `srcset` attributes on those pictures only offer the WebP copy; there are no smaller widths. It needs extra sizes from `scripts/extract-plans.mjs`, a `srcset` and `sizes` from `scripts/build-plans.mjs`, the same on the hand-written cards of the semi-custom page, and a check that every file a `srcset` names exists (`seo.test.js` does this for the hero).
+   - **6, smaller plan pictures.** Every main rendering is 1468px wide (about 190 to 280 KB); the Modern Brick ones are 1600px wide (up to 314 KB), which the first version of these notes had as 1468. The main ones are shown in cards about 400px wide. The `srcset` attributes on those pictures only offer the WebP copy; there are no smaller widths. It needs extra sizes from `scripts/extract-plans.mjs`, a `srcset` and `sizes` from `scripts/build-plans.mjs`, the same on the hand-written cards of the semi-custom page, and a check that every file a `srcset` names exists (`seo.test.js` does this for the hero).
 3. For anything that changes words (item 8, more of item 2): put the proposed words to him in full first, with the current words beside them, and edit only after he chooses. Titles are at most 70 characters, descriptions 70 to 155, each repeated in the `og:` and `twitter:` tags, and a service page's description is repeated in its `Service` data (`markup.test.js`, `seo.test.js`). Merge only when he says "merge", then confirm on buildleavitt.com with `curl`.
 
 ---
