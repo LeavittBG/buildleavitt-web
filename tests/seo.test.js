@@ -278,5 +278,75 @@ console.log('\n== the custom homes page says "build on your lot" in its title, h
   ok(/Harford County/.test(homeTitle), `the homepage title still names Harford County ("${homeTitle}")`);
 }
 
-console.log(fail === 0 ? '\nAll checks passed.' : `\n${fail} check(s) failed.`);
-process.exit(fail ? 1 : 0);
+// --- pictures: from this site only, and no bigger than their place needs ---
+// Housekeeping from the November 2026 audit (item 17).
+//
+// Four pictures on the homepage (the logo, Kyle's portrait, Before and After)
+// carried an `onerror` left over from the template the site began as: if the
+// picture failed to load, the visitor's browser fetched a grey stand-in from
+// placehold.co, an outside company, which then learned of the visit and could
+// show whatever it liked in the middle of the page. A picture that fails
+// should simply show its description.
+//
+// The logo was one file, 1200 pixels wide, for a place at most 328 wide, on
+// every page. It is now offered at 656 as well (twice its largest place), and
+// the browser takes the big one only on a screen sharp enough to use it.
+// Gold.png keeps its address: the business data names it as the logo.
+//
+// And for every picture offered in several widths, the width the page states
+// must be the file's real width, or the browser chooses wrongly.
+const widthChecks = [];
+console.log('\n== pictures come from this site, and the logo fits its place ==');
+{
+  const handlers = [];
+  const outside = [];
+  const logos = [];
+  for (const f of PAGES) {
+    const base = new URL(urlOf(f));
+    docs[f].querySelectorAll('img, source, video').forEach((el) => {
+      if (el.hasAttribute('onerror')) handlers.push(`${f}: ${el.getAttribute('src') || el.tagName}`);
+      const refs = [el.getAttribute('src'), el.getAttribute('poster'),
+        ...(el.getAttribute('srcset') || '').split(',').map((c) => c.trim())].filter(Boolean);
+      for (const ref of refs) {
+        const [file, descriptor] = ref.split(/\s+/);
+        const u = new URL(file, base);
+        if (u.origin !== base.origin) { outside.push(`${f}: ${u.host}`); continue; }
+        if (/^\d+w$/.test(descriptor || '')) widthChecks.push({ page: f, file: u.pathname, stated: parseInt(descriptor, 10) });
+      }
+    });
+    const logo = docs[f].querySelector('img[src$="Gold.png"]');
+    if (logo) {
+      const parts = [...logo.closest('picture').querySelectorAll('source'), logo];
+      const good = parts.every((el) => {
+        const widths = (el.getAttribute('srcset') || '').split(',').map((c) => parseInt(c.trim().split(/\s+/)[1], 10));
+        return widths.length >= 2 && widths.every((n) => n > 0) && Math.min(...widths) <= 700 && !!el.getAttribute('sizes');
+      });
+      logos.push({ f, good, src: logo.getAttribute('src') });
+    }
+  }
+  ok(handlers.length === 0, 'no picture has an onerror stand-in' + (handlers.length ? ' - ' + handlers.join(', ') : ''));
+  ok(outside.length === 0, 'no page shows a picture from another site' + (outside.length ? ' - ' + [...new Set(outside)].join(', ') : ''));
+  const big = logos.filter((l) => !l.good).map((l) => l.f);
+  ok(logos.length === PAGES.length && big.length === 0,
+    `the logo is offered at about twice its place, with the full-size file for sharper screens, on all ${logos.length} pages`
+    + (big.length ? ` - only the 1200px file on ${big.length}: ${big.slice(0, 5).join(', ')}${big.length > 5 ? ' ...' : ''}` : ''));
+  ok(logos.every((l) => /(^|\/)Gold\.png$/.test(l.src)) && home.logo === `${SITE}/Gold.png` && fs.existsSync(path.join(ROOT, 'Gold.png')),
+    'Gold.png keeps its address: every page falls back to it and the business data names it');
+}
+
+(async () => {
+  console.log('\n== a picture offered in several widths states each file\'s real width ==');
+  const sharp = require('sharp');
+  const seen = new Map();
+  const wrong = [];
+  for (const c of widthChecks) {
+    const file = path.join(ROOT, c.file);
+    if (!fs.existsSync(file)) { wrong.push(`${c.file} is missing`); continue; }
+    if (!seen.has(c.file)) seen.set(c.file, (await sharp(file).metadata()).width);
+    if (seen.get(c.file) !== c.stated) wrong.push(`${c.file} is ${seen.get(c.file)}px, stated as ${c.stated}w on ${c.page}`);
+  }
+  ok(seen.size >= 12 && wrong.length === 0, `${seen.size} files, each as wide as its page says` + (wrong.length ? ' - ' + [...new Set(wrong)].slice(0, 6).join(' | ') : ''));
+
+  console.log(fail === 0 ? '\nAll checks passed.' : `\n${fail} check(s) failed.`);
+  process.exit(fail ? 1 : 0);
+})();

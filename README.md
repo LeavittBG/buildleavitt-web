@@ -165,6 +165,17 @@ for the hero's `srcset`, so a phone is not sent the 2560-pixel file. The widths
 are the `srcset` lists in `TARGETS` in `scripts/optimize-images.mjs`; the files
 are committed like the rest.
 
+The logo is written the same way at 656 pixels (`Gold-656.png`, `Gold-656.webp`)
+beside the 1200-pixel `Gold.png` and `Gold.webp`. Its largest place on any page
+is 328 pixels wide, so the 656 file is what every phone and ordinary laptop is
+sent; each page's logo lists both files with a `sizes` matching its own logo.
+`Gold.png` must keep its name: the business's structured data gives that address
+as the logo.
+
+No picture has an `onerror` stand-in, and none comes from another site: a
+picture that fails to load shows its description. `tests/seo.test.js` checks
+both, and that every file a `srcset` names with a width really is that wide.
+
 ## Icons
 
 The icons are inline SVG in the page, not a script. They came from

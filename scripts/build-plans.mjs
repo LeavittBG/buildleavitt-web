@@ -196,7 +196,7 @@ const head = ({ title, description, canonical, image, jsonLd = [] }) => `<!DOCTY
     <header class="bg-[#0f172a] px-6 py-6">
         <div class="max-w-6xl mx-auto flex items-center justify-between gap-6">
             <a href="/" class="inline-block" aria-label="Leavitt Building Group - back to home">
-                <picture class="contents"><source srcset="/Gold.webp" type="image/webp"><img src="/Gold.png" alt="Leavitt Building Group" width="1200" height="293" class="h-12 md:h-14 w-auto object-contain"></picture>
+                <picture class="contents"><source srcset="/Gold-656.webp 656w, /Gold.webp 1200w" sizes="(min-width: 768px) 229px, 197px" type="image/webp"><img src="/Gold.png" srcset="/Gold-656.png 656w, /Gold.png 1200w" sizes="(min-width: 768px) 229px, 197px" alt="Leavitt Building Group" width="1200" height="293" class="h-12 md:h-14 w-auto object-contain"></picture>
             </a>
             <nav aria-label="Main" class="flex items-center gap-6 md:gap-8 text-xs md:text-sm uppercase tracking-widest font-semibold">
                 <a href="/plans/" class="inline-block py-2 text-gray-300 hover:text-white transition-colors">Plans</a>
@@ -314,6 +314,22 @@ const coverOf = (model) => {
 };
 const coverAlt = (model, cover) =>
   cover.id === 'elevation' ? `${model.name} front elevation` : `${model.name} ${cover.label.toLowerCase()}`;
+
+/**
+ * The description of a plan page's main picture, for a screen reader and for
+ * image search. The brochure cover's caption names an exterior style
+ * ("Elevation C – Modern Farmhouse w/ Stone, Board & Batten and Siding"), and
+ * this used to repeat it whole: the last place a plan page still said
+ * "Modern Farmhouse" after the style came out of the text in October 2026.
+ * It keeps what can be seen, which elevation and what it is built of:
+ * "The Poet front elevation, Elevation C, with stone, board & batten and siding".
+ */
+const elevationAlt = (model, label) => {
+  const m = /^(.*?)\s+[–—-]\s+.*?\bw\/\s*(.+)$/.exec(label || '');
+  if (!m) return `${model.name} front elevation`;
+  const which = /^front elevation$/i.test(m[1]) ? '' : `, ${m[1]}`;
+  return `${model.name} front elevation${which}, with ${m[2].toLowerCase()}`;
+};
 
 /**
  * One factual sentence assembled from the data - no adjectives we cannot stand
@@ -727,10 +743,11 @@ for (const [i, model] of models.entries()) {
 
         ${elevation ? `
         <!-- The drawing carries its own caption, so no figcaption repeating it here.
-             The alt text still names the elevation for anyone not seeing the image. -->
+             The alt text still names the elevation and its materials for anyone not
+             seeing the image, without the style name (elevationAlt above). -->
         <div class="mb-12">
             ${picture(elevation.img, {
-              alt: `${model.name} front elevation - ${elevation.label}`,
+              alt: elevationAlt(model, elevation.label),
               cls: 'w-full h-auto bg-white border border-gray-200',
               lazy: false,
             })}${exteriors.length ? `

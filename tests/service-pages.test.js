@@ -43,8 +43,11 @@ const PAGES = [
     const option = [...home.querySelectorAll('input[name="Interest"]')].some((o) => o.value === interest);
     ok(option, `${file}: "${interest}" is one of the form's Project Interest options`);
     // Every root-relative asset and page it points at exists.
-    const refs = [...d.querySelectorAll('img[src], source[srcset], link[rel=stylesheet][href], a[href^="/"]')]
-      .map((e) => (e.getAttribute('src') || e.getAttribute('srcset') || e.getAttribute('href')).split(/[?#]/)[0])
+    // A srcset may list several files, each followed by its width.
+    const refs = [...d.querySelectorAll('img[src], img[srcset], source[srcset], link[rel=stylesheet][href], a[href^="/"]')]
+      .flatMap((e) => [e.getAttribute('src'), e.getAttribute('href'),
+        ...(e.getAttribute('srcset') || '').split(',').map((c) => c.trim().split(/\s+/)[0])])
+      .filter(Boolean).map((u) => u.split(/[?#]/)[0])
       .filter((u) => u && u.startsWith('/'));
     const missing = [...new Set(refs)].filter((u) => !fs.existsSync(path.join(ROOT, u.endsWith('/') ? u + 'index.html' : u.slice(1))));
     ok(missing.length === 0, `${file}: every local link and asset resolves` + (missing.length ? ' - missing: ' + missing.join(', ') : ''));
