@@ -201,6 +201,56 @@ console.log('\n== netlify.toml sets cache and security headers ==');
       `${p} may be cached (public, max-age of a month or less; the files are replaced in place)`);
   }
   ok(!blocks.some((b) => b.for === '/*' && b.values['Cache-Control']), 'HTML and dist/styles.css keep Netlify\'s default must-revalidate (no site-wide Cache-Control)');
+
+  // The pictures at the top of the site (November 2026, audit item 15). The
+  // hero photograph, the logo, Kyle's portrait and the before/after pair sit in
+  // the site's root, outside the three cached folders, so they were served
+  // "max-age=0, must-revalidate": a returning visitor's browser asked Netlify
+  // about each of them again on every page, the logo included, which is on
+  // every page. They get the same week as the plan pictures. A week at most
+  // and never `immutable`, because a retaken photograph keeps its file name.
+  // Netlify's rule for a path (docs.netlify.com, "Custom headers"): `*` matches
+  // any characters, anywhere in a path segment; `:name` matches one segment.
+  const matcher = (pattern) => new RegExp('^' + pattern.split('*').map((part) =>
+    part.split(/(:[A-Za-z_]+)/).map((bit, i) => (i % 2 ? '[^/]+' : bit.replace(/[.+?^${}()|[\]\\]/g, '\\$&'))).join('')).join('.*') + '$');
+  const cached = blocks.filter((b) => b.for && b.values['Cache-Control']).map((b) => ({ ...b, re: matcher(b.for) }));
+  const lifetime = (p) => cached.filter((b) => b.re.test(p)).map((b) => b.values['Cache-Control']);
+
+  const pictures = new Set();
+  for (const f of PAGES) {
+    const base = new URL(urlOf(f));
+    docs[f].querySelectorAll('img[src], img[srcset], source[srcset], video[poster]').forEach((el) => {
+      const refs = [el.getAttribute('src'), el.getAttribute('poster'),
+        ...(el.getAttribute('srcset') || '').split(',').map((s) => s.trim().split(/\s+/)[0])].filter(Boolean);
+      for (const r of refs) {
+        const u = new URL(r, base);
+        if (u.origin === base.origin && /\.(jpe?g|png|webp|avif|gif|svg)$/i.test(u.pathname)) pictures.add(u.pathname);
+      }
+    });
+  }
+  const list = [...pictures].sort();
+  const missing = list.filter((p) => !fs.existsSync(path.join(ROOT, p)));
+  ok(list.length > 50 && missing.length === 0, `the pages show ${list.length} pictures, all present` + (missing.length ? ' - missing: ' + missing.join(', ') : ''));
+  const uncached = list.filter((p) => lifetime(p).length === 0);
+  const atRoot = list.filter((p) => !p.slice(1).includes('/'));
+  ok(uncached.length === 0, `every picture the pages show may be kept by the browser (${atRoot.length} of them at the site's root)` +
+    (uncached.length ? ' - no cache lifetime: ' + uncached.join(', ') : ''));
+
+  const WEEK = 7 * 86400;
+  const wrong = cached.filter((b) => {
+    const v = b.values['Cache-Control'];
+    const age = /^public, max-age=(\d+)$/.exec(v);
+    return !age || +age[1] < 86400 || +age[1] > WEEK;
+  }).map((b) => `${b.for}: ${b.values['Cache-Control']}`);
+  ok(cached.length >= 4 && wrong.length === 0 && !/immutable/i.test(toml.replace(/^\s*#.*$/gm, '')),
+    `all ${cached.length} cache rules are "public", a day to a week, never immutable` + (wrong.length ? ' - ' + wrong.join(' | ') : ''));
+
+  // A pattern written too widely would freeze a page or the stylesheet for a
+  // week: an edit merged today would not show to someone who visited yesterday.
+  const mustStayFresh = ['/', '/dist/styles.css', '/sitemap.xml', '/robots.txt', '/favicon.png', ...PAGES.map((f) => '/' + f), '/plans/'];
+  const frozen = mustStayFresh.filter((p) => lifetime(p).length > 0);
+  ok(frozen.length === 0, `no page, stylesheet or sitemap is caught by a cache rule (${mustStayFresh.length} addresses tried)` +
+    (frozen.length ? ' - cached: ' + frozen.join(', ') : ''));
 }
 
 // --- "build on your lot" is said where a search engine looks first ---

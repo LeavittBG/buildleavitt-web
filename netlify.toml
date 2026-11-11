@@ -40,6 +40,16 @@
 # and never `immutable`: a changed file keeps its name here (hero-home.jpg was
 # replaced in place in October 2026, the brochures with every redraw).
 # tests/seo.test.js checks these blocks.
+#
+# The pictures in the site's root get the same week (November 2026): the hero
+# photograph in all its sizes, the logo, Kyle's portrait and the before/after
+# pair. Until then a returning visitor's browser asked about each one again on
+# every page. Netlify lets `*` stand for any characters inside a path segment
+# (docs.netlify.com, Custom headers, "Wildcards and placeholders in paths"), so
+# "/hero-home*" covers hero-home.jpg, hero-home-1280.webp and the rest, and a
+# new size needs no new rule. Each pattern names one picture's files and
+# nothing else: the test also checks that no page, stylesheet or sitemap is
+# caught by a cache rule, and that every picture a page shows has one.
 [[headers]]
   for = "/*"
   [headers.values]
@@ -59,5 +69,30 @@
 
 [[headers]]
   for = "/media/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/hero-home*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/Gold*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/kyle.*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/Before.*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/After.*"
   [headers.values]
     Cache-Control = "public, max-age=604800"

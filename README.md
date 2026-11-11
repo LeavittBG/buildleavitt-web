@@ -640,12 +640,20 @@ question answer are not scanned, so keep them to the same facts by hand.
 
 `netlify.toml` sets `X-Content-Type-Options`, `Referrer-Policy` and
 `Permissions-Policy` on every response, and a one-week `Cache-Control` on
-`/plans/img/`, `/plans/pdf/` and `/media/`. The HTML and `dist/styles.css` keep
+`/plans/img/`, `/plans/pdf/` and `/media/` and, since November 2026, on the
+pictures in the site's root: the hero photograph in every size
+(`/hero-home*`), the logo (`/Gold*`), Kyle's portrait (`/kyle.*`) and the
+before/after pair (`/Before.*`, `/After.*`). The HTML and `dist/styles.css` keep
 Netlify's default (`max-age=0, must-revalidate`), because their names never
 change and an edit has to show at once. The cached paths hold files that are
 replaced in place under the same name (a redrawn brochure, a retaken
 rendering), so the age stays short and is never `immutable`.
-`tests/seo.test.js` checks the blocks.
+
+`tests/seo.test.js` checks the blocks: every picture any page shows must fall
+under a cache rule, every rule is a day to a week, and no page, stylesheet or
+sitemap may be caught by one. A new picture in the root therefore fails the
+test until it has a rule; in `netlify.toml` a `*` stands for any characters
+inside a path segment.
 
 ## Forms
 
