@@ -32,6 +32,10 @@
     title="Google Tag Manager" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
+    <!-- The first thing the Tab key reaches: past the bar, into the page. It takes
+         no room until it is focused (.skip-link in src/styles.css). -->
+    <a href="#main" class="skip-link">Skip to main content</a>
+
 
     <header class="bg-[#0f172a] px-6 py-6">
         <div class="max-w-3xl mx-auto flex items-center justify-between gap-6">
@@ -53,7 +57,7 @@
         </a>
     </header>
 
-    <main class="max-w-3xl mx-auto px-6 py-16 md:py-24">
+    <main id="main" tabindex="-1" class="max-w-3xl mx-auto px-6 py-16 md:py-24">
 
         <h1 class="text-4xl md:text-5xl font-light text-[#0f172a] mb-4">Privacy Policy</h1>
         <p class="text-gray-500 mb-12 text-sm">Last updated: September 29, 2026</p>

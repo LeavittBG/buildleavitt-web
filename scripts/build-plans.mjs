@@ -189,6 +189,10 @@ const head = ({ title, description, canonical, image, jsonLd = [] }) => `<!DOCTY
     title="Google Tag Manager" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
+    <!-- The first thing the Tab key reaches: past the bar, into the page. It takes
+         no room until it is focused (.skip-link in src/styles.css). -->
+    <a href="#main" class="skip-link">Skip to main content</a>
+
     <header class="bg-[#0f172a] px-6 py-6">
         <div class="max-w-6xl mx-auto flex items-center justify-between gap-6">
             <a href="/" class="inline-block" aria-label="Leavitt Building Group - back to home">
@@ -504,7 +508,7 @@ const finderHtml = ({ cap, base = '/' } = {}) => {
                     <div class="flex flex-wrap gap-2">
 ${options.map(([value, label], i) => `                        <label class="cursor-pointer">
                             <input type="radio" name="finder-${key}" value="${value}" class="sr-only peer"${i === 0 ? ' checked' : ''}>
-                            <span class="inline-block border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">${label}</span>
+                            <span class="inline-block border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#866f4f] peer-focus-visible:ring-offset-2">${label}</span>
                         </label>`).join('\n')}
                     </div>
                 </fieldset>`).join('\n');
@@ -706,7 +710,7 @@ for (const [i, model] of models.entries()) {
     image: shareImage(model),
     jsonLd: [breadcrumbs([['Home', '/'], ['Home Plans', '/plans/'], [model.name, `/plans/${model.slug}.html`]])],
   }) + `
-    <main class="max-w-6xl mx-auto px-6 py-14 md:py-20">
+    <main id="main" tabindex="-1" class="max-w-6xl mx-auto px-6 py-14 md:py-20">
 
         <nav aria-label="Breadcrumb" class="mb-10 text-sm text-gray-500">
             <a href="/" class="inline-block py-1 hover:text-[#866f4f]">Home</a>
@@ -822,7 +826,7 @@ const indexHtml = head({
   image: shareImage(models.find((m) => m.slug === 'the-visionary')),
   jsonLd: [breadcrumbs([['Home', '/'], ['Home Plans', '/plans/']]), planList()],
 }) + `
-    <main class="max-w-6xl mx-auto px-6 py-14 md:py-20">
+    <main id="main" tabindex="-1" class="max-w-6xl mx-auto px-6 py-14 md:py-20">
 
         <nav aria-label="Breadcrumb" class="mb-10 text-sm text-gray-500">
             <a href="/" class="inline-block py-1 hover:text-[#866f4f]">Home</a>

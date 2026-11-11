@@ -81,7 +81,9 @@ const PAGES = [
         year: document.getElementById('year')?.textContent,
         logo: document.querySelector('header img')?.naturalWidth > 0,
         // Every link and button is at least 24px tall, the size a fingertip needs.
-        small: [...document.querySelectorAll('a, button')].filter((e) => { const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0 && r.height < 24; }).map((e) => e.textContent.trim().slice(0, 30)),
+        // The "Skip to main content" link is 1px by 1px until the Tab key reaches
+        // it, so there is nothing to tap; keyboard.test.js measures it when shown.
+        small: [...document.querySelectorAll('a, button')].filter((e) => { const r = e.getBoundingClientRect(); return r.width > 1 && r.height > 1 && r.height < 24; }).map((e) => e.textContent.trim().slice(0, 30)),
       }));
       ok(errs.length === 0, `${width}px: no JS errors` + (errs.length ? ': ' + errs.join(' | ') : ''));
       ok(r.styled, `${width}px: stylesheet applied`);

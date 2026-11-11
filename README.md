@@ -636,6 +636,29 @@ question answer are not scanned, so keep them to the same facts by hand.
   Group", meaning buildleavitt.com accounts. Kyle is the only one, so he kept
   it. If employee accounts are added, they will be able to open it.
 
+## Keyboard and screen readers
+
+Every page has one `<main id="main">` holding the page's content, which is the
+landmark a screen reader's "jump to main content" key looks for. Every page
+with a bar starts with a "Skip to main content" link (`class="skip-link"`,
+styled in `src/styles.css`), directly after the Tag Manager `<noscript>`: it
+takes no room until the Tab key reaches it, then shows as a white button at the
+top left and sends the keyboard past the logo, menu, phone number and Client
+Login into the page. It is in the same seven places as the header (the homepage,
+the three service pages, `privacy.html`, `terms.html` and `build-plans.mjs`).
+The thank-you and not-found pages have only a logo above their content, so they
+have the landmark and no skip link.
+
+In the contact form, the field being typed in is marked by a 2px underline in
+the deeper gold (`#866f4f`), and a choice chip reached with the keyboard is
+ringed in the same colour, in the form and in the plan finder. The paler gold is
+too faint on white for this (2.3:1; a focus mark needs 3:1).
+
+`tests/keyboard.test.js` checks all of it on every page at phone and laptop
+width: it presses Tab, confirms the skip link appears on top of the page, presses
+Enter and confirms the next Tab lands inside the content, and photographs the
+chosen fields and chips to measure the mark against the page around it.
+
 ## Response headers
 
 `netlify.toml` sets `X-Content-Type-Options`, `Referrer-Policy` and

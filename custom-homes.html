@@ -137,6 +137,10 @@
     title="Google Tag Manager" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
+    <!-- The first thing the Tab key reaches: past the bar, into the page. It takes
+         no room until it is focused (.skip-link in src/styles.css). -->
+    <a href="#main" class="skip-link">Skip to main content</a>
+
     <!-- The same header as the plan pages: the wordmark, Plans, Get a Quote and,
          from tablet width, Client Login. -->
     <header class="bg-[#0f172a] px-6 py-6">
@@ -170,7 +174,7 @@
         </a>
     </header>
 
-    <main class="max-w-6xl mx-auto px-6 py-14 md:py-20">
+    <main id="main" tabindex="-1" class="max-w-6xl mx-auto px-6 py-14 md:py-20">
 
         <nav aria-label="Breadcrumb" class="mb-10 text-sm text-gray-500">
             <a href="/" class="inline-block py-1 hover:text-[#866f4f]">Home</a>
