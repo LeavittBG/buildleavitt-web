@@ -659,6 +659,16 @@ width: it presses Tab, confirms the skip link appears on top of the page, presse
 Enter and confirms the next Tab lands inside the content, and photographs the
 chosen fields and chips to measure the mark against the page around it.
 
+## Smallest text
+
+No text on the site is smaller than 12px (`text-xs`). Until November 2026 the
+small capital-letter labels were 11px, and a few were 9 or 10px on a phone.
+`tests/text-size.test.js` reads the size the browser gives every piece of text
+on every page, at a phone and a laptop width, hidden or not, and fails anything
+smaller. The two links under each plan card ("View plan", "Start with this
+plan") are set a little closer (`tracking-widest`) so that the larger letters
+take no more room than the old ones did.
+
 ## Response headers
 
 `netlify.toml` sets `X-Content-Type-Options`, `Referrer-Policy` and

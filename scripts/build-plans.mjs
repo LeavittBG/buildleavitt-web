@@ -93,7 +93,7 @@ const standardSection = () => `
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12">
 ${STANDARD.map(([heading, items]) => `                    <div>
-                        <h3 class="text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] mb-6">${heading}</h3>
+                        <h3 class="text-xs font-bold uppercase tracking-[0.2em] text-[#866f4f] mb-6">${heading}</h3>
                         <ul class="space-y-4">
 ${items.map(([title, detail]) => `                            <li class="flex gap-3">
                                 <span aria-hidden="true" class="text-[#866f4f] shrink-0 mt-1">&#10003;</span>
@@ -234,7 +234,7 @@ const foot = () => `
                  same two rows. -->
             <nav aria-label="Footer" class="flex flex-col items-center md:items-end gap-y-1 text-sm uppercase tracking-wider font-semibold">
                 <div class="flex flex-wrap items-baseline justify-center md:justify-end gap-x-6">
-                    <span class="text-[11px] tracking-[0.2em] text-[#c2a67a]">Services</span>
+                    <span class="text-xs tracking-[0.2em] text-[#c2a67a]">Services</span>
                     <a href="/custom-homes.html" class="inline-block py-2 hover:text-white transition-colors">Custom Homes</a>
                     <a href="/semi-custom-homes.html" class="inline-block py-2 hover:text-white transition-colors">Semi-Custom Homes</a>
                     <a href="/renovations.html" class="inline-block py-2 hover:text-white transition-colors">Renovations</a>
@@ -489,8 +489,8 @@ const planCard = (model, { featured = false, finder = true, base = '/' } = {}) =
                         </div>
                     </a>
                     <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
-                        <a href="/plans/${model.slug}.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
-                        <a href="${startHref(model)}" data-start-plan="${esc(model.name)}" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
+                        <a href="/plans/${model.slug}.html" class="inline-block py-1.5 text-xs font-bold uppercase tracking-widest text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="${startHref(model)}" data-start-plan="${esc(model.name)}" class="inline-block py-1.5 text-xs font-bold uppercase tracking-widest text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
                     </div>
                 </div>`;
 };
@@ -504,7 +504,7 @@ const finderHtml = ({ cap, base = '/' } = {}) => {
   const capped = Number.isFinite(cap);
   const questions = FINDER_QUESTIONS.map(([key, legend, options]) => `
                 <fieldset>
-                    <legend class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-3">${legend}</legend>
+                    <legend class="text-xs font-bold uppercase tracking-[0.2em] text-gray-500 mb-3">${legend}</legend>
                     <div class="flex flex-wrap gap-2">
 ${options.map(([value, label], i) => `                        <label class="cursor-pointer">
                             <input type="radio" name="finder-${key}" value="${value}" class="sr-only peer"${i === 0 ? ' checked' : ''}>
@@ -655,7 +655,7 @@ for (const [i, model] of models.entries()) {
     const v = model.specs?.[key];
     const known = v !== null && v !== undefined && v !== '';
     return `                    <div class="border-t border-gray-200 py-4">
-                        <dt class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-1">${esc(label)}</dt>
+                        <dt class="text-xs font-bold uppercase tracking-[0.2em] text-gray-500 mb-1">${esc(label)}</dt>
                         <dd class="text-lg ${known ? 'text-[#0f172a] font-medium' : 'text-gray-400'}">${known ? esc(fmt(v, model.specs)) : 'On request'}</dd>${NOTE_FOR[key] && model.specs?.[NOTE_FOR[key]] ? `
                         <dd class="text-xs text-gray-500 mt-1">${esc(model.specs[NOTE_FOR[key]])}</dd>` : ''}
                     </div>`;
@@ -795,12 +795,12 @@ ${similarTo(model).map((m) => planCard(m, { finder: false })).join('\n')}
 
         <nav aria-label="Other plans" class="border-t border-gray-200 pt-10 flex flex-col sm:flex-row justify-between gap-6 text-sm">
             <a href="/plans/${prev.slug}.html" class="group">
-                <span class="block text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-1">Previous plan</span>
+                <span class="block text-xs font-bold uppercase tracking-[0.2em] text-gray-500 mb-1">Previous plan</span>
                 <span class="text-lg text-[#0f172a] group-hover:text-[#866f4f] transition-colors">${esc(prev.name)}</span>
             </a>
             <a href="/plans/" class="self-center py-2 text-[#866f4f] uppercase tracking-widest font-bold text-xs hover:underline">All plans</a>
             <a href="/plans/${next.slug}.html" class="group sm:text-right">
-                <span class="block text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-1">Next plan</span>
+                <span class="block text-xs font-bold uppercase tracking-[0.2em] text-gray-500 mb-1">Next plan</span>
                 <span class="text-lg text-[#0f172a] group-hover:text-[#866f4f] transition-colors">${esc(next.name)}</span>
             </a>
         </nav>
