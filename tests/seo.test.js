@@ -278,6 +278,57 @@ console.log('\n== the custom homes page says "build on your lot" in its title, h
   ok(/Harford County/.test(homeTitle), `the homepage title still names Harford County ("${homeTitle}")`);
 }
 
+// --- "Maryland" is written out, not left as "MD" ---
+// The second phrase Kyle wants the site found for is "custom home builder
+// Maryland". The November 2026 audit (item 8) found the state was rarely
+// spelled out: four of the five main titles said "MD" or named no place at
+// all, the plans page and the seventeen plan pages named no place anywhere
+// above the footer's postal address, and the homepage band ended "Southern
+// PA". A search engine does not reliably read "MD" as Maryland, and a visitor
+// from outside the state may not either. Kyle approved the words on November
+// 11, 2026. Harford County stays wherever it was: this adds the state to it.
+// The footer's "Forest Hill, MD 21050" is the postal form and stays as it is,
+// matching the business listings.
+console.log('\n== Maryland is written out in titles, descriptions and on the page ==');
+{
+  const MAIN_PAGES = ['index.html', ...SERVICE_PAGES, 'plans/index.html'];
+  const PLAN_PAGES = PAGES.filter((f) => f.startsWith('plans/') && f !== 'plans/index.html');
+  const titleOf = (f) => docs[f].querySelector('title')?.textContent || '';
+  const descOf = (f) => docs[f].querySelector('meta[name="description"]')?.getAttribute('content') || '';
+  // What a visitor reads in the body of the page: <main> without its scripts.
+  const mainText = (f) => {
+    const m = docs[f].querySelector('main').cloneNode(true);
+    m.querySelectorAll('script, style, noscript').forEach((e) => e.remove());
+    return m.textContent.replace(/\s+/g, ' ');
+  };
+
+  const noState = MAIN_PAGES.filter((f) => !/\bMaryland\b/.test(titleOf(f)));
+  ok(noState.length === 0, `the homepage, the three service pages and /plans/ each name Maryland in the title` +
+    (noState.length ? ' - not: ' + noState.map((f) => `${f} ("${titleOf(f)}")`).join(' | ') : ''));
+  const abbreviated = [...MAIN_PAGES, ...PLAN_PAGES].filter((f) => /\bMD\b/.test(titleOf(f)) || /\bMD\b/.test(descOf(f)));
+  ok(abbreviated.length === 0, 'no title or description abbreviates the state to "MD"' +
+    (abbreviated.length ? ' - ' + abbreviated.join(', ') : ''));
+  ok(/Harford County/.test(titleOf('index.html')) && /custom home builder/i.test(titleOf('index.html')),
+    `the homepage title keeps Harford County and "custom home builder" beside Maryland ("${titleOf('index.html')}")`);
+
+  const descMissing = [...MAIN_PAGES, ...PLAN_PAGES].filter((f) => !/\bMaryland\b/.test(descOf(f)));
+  ok(PLAN_PAGES.length >= 17 && descMissing.length === 0,
+    `all ${MAIN_PAGES.length + PLAN_PAGES.length} descriptions (main pages and plan pages) name Maryland` +
+    (descMissing.length ? ' - not: ' + descMissing.join(', ') : ''));
+
+  const bodyMissing = [...MAIN_PAGES, ...PLAN_PAGES].filter((f) => !/\bMaryland\b/.test(mainText(f)));
+  ok(bodyMissing.length === 0, 'every main page and plan page names Maryland in the text a visitor reads' +
+    (bodyMissing.length ? ' - not: ' + bodyMissing.join(', ') : ''));
+
+  const noTown = SERVICE_PAGES.filter((f) => !/based in Forest Hill, Maryland/.test(mainText(f)));
+  ok(noTown.length === 0, 'each service page says "based in Forest Hill, Maryland"' + (noTown.length ? ' - not: ' + noTown.join(', ') : ''));
+
+  const band = [...docs['index.html'].querySelectorAll('h2')].find((h) => /Greater Baltimore/.test(h.textContent))?.closest('section');
+  const bandText = (band?.textContent || '').replace(/\s+/g, ' ');
+  ok(!!band && /\bMaryland/.test(band.querySelector('h2').textContent), 'the homepage service-area band names Maryland in its heading');
+  ok(/Southern Pennsylvania/.test(bandText) && !/Southern PA\b/.test(bandText), 'the band ends "Southern Pennsylvania", not "Southern PA"');
+}
+
 // --- pictures: from this site only, and no bigger than their place needs ---
 // Housekeeping from the November 2026 audit (item 17).
 //

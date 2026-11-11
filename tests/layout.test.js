@@ -134,6 +134,45 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
       `plan page ${w}px: the phone number and Client Login show in the header, in one row with Plans and Get a Quote (${JSON.stringify(r)})`);
     await page.close();
   }
+
+  // The homepage band that lists the counties. Its last entry was "Southern
+  // PA" and the six fitted on one line on a wide screen. Written out as
+  // "Southern Pennsylvania" (November 2026) they cannot, at any width: the
+  // band is at most 1232px wide. Left to wrap on its own the line broke inside
+  // the last name, leaving "Southern" at the end of the first row and
+  // "Pennsylvania" alone under it. So from lg up the list is two rows of
+  // three, no name is split, and no dividing bar is left hanging at the end
+  // of a row. Phones and tablets wrap it as they always did.
+  for (const w of [1024, 1280, 1440]) {
+    const page = await b.newPage({ viewport: { width: w, height: 800 } });
+    await serveFonts(page);
+    await page.goto(site.base + '/');
+    await page.evaluate(() => document.fonts.ready);
+    const r = await page.evaluate(() => {
+      const band = [...document.querySelectorAll('h2')].find((h) => /Greater Baltimore/.test(h.textContent)).closest('section');
+      const list = band.querySelector('p');
+      const spans = [...list.querySelectorAll(':scope > span')];
+      const bar = (s) => s.textContent.trim() === '|';
+      const top = (s) => Math.round(s.getBoundingClientRect().top);
+      const names = spans.filter((s) => !bar(s));
+      const shownBars = spans.filter((s) => bar(s) && s.getBoundingClientRect().width > 0);
+      return {
+        names: names.length,
+        split: names.filter((s) => s.getClientRects().length > 1).map((s) => s.textContent.trim()),
+        perRow: Object.values(names.reduce((rows, s) => { rows[top(s)] = (rows[top(s)] || 0) + 1; return rows; }, {})),
+        // A bar belongs between two names on the same row.
+        hanging: shownBars.filter((s) => {
+          const i = spans.indexOf(s);
+          const next = spans.slice(i + 1).find((x) => !bar(x));
+          const prev = spans.slice(0, i).reverse().find((x) => !bar(x));
+          return !next || !prev || Math.abs(top(next) - top(prev)) > 2;
+        }).length,
+      };
+    });
+    ok(r.names === 6 && r.split.length === 0 && r.perRow.join() === '3,3' && r.hanging === 0,
+      `homepage ${w}px: the six service areas make two rows of three, no name split and no bar left hanging (${JSON.stringify(r)})`);
+    await page.close();
+  }
   await site.close();
 
   await b.close();
