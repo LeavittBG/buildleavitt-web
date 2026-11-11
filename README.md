@@ -70,7 +70,8 @@ every other file that is not part of the site - see the comment in
 
 GitHub runs the whole suite on every pull request
 (`.github/workflows/test.yml`) and shows the result as a check named **test**
-on the PR. If it fails, the screenshots are attached to the run under
+on the PR, listed there as **Tests / test** because the workflow is named
+**Tests** (the name to look for in the Actions tab). If it fails, the screenshots are attached to the run under
 Artifacts. To make a failing run block the merge button:
 
 1. On GitHub, open the repository → **Settings** → **Branches**
