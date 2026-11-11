@@ -19,23 +19,31 @@ On November 10, 2026 Kyle asked for a full audit of the site (speed, local SEO, 
 
 ## A2. Done
 
-**Merged and live before this session** (all confirmed on buildleavitt.com on November 10, 2026; `CLAUDE.md` records each decision):
+**Everything below is merged and live** (`CLAUDE.md` records each decision). Nothing is in progress.
 
 - **#58:** item 4 (tests cannot reach Google Analytics), item 1 (phone number at the top of every page), item 5 (licence numbers readable).
 - **#60:** item 11 (every link and button at least 24px tall, on every page), item 2(a) ("build on your lot" in the custom homes title, heading and description).
-- **#47:** the nightly site watch (`scripts/watch-site.mjs`, `.github/workflows/watch-site.yml`). Run by hand on GitHub after the merge: green.
-- **#59 and #61:** notes only (earlier versions of this file).
+- **#47:** the nightly site watch (`scripts/watch-site.mjs`, `.github/workflows/watch-site.yml`).
+- **#59, #61 and #63:** notes only (versions of this file). #63 carries this version and changes no page; if you are reading this on `main`, it has merged.
+- **#62:** items 15, 14, 13, 17 and 6, and the missed notes. Kyle merged it on November 11, 2026 (17:13 UTC). One commit each:
 
-**Pull request #62**, from branch `claude/vibrant-hamilton-yb9nk3`, opened November 11, 2026 as a draft. This version of the file travels with it, so if you are reading it on `main`, #62 has merged; A6 step 1 says how to confirm it on the live site. Kyle said yes to items 15, 14, 13, 17 and 6 and to folding in the missed notes first. One commit each, so any one can be dropped:
-
-- **Notes.** The session began by checking `CLAUDE.md` and this file against the code, the history and the live site. The site matched GitHub file for file. What did not match: two sessions' write-ups (November 8 and 9) had been committed to their own branches and never opened as pull requests, so `main` never had them. Both are folded into `CLAUDE.md` and the README (the brochure copies in Drive; the Leavitt Connect history). One question for Kyle had dropped off the list because of it and is question 7 below.
+- **Notes.** That session began by checking `CLAUDE.md` and this file against the code, the history and the live site. The site matched GitHub file for file. What did not match: two sessions' write-ups (November 8 and 9) had been committed to their own branches and never opened as pull requests, so `main` never had them. Both are folded into `CLAUDE.md` and the README (the brochure copies in Drive; the Leavitt Connect history). One question for Kyle had dropped off the list because of it and is question 7 below.
 - **Item 15:** the hero, logo, Kyle's portrait and the before/after pair may be kept by a browser for a week (`netlify.toml`; `tests/seo.test.js`). Nothing visible.
 - **Item 14:** a "Skip to main content" link on every page with a bar, a main-content landmark on the homepage, thank-you and not-found pages, and a clearer mark on the chosen field and chip in the contact form and plan finder (`tests/keyboard.test.js`, new).
 - **Item 13:** no text under 12px (`tests/text-size.test.js`, new). The line under Kyle's name on his photograph is two lines on a phone now.
 - **Item 17:** the stand-in pictures from an outside site are gone, the logo comes in a 656px copy as well, and the plan pictures' descriptions no longer say "Modern Farmhouse" (`tests/seo.test.js`, `tests/plans.test.js`). The founding year was not added: it waits on Kyle (question 2).
 - **Item 6:** each plan rendering also comes 640 and 960 pixels wide, and a phone or a card takes the small one (`tests/plan-pictures.test.js`, new).
 
-The full suite passes on the branch: 26 test files. Kyle was sent before-and-after pictures of everything visible (items 14 and 13; a close-up of the logo and of a plan card to show items 17 and 6 look the same).
+Kyle was sent before-and-after pictures of everything visible (items 14 and 13; a close-up of the logo and of a plan card to show items 17 and 6 look the same).
+
+**Checked after #62 merged, November 11, 2026**, all with `curl` or by reading files, so nothing reached Analytics:
+
+- The site watch, run by hand: all 437 published files on buildleavitt.com match `main` byte for byte; Tag Manager, DNS and HTTPS are as recorded.
+- On the live site: the hero files, both logo files, Kyle's portrait and the before/after pair answer `cache-control: public,max-age=604800`; the pages, the stylesheet and the sitemap still answer `max-age=0`; the homepage has the skip link and no `onerror` or text under 12px; `HANDOFF.md`, `CLAUDE.md`, the README and the tests answer 404.
+- On `main`: the full suite passes (26 files, 2,585 checks); a fresh `npm run build` gives the committed stylesheet exactly; `npm run plans:build` changes nothing.
+- On GitHub: no pull request open besides #63, and no issue open.
+
+Four small things in the notes did not match and #63 corrects them: this file still called #62 an open draft; it said the site watch had not yet run on its schedule (A5); the start-of-session branch check names two known branches where four show (`CLAUDE.md`, "How changes are made", and A6 step 1); and `CLAUDE.md` gave the pull-request check's name as "test" where GitHub lists it as "Tests / test".
 
 ## A3. The audit list and what is left
 
@@ -76,8 +84,8 @@ Found in good order, so do not re-audit: compression and HTTPS on the live site,
 
 ## A5. Known issues and things not verified
 
-- **The nightly site watch had not yet run on its schedule** when this was written: its first scheduled run was due at 06:17 UTC on November 11 (about 1:17 a.m. in Maryland). Look for a green "Site watch" run whose event is "schedule". Once #62 merges, the watch compares 138 more published files (the smaller plan pictures and the smaller logo).
-- **The cache rules use a pattern Netlify documents but this site had not used** (`/hero-home*`: a `*` inside a path segment). It was confirmed on #62's deploy preview on November 11, 2026: the hero files, both logo files, Kyle's portrait and the before/after pair answered `cache-control: public,max-age=604800`, and `/`, the pages, `/dist/styles.css`, the sitemap and the favicon still answered `max-age=0`. Confirm the same on the live site after the merge: `curl -sI https://buildleavitt.com/hero-home.webp`, `/Gold-656.webp`, `/kyle.webp`, `/Before.webp`, then `/` and `/dist/styles.css`.
+- **The nightly site watch has run on its schedule once, and not yet against the site as it is now.** That run was on November 11, 2026 and was green, but it started at 14:28 UTC, about eight hours after its 06:17 UTC slot (GitHub does not promise the time of a scheduled run), and that was before #62 merged. The merged site was checked by hand the same day (A2: 437 files, no differences). The first scheduled run against it is due on November 12: look in the Actions tab for a green "Site watch" run whose event is "schedule". A run that is hours late is not a fault; a day with no run at all is worth a look.
+- **The cache rules use a pattern Netlify documents but this site had not used** (`/hero-home*`: a `*` inside a path segment). It works: confirmed on #62's deploy preview and again on the live site after the merge (A2). `curl -sI https://buildleavitt.com/hero-home.webp` shows the header. Read the status with `curl -s -o /dev/null -w '%{http_code}'`: with `-I` the first line printed in the cloud sandbox is its proxy's own "200", not the site's answer.
 - **Safari itself was not opened.** `plan-pictures.test.js` runs Chrome and works out Safari's choice by Safari's published rule. The iPhone entry in `sizes` relies on Safari understanding `min-resolution` in `dppx`, which it has since version 16 (2022); an older Safari skips the entry and takes the full-size file, as before.
 - Google Analytics may hold page views and `generate_lead` events from hostname `127.0.0.1` dated before November 10, 2026 (see `CLAUDE.md`, Tests).
 - Kyle was told of an optional change in GA that needs no code: make the `generate_lead` rule "page_location contains buildleavitt.com/success", so deploy previews and test addresses can never count. Not confirmed done.
@@ -91,7 +99,7 @@ Found in good order, so do not re-audit: compression and HTTPS on the live site,
 
 ## A6. The exact next three steps
 
-1. **Start the way this session did.** List every open pull request and every branch that holds commits `main` lacks (`git fetch origin`, then `git cherry origin/main origin/<branch>` for each; the two September upload branches in question 8 are known). If #62 is still open, it is waiting on Kyle's "merge": he reviews the Netlify deploy preview. Once merged, bring the branch level with `main` and confirm on buildleavitt.com with `curl` (never a browser without Google's tag hosts blocked): the cache headers in A5; `Skip to main content` in the homepage's HTML; `https://buildleavitt.com/Gold-656.webp` and `https://buildleavitt.com/plans/img/the-poet-elevation-640.webp` answer 200; no `onerror=` and no `text-[11px]` in the homepage. Then check the site watch's latest run is green.
+1. **Start the way the last two sessions did.** List every open pull request and every branch that holds commits `main` lacks (`git fetch origin`, then `git cherry origin/main origin/<branch>` for each). Four branches show when nothing is wrong: the two September upload branches in question 8, and `claude/cool-rubin-ipc0c4` and `claude/wonderful-cray-7odgsh`, whose notes are already in `main` (see `CLAUDE.md`, "How changes are made"). If #63 is still open, it is notes only and waits on Kyle's "merge". Then check that the latest scheduled "Site watch" run is green (A5) and that no issue labelled `site-watch` is open. `node scripts/watch-site.mjs` runs the same watch by hand in about a minute and opens no browser.
 2. **Ask Kyle which of the remaining items he wants next**, by number. Three need only his say-so and no facts: **8** (spell out Maryland; wording, so put the proposed words beside the current ones first), **12** (a menu on phones away from the homepage; it touches the menu, so describe it and wait), **7** (the old number at the end of the video; needs his answer to questions 3 and 7). The rest wait on his facts: 2(b), 3, 9, 10. Item 16 is deferred.
 3. **For anything that changes words** (item 8, more of item 2): put the proposed words to him in full first, with the current words beside them, and edit only after he chooses. Titles are at most 70 characters, descriptions 70 to 155, each repeated in the `og:` and `twitter:` tags, and a service page's description is repeated in its `Service` data (`markup.test.js`, `seo.test.js`). One commit per item, each with a check seen failing first and a before-and-after picture of anything visible. Merge only when he says "merge".
 
