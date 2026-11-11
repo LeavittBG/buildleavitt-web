@@ -267,11 +267,43 @@ const foot = () => `
  * homepage, whose paths are relative (several tests open index.html straight
  * from disk, where "/plans/img/..." would resolve to the root of the machine).
  */
-const picture = (img, { alt, cls, lazy = true, base = '/' }) => {
+const picture = (img, { alt, cls, lazy = true, base = '/', sizes }) => {
   const a = lazy ? ' loading="lazy" decoding="async"' : ' decoding="async"';
-  return `<picture class="contents"><source srcset="${base}plans/img/${img.file}.webp" type="image/webp">` +
-    `<img src="${base}plans/img/${img.file}.${img.ext || 'png'}" alt="${esc(alt)}" width="${img.width}" height="${img.height}"${a} class="${cls}"></picture>`;
+  const ext = img.ext || 'png';
+  // A photo rendering also exists 640 and 960 pixels wide (`widths`, written by
+  // extract-plans.mjs). Where the caller says how wide the picture is drawn
+  // (`sizes`), every width is offered and the browser takes the smallest that
+  // still looks sharp, on both the WebP and the fallback.
+  const several = sizes && img.widths?.length;
+  const set = (e) => [...img.widths.map((w) => `${base}plans/img/${img.file}-${w}.${e} ${w}w`),
+    `${base}plans/img/${img.file}.${e} ${img.width}w`].join(', ');
+  return `<picture class="contents"><source srcset="${several ? set('webp') : `${base}plans/img/${img.file}.webp`}"${several ? ` sizes="${sizes}"` : ''} type="image/webp">` +
+    `<img src="${base}plans/img/${img.file}.${ext}"${several ? ` srcset="${set(ext)}" sizes="${sizes}"` : ''} alt="${esc(alt)}" width="${img.width}" height="${img.height}"${a} class="${cls}"></picture>`;
 };
+
+/*
+ * How wide a rendering is drawn, for `sizes` (November 2026). Measured on the
+ * pages at ten screen widths; plan-pictures.test.js opens the pages and checks
+ * what the browser takes.
+ *
+ * The first entry is for phones with very sharp screens (an iPhone has three
+ * device pixels to each CSS pixel). Safari takes the first file at least as
+ * sharp as the screen, which for a 340px card on such a phone would be the
+ * full-size file again, 250 KB to fill a card. So there the page asks for
+ * three-quarters of the screen's width, a little less than the card, and
+ * Safari and Chrome both settle on the 960 copy: 2.8 device pixels to the
+ * pixel, which the eye cannot tell from 3. A browser that does not understand
+ * the condition skips it and behaves as it did before.
+ */
+const SHARP_PHONE = '(max-width: 639px) and (min-resolution: 2.5dppx) 74vw';
+// A card in a grid of plans: one column on a phone, two from 640px, three from 1024px.
+const CARD_SIZES = `${SHARP_PHONE}, (min-width: 1280px) 410px, (min-width: 1024px) 310px, (min-width: 640px) 46vw, calc(100vw - 50px)`;
+// The picture across the top of a plan page, and its Modern Brick twin: the
+// width of the page less its margins, 1104px at most.
+const PAGE_SIZES = `${SHARP_PHONE}, (min-width: 1200px) 1104px, calc(100vw - 48px)`;
+// The three cards written by hand on the semi-custom page: the picture sits
+// inside a padded frame, so it is drawn a little narrower than a finder card.
+const HAND_CARD_SIZES = `${SHARP_PHONE}, (min-width: 640px) 320px, calc(100vw - 80px)`;
 
 /** Every sheet this model has, in the order they are shown. */
 const sheets = (model) => model.pages.map((p) => ({ ...p, img: images[model.slug]?.[p.id] }))
@@ -497,6 +529,7 @@ const planCard = (model, { featured = false, finder = true, base = '/' } = {}) =
                               alt: coverAlt(model, cover),
                               cls: 'w-full h-full object-cover',
                               base,
+                              sizes: CARD_SIZES,
                             }) : '<span class="block p-6 text-gray-400 text-sm">Drawings coming soon</span>'}
                         </div>
                         <div class="px-6 pt-5">
@@ -689,6 +722,7 @@ for (const [i, model] of models.entries()) {
                 ${picture(s.img, {
                   alt: `${model.name} ${s.label.toLowerCase()} - the same house finished in ${EXTERIOR_NOTES[s.id]}`,
                   cls: 'w-full h-auto bg-white border border-gray-200',
+                  sizes: PAGE_SIZES,
                 })}
                 <figcaption class="mt-3 text-sm text-gray-500 flex flex-wrap items-baseline justify-end gap-x-6 gap-y-1">
                     <a href="/plans/img/${s.img.file}.${s.img.ext || 'png'}" target="_blank" rel="noopener"
@@ -750,6 +784,7 @@ for (const [i, model] of models.entries()) {
               alt: elevationAlt(model, elevation.label),
               cls: 'w-full h-auto bg-white border border-gray-200',
               lazy: false,
+              sizes: PAGE_SIZES,
             })}${exteriors.length ? `
             <p class="mt-3 text-sm text-gray-600">
                 See this plan with a
@@ -980,14 +1015,36 @@ for (const file of ['index.html', 'semi-custom-homes.html']) {
   if (!existsSync(p)) continue;
   const before = readFileSync(p, 'utf8');
   let filled = 0;
-  const after = before.replace(/(<p [^>]*data-plan-facts="([a-z0-9-]+)"[^>]*>)[\s\S]*?(<\/p>)/g, (whole, open, slug, close) => {
+  let after = before.replace(/(<p [^>]*data-plan-facts="([a-z0-9-]+)"[^>]*>)[\s\S]*?(<\/p>)/g, (whole, open, slug, close) => {
     const model = models.find((m) => m.slug === slug);
     if (!model) { console.error(`  ! ${file} asks for facts of "${slug}", which is not in plans.json`); return whole; }
     filled++;
     return `${open}${cardFacts(model)}${close}`;
   });
+  // The same cards' pictures: a rendering written by hand as one file is given
+  // its three widths here, so the list of widths can never fall behind the
+  // files. Run again, it rewrites what it wrote. Outside the generated finder
+  // only: the finder's own pictures already carry theirs.
+  let widened = 0;
+  const everyImage = Object.values(images).flatMap((sheets) => Object.values(sheets));
+  const handWritten = (html) => html.replace(
+    /<picture class="contents"><source srcset="[^"]*"(?: sizes="[^"]*")? type="image\/webp"><img src="(\/?)plans\/img\/([a-z0-9-]+)\.(jpg|png)"(?: srcset="[^"]*" sizes="[^"]*")?/g,
+    (whole, slash, name, ext) => {
+      const img = everyImage.find((i) => i.file === name);
+      if (!img?.widths?.length) return whole;
+      const set = (e) => [...img.widths.map((w) => `${slash}plans/img/${name}-${w}.${e} ${w}w`), `${slash}plans/img/${name}.${e} ${img.width}w`].join(', ');
+      widened++;
+      return `<picture class="contents"><source srcset="${set('webp')}" sizes="${HAND_CARD_SIZES}" type="image/webp">` +
+        `<img src="${slash}plans/img/${name}.${ext}" srcset="${set(ext)}" sizes="${HAND_CARD_SIZES}"`;
+    });
+  const [head0, finder0, tail0] = (() => {
+    const a = after.indexOf('<!-- plan-finder:start -->');
+    const b = after.indexOf('<!-- plan-finder:end -->');
+    return a === -1 || b === -1 ? [after, '', ''] : [after.slice(0, a), after.slice(a, b), after.slice(b)];
+  })();
+  after = handWritten(head0) + finder0 + handWritten(tail0);
   if (after !== before) writeFileSync(p, after);
-  console.log(`${file}  (${filled} plan card${filled === 1 ? '' : 's'} filled from plans.json)`);
+  console.log(`${file}  (${filled} plan card${filled === 1 ? '' : 's'} filled from plans.json${widened ? `, ${widened} picture${widened === 1 ? '' : 's'} given their widths` : ''})`);
 }
 
 // -------------------------------------------------------------- sitemap

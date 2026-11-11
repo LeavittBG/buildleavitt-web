@@ -239,6 +239,20 @@ also names its front elevation as the image shown when it is shared.
 Models appear at `/plans/` in the order they are listed in `src/plans.json` —
 currently alphabetical by the name after "The".
 
+Each photo rendering (a plan's cover picture and its Modern Brick twin) is
+written in three widths: full size (1468 or 1600 pixels), 960 and 640, as WebP
+and JPEG. `plans:images` writes them (`SMALL_WIDTHS` in
+`scripts/extract-plans.mjs`) and records the widths in `src/plan-images.json`;
+`plans:build` then lists all three wherever a rendering is shown, with the width
+it is drawn at, so a browser takes the smallest that still looks sharp: the 640
+copy for a card on a laptop, the 960 copy on a phone, the full file for the
+picture across a plan page on a desktop. The first entry of each `sizes`
+(`(max-width: 639px) and (min-resolution: 2.5dppx) 74vw`) is there for iPhones,
+which would otherwise take the full-size file for a small card; keep it. Floor
+plans are line drawings people zoom into and stay one full-size file.
+`tests/plan-pictures.test.js` opens the pages as an iPhone, an older phone and a
+laptop and checks which file each takes.
+
 ### Adding a model
 
 1. Put the brochure at `assets-src/plans/<slug>.pdf` (lowercase, hyphenated —
