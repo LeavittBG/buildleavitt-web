@@ -137,12 +137,16 @@
     title="Google Tag Manager" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
+    <!-- The first thing the Tab key reaches: past the bar, into the page. It takes
+         no room until it is focused (.skip-link in src/styles.css). -->
+    <a href="#main" class="skip-link">Skip to main content</a>
+
     <!-- The same header as the plan pages: the wordmark, Plans, Get a Quote and,
          from tablet width, Client Login. -->
     <header class="bg-[#0f172a] px-6 py-6">
         <div class="max-w-6xl mx-auto flex items-center justify-between gap-6">
             <a href="/" class="inline-block" aria-label="Leavitt Building Group - back to home">
-                <picture class="contents"><source srcset="/Gold.webp" type="image/webp"><img src="/Gold.png" alt="Leavitt Building Group" width="1200" height="293" class="h-12 md:h-14 w-auto object-contain"></picture>
+                <picture class="contents"><source srcset="/Gold-656.webp 656w, /Gold.webp 1200w" sizes="(min-width: 768px) 229px, 197px" type="image/webp"><img src="/Gold.png" srcset="/Gold-656.png 656w, /Gold.png 1200w" sizes="(min-width: 768px) 229px, 197px" alt="Leavitt Building Group" width="1200" height="293" class="h-12 md:h-14 w-auto object-contain"></picture>
             </a>
             <nav aria-label="Main" class="flex items-center gap-6 md:gap-8 text-xs md:text-sm uppercase tracking-widest font-semibold">
                 <a href="/plans/" class="inline-block py-2 text-gray-300 hover:text-white transition-colors">Plans</a>
@@ -170,7 +174,7 @@
         </a>
     </header>
 
-    <main class="max-w-6xl mx-auto px-6 py-14 md:py-20">
+    <main id="main" tabindex="-1" class="max-w-6xl mx-auto px-6 py-14 md:py-20">
 
         <nav aria-label="Breadcrumb" class="mb-10 text-sm text-gray-500">
             <a href="/" class="inline-block py-1 hover:text-[#866f4f]">Home</a>
@@ -218,11 +222,11 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <figure>
                     <picture class="contents"><source srcset="/Before.webp" type="image/webp"><img src="/Before.jpg" alt="A Leavitt Building Group project before renovation" width="1800" height="1165" loading="lazy" decoding="async" class="w-full h-auto aspect-[4/3] object-cover border border-gray-200"></picture>
-                    <figcaption class="mt-3 text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500">Before</figcaption>
+                    <figcaption class="mt-3 text-xs font-bold uppercase tracking-[0.2em] text-gray-500">Before</figcaption>
                 </figure>
                 <figure>
                     <picture class="contents"><source srcset="/After.webp" type="image/webp"><img src="/After.jpg" alt="The same project after renovation by Leavitt Building Group" width="1800" height="1206" loading="lazy" decoding="async" class="w-full h-auto aspect-[4/3] object-cover border border-gray-200"></picture>
-                    <figcaption class="mt-3 text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500">After</figcaption>
+                    <figcaption class="mt-3 text-xs font-bold uppercase tracking-[0.2em] text-gray-500">After</figcaption>
                 </figure>
             </div>
         </section>
@@ -315,7 +319,7 @@
             <p class="text-sm">&copy; <span id="year">2026</span> Leavitt Building Group. All Rights Reserved.</p>
             <nav aria-label="Footer" class="flex flex-col items-center md:items-end gap-y-1 text-sm uppercase tracking-wider font-semibold">
                 <div class="flex flex-wrap items-baseline justify-center md:justify-end gap-x-6">
-                    <span class="text-[11px] tracking-[0.2em] text-[#c2a67a]">Services</span>
+                    <span class="text-xs tracking-[0.2em] text-[#c2a67a]">Services</span>
                     <a href="/custom-homes.html" class="inline-block py-2 hover:text-white transition-colors">Custom Homes</a>
                     <a href="/semi-custom-homes.html" class="inline-block py-2 hover:text-white transition-colors">Semi-Custom Homes</a>
                     <a href="/renovations.html" class="inline-block py-2 hover:text-white transition-colors">Renovations</a>

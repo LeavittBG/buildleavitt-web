@@ -120,6 +120,18 @@ const PNG_PALETTE = { compressionLevel: 9, palette: true, colours: 64, dither: 0
 const PALETTE_MAX_RMSE = 2.0;   // out of 255
 const MAX_WIDTH = 1600;
 
+/*
+ * Smaller copies of the photo renderings (November 2026). A rendering is 1468
+ * or 1600 pixels wide and 190 to 315 KB, and most of the places it is shown
+ * are cards about 340 to 410 pixels wide: the homepage's finder, /plans/, the
+ * "Plans like this one" row. Each rendering is therefore also written at these
+ * widths, as <name>-<width>.webp and .jpg, and build-plans.mjs lists them in a
+ * srcset so the browser takes the smallest that still looks sharp. Only the
+ * photographs get them: a floor plan is a line drawing people zoom into to
+ * read the room sizes, and it stays one full-size file.
+ */
+const SMALL_WIDTHS = [640, 960];
+
 /** Root-mean-square difference between two encoded images, in levels of 255. */
 async function rmse(a, b) {
   const [A, B] = await Promise.all([
@@ -257,7 +269,10 @@ for (const model of models) {
 
     const name = `${slug}-${id}`;
     const webp = await base.clone().webp(WEBP).toBuffer();
-    const { buffer: fallback, ext, note } = await encodeFallback(await base.clone().png().toBuffer());
+    // The page at full size, losslessly: what the fallback and the smaller
+    // copies below are each encoded from.
+    const lossless = await base.clone().png().toBuffer();
+    const { buffer: fallback, ext, note } = await encodeFallback(lossless);
     const dims = await sharp(webp).metadata();
 
     writeFileSync(join(IMG, `${name}.webp`), webp);
@@ -271,8 +286,27 @@ for (const model of models) {
 
     manifest[slug][id] = { file: name, ext, width: dims.width, height: dims.height, label };
 
+    // A photograph (it came out as a JPEG) also gets its smaller copies; a
+    // sheet that is not one, or is no longer one, has any old copies removed.
+    const widths = ext === 'jpg' ? SMALL_WIDTHS.filter((w) => w < dims.width) : [];
+    for (const w of SMALL_WIDTHS) {
+      for (const e of ['webp', 'jpg']) {
+        if (!widths.includes(w)) rmSync(join(IMG, `${name}-${w}.${e}`), { force: true });
+      }
+    }
+    let smallNote = '';
+    for (const w of widths) {
+      const small = sharp(lossless).resize({ width: w });
+      const smallWebp = await small.clone().webp(WEBP).toBuffer();
+      const smallJpeg = await small.clone().jpeg(JPEG).toBuffer();
+      writeFileSync(join(IMG, `${name}-${w}.webp`), smallWebp);
+      writeFileSync(join(IMG, `${name}-${w}.jpg`), smallJpeg);
+      smallNote += `  ${w}: webp ${kb(smallWebp.length)} / jpg ${kb(smallJpeg.length)}`;
+    }
+    if (widths.length) manifest[slug][id].widths = widths;
+
     console.log(`   p${page} -> ${name}  ${dims.width}x${dims.height}  ` +
-      `webp ${kb(webp.length)} / ${ext} ${kb(fallback.length)}  ${note}`);
+      `webp ${kb(webp.length)} / ${ext} ${kb(fallback.length)}  ${note}${smallNote}`);
   }
 
   if (!fromImages) {

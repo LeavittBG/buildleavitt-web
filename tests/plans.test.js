@@ -30,7 +30,8 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
     const doc = dom.window.document;
     const refs = [
       ...[...doc.querySelectorAll('img[src]')].map(e => e.getAttribute('src')),
-      ...[...doc.querySelectorAll('source[srcset]')].map(e => e.getAttribute('srcset')),
+      // A srcset may list several files, each followed by its width ("a.webp 640w, b.webp 960w").
+      ...[...doc.querySelectorAll('source[srcset], img[srcset]')].flatMap(e => e.getAttribute('srcset').split(',').map(c => c.trim().split(/\s+/)[0])),
       ...[...doc.querySelectorAll('link[rel="stylesheet"][href]')].map(e => e.getAttribute('href')),
       ...[...doc.querySelectorAll('a[href$=".pdf"], a[href$=".html"]')].map(e => e.getAttribute('href')),
     ].filter(u => u && !/^https?:/.test(u));
@@ -219,8 +220,14 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
   console.log('\n== the elevation caption is off the site ==');
   // Leavitt asked for the text naming the elevation and exterior style to be
   // kept off the pages. It is cropped out of the rendering, and it must not have
-  // crept back in as visible text either. It does survive as alt text, which is
-  // an attribute and so is not part of textContent.
+  // crept back in as visible text either.
+  //
+  // The main picture's description (its alt text, read out by a screen reader
+  // and read by image search) used to repeat the whole caption, so "Modern
+  // Farmhouse" was still said on every plan page after Kyle had the style taken
+  // out of the text, once each plan had a second exterior (October 31, 2026).
+  // Since November 2026 the description keeps what can be seen in the picture,
+  // which elevation it is and what it is built of, and names no style.
   for (const m of models) {
     const caption = m.pages.find(p => p.id === 'elevation')?.label;
     if (!caption) continue;
@@ -228,7 +235,10 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
     ok(!doc.body.textContent.includes(caption), `${m.slug}: caption not shown as page text`);
     ok(!/Modern Farmhouse w\//.test(doc.body.textContent), `${m.slug}: no "Elevation X - style w/ materials" line`);
     const alts = [...doc.querySelectorAll('img')].map(i => i.getAttribute('alt')).join(' | ');
-    ok(alts.includes(caption), `${m.slug}: caption kept in alt text for screen readers`);
+    const [which, built] = [caption.split(/\s+[–—-]\s+/)[0], caption.split(/\bw\/\s*/)[1] || ''];
+    ok(!!built && alts.toLowerCase().includes(built.toLowerCase()) && (/^front elevation$/i.test(which) || alts.includes(which)),
+      `${m.slug}: the main picture's description says which elevation and what it is built of ("${which}", "${built}")`);
+    ok(!alts.includes(caption) && !/farmhouse/i.test(alts), `${m.slug}: no picture's description names a style`);
   }
   {
     const idx = new JSDOM(fs.readFileSync(path.join(ROOT, 'plans/index.html'), 'utf8')).window.document;
@@ -367,8 +377,9 @@ const images = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/plan-images.json'
     ok(!fig || !/Dashed outlines/.test(fig.textContent), `${m.slug}: Modern Brick is not captioned as a floor plan`);
     // With two exteriors the plan is no longer one style, so the line under its
     // name and its Google description stopped calling it "a two-story Modern
-    // Farmhouse plan" (Kyle, October 31, 2026). The style names survive only as
-    // the pictures' alt text and the brick picture's own heading.
+    // Farmhouse plan" (Kyle, October 31, 2026). The only style still named is
+    // Modern Brick, on that picture's own heading; "farmhouse" is gone from the
+    // pictures' descriptions too (see "the elevation caption is off the site").
     const desc = doc.querySelector('meta[name="description"]')?.getAttribute('content') || '';
     ok(!/farmhouse/i.test(doc.body.textContent) && !/farmhouse/i.test(desc),
       `${m.slug}: the page text and description name no single style`);

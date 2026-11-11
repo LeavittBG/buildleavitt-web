@@ -43,8 +43,11 @@ const PAGES = [
     const option = [...home.querySelectorAll('input[name="Interest"]')].some((o) => o.value === interest);
     ok(option, `${file}: "${interest}" is one of the form's Project Interest options`);
     // Every root-relative asset and page it points at exists.
-    const refs = [...d.querySelectorAll('img[src], source[srcset], link[rel=stylesheet][href], a[href^="/"]')]
-      .map((e) => (e.getAttribute('src') || e.getAttribute('srcset') || e.getAttribute('href')).split(/[?#]/)[0])
+    // A srcset may list several files, each followed by its width.
+    const refs = [...d.querySelectorAll('img[src], img[srcset], source[srcset], link[rel=stylesheet][href], a[href^="/"]')]
+      .flatMap((e) => [e.getAttribute('src'), e.getAttribute('href'),
+        ...(e.getAttribute('srcset') || '').split(',').map((c) => c.trim().split(/\s+/)[0])])
+      .filter(Boolean).map((u) => u.split(/[?#]/)[0])
       .filter((u) => u && u.startsWith('/'));
     const missing = [...new Set(refs)].filter((u) => !fs.existsSync(path.join(ROOT, u.endsWith('/') ? u + 'index.html' : u.slice(1))));
     ok(missing.length === 0, `${file}: every local link and asset resolves` + (missing.length ? ' - missing: ' + missing.join(', ') : ''));
@@ -81,7 +84,9 @@ const PAGES = [
         year: document.getElementById('year')?.textContent,
         logo: document.querySelector('header img')?.naturalWidth > 0,
         // Every link and button is at least 24px tall, the size a fingertip needs.
-        small: [...document.querySelectorAll('a, button')].filter((e) => { const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0 && r.height < 24; }).map((e) => e.textContent.trim().slice(0, 30)),
+        // The "Skip to main content" link is 1px by 1px until the Tab key reaches
+        // it, so there is nothing to tap; keyboard.test.js measures it when shown.
+        small: [...document.querySelectorAll('a, button')].filter((e) => { const r = e.getBoundingClientRect(); return r.width > 1 && r.height > 1 && r.height < 24; }).map((e) => e.textContent.trim().slice(0, 30)),
       }));
       ok(errs.length === 0, `${width}px: no JS errors` + (errs.length ? ': ' + errs.join(' | ') : ''));
       ok(r.styled, `${width}px: stylesheet applied`);

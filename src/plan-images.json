@@ -5,7 +5,11 @@
       "ext": "jpg",
       "width": 1468,
       "height": 820,
-      "label": "Elevation D – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+      "label": "Elevation D – Modern Farmhouse w/ Stone, Board & Batten and Siding",
+      "widths": [
+        640,
+        960
+      ]
     },
     "first-floor": {
       "file": "the-craftsman-first-floor",
@@ -33,7 +37,11 @@
       "ext": "jpg",
       "width": 1600,
       "height": 893,
-      "label": "Modern Brick Elevation"
+      "label": "Modern Brick Elevation",
+      "widths": [
+        640,
+        960
+      ]
     }
   },
   "the-daydreamer": {
@@ -42,7 +50,11 @@
       "ext": "jpg",
       "width": 1468,
       "height": 820,
-      "label": "Elevation C – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+      "label": "Elevation C – Modern Farmhouse w/ Stone, Board & Batten and Siding",
+      "widths": [
+        640,
+        960
+      ]
     },
     "first-floor": {
       "file": "the-daydreamer-first-floor",
@@ -84,7 +96,11 @@
       "ext": "jpg",
       "width": 1600,
       "height": 893,
-      "label": "Modern Brick Elevation"
+      "label": "Modern Brick Elevation",
+      "widths": [
+        640,
+        960
+      ]
     }
   },
   "the-draftsman": {
@@ -93,7 +109,11 @@
       "ext": "jpg",
       "width": 1468,
       "height": 820,
-      "label": "Elevation B – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+      "label": "Elevation B – Modern Farmhouse w/ Stone, Board & Batten and Siding",
+      "widths": [
+        640,
+        960
+      ]
     },
     "first-floor": {
       "file": "the-draftsman-first-floor",
@@ -135,7 +155,11 @@
       "ext": "jpg",
       "width": 1600,
       "height": 893,
-      "label": "Modern Brick Elevation"
+      "label": "Modern Brick Elevation",
+      "widths": [
+        640,
+        960
+      ]
     }
   },
   "the-entrepreneur": {
@@ -144,7 +168,11 @@
       "ext": "jpg",
       "width": 1468,
       "height": 820,
-      "label": "Elevation B – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+      "label": "Elevation B – Modern Farmhouse w/ Stone, Board & Batten and Siding",
+      "widths": [
+        640,
+        960
+      ]
     },
     "first-floor": {
       "file": "the-entrepreneur-first-floor",
@@ -179,7 +207,11 @@
       "ext": "jpg",
       "width": 1600,
       "height": 893,
-      "label": "Modern Brick Elevation"
+      "label": "Modern Brick Elevation",
+      "widths": [
+        640,
+        960
+      ]
     }
   },
   "the-expressionist-i": {
@@ -188,7 +220,11 @@
       "ext": "jpg",
       "width": 1468,
       "height": 820,
-      "label": "Elevation B – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+      "label": "Elevation B – Modern Farmhouse w/ Stone, Board & Batten and Siding",
+      "widths": [
+        640,
+        960
+      ]
     },
     "first-floor": {
       "file": "the-expressionist-i-first-floor",
@@ -237,7 +273,11 @@
       "ext": "jpg",
       "width": 1600,
       "height": 893,
-      "label": "Modern Brick Elevation"
+      "label": "Modern Brick Elevation",
+      "widths": [
+        640,
+        960
+      ]
     }
   },
   "the-expressionist-ii": {
@@ -246,7 +286,11 @@
       "ext": "jpg",
       "width": 1468,
       "height": 820,
-      "label": "Elevation B – Modern Farmhouse w/ Stone and Board & Batten"
+      "label": "Elevation B – Modern Farmhouse w/ Stone and Board & Batten",
+      "widths": [
+        640,
+        960
+      ]
     },
     "first-floor": {
       "file": "the-expressionist-ii-first-floor",
@@ -295,7 +339,11 @@
       "ext": "jpg",
       "width": 1600,
       "height": 893,
-      "label": "Modern Brick Elevation"
+      "label": "Modern Brick Elevation",
+      "widths": [
+        640,
+        960
+      ]
     }
   },
   "the-illustrator": {
@@ -304,7 +352,11 @@
       "ext": "jpg",
       "width": 1468,
       "height": 820,
-      "label": "Elevation C – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+      "label": "Elevation C – Modern Farmhouse w/ Stone, Board & Batten and Siding",
+      "widths": [
+        640,
+        960
+      ]
     },
     "first-floor": {
       "file": "the-illustrator-first-floor",
@@ -353,7 +405,11 @@
       "ext": "jpg",
       "width": 1600,
       "height": 893,
-      "label": "Modern Brick Elevation"
+      "label": "Modern Brick Elevation",
+      "widths": [
+        640,
+        960
+      ]
     }
   },
   "the-impressionist": {
@@ -362,7 +418,11 @@
       "ext": "jpg",
       "width": 1468,
       "height": 820,
-      "label": "Elevation C – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+      "label": "Elevation C – Modern Farmhouse w/ Stone, Board & Batten and Siding",
+      "widths": [
+        640,
+        960
+      ]
     },
     "first-floor": {
       "file": "the-impressionist-first-floor",
@@ -390,7 +450,11 @@
       "ext": "jpg",
       "width": 1600,
       "height": 893,
-      "label": "Modern Brick Elevation"
+      "label": "Modern Brick Elevation",
+      "widths": [
+        640,
+        960
+      ]
     }
   },
   "the-innovator": {
@@ -399,7 +463,11 @@
       "ext": "jpg",
       "width": 1468,
       "height": 820,
-      "label": "Elevation A – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+      "label": "Elevation A – Modern Farmhouse w/ Stone, Board & Batten and Siding",
+      "widths": [
+        640,
+        960
+      ]
     },
     "first-floor": {
       "file": "the-innovator-first-floor",
@@ -434,7 +502,11 @@
       "ext": "jpg",
       "width": 1600,
       "height": 893,
-      "label": "Modern Brick Elevation"
+      "label": "Modern Brick Elevation",
+      "widths": [
+        640,
+        960
+      ]
     }
   },
   "the-maestro": {
@@ -443,7 +515,11 @@
       "ext": "jpg",
       "width": 1468,
       "height": 820,
-      "label": "Elevation D – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+      "label": "Elevation D – Modern Farmhouse w/ Stone, Board & Batten and Siding",
+      "widths": [
+        640,
+        960
+      ]
     },
     "first-floor": {
       "file": "the-maestro-first-floor",
@@ -478,7 +554,11 @@
       "ext": "jpg",
       "width": 1600,
       "height": 893,
-      "label": "Modern Brick Elevation"
+      "label": "Modern Brick Elevation",
+      "widths": [
+        640,
+        960
+      ]
     }
   },
   "the-novel": {
@@ -487,7 +567,11 @@
       "ext": "jpg",
       "width": 1468,
       "height": 820,
-      "label": "Elevation B – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+      "label": "Elevation B – Modern Farmhouse w/ Stone, Board & Batten and Siding",
+      "widths": [
+        640,
+        960
+      ]
     },
     "first-floor": {
       "file": "the-novel-first-floor",
@@ -529,7 +613,11 @@
       "ext": "jpg",
       "width": 1600,
       "height": 893,
-      "label": "Modern Brick Elevation"
+      "label": "Modern Brick Elevation",
+      "widths": [
+        640,
+        960
+      ]
     }
   },
   "the-pioneer-i": {
@@ -538,7 +626,11 @@
       "ext": "jpg",
       "width": 1468,
       "height": 820,
-      "label": "Elevation C – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+      "label": "Elevation C – Modern Farmhouse w/ Stone, Board & Batten and Siding",
+      "widths": [
+        640,
+        960
+      ]
     },
     "first-floor": {
       "file": "the-pioneer-i-first-floor",
@@ -580,7 +672,11 @@
       "ext": "jpg",
       "width": 1600,
       "height": 893,
-      "label": "Modern Brick Elevation"
+      "label": "Modern Brick Elevation",
+      "widths": [
+        640,
+        960
+      ]
     }
   },
   "the-pioneer-ii": {
@@ -589,7 +685,11 @@
       "ext": "jpg",
       "width": 1468,
       "height": 820,
-      "label": "Elevation C – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+      "label": "Elevation C – Modern Farmhouse w/ Stone, Board & Batten and Siding",
+      "widths": [
+        640,
+        960
+      ]
     },
     "first-floor": {
       "file": "the-pioneer-ii-first-floor",
@@ -631,7 +731,11 @@
       "ext": "jpg",
       "width": 1600,
       "height": 893,
-      "label": "Modern Brick Elevation"
+      "label": "Modern Brick Elevation",
+      "widths": [
+        640,
+        960
+      ]
     }
   },
   "the-poet": {
@@ -640,7 +744,11 @@
       "ext": "jpg",
       "width": 1468,
       "height": 820,
-      "label": "Elevation C – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+      "label": "Elevation C – Modern Farmhouse w/ Stone, Board & Batten and Siding",
+      "widths": [
+        640,
+        960
+      ]
     },
     "first-floor": {
       "file": "the-poet-first-floor",
@@ -675,7 +783,11 @@
       "ext": "jpg",
       "width": 1600,
       "height": 893,
-      "label": "Modern Brick Elevation"
+      "label": "Modern Brick Elevation",
+      "widths": [
+        640,
+        960
+      ]
     }
   },
   "the-romantic": {
@@ -684,7 +796,11 @@
       "ext": "jpg",
       "width": 1468,
       "height": 820,
-      "label": "Elevation A – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+      "label": "Elevation A – Modern Farmhouse w/ Stone, Board & Batten and Siding",
+      "widths": [
+        640,
+        960
+      ]
     },
     "first-floor": {
       "file": "the-romantic-first-floor",
@@ -726,7 +842,11 @@
       "ext": "jpg",
       "width": 1600,
       "height": 893,
-      "label": "Modern Brick Elevation"
+      "label": "Modern Brick Elevation",
+      "widths": [
+        640,
+        960
+      ]
     }
   },
   "the-storyteller": {
@@ -735,7 +855,11 @@
       "ext": "jpg",
       "width": 1468,
       "height": 820,
-      "label": "Front Elevation – Modern Farmhouse w/ Stone, Board & Batten, Shakes and Siding"
+      "label": "Front Elevation – Modern Farmhouse w/ Stone, Board & Batten, Shakes and Siding",
+      "widths": [
+        640,
+        960
+      ]
     },
     "first-floor": {
       "file": "the-storyteller-first-floor",
@@ -763,7 +887,11 @@
       "ext": "jpg",
       "width": 1600,
       "height": 893,
-      "label": "Modern Brick Elevation"
+      "label": "Modern Brick Elevation",
+      "widths": [
+        640,
+        960
+      ]
     }
   },
   "the-visionary": {
@@ -772,7 +900,11 @@
       "ext": "jpg",
       "width": 1468,
       "height": 826,
-      "label": "Elevation B – Modern Farmhouse w/ Stone, Board & Batten and Siding"
+      "label": "Elevation B – Modern Farmhouse w/ Stone, Board & Batten and Siding",
+      "widths": [
+        640,
+        960
+      ]
     },
     "first-floor": {
       "file": "the-visionary-first-floor",
@@ -821,7 +953,11 @@
       "ext": "jpg",
       "width": 1600,
       "height": 893,
-      "label": "Modern Brick Elevation"
+      "label": "Modern Brick Elevation",
+      "widths": [
+        640,
+        960
+      ]
     }
   }
 }

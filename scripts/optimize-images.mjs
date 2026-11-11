@@ -49,7 +49,10 @@ const TARGETS = {
   'kyle.jpg': 928,
   'Before.jpg': 1800,
   'After.jpg': 1800,
-  'Gold.png': 1200,
+  // The logo's largest place is 328px wide (h-20), so 656 is twice that: what
+  // every phone and most laptops need. The 1200px file stays for sharper
+  // screens, and because the business data names Gold.png as the logo.
+  'Gold.png': { width: 1200, srcset: [656] },
 };
 
 /** WebP is only worth a second file when it is meaningfully smaller. */

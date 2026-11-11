@@ -9,7 +9,7 @@ The repository is public, so neither part holds prices, margins, fees, client na
 
 ---
 
-# Part A — The website: where things stand (November 10, 2026)
+# Part A — The website: where things stand (November 11, 2026)
 
 Read `CLAUDE.md` first: it has the rules, the commands and every decision. This part is only the state of the work in progress.
 
@@ -19,25 +19,23 @@ On November 10, 2026 Kyle asked for a full audit of the site (speed, local SEO, 
 
 ## A2. Done
 
-**Merged and live.** Pull request #58, merged November 10, 2026 and confirmed on buildleavitt.com. `CLAUDE.md` records each decision.
+**Merged and live before this session** (all confirmed on buildleavitt.com on November 10, 2026; `CLAUDE.md` records each decision):
 
-- **Item 4:** the tests can no longer reach Google Analytics (`launch()` in `tests/lib/env.js`; `tests/analytics-off.test.js`).
-- **Item 1:** the phone number is in the bar at the top of every page (`tests/header-phone.test.js`).
-- **Item 5:** the licence numbers are readable (footer line and hero line; `tests/colour-contrast.test.js`).
+- **#58:** item 4 (tests cannot reach Google Analytics), item 1 (phone number at the top of every page), item 5 (licence numbers readable).
+- **#60:** item 11 (every link and button at least 24px tall, on every page), item 2(a) ("build on your lot" in the custom homes title, heading and description).
+- **#47:** the nightly site watch (`scripts/watch-site.mjs`, `.github/workflows/watch-site.yml`). Run by hand on GitHub after the merge: green.
+- **#59 and #61:** notes only (earlier versions of this file).
 
-Pull request #59 carried the first version of this file and merged the same day.
+**Pull request #62**, from branch `claude/vibrant-hamilton-yb9nk3`, opened November 11, 2026 as a draft. This version of the file travels with it, so if you are reading it on `main`, #62 has merged; A6 step 1 says how to confirm it on the live site. Kyle said yes to items 15, 14, 13, 17 and 6 and to folding in the missed notes first. One commit each, so any one can be dropped:
 
-**Pull request #60**, from branch `claude/lucid-feynman-u8ep8j`. Kyle saw its deploy preview and its before-and-after pictures and said "merge" on November 10, 2026. This version of the file travels with it, so on `main` it has merged; A6 step 1 says how to confirm it on the live site if that is in doubt. One commit each:
+- **Notes.** The session began by checking `CLAUDE.md` and this file against the code, the history and the live site. The site matched GitHub file for file. What did not match: two sessions' write-ups (November 8 and 9) had been committed to their own branches and never opened as pull requests, so `main` never had them. Both are folded into `CLAUDE.md` and the README (the brochure copies in Drive; the Leavitt Connect history). One question for Kyle had dropped off the list because of it and is question 7 below.
+- **Item 15:** the hero, logo, Kyle's portrait and the before/after pair may be kept by a browser for a week (`netlify.toml`; `tests/seo.test.js`). Nothing visible.
+- **Item 14:** a "Skip to main content" link on every page with a bar, a main-content landmark on the homepage, thank-you and not-found pages, and a clearer mark on the chosen field and chip in the contact form and plan finder (`tests/keyboard.test.js`, new).
+- **Item 13:** no text under 12px (`tests/text-size.test.js`, new). The line under Kyle's name on his photograph is two lines on a phone now.
+- **Item 17:** the stand-in pictures from an outside site are gone, the logo comes in a 656px copy as well, and the plan pictures' descriptions no longer say "Modern Farmhouse" (`tests/seo.test.js`, `tests/plans.test.js`). The founding year was not added: it waits on Kyle (question 2).
+- **Item 6:** each plan rendering also comes 640 and 960 pixels wide, and a phone or a card takes the small one (`tests/plan-pictures.test.js`, new).
 
-- **Notes corrected:** `CLAUDE.md` and this part were checked line by line against the files, the history and the live site. The site was right; a handful of lines in the notes were not.
-- **Item 11:** every link, button and "tap to open" line is at least 24px tall, on every page, from a 360px phone to a laptop (`tests/tap-targets.test.js`). The fixed ones are 28px or more. The homepage's four desktop menu links were the last of them: Kyle approved raising those separately, and the bar did not change by a pixel.
-- **Item 2(a):** `custom-homes.html` says "build on your lot" in its title, main heading and description, in words Kyle chose (`tests/seo.test.js`; the words are in `CLAUDE.md`, under Content decisions).
-
-The full suite passed on that branch and in GitHub's own run: 22 test files. It was confirmed on buildleavitt.com the same evening.
-
-**Pull request #47, the nightly site watch.** Written on October 24, 2026 and then left open and unnoticed; brought up to date on November 10 at Kyle's request, and merged on his word that evening. It changes nothing on the site. Every night GitHub compares every published file on buildleavitt.com with `main`, reads the Tag Manager container, and checks the domain's DNS and HTTPS; a difference opens a GitHub issue that emails Kyle (`scripts/watch-site.mjs`, `.github/workflows/watch-site.yml`, `tests/watch-site.test.js`; `CLAUDE.md` and the README's "Site watch" section explain it). Run against the live site on November 10: no differences in any of the four checks, 299 files compared. Straight after the merge it was run once by hand on GitHub (Actions, **Site watch**) and finished green in under a minute; the nightly schedule runs from that night on.
-
-**Where that leaves things.** Nothing is in progress and no pull request is open. Both pull requests were confirmed on buildleavitt.com. Kyle has named the next items (A6).
+The full suite passes on the branch: 26 test files. Kyle was sent before-and-after pictures of everything visible (items 14 and 13; a close-up of the logo and of a plan card to show items 17 and 6 look the same).
 
 ## A3. The audit list and what is left
 
@@ -45,59 +43,57 @@ Numbers are the ones Kyle was given; use them with him.
 
 | # | Finding | Status / what it needs |
 |---|---|---|
-| 1 | No phone number at the top of any page | Done |
-| 2 | "Build on your lot" has no heading or page. On the homepage it appears only inside a closed question and on a form card; the custom and semi-custom pages say it once each, under "The practical questions" | (a) Done in #60: the `custom-homes.html` title, heading and description. (b) A dedicated page: not started, needs Kyle's facts on how a lot is evaluated |
+| 1 | No phone number at the top of any page | Done (#58) |
+| 2 | "Build on your lot" had no heading or page | (a) Done (#60): the `custom-homes.html` title, heading and description. (b) A dedicated page: not started, needs Kyle's facts on how a lot is evaluated |
 | 3 | No real project photos; every house picture is a rendering, plus one before/after pair | Waiting on Kyle's photographs. The gallery was removed on purpose (see `CLAUDE.md`) |
-| 4 | Tests loaded the live Google tag | Done |
-| 5 | Licence numbers were the faintest text on the site | Done |
-| 6 | Plan renderings come in one size: 1468px wide, 200–310 KB each, shown in cards about 400px wide. WebP is no smaller than JPEG for them. A 640px copy measured about 46 KB, a 960px copy about 94 KB | Not started. Needs extra sizes from `scripts/extract-plans.mjs`, a `srcset` from `scripts/build-plans.mjs` (and the hand-written cards on the semi-custom page), and tests |
-| 7 | The old (866) 832-6524 number is still in the Leavitt Connect video: on the closing card and spoken, 1:39.9 to 1:45.6, so also in the captions and the homepage transcript | Not started. Either trim the ending (ffmpeg is in the sandbox) and update the captions, transcript, the `VideoObject` duration and the two tests that know about it, or Kyle re-records. Ask whether the old number still rings |
-| 8 | "Maryland" is rarely spelled out (never on `/plans/`, whose title and description do say "Harford County, MD" but whose visible text names no place above the footer); the semi-custom title has no location | Not started. Wording needs approval. The November 6 choice to target Harford County first stands; this adds to it |
+| 4 | Tests loaded the live Google tag | Done (#58) |
+| 5 | Licence numbers were the faintest text on the site | Done (#58) |
+| 6 | Plan renderings came in one size, 190–315 KB each, shown in cards about 400px wide | Done in #62 |
+| 7 | The old (866) 832-6524 number is still in the Leavitt Connect video: on the closing card and spoken, 1:39.9 to 1:45.6, so also in the captions and the homepage transcript | Not started. Either trim the ending (ffmpeg is in the sandbox) and update the captions, transcript, the `VideoObject` duration and the two tests that know about it, or Kyle re-records, which would also settle question 7. README "Leavitt Connect" has the steps. Ask whether the old number still rings |
+| 8 | "Maryland" is rarely spelled out (never on `/plans/`, whose visible text names no place above the footer); the semi-custom title has no location | Not started. Wording needs approval. The November 6 choice to target Harford County first stands; this adds to it |
 | 9 | No mention of insurance; the founding year appears nowhere; "20+ Years of Excellence" may read as conflicting with a 2011 founding | Needs Kyle's facts. Never invent them |
 | 10 | The three testimonials name no source and do not link to Google reviews | Needs Kyle to say where they came from |
-| 11 | Small tap targets on phones. Plan pages: breadcrumbs 17px tall, the phone link in "Interested in this plan?" 17px, "Open full size image" 20px, "All plans" 16px. `/plans/`: the Leavitt Standard PDF link 17px. The `/plans/` breadcrumb is 17px too. Homepage: "Read the transcript" 17px, and two links inside sentences, "Leavitt Connect" and "the Leavitt Standard", 20px. 404: the phone link 17px. "View plan" and "Start with this plan" are 25px | Done in #60, every page and every width, the homepage's desktop menu links included |
+| 11 | Small tap targets on phones | Done (#60) |
 | 12 | Away from the homepage, phones get no menu: only Plans and Get a Quote | Not started. Touches the menu, so it is Kyle's call |
-| 13 | Tiny text: 9px caption under Kyle's photo, 10px Before/After labels, 11px "Read More", "View plan" and the small labels | Not started |
-| 14 | No page has a "skip to content" link; the homepage, `success.html` and `404.html` have no main-content landmark either (the other pages do); the form fields' focus highlight is faint | Not started |
-| 15 | The hero, logo, Kyle's photo and the before/after pair have no cache lifetime | Not started. A one-week header in `netlify.toml`, never `immutable` (see `CLAUDE.md`) |
+| 13 | Tiny text: 9, 10 and 11px in about 150 places | Done in #62 |
+| 14 | No "skip to content" link; three pages had no main-content landmark; the form fields' focus highlight was faint | Done in #62 |
+| 15 | The hero, logo, Kyle's photo and the before/after pair had no cache lifetime | Done in #62 |
 | 16 | Fonts load from Google | Deferred by Kyle on November 6 |
-| 17 | Housekeeping: the logo file is 1200px wide for a slot of at most 328px; four homepage pictures (the logo, Kyle's photo and the Before and After pair) have a leftover `onerror` fallback to an outside placeholder site, placehold.co; image descriptions on all 17 plan pages still say "Modern Farmhouse"; `foundingDate` is missing from the business data | Not started |
+| 17 | Housekeeping: oversized logo file, `onerror` fallbacks to an outside placeholder site, "Modern Farmhouse" in picture descriptions, `foundingDate` missing from the business data | Done in #62, except `foundingDate`, which waits on question 2 |
 
 Found in good order, so do not re-audit: compression and HTTPS on the live site, titles and descriptions, one main heading per page, the business markup, sitemap, robots.txt, no sideways scrolling at 360 and 390px, no "Creative Home Co" anywhere, no broken links (1,608 checked), and a Tag Manager container that holds only Google Analytics.
 
 ## A4. Questions waiting on Kyle
 
 1. Insurance: what may the site state? (item 9)
-2. Is "20+ years" his own experience, and may the site say "founded 2011"? (item 9)
+2. Is "20+ years" his own experience, and may the site say "founded 2011"? (item 9; also unlocks `foundingDate`, item 17)
 3. Does (866) 832-6524 still ring? Trim the video ending or re-record it? (item 7)
 4. Where did the three testimonials come from, and may they link to the Google profile? (item 10)
 5. Are there real photographs of finished homes? (item 3)
 6. How does Leavitt evaluate a client's lot? Needed before a "build on your lot" page is written. (item 2b)
+7. The Leavitt Connect video: at about 0:55 the sample change order shows an overhead-and-profit percentage that a viewer who pauses could take for Leavitt's markup. Re-record that screen or leave it? Asked on October 8, 2026 and still open; it had dropped off this list because the notes recording it never reached `main` (see `CLAUDE.md`, "How changes are made"). The same video ends on the old phone number (question 3), so one re-recording would settle both.
+8. Two branches from his own uploads in September 2026 are still on GitHub: `new-plans-layouts` (brochures since replaced) and `new-gallery-photos` (house photographs). The repository is public. Delete them? He was told on November 11; it is his call and only he, or a session he tells to, should do it.
 
 ## A5. Known issues and things not verified
 
-- Google Analytics may hold page views and `generate_lead` events from hostname `127.0.0.1` dated before the block went in. On November 10 this session's own audit loaded the live tag about 30 times, and one full test run, before that was noticed.
+- **The nightly site watch had not yet run on its schedule** when this was written: its first scheduled run was due at 06:17 UTC on November 11 (about 1:17 a.m. in Maryland). Look for a green "Site watch" run whose event is "schedule". Once #62 merges, the watch compares 138 more published files (the smaller plan pictures and the smaller logo).
+- **The cache rules use a pattern Netlify documents but this site had not used** (`/hero-home*`: a `*` inside a path segment). It was confirmed on #62's deploy preview on November 11, 2026: the hero files, both logo files, Kyle's portrait and the before/after pair answered `cache-control: public,max-age=604800`, and `/`, the pages, `/dist/styles.css`, the sitemap and the favicon still answered `max-age=0`. Confirm the same on the live site after the merge: `curl -sI https://buildleavitt.com/hero-home.webp`, `/Gold-656.webp`, `/kyle.webp`, `/Before.webp`, then `/` and `/dist/styles.css`.
+- **Safari itself was not opened.** `plan-pictures.test.js` runs Chrome and works out Safari's choice by Safari's published rule. The iPhone entry in `sizes` relies on Safari understanding `min-resolution` in `dppx`, which it has since version 16 (2022); an older Safari skips the entry and takes the full-size file, as before.
+- Google Analytics may hold page views and `generate_lead` events from hostname `127.0.0.1` dated before November 10, 2026 (see `CLAUDE.md`, Tests).
 - Kyle was told of an optional change in GA that needs no code: make the `generate_lead` rule "page_location contains buildleavitt.com/success", so deploy previews and test addresses can never count. Not confirmed done.
 - Away from the homepage, on a 320px-wide phone, the logo is squeezed to about 90px by Plans and Get a Quote. It was like that before the phone number went in and was left alone.
 - Speed was measured locally (page weight, layout shift). Real-visitor Core Web Vitals were not; they are in Search Console.
 - The Semrush account had no API units, so there are no search-volume figures behind the SEO items.
-- The audit's measuring scripts lived in the session's scratch folder and are gone. The figures that matter are in the table above.
-- Google shows a new title and description only after it next reads the page, which can take days or weeks. Nothing has been checked in Search Console for "build on your lot" yet.
+- Google shows a new title and description only after it next reads the page. Nothing has been checked in Search Console for "build on your lot" yet.
 - The custom homes title ends "| Leavitt", not the full company name, so that both phrases fit. Every other title ends "| Leavitt Building Group".
 - Other links inside sentences on the service pages use `inline-block py-1`, which makes their line of text 8px taller than its neighbours. Item 11 used padding alone for sentence links so no line moved; the service pages were not changed to match.
+- The wording check for Leavitt Connect reads the homepage section only; the service pages' paragraphs and the project-manager answer are kept to the same facts by hand (README "Leavitt Connect", open items).
 
 ## A6. The exact next three steps
 
-Kyle asked for **items 15, 14, 13, 17 and 6** on November 10, 2026, then handed off to a new session before any of it was started. No file has been touched for them.
-
-1. List every open pull request (all of them, not only the newest: #47 sat open for seventeen days because nobody looked), start from the latest `main`, and confirm with Kyle that 15, 14, 13, 17 and 6 are still what he wants.
-2. Do them as one pull request, one commit per item, each with a check that was seen failing first, and a before-and-after picture of anything visible. What was found about each on November 10, so it need not be measured again:
-   - **15, cache lifetime.** `netlify.toml` gives a one-week lifetime only to `/plans/img/*`, `/plans/pdf/*` and `/media/*`. The pictures at the site root (the hero files, `Gold.*`, `kyle.*`, `Before.*`, `After.*`) are served `max-age=0, must-revalidate`. One week at most, never `immutable`. `seo.test.js` checks the header blocks and that `/*` carries no cache rule; read Netlify's documentation for the path pattern before writing one.
-   - **14, skip link and landmark.** No page has a "skip to content" link. The homepage, `success.html` and `404.html` have no `<main>`; the other pages do. The form fields' focus highlight is faint.
-   - **13, tiny text.** On the homepage: one 9px caption under Kyle's photo, four uses of 10px (the Before and After labels among them), and 64 uses of 11px (Read More, View plan, the finder's labels). Raising the 11px text changes how the plan cards lay out, so it needs pictures.
-   - **17, housekeeping.** Four homepage pictures (the logo, Kyle's photo, Before, After) have an `onerror` fallback to placehold.co. `Gold.png` is 1200 by 293 for a slot at most 328px wide; the business data names that file as the logo, so keep its address working. "Modern Farmhouse" is still in the main picture's description (alt text) on all seventeen plan pages, and `plans.test.js` keeps it there on purpose ("caption kept in alt text for screen readers"), so that check changes with it. `foundingDate` waits on Kyle's answer to question 2 in A4; do not invent it.
-   - **6, smaller plan pictures.** Every rendering is 1468px wide (about 190 to 280 KB; the Modern Brick ones up to 313 KB) and is shown in cards about 400px wide. The `srcset` attributes on those pictures only offer the WebP copy; there are no smaller widths. It needs extra sizes from `scripts/extract-plans.mjs`, a `srcset` and `sizes` from `scripts/build-plans.mjs`, the same on the hand-written cards of the semi-custom page, and a check that every file a `srcset` names exists (`seo.test.js` does this for the hero).
-3. For anything that changes words (item 8, more of item 2): put the proposed words to him in full first, with the current words beside them, and edit only after he chooses. Titles are at most 70 characters, descriptions 70 to 155, each repeated in the `og:` and `twitter:` tags, and a service page's description is repeated in its `Service` data (`markup.test.js`, `seo.test.js`). Merge only when he says "merge", then confirm on buildleavitt.com with `curl`.
+1. **Start the way this session did.** List every open pull request and every branch that holds commits `main` lacks (`git fetch origin`, then `git cherry origin/main origin/<branch>` for each; the two September upload branches in question 8 are known). If #62 is still open, it is waiting on Kyle's "merge": he reviews the Netlify deploy preview. Once merged, bring the branch level with `main` and confirm on buildleavitt.com with `curl` (never a browser without Google's tag hosts blocked): the cache headers in A5; `Skip to main content` in the homepage's HTML; `https://buildleavitt.com/Gold-656.webp` and `https://buildleavitt.com/plans/img/the-poet-elevation-640.webp` answer 200; no `onerror=` and no `text-[11px]` in the homepage. Then check the site watch's latest run is green.
+2. **Ask Kyle which of the remaining items he wants next**, by number. Three need only his say-so and no facts: **8** (spell out Maryland; wording, so put the proposed words beside the current ones first), **12** (a menu on phones away from the homepage; it touches the menu, so describe it and wait), **7** (the old number at the end of the video; needs his answer to questions 3 and 7). The rest wait on his facts: 2(b), 3, 9, 10. Item 16 is deferred.
+3. **For anything that changes words** (item 8, more of item 2): put the proposed words to him in full first, with the current words beside them, and edit only after he chooses. Titles are at most 70 characters, descriptions 70 to 155, each repeated in the `og:` and `twitter:` tags, and a service page's description is repeated in its `Service` data (`markup.test.js`, `seo.test.js`). One commit per item, each with a check seen failing first and a before-and-after picture of anything visible. Merge only when he says "merge".
 
 ---
 

@@ -165,6 +165,17 @@ for the hero's `srcset`, so a phone is not sent the 2560-pixel file. The widths
 are the `srcset` lists in `TARGETS` in `scripts/optimize-images.mjs`; the files
 are committed like the rest.
 
+The logo is written the same way at 656 pixels (`Gold-656.png`, `Gold-656.webp`)
+beside the 1200-pixel `Gold.png` and `Gold.webp`. Its largest place on any page
+is 328 pixels wide, so the 656 file is what every phone and ordinary laptop is
+sent; each page's logo lists both files with a `sizes` matching its own logo.
+`Gold.png` must keep its name: the business's structured data gives that address
+as the logo.
+
+No picture has an `onerror` stand-in, and none comes from another site: a
+picture that fails to load shows its description. `tests/seo.test.js` checks
+both, and that every file a `srcset` names with a width really is that wide.
+
 ## Icons
 
 The icons are inline SVG in the page, not a script. They came from
@@ -227,6 +238,20 @@ also names its front elevation as the image shown when it is shared.
 
 Models appear at `/plans/` in the order they are listed in `src/plans.json` —
 currently alphabetical by the name after "The".
+
+Each photo rendering (a plan's cover picture and its Modern Brick twin) is
+written in three widths: full size (1468 or 1600 pixels), 960 and 640, as WebP
+and JPEG. `plans:images` writes them (`SMALL_WIDTHS` in
+`scripts/extract-plans.mjs`) and records the widths in `src/plan-images.json`;
+`plans:build` then lists all three wherever a rendering is shown, with the width
+it is drawn at, so a browser takes the smallest that still looks sharp: the 640
+copy for a card on a laptop, the 960 copy on a phone, the full file for the
+picture across a plan page on a desktop. The first entry of each `sizes`
+(`(max-width: 639px) and (min-resolution: 2.5dppx) 74vw`) is there for iPhones,
+which would otherwise take the full-size file for a small card; keep it. Floor
+plans are line drawings people zoom into and stay one full-size file.
+`tests/plan-pictures.test.js` opens the pages as an iPhone, an older phone and a
+laptop and checks which file each takes.
 
 ### Adding a model
 
@@ -456,16 +481,237 @@ names the towns in the five counties, and links to the other services and to
 the plans. Every footer on the site, the plan pages' included, has a Services
 row linking the three pages; the menu bar is Kyle's and does not change.
 
+## Leavitt Connect
+
+Leavitt Connect is Leavitt's own app for homeowners, at
+`https://connect.buildleavitt.com`. It opens in the phone's browser and is not
+in an app store. The site uses it in two ways: as the sign-in link for current
+clients ("Client Login"), and as a selling point for buyers.
+
+This section was written on November 9, 2026 and sat on a branch without a pull
+request; it was checked against the site and added here on November 11, 2026.
+
+### Where it appears
+
+- **Client Login** links to `https://connect.buildleavitt.com` in a new tab:
+  - at the end of the homepage's desktop menu bar, after a fine rule, small,
+    under the phone number;
+  - in the header of the plan pages and the three service pages, from tablet
+    width up, beside the phone number;
+  - in the phone menu;
+  - in the footer of every page.
+
+  On the homepage it is white while the menu bar is transparent over the hero
+  photo, and gold once the bar turns navy.
+- **Homepage section `#leavitt-connect`**, after the process steps. It has:
+  - the heading "Leavitt Connect." and an introduction;
+  - the homebuyer tour video, with a written transcript underneath;
+  - six features, each with a "See it in the video" button: schedule,
+    selections, change orders signed online, inspections / punch lists /
+    documents, "Nothing to download, no password", and email updates;
+  - "Let's talk about your home", the office line and a sign-in link.
+- **"Follow the build from your phone."** on `custom-homes.html` and
+  `semi-custom-homes.html`. It is a short paragraph linking to
+  `/#leavitt-connect`. The semi-custom page also lists Leavitt Connect among
+  what is the same for custom and semi-custom builds.
+- **The homepage questions:** the project-manager answer, and its FAQPage
+  structured data, say homeowners follow the build in Leavitt Connect.
+- **`terms.html`** says the portal is Leavitt's own service and the terms
+  apply there.
+
+### History
+
+| Date (2026) | Pull request | What changed |
+|---|---|---|
+| Aug 5 | early commit | "Client Login" added to the header and phone menu. It pointed at `builderpro.com/login`, an unrelated company's site. |
+| Sep 22 | #12 | Client Login pointed at Leavitt's own portal, connect.buildleavitt.com. The terms stopped calling the portal someone else's service. |
+| Sep 27 | #26 | Client Login moved to the footer and the phone menu. On small laptops it wrapped onto two lines in the desktop bar. |
+| Oct 7–8 | #38 | Kyle wanted it back at the top. It returned small and set apart after "Get a Quote", and on the plan-page header. The same pull request added the homepage section and the video. |
+| Oct 11 | #40 | The video's `uploadDate` was given a time and timezone, after Search Console flagged the bare date. |
+| Oct 16 | #42–#46 | The service pages gained the "Follow the build from your phone." paragraph. The video buttons got taller tap targets (`py-2`). Client Login turned white over the new daylight hero photo. |
+| Oct 31 | #51 | The homepage sections were reordered. Leavitt Connect stayed directly after the process steps. |
+| Nov 9 | #57 | The office line changed to (443) 613-9750 everywhere, the section's own call link included. The video still says and shows the old (866) number at its end, so that caption and transcript sentence keep it. |
+| Nov 10 | #58 | The phone number went into every header, above or beside Client Login. |
+
+### Wording rule
+
+Kyle's rule: every claim is true and can be checked. Never say or imply Leavitt
+is the only builder with an app. "Our own app, built for Leavitt homeowners"
+and "one more way building with Leavitt is different" are his approved phrases.
+
+The facts come from two sources:
+- **Kyle's list (October 5, 2026):** schedule and what's next, selections,
+  change orders signed online by every homeowner on the home, inspections
+  passed, walk-through punch lists with photos, documents, sign-in by emailed
+  code or Face ID, and short email updates, never a flood.
+- **The video's narration**, which gives more detail.
+
+Kyle confirmed on October 7–8, 2026 that:
+- the app is not in an app store, which is why the page says "Nothing to
+  download";
+- biometric sign-in works on iPhone and Android, which is why it says "Face ID
+  or your fingerprint".
+
+The six features keep Kyle's short approved wording. A longer version taken
+from the narration was offered and not adopted.
+
+`markup.test.js` checks the `#leavitt-connect` section:
+- all six features are there;
+- the change-order line says every homeowner signs;
+- it links to the sign-in, the office line and the contact form;
+- nothing says "only … builder/app", "first builder/app", "unique",
+  "unlike any", "no other", an app store or "download the app".
+
+The check reads that section only. The service-page paragraphs and the
+question answer are not scanned, so keep them to the same facts by hand.
+
+### The video
+
+- **Source.** The source files are in Kyle's Google Drive, under
+  `Builder Pro App/Tutorial videos`:
+  - `Leavitt Connect - Homebuyers.mp4`: 1:48, 1920×1080, 38 MB;
+  - `Leavitt Connect - Homebuyers (captions).srt`;
+  - `Chapters for YouTube.txt`;
+  - the narration scripts.
+
+  The same folder has tutorials for homeowners, realtors, office staff and
+  trade partners; none of them is on the site. The video shows a made-up demo
+  home, so its names are not real clients.
+- **Why it is hosted here and not on YouTube.** YouTube can run ads, possibly
+  a competitor's, on any video from a channel outside its Partner Program.
+  Viewers without YouTube Premium would see them, and a new channel cannot
+  switch them off.
+- **Files in `media/`:**
+  - `leavitt-connect-homebuyers.mp4`, the 5.3 MB web copy;
+  - `leavitt-connect-homebuyers.vtt`, the captions;
+  - `leavitt-connect-poster.webp`, the cover still.
+
+  Netlify caches `/media/` for one week (`netlify.toml`). The files are
+  replaced in place under the same names, so the cache is never longer than
+  that and never `immutable`.
+- **Loading.** The `<video>` has `preload="none"`, so nothing downloads until
+  play is pressed. Captions are a `<track>` the viewer turns on.
+- **The cover still** is the schedule screen at 0:39.5. The "home at a glance"
+  screen was rejected because it shows a demo price, which could be read as a
+  real Leavitt price.
+- **The transcript** under the video is the captions, word for word, in six
+  paragraphs.
+- **The six buttons** start at 0:35, 0:42, 0:50, 1:10, 0:18 and 1:25, each the
+  start of the caption where that feature is described. A small script waits
+  for the video's metadata, then seeks and plays.
+- **The line under the video** reads only "A sample home: the names and
+  numbers aren't real." Kyle kept it short on October 8, 2026. Someone watching
+  without sound never hears the narration say the same thing at 0:11.
+- **Structured data.** A `VideoObject` in the homepage's JSON-LD names the
+  file, poster, 1:48 duration and
+  `uploadDate` `2026-10-08T15:19:04-04:00`. Google needs a full date and time
+  with a timezone.
+
+#### Replacing the video
+
+1. **Get the new MP4 from Drive.** The Drive connector returns files as text,
+   which is too large for a video. Kyle sets the one file to "Anyone with the
+   link" for a few minutes. Download it with
+   `curl -L "https://drive.usercontent.google.com/download?id=<id>&export=download&confirm=t"`,
+   then he sets it back.
+2. **Re-encode it:**
+   `ffmpeg -i in.mp4 -c:v libx264 -preset slow -crf 26 -tune stillimage -pix_fmt yuv420p -movflags +faststart -c:a aac -b:a 64k -ac 1 media/leavitt-connect-homebuyers.mp4`.
+   Before choosing, compare the smallest on-screen text against the original.
+   At CRF 26 it looked the same; at 30 it softened.
+3. **Make the captions.** Turn the `.srt` into WebVTT: add a `WEBVTT` header
+   and change the comma in each timestamp to a dot.
+4. **Choose a cover still** with no demo prices. Write it as WebP with sharp.
+5. **Update the page.** Rewrite the transcript paragraphs from the new
+   captions. Move each button's `data-seek` to the caption where its feature
+   starts. Update the `VideoObject`'s `duration` and `uploadDate`.
+6. **Run `node tests/connect-video.test.js`.** It checks:
+   - nothing downloads before play;
+   - the file is under 8 MB, with its index (`moov`) before the data;
+   - it runs 1:48;
+   - the captions fit the video, and the transcript has every caption;
+   - every button starts on a caption and plays from its moment;
+   - the `VideoObject` matches the files.
+
+   Headless Chromium cannot decode H.264, so the button check plays the blank
+   WebM in `tests/fixtures/blank-108s.webm`, served with byte ranges as
+   Netlify serves the real file. A different length means changing the
+   1:48 checks and that fixture.
+
+   `markup.test.js` also knows the one transcript sentence that keeps the old
+   (866) number; once the video no longer says it, that exception goes.
+
+### Open items
+
+- **A demo markup figure in the video.** At about 0:55 the sample change order
+  shows an overhead-and-profit percentage. The video and the line under it say
+  the numbers aren't real, but a viewer who pauses could read it as Leavitt's
+  markup. It was pointed out to Kyle on October 8, 2026 and he has not decided.
+  The fix is re-recording that screen. The figure itself is left out of these
+  notes on purpose.
+- **The old phone number at the end of the video** (audit item 7): the closing
+  card shows (866) 832-6524 and the narrator says it, from 1:39.9 to 1:45.6.
+  Trim the ending or re-record; one re-recording would settle this and the
+  item above together.
+- **Unreviewed wording.** Kyle has not reviewed the service pages' wording,
+  the Leavitt Connect paragraph included (see "Service pages").
+- **The wording check covers the homepage section only.** Extending it in
+  `markup.test.js` to the service pages' paragraphs and the project-manager
+  answer was proposed on November 9, 2026 and not done.
+- **Video sharing in Drive.** The source video is shared with "Leavitt Building
+  Group", meaning buildleavitt.com accounts. Kyle is the only one, so he kept
+  it. If employee accounts are added, they will be able to open it.
+
+## Keyboard and screen readers
+
+Every page has one `<main id="main">` holding the page's content, which is the
+landmark a screen reader's "jump to main content" key looks for. Every page
+with a bar starts with a "Skip to main content" link (`class="skip-link"`,
+styled in `src/styles.css`), directly after the Tag Manager `<noscript>`: it
+takes no room until the Tab key reaches it, then shows as a white button at the
+top left and sends the keyboard past the logo, menu, phone number and Client
+Login into the page. It is in the same seven places as the header (the homepage,
+the three service pages, `privacy.html`, `terms.html` and `build-plans.mjs`).
+The thank-you and not-found pages have only a logo above their content, so they
+have the landmark and no skip link.
+
+In the contact form, the field being typed in is marked by a 2px underline in
+the deeper gold (`#866f4f`), and a choice chip reached with the keyboard is
+ringed in the same colour, in the form and in the plan finder. The paler gold is
+too faint on white for this (2.3:1; a focus mark needs 3:1).
+
+`tests/keyboard.test.js` checks all of it on every page at phone and laptop
+width: it presses Tab, confirms the skip link appears on top of the page, presses
+Enter and confirms the next Tab lands inside the content, and photographs the
+chosen fields and chips to measure the mark against the page around it.
+
+## Smallest text
+
+No text on the site is smaller than 12px (`text-xs`). Until November 2026 the
+small capital-letter labels were 11px, and a few were 9 or 10px on a phone.
+`tests/text-size.test.js` reads the size the browser gives every piece of text
+on every page, at a phone and a laptop width, hidden or not, and fails anything
+smaller. The two links under each plan card ("View plan", "Start with this
+plan") are set a little closer (`tracking-widest`) so that the larger letters
+take no more room than the old ones did.
+
 ## Response headers
 
 `netlify.toml` sets `X-Content-Type-Options`, `Referrer-Policy` and
 `Permissions-Policy` on every response, and a one-week `Cache-Control` on
-`/plans/img/`, `/plans/pdf/` and `/media/`. The HTML and `dist/styles.css` keep
+`/plans/img/`, `/plans/pdf/` and `/media/` and, since November 2026, on the
+pictures in the site's root: the hero photograph in every size
+(`/hero-home*`), the logo (`/Gold*`), Kyle's portrait (`/kyle.*`) and the
+before/after pair (`/Before.*`, `/After.*`). The HTML and `dist/styles.css` keep
 Netlify's default (`max-age=0, must-revalidate`), because their names never
 change and an edit has to show at once. The cached paths hold files that are
 replaced in place under the same name (a redrawn brochure, a retaken
 rendering), so the age stays short and is never `immutable`.
-`tests/seo.test.js` checks the blocks.
+
+`tests/seo.test.js` checks the blocks: every picture any page shows must fall
+under a cache rule, every rule is a day to a week, and no page, stylesheet or
+sitemap may be caught by one. A new picture in the root therefore fails the
+test until it has a rule; in `netlify.toml` a `*` stands for any characters
+inside a path segment.
 
 ## Forms
 

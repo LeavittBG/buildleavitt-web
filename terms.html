@@ -32,11 +32,15 @@
     title="Google Tag Manager" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
+    <!-- The first thing the Tab key reaches: past the bar, into the page. It takes
+         no room until it is focused (.skip-link in src/styles.css). -->
+    <a href="#main" class="skip-link">Skip to main content</a>
+
 
     <header class="bg-[#0f172a] px-6 py-6">
         <div class="max-w-3xl mx-auto flex items-center justify-between gap-6">
             <a href="/" class="inline-block" aria-label="Leavitt Building Group - back to home">
-                <picture class="contents"><source srcset="Gold.webp" type="image/webp"><img src="Gold.png" alt="Leavitt Building Group" width="1200" height="293" class="h-12 md:h-14 w-auto object-contain"></picture>
+                <picture class="contents"><source srcset="Gold-656.webp 656w, Gold.webp 1200w" sizes="(min-width: 768px) 229px, 197px" type="image/webp"><img src="Gold.png" srcset="Gold-656.png 656w, Gold.png 1200w" sizes="(min-width: 768px) 229px, 197px" alt="Leavitt Building Group" width="1200" height="293" class="h-12 md:h-14 w-auto object-contain"></picture>
             </a>
             <!-- The phone number at the top of the page, as on every other page (November 2026). -->
             <a href="tel:+14436139750" class="hidden md:flex items-center gap-2 py-1 text-xs xl:text-sm uppercase tracking-widest font-semibold text-white hover:text-[#c2a67a] transition-colors whitespace-nowrap">
@@ -53,7 +57,7 @@
         </a>
     </header>
 
-    <main class="max-w-3xl mx-auto px-6 py-16 md:py-24">
+    <main id="main" tabindex="-1" class="max-w-3xl mx-auto px-6 py-16 md:py-24">
 
         <h1 class="text-4xl md:text-5xl font-light text-[#0f172a] mb-4">Terms of Use</h1>
         <p class="text-gray-500 mb-12 text-sm">Last updated: September 9, 2026</p>
@@ -204,7 +208,7 @@
             <p class="text-sm">&copy; <span id="year"></span> Leavitt Building Group. All Rights Reserved.</p>
             <nav aria-label="Footer" class="flex flex-col items-center md:items-end gap-y-1 text-sm uppercase tracking-wider font-semibold">
                 <div class="flex flex-wrap items-baseline justify-center md:justify-end gap-x-6">
-                    <span class="text-[11px] tracking-[0.2em] text-[#c2a67a]">Services</span>
+                    <span class="text-xs tracking-[0.2em] text-[#c2a67a]">Services</span>
                     <a href="/custom-homes.html" class="inline-block py-2 hover:text-white transition-colors">Custom Homes</a>
                     <a href="/semi-custom-homes.html" class="inline-block py-2 hover:text-white transition-colors">Semi-Custom Homes</a>
                     <a href="/renovations.html" class="inline-block py-2 hover:text-white transition-colors">Renovations</a>

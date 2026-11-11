@@ -93,7 +93,7 @@ const standardSection = () => `
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12">
 ${STANDARD.map(([heading, items]) => `                    <div>
-                        <h3 class="text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] mb-6">${heading}</h3>
+                        <h3 class="text-xs font-bold uppercase tracking-[0.2em] text-[#866f4f] mb-6">${heading}</h3>
                         <ul class="space-y-4">
 ${items.map(([title, detail]) => `                            <li class="flex gap-3">
                                 <span aria-hidden="true" class="text-[#866f4f] shrink-0 mt-1">&#10003;</span>
@@ -189,10 +189,14 @@ const head = ({ title, description, canonical, image, jsonLd = [] }) => `<!DOCTY
     title="Google Tag Manager" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
+    <!-- The first thing the Tab key reaches: past the bar, into the page. It takes
+         no room until it is focused (.skip-link in src/styles.css). -->
+    <a href="#main" class="skip-link">Skip to main content</a>
+
     <header class="bg-[#0f172a] px-6 py-6">
         <div class="max-w-6xl mx-auto flex items-center justify-between gap-6">
             <a href="/" class="inline-block" aria-label="Leavitt Building Group - back to home">
-                <picture class="contents"><source srcset="/Gold.webp" type="image/webp"><img src="/Gold.png" alt="Leavitt Building Group" width="1200" height="293" class="h-12 md:h-14 w-auto object-contain"></picture>
+                <picture class="contents"><source srcset="/Gold-656.webp 656w, /Gold.webp 1200w" sizes="(min-width: 768px) 229px, 197px" type="image/webp"><img src="/Gold.png" srcset="/Gold-656.png 656w, /Gold.png 1200w" sizes="(min-width: 768px) 229px, 197px" alt="Leavitt Building Group" width="1200" height="293" class="h-12 md:h-14 w-auto object-contain"></picture>
             </a>
             <nav aria-label="Main" class="flex items-center gap-6 md:gap-8 text-xs md:text-sm uppercase tracking-widest font-semibold">
                 <a href="/plans/" class="inline-block py-2 text-gray-300 hover:text-white transition-colors">Plans</a>
@@ -230,7 +234,7 @@ const foot = () => `
                  same two rows. -->
             <nav aria-label="Footer" class="flex flex-col items-center md:items-end gap-y-1 text-sm uppercase tracking-wider font-semibold">
                 <div class="flex flex-wrap items-baseline justify-center md:justify-end gap-x-6">
-                    <span class="text-[11px] tracking-[0.2em] text-[#c2a67a]">Services</span>
+                    <span class="text-xs tracking-[0.2em] text-[#c2a67a]">Services</span>
                     <a href="/custom-homes.html" class="inline-block py-2 hover:text-white transition-colors">Custom Homes</a>
                     <a href="/semi-custom-homes.html" class="inline-block py-2 hover:text-white transition-colors">Semi-Custom Homes</a>
                     <a href="/renovations.html" class="inline-block py-2 hover:text-white transition-colors">Renovations</a>
@@ -263,11 +267,43 @@ const foot = () => `
  * homepage, whose paths are relative (several tests open index.html straight
  * from disk, where "/plans/img/..." would resolve to the root of the machine).
  */
-const picture = (img, { alt, cls, lazy = true, base = '/' }) => {
+const picture = (img, { alt, cls, lazy = true, base = '/', sizes }) => {
   const a = lazy ? ' loading="lazy" decoding="async"' : ' decoding="async"';
-  return `<picture class="contents"><source srcset="${base}plans/img/${img.file}.webp" type="image/webp">` +
-    `<img src="${base}plans/img/${img.file}.${img.ext || 'png'}" alt="${esc(alt)}" width="${img.width}" height="${img.height}"${a} class="${cls}"></picture>`;
+  const ext = img.ext || 'png';
+  // A photo rendering also exists 640 and 960 pixels wide (`widths`, written by
+  // extract-plans.mjs). Where the caller says how wide the picture is drawn
+  // (`sizes`), every width is offered and the browser takes the smallest that
+  // still looks sharp, on both the WebP and the fallback.
+  const several = sizes && img.widths?.length;
+  const set = (e) => [...img.widths.map((w) => `${base}plans/img/${img.file}-${w}.${e} ${w}w`),
+    `${base}plans/img/${img.file}.${e} ${img.width}w`].join(', ');
+  return `<picture class="contents"><source srcset="${several ? set('webp') : `${base}plans/img/${img.file}.webp`}"${several ? ` sizes="${sizes}"` : ''} type="image/webp">` +
+    `<img src="${base}plans/img/${img.file}.${ext}"${several ? ` srcset="${set(ext)}" sizes="${sizes}"` : ''} alt="${esc(alt)}" width="${img.width}" height="${img.height}"${a} class="${cls}"></picture>`;
 };
+
+/*
+ * How wide a rendering is drawn, for `sizes` (November 2026). Measured on the
+ * pages at ten screen widths; plan-pictures.test.js opens the pages and checks
+ * what the browser takes.
+ *
+ * The first entry is for phones with very sharp screens (an iPhone has three
+ * device pixels to each CSS pixel). Safari takes the first file at least as
+ * sharp as the screen, which for a 340px card on such a phone would be the
+ * full-size file again, 250 KB to fill a card. So there the page asks for
+ * three-quarters of the screen's width, a little less than the card, and
+ * Safari and Chrome both settle on the 960 copy: 2.8 device pixels to the
+ * pixel, which the eye cannot tell from 3. A browser that does not understand
+ * the condition skips it and behaves as it did before.
+ */
+const SHARP_PHONE = '(max-width: 639px) and (min-resolution: 2.5dppx) 74vw';
+// A card in a grid of plans: one column on a phone, two from 640px, three from 1024px.
+const CARD_SIZES = `${SHARP_PHONE}, (min-width: 1280px) 410px, (min-width: 1024px) 310px, (min-width: 640px) 46vw, calc(100vw - 50px)`;
+// The picture across the top of a plan page, and its Modern Brick twin: the
+// width of the page less its margins, 1104px at most.
+const PAGE_SIZES = `${SHARP_PHONE}, (min-width: 1200px) 1104px, calc(100vw - 48px)`;
+// The three cards written by hand on the semi-custom page: the picture sits
+// inside a padded frame, so it is drawn a little narrower than a finder card.
+const HAND_CARD_SIZES = `${SHARP_PHONE}, (min-width: 640px) 320px, calc(100vw - 80px)`;
 
 /** Every sheet this model has, in the order they are shown. */
 const sheets = (model) => model.pages.map((p) => ({ ...p, img: images[model.slug]?.[p.id] }))
@@ -310,6 +346,22 @@ const coverOf = (model) => {
 };
 const coverAlt = (model, cover) =>
   cover.id === 'elevation' ? `${model.name} front elevation` : `${model.name} ${cover.label.toLowerCase()}`;
+
+/**
+ * The description of a plan page's main picture, for a screen reader and for
+ * image search. The brochure cover's caption names an exterior style
+ * ("Elevation C – Modern Farmhouse w/ Stone, Board & Batten and Siding"), and
+ * this used to repeat it whole: the last place a plan page still said
+ * "Modern Farmhouse" after the style came out of the text in October 2026.
+ * It keeps what can be seen, which elevation and what it is built of:
+ * "The Poet front elevation, Elevation C, with stone, board & batten and siding".
+ */
+const elevationAlt = (model, label) => {
+  const m = /^(.*?)\s+[–—-]\s+.*?\bw\/\s*(.+)$/.exec(label || '');
+  if (!m) return `${model.name} front elevation`;
+  const which = /^front elevation$/i.test(m[1]) ? '' : `, ${m[1]}`;
+  return `${model.name} front elevation${which}, with ${m[2].toLowerCase()}`;
+};
 
 /**
  * One factual sentence assembled from the data - no adjectives we cannot stand
@@ -477,6 +529,7 @@ const planCard = (model, { featured = false, finder = true, base = '/' } = {}) =
                               alt: coverAlt(model, cover),
                               cls: 'w-full h-full object-cover',
                               base,
+                              sizes: CARD_SIZES,
                             }) : '<span class="block p-6 text-gray-400 text-sm">Drawings coming soon</span>'}
                         </div>
                         <div class="px-6 pt-5">
@@ -485,8 +538,8 @@ const planCard = (model, { featured = false, finder = true, base = '/' } = {}) =
                         </div>
                     </a>
                     <div class="px-6 pb-5 pt-4 mt-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
-                        <a href="/plans/${model.slug}.html" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
-                        <a href="${startHref(model)}" data-start-plan="${esc(model.name)}" class="inline-block py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
+                        <a href="/plans/${model.slug}.html" class="inline-block py-1.5 text-xs font-bold uppercase tracking-widest text-[#866f4f] hover:underline underline-offset-4">View plan &rarr;</a>
+                        <a href="${startHref(model)}" data-start-plan="${esc(model.name)}" class="inline-block py-1.5 text-xs font-bold uppercase tracking-widest text-[#0f172a] hover:text-[#866f4f] transition-colors">Start with this plan</a>
                     </div>
                 </div>`;
 };
@@ -500,11 +553,11 @@ const finderHtml = ({ cap, base = '/' } = {}) => {
   const capped = Number.isFinite(cap);
   const questions = FINDER_QUESTIONS.map(([key, legend, options]) => `
                 <fieldset>
-                    <legend class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-3">${legend}</legend>
+                    <legend class="text-xs font-bold uppercase tracking-[0.2em] text-gray-500 mb-3">${legend}</legend>
                     <div class="flex flex-wrap gap-2">
 ${options.map(([value, label], i) => `                        <label class="cursor-pointer">
                             <input type="radio" name="finder-${key}" value="${value}" class="sr-only peer"${i === 0 ? ' checked' : ''}>
-                            <span class="inline-block border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#c2a67a] peer-focus-visible:ring-offset-2">${label}</span>
+                            <span class="inline-block border border-gray-300 bg-white px-4 py-2 text-sm text-[#0f172a] select-none transition-colors hover:border-[#0f172a] peer-checked:bg-[#0f172a] peer-checked:border-[#0f172a] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#866f4f] peer-focus-visible:ring-offset-2">${label}</span>
                         </label>`).join('\n')}
                     </div>
                 </fieldset>`).join('\n');
@@ -651,7 +704,7 @@ for (const [i, model] of models.entries()) {
     const v = model.specs?.[key];
     const known = v !== null && v !== undefined && v !== '';
     return `                    <div class="border-t border-gray-200 py-4">
-                        <dt class="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-1">${esc(label)}</dt>
+                        <dt class="text-xs font-bold uppercase tracking-[0.2em] text-gray-500 mb-1">${esc(label)}</dt>
                         <dd class="text-lg ${known ? 'text-[#0f172a] font-medium' : 'text-gray-400'}">${known ? esc(fmt(v, model.specs)) : 'On request'}</dd>${NOTE_FOR[key] && model.specs?.[NOTE_FOR[key]] ? `
                         <dd class="text-xs text-gray-500 mt-1">${esc(model.specs[NOTE_FOR[key]])}</dd>` : ''}
                     </div>`;
@@ -669,6 +722,7 @@ for (const [i, model] of models.entries()) {
                 ${picture(s.img, {
                   alt: `${model.name} ${s.label.toLowerCase()} - the same house finished in ${EXTERIOR_NOTES[s.id]}`,
                   cls: 'w-full h-auto bg-white border border-gray-200',
+                  sizes: PAGE_SIZES,
                 })}
                 <figcaption class="mt-3 text-sm text-gray-500 flex flex-wrap items-baseline justify-end gap-x-6 gap-y-1">
                     <a href="/plans/img/${s.img.file}.${s.img.ext || 'png'}" target="_blank" rel="noopener"
@@ -706,7 +760,7 @@ for (const [i, model] of models.entries()) {
     image: shareImage(model),
     jsonLd: [breadcrumbs([['Home', '/'], ['Home Plans', '/plans/'], [model.name, `/plans/${model.slug}.html`]])],
   }) + `
-    <main class="max-w-6xl mx-auto px-6 py-14 md:py-20">
+    <main id="main" tabindex="-1" class="max-w-6xl mx-auto px-6 py-14 md:py-20">
 
         <nav aria-label="Breadcrumb" class="mb-10 text-sm text-gray-500">
             <a href="/" class="inline-block py-1 hover:text-[#866f4f]">Home</a>
@@ -723,12 +777,14 @@ for (const [i, model] of models.entries()) {
 
         ${elevation ? `
         <!-- The drawing carries its own caption, so no figcaption repeating it here.
-             The alt text still names the elevation for anyone not seeing the image. -->
+             The alt text still names the elevation and its materials for anyone not
+             seeing the image, without the style name (elevationAlt above). -->
         <div class="mb-12">
             ${picture(elevation.img, {
-              alt: `${model.name} front elevation - ${elevation.label}`,
+              alt: elevationAlt(model, elevation.label),
               cls: 'w-full h-auto bg-white border border-gray-200',
               lazy: false,
+              sizes: PAGE_SIZES,
             })}${exteriors.length ? `
             <p class="mt-3 text-sm text-gray-600">
                 See this plan with a
@@ -791,12 +847,12 @@ ${similarTo(model).map((m) => planCard(m, { finder: false })).join('\n')}
 
         <nav aria-label="Other plans" class="border-t border-gray-200 pt-10 flex flex-col sm:flex-row justify-between gap-6 text-sm">
             <a href="/plans/${prev.slug}.html" class="group">
-                <span class="block text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-1">Previous plan</span>
+                <span class="block text-xs font-bold uppercase tracking-[0.2em] text-gray-500 mb-1">Previous plan</span>
                 <span class="text-lg text-[#0f172a] group-hover:text-[#866f4f] transition-colors">${esc(prev.name)}</span>
             </a>
             <a href="/plans/" class="self-center py-2 text-[#866f4f] uppercase tracking-widest font-bold text-xs hover:underline">All plans</a>
             <a href="/plans/${next.slug}.html" class="group sm:text-right">
-                <span class="block text-[11px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-1">Next plan</span>
+                <span class="block text-xs font-bold uppercase tracking-[0.2em] text-gray-500 mb-1">Next plan</span>
                 <span class="text-lg text-[#0f172a] group-hover:text-[#866f4f] transition-colors">${esc(next.name)}</span>
             </a>
         </nav>
@@ -822,7 +878,7 @@ const indexHtml = head({
   image: shareImage(models.find((m) => m.slug === 'the-visionary')),
   jsonLd: [breadcrumbs([['Home', '/'], ['Home Plans', '/plans/']]), planList()],
 }) + `
-    <main class="max-w-6xl mx-auto px-6 py-14 md:py-20">
+    <main id="main" tabindex="-1" class="max-w-6xl mx-auto px-6 py-14 md:py-20">
 
         <nav aria-label="Breadcrumb" class="mb-10 text-sm text-gray-500">
             <a href="/" class="inline-block py-1 hover:text-[#866f4f]">Home</a>
@@ -959,14 +1015,36 @@ for (const file of ['index.html', 'semi-custom-homes.html']) {
   if (!existsSync(p)) continue;
   const before = readFileSync(p, 'utf8');
   let filled = 0;
-  const after = before.replace(/(<p [^>]*data-plan-facts="([a-z0-9-]+)"[^>]*>)[\s\S]*?(<\/p>)/g, (whole, open, slug, close) => {
+  let after = before.replace(/(<p [^>]*data-plan-facts="([a-z0-9-]+)"[^>]*>)[\s\S]*?(<\/p>)/g, (whole, open, slug, close) => {
     const model = models.find((m) => m.slug === slug);
     if (!model) { console.error(`  ! ${file} asks for facts of "${slug}", which is not in plans.json`); return whole; }
     filled++;
     return `${open}${cardFacts(model)}${close}`;
   });
+  // The same cards' pictures: a rendering written by hand as one file is given
+  // its three widths here, so the list of widths can never fall behind the
+  // files. Run again, it rewrites what it wrote. Outside the generated finder
+  // only: the finder's own pictures already carry theirs.
+  let widened = 0;
+  const everyImage = Object.values(images).flatMap((sheets) => Object.values(sheets));
+  const handWritten = (html) => html.replace(
+    /<picture class="contents"><source srcset="[^"]*"(?: sizes="[^"]*")? type="image\/webp"><img src="(\/?)plans\/img\/([a-z0-9-]+)\.(jpg|png)"(?: srcset="[^"]*" sizes="[^"]*")?/g,
+    (whole, slash, name, ext) => {
+      const img = everyImage.find((i) => i.file === name);
+      if (!img?.widths?.length) return whole;
+      const set = (e) => [...img.widths.map((w) => `${slash}plans/img/${name}-${w}.${e} ${w}w`), `${slash}plans/img/${name}.${e} ${img.width}w`].join(', ');
+      widened++;
+      return `<picture class="contents"><source srcset="${set('webp')}" sizes="${HAND_CARD_SIZES}" type="image/webp">` +
+        `<img src="${slash}plans/img/${name}.${ext}" srcset="${set(ext)}" sizes="${HAND_CARD_SIZES}"`;
+    });
+  const [head0, finder0, tail0] = (() => {
+    const a = after.indexOf('<!-- plan-finder:start -->');
+    const b = after.indexOf('<!-- plan-finder:end -->');
+    return a === -1 || b === -1 ? [after, '', ''] : [after.slice(0, a), after.slice(a, b), after.slice(b)];
+  })();
+  after = handWritten(head0) + finder0 + handWritten(tail0);
   if (after !== before) writeFileSync(p, after);
-  console.log(`${file}  (${filled} plan card${filled === 1 ? '' : 's'} filled from plans.json)`);
+  console.log(`${file}  (${filled} plan card${filled === 1 ? '' : 's'} filled from plans.json${widened ? `, ${widened} picture${widened === 1 ? '' : 's'} given their widths` : ''})`);
 }
 
 // -------------------------------------------------------------- sitemap

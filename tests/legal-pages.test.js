@@ -20,7 +20,8 @@ const ok = (c, m) => { console.log((c ? '  PASS  ' : '  FAIL  ') + m); if (!c) f
     ok(year === String(new Date().getFullYear()), `[${page}] footer year renders (${year})`);
     ok(await p.locator('header img').evaluate(i => i.naturalWidth > 0), `[${page}] logo loads`);
     const served = await p.locator('header img').evaluate(i => i.currentSrc.split('/').pop());
-    ok(served === 'Gold.webp', `[${page}] logo served as WebP (${served})`);
+    // Either width of the logo (Gold-656.webp for most screens, Gold.webp for the sharpest).
+    ok(/^Gold(-\d+)?\.webp$/.test(served), `[${page}] logo served as WebP (${served})`);
     // no horizontal overflow at mobile width
     await p.setViewportSize({ width: 390, height: 844 });
     await p.waitForTimeout(400);
