@@ -406,7 +406,7 @@ const snippet = (model) => {
   const exteriors = sheets(model).filter((x) => x.id === 'elevation' || isExterior(x)).length;
   const what = exteriors > 1 ? 'Floor plans and elevations'
     : exteriors ? 'Floor plans and elevation' : 'Floor plans';
-  return `${model.name} home plan${facts ? `: ${facts}` : ''}. ${what} by Leavitt Building Group.`;
+  return `${model.name} home plan${facts ? `: ${facts}` : ''}. ${what} by Leavitt Building Group in Maryland.`;
 };
 
 /** A plan's cover drawing as a share image. */
@@ -825,6 +825,8 @@ ${specRows}
                     Building from one of our plans is our
                     <a href="/semi-custom-homes.html" class="inline-block py-1 text-[#866f4f] font-medium hover:underline">semi-custom home</a>
                     process: the plan adapted to your lot, about 6 to 8 months to complete.
+                    We build across Harford County and the surrounding counties in Maryland, and
+                    into southern Pennsylvania.
                 </p>
                 <p class="text-sm text-gray-600 mt-4">
                     Prefer to talk it through?
@@ -869,10 +871,12 @@ ${similarTo(model).map((m) => planCard(m, { finder: false })).join('\n')}
 /* The plan cards on /plans/ are the finder's cards (planCard above). */
 
 const indexHtml = head({
-  title: 'Home Plans for Harford County, MD | Leavitt Building Group',
+  // "Maryland" written out, here and in the first paragraph below (Kyle,
+  // November 11, 2026): the page used to name no place above the footer.
+  title: 'Home Plans for Harford County, Maryland | Leavitt Building Group',
   description:
-    `${models.length} home plans from Leavitt Building Group, a custom home builder serving Harford ` +
-    'and surrounding counties. Elevations, floor plans and brochures for each.',
+    `${models.length} home plans from Leavitt Building Group, a Maryland custom home builder serving Harford ` +
+    'and nearby counties. Elevations, floor plans and brochures.',
   canonical: '/plans/',
   // The Visionary leads the plans on the home page, so it leads the preview too.
   image: shareImage(models.find((m) => m.slug === 'the-visionary')),
@@ -893,7 +897,9 @@ const indexHtml = head({
             We build <a href="/custom-homes.html" class="inline-block py-1 text-[#866f4f] font-medium hover:underline">fully custom homes</a>. But a blank page is a difficult place to begin, so here is
             somewhere to start &mdash; plans we have built before, each one adapted to your lot and
             the way you want to live. Change the elevation, the room sizes, the optional spaces;
-            or bring us something else entirely.
+            or bring us something else entirely. We build these plans on your lot, or help you find
+            one, across Harford County and the surrounding counties in Maryland, and into southern
+            Pennsylvania.
         </p>
         <p class="text-gray-600 max-w-2xl mb-4">
             Every sheet shows the optional features available for that model in dashed outline:
