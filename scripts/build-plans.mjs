@@ -193,13 +193,13 @@ const head = ({ title, description, canonical, image, jsonLd = [] }) => `<!DOCTY
          no room until it is focused (.skip-link in src/styles.css). -->
     <a href="#main" class="skip-link">Skip to main content</a>
 
-    <header class="bg-[#0f172a] px-6 py-6">
+    <header class="relative bg-[#0f172a] px-6 py-6">
         <div class="max-w-6xl mx-auto flex items-center justify-between gap-6">
             <a href="/" class="inline-block" aria-label="Leavitt Building Group - back to home">
                 <picture class="contents"><source srcset="/Gold-656.webp 656w, /Gold.webp 1200w" sizes="(min-width: 768px) 229px, 197px" type="image/webp"><img src="/Gold.png" srcset="/Gold-656.png 656w, /Gold.png 1200w" sizes="(min-width: 768px) 229px, 197px" alt="Leavitt Building Group" width="1200" height="293" class="h-12 md:h-14 w-auto object-contain"></picture>
             </a>
-            <nav aria-label="Main" class="flex items-center gap-6 md:gap-8 text-xs md:text-sm uppercase tracking-widest font-semibold">
-                <a href="/plans/" class="inline-block py-2 text-gray-300 hover:text-white transition-colors">Plans</a>
+            <nav aria-label="Main" class="flex items-center gap-3 md:gap-8 text-xs md:text-sm uppercase tracking-widest font-semibold">
+                <a href="/plans/" class="hidden md:inline-block py-2 text-gray-300 hover:text-white transition-colors">Plans</a>
                 <a href="/#contact" class="bg-[#c2a67a] text-[#0f172a] px-5 py-3 hover:bg-white transition-colors">Get a Quote</a>
                 <!-- The phone number, and under it Client Login, after a fine rule: the
                      same pair, in the same place, as the homepage's menu bar. -->
@@ -213,6 +213,29 @@ const head = ({ title, description, canonical, image, jsonLd = [] }) => `<!DOCTY
                         Client Login
                     </a>
                 </div>
+                <!-- Phones only (November 2026): a menu button, in the place the word
+                     "Plans" had. It opens the same six entries as the homepage's phone
+                     menu, in the same order; tests/phone-menu.test.js compares the two.
+                     It is a <details>, so it opens with no script; the script at the end
+                     of the page only adds the Escape key, a tap elsewhere and the Back
+                     button as ways to close it. The panel hangs from the bottom of the
+                     header, under the Call line. Tablets and desktops never see it. -->
+                <details id="site-menu" class="md:hidden group">
+                    <summary aria-label="Navigation menu" class="w-11 h-11 -mr-2 flex items-center justify-center text-white hover:text-[#c2a67a] cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-7 h-7 group-open:hidden"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-7 h-7 hidden group-open:block"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                    </summary>
+                    <div class="absolute left-0 right-0 top-full z-40 bg-[#0f172a] border-t border-white/10 px-6 py-7 space-y-4 text-base shadow-lg">
+                        <a href="/#services" class="block py-1 text-gray-300 hover:text-white">Services</a>
+                        <a href="/plans/" class="block py-1 text-gray-300 hover:text-white">Plans</a>
+                        <a href="/#about" class="block py-1 text-gray-300 hover:text-white">About</a>
+                        <a href="/#process" class="block py-1 text-gray-300 hover:text-white">Process</a>
+                        <a href="https://connect.buildleavitt.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 py-1 text-[#c2a67a] hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-5 h-5"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Client Login
+                        </a>
+                        <a href="/#contact" class="block w-full text-center bg-[#c2a67a] text-[#0f172a] px-6 py-4 font-bold">Get a Quote</a>
+                    </div>
+                </details>
             </nav>
         </div>
         <!-- On phones the bar has no room for the number, so it has a line of its own
@@ -255,6 +278,21 @@ const foot = () => `
 
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
+
+        // The phone menu in the header is a <details> and needs none of this to
+        // open. These only close it the ways people expect: the Escape key, a
+        // tap anywhere else, and coming back to the page with the Back button.
+        (function () {
+            var menu = document.getElementById('site-menu');
+            if (!menu) return;
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && menu.open) { menu.open = false; menu.querySelector('summary').focus(); }
+            });
+            document.addEventListener('click', function (e) {
+                if (menu.open && !menu.contains(e.target)) menu.open = false;
+            });
+            window.addEventListener('pageshow', function () { menu.open = false; });
+        })();
     </script>
 </body>
 </html>
