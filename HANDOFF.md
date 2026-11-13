@@ -9,7 +9,7 @@ The repository is public, so neither part holds prices, margins, fees, client na
 
 ---
 
-# Part A — The website: where things stand (November 11, 2026)
+# Part A — The website: where things stand (November 13, 2026)
 
 Read `CLAUDE.md` first: it has the rules, the commands and every decision. This part is only the state of the work in progress.
 
@@ -19,33 +19,18 @@ On November 10, 2026 Kyle asked for a full audit of the site (speed, local SEO, 
 
 ## A2. Done
 
-**Everything below is merged and live** (`CLAUDE.md` records each decision). Nothing is in progress.
+**Merged and live** (`CLAUDE.md` records each decision and the exact words):
 
 - **#58:** item 4 (tests cannot reach Google Analytics), item 1 (phone number at the top of every page), item 5 (licence numbers readable).
 - **#60:** item 11 (every link and button at least 24px tall, on every page), item 2(a) ("build on your lot" in the custom homes title, heading and description).
 - **#47:** the nightly site watch (`scripts/watch-site.mjs`, `.github/workflows/watch-site.yml`).
-- **#59, #61 and #63:** notes only (versions of this file). #63 carries this version and changes no page; if you are reading this on `main`, it has merged.
-- **#62:** items 15, 14, 13, 17 and 6, and the missed notes. Kyle merged it on November 11, 2026 (17:13 UTC). One commit each:
+- **#62** (November 11): item 15 (the root pictures cached for a week), item 14 (skip link, main landmark, focus marks), item 13 (no text under 12px), item 17 (housekeeping; the founding year was not added and waits on question 2), item 6 (smaller copies of the plan renderings), and two sets of notes that earlier sessions had left on branches without a pull request.
+- **#64** (merged November 13): item 8, "Maryland" written out. Kyle was shown thirteen wordings (A to M), each beside the current one, and approved all of them. One thing followed that he had not been shown beforehand: "Southern Pennsylvania" does not fit on the homepage band's one line, so on a desktop the six names are two rows of three; he saw the before-and-after picture before merging.
+- **#59, #61 and #63:** notes only (versions of this file).
 
-- **Notes.** That session began by checking `CLAUDE.md` and this file against the code, the history and the live site. The site matched GitHub file for file. What did not match: two sessions' write-ups (November 8 and 9) had been committed to their own branches and never opened as pull requests, so `main` never had them. Both are folded into `CLAUDE.md` and the README (the brochure copies in Drive; the Leavitt Connect history). One question for Kyle had dropped off the list because of it and is question 7 below.
-- **Item 15:** the hero, logo, Kyle's portrait and the before/after pair may be kept by a browser for a week (`netlify.toml`; `tests/seo.test.js`). Nothing visible.
-- **Item 14:** a "Skip to main content" link on every page with a bar, a main-content landmark on the homepage, thank-you and not-found pages, and a clearer mark on the chosen field and chip in the contact form and plan finder (`tests/keyboard.test.js`, new).
-- **Item 13:** no text under 12px (`tests/text-size.test.js`, new). The line under Kyle's name on his photograph is two lines on a phone now.
-- **Item 17:** the stand-in pictures from an outside site are gone, the logo comes in a 656px copy as well, and the plan pictures' descriptions no longer say "Modern Farmhouse" (`tests/seo.test.js`, `tests/plans.test.js`). The founding year was not added: it waits on Kyle (question 2).
-- **Item 6:** each plan rendering also comes 640 and 960 pixels wide, and a phone or a card takes the small one (`tests/plan-pictures.test.js`, new).
+**Checked after #64 merged, November 13, 2026**, all with `curl` or by reading files, so nothing reached Analytics: the site watch run by hand found all 437 published files identical to `main`; the new titles and wording are on the live homepage, plans page, a plan page and the service pages; the watch's scheduled runs on November 12 and 13 were green; no pull request and no issue was open.
 
-Kyle was sent before-and-after pictures of everything visible (items 14 and 13; a close-up of the logo and of a plan card to show items 17 and 6 look the same).
-
-**Checked after #62 merged, November 11, 2026**, all with `curl` or by reading files, so nothing reached Analytics:
-
-- The site watch, run by hand: all 437 published files on buildleavitt.com match `main` byte for byte; Tag Manager, DNS and HTTPS are as recorded.
-- On the live site: the hero files, both logo files, Kyle's portrait and the before/after pair answer `cache-control: public,max-age=604800`; the pages, the stylesheet and the sitemap still answer `max-age=0`; the homepage has the skip link and no `onerror` or text under 12px; `HANDOFF.md`, `CLAUDE.md`, the README and the tests answer 404.
-- On `main`: the full suite passes (26 files, 2,585 checks); a fresh `npm run build` gives the committed stylesheet exactly; `npm run plans:build` changes nothing.
-- On GitHub: no pull request open besides #63, and no issue open.
-
-**Pull request #64: item 8, "Maryland" written out.** Opened November 11, 2026 as a draft from branch `claude/dazzling-mccarthy-kjy8kf`. This version of the file travels with it, so if you are reading it on `main`, #64 has merged; A6 step 1 says how to confirm it on the live site. Kyle was shown thirteen wordings (A to M), each beside the current one, and approved all of them: four titles, the descriptions of the semi-custom, renovations and plans pages and of all seventeen plan pages, a sentence naming the service area on `/plans/` and on every plan page, "Forest Hill, Maryland" on the three service pages, and the homepage band's heading and its last entry. `CLAUDE.md` has the exact words. One thing followed that he had not been shown beforehand: "Southern Pennsylvania" does not fit on the band's one line, so on a desktop the six names are now two rows of three; he was sent the before-and-after picture with the others. Checks: `tests/seo.test.js` (seen failing 7 checks on the old pages) and `tests/layout.test.js` (seen failing on the untidy wrap).
-
-Four small things in the notes did not match and #63 corrected them: this file still called #62 an open draft; it said the site watch had not yet run on its schedule (A5); the start-of-session branch check names two known branches where four show (`CLAUDE.md`, "How changes are made", and A6 step 1); and `CLAUDE.md` gave the pull-request check's name as "test" where GitHub lists it as "Tests / test".
+**Pull request #65: item 12, a menu on phones away from the homepage.** Opened November 13, 2026 as a draft from branch `claude/dazzling-mccarthy-kjy8kf`. This version of the file travels with it, so if you are reading it on `main`, #65 has merged; A6 step 1 says how to confirm it on the live site. Kyle approved it from a mock-up picture: on a phone, on the three service pages, the plans page and the seventeen plan pages, a menu button takes the place of the word "Plans"; "Get a Quote" and the "Call" line stay; the menu holds the homepage phone menu's six entries, same words, same order. Tablets and desktops are unchanged (the header was compared pixel for pixel at 768, 1024, 1280 and 1440px), and so are `privacy.html` and `terms.html`, by his choice. He was asked whether the desktop bar on those pages should also gain Services, About and Process and did not answer, so it was left as it is (question 9). `tests/phone-menu.test.js` is new and failed 35 checks on the old pages.
 
 ## A3. The audit list and what is left
 
@@ -60,11 +45,11 @@ Numbers are the ones Kyle was given; use them with him.
 | 5 | Licence numbers were the faintest text on the site | Done (#58) |
 | 6 | Plan renderings came in one size, 190–315 KB each, shown in cards about 400px wide | Done in #62 |
 | 7 | The old (866) 832-6524 number is still in the Leavitt Connect video: on the closing card and spoken, 1:39.9 to 1:45.6, so also in the captions and the homepage transcript | Not started. Either trim the ending (ffmpeg is in the sandbox) and update the captions, transcript, the `VideoObject` duration and the two tests that know about it, or Kyle re-records, which would also settle question 7. README "Leavitt Connect" has the steps. Ask whether the old number still rings |
-| 8 | "Maryland" is rarely spelled out (never on `/plans/`, whose visible text names no place above the footer); the semi-custom title has no location | Done in #64 |
+| 8 | "Maryland" is rarely spelled out (never on `/plans/`, whose visible text names no place above the footer); the semi-custom title has no location | Done (#64) |
 | 9 | No mention of insurance; the founding year appears nowhere; "20+ Years of Excellence" may read as conflicting with a 2011 founding | Needs Kyle's facts. Never invent them |
 | 10 | The three testimonials name no source and do not link to Google reviews | Needs Kyle to say where they came from |
 | 11 | Small tap targets on phones | Done (#60) |
-| 12 | Away from the homepage, phones get no menu: only Plans and Get a Quote | Not started. Touches the menu, so it is Kyle's call |
+| 12 | Away from the homepage, phones get no menu: only Plans and Get a Quote | Done in #65 |
 | 13 | Tiny text: 9, 10 and 11px in about 150 places | Done in #62 |
 | 14 | No "skip to content" link; three pages had no main-content landmark; the form fields' focus highlight was faint | Done in #62 |
 | 15 | The hero, logo, Kyle's photo and the before/after pair had no cache lifetime | Done in #62 |
@@ -83,15 +68,17 @@ Found in good order, so do not re-audit: compression and HTTPS on the live site,
 6. How does Leavitt evaluate a client's lot? Needed before a "build on your lot" page is written. (item 2b)
 7. The Leavitt Connect video: at about 0:55 the sample change order shows an overhead-and-profit percentage that a viewer who pauses could take for Leavitt's markup. Re-record that screen or leave it? Asked on October 8, 2026 and still open; it had dropped off this list because the notes recording it never reached `main` (see `CLAUDE.md`, "How changes are made"). The same video ends on the old phone number (question 3), so one re-recording would settle both.
 8. Two branches from his own uploads in September 2026 are still on GitHub: `new-plans-layouts` (brochures since replaced) and `new-gallery-photos` (house photographs). The repository is public. Delete them? He was told on November 11; it is his call and only he, or a session he tells to, should do it.
+9. Away from the homepage the desktop bar shows Plans and Get a Quote but not Services, About or Process. Add the three links there from laptop width up? Asked on November 13, 2026 with item 12; he approved the phone menu and did not answer this, so the desktop bar is unchanged. It would be a visible change on 21 pages and touches the menu, so it needs his yes.
 
 ## A5. Known issues and things not verified
 
-- **The nightly site watch has run on its schedule once, and not yet against the site as it is now.** That run was on November 11, 2026 and was green, but it started at 14:28 UTC, about eight hours after its 06:17 UTC slot (GitHub does not promise the time of a scheduled run), and that was before #62 merged. The merged site was checked by hand the same day (A2: 437 files, no differences). The first scheduled run against it is due on November 12: look in the Actions tab for a green "Site watch" run whose event is "schedule". A run that is hours late is not a fault; a day with no run at all is worth a look.
+- **The nightly site watch runs every day, about eight to nine hours after its slot.** Its scheduled runs on November 11, 12 and 13, 2026 were all green and started between 14:28 and 15:20 UTC, not at 06:17 UTC as the schedule asks (GitHub does not promise the time of a scheduled run). So a run that is hours late is not a fault; a day with no run at all is worth a look. Each run checks `main` as it was when the run started, so a merge later that day is first checked the next day; `node scripts/watch-site.mjs --only site` checks it at once.
 - **The cache rules use a pattern Netlify documents but this site had not used** (`/hero-home*`: a `*` inside a path segment). It works: confirmed on #62's deploy preview and again on the live site after the merge (A2). `curl -sI https://buildleavitt.com/hero-home.webp` shows the header. Read the status with `curl -s -o /dev/null -w '%{http_code}'`: with `-I` the first line printed in the cloud sandbox is its proxy's own "200", not the site's answer.
 - **Safari itself was not opened.** `plan-pictures.test.js` runs Chrome and works out Safari's choice by Safari's published rule. The iPhone entry in `sizes` relies on Safari understanding `min-resolution` in `dppx`, which it has since version 16 (2022); an older Safari skips the entry and takes the full-size file, as before.
 - Google Analytics may hold page views and `generate_lead` events from hostname `127.0.0.1` dated before November 10, 2026 (see `CLAUDE.md`, Tests).
 - Kyle was told of an optional change in GA that needs no code: make the `generate_lead` rule "page_location contains buildleavitt.com/success", so deploy previews and test addresses can never count. Not confirmed done.
-- Away from the homepage, on a 320px-wide phone, the logo is squeezed to about 90px by Plans and Get a Quote. It was like that before the phone number went in and was left alone.
+- Away from the homepage, on a 320px-wide phone, the logo was squeezed to about 90px by Plans and Get a Quote. With the menu button in place of "Plans" (#65) it is about 112px there, and 165px on a 390px phone.
+- The phone menu on those pages is a `<details>` that opens without script. Its closing by the Back button could not be tried for real: the test browser reloads the page on Back, where a phone shows the kept page again, so `phone-menu.test.js` tells the page it is being shown from that cache. Worth one look on a real phone: open the menu, tap About, press Back; the menu should be shut.
 - Speed was measured locally (page weight, layout shift). Real-visitor Core Web Vitals were not; they are in Search Console.
 - The Semrush account had no API units, so there are no search-volume figures behind the SEO items.
 - Google shows a new title and description only after it next reads the page. Nothing has been checked in Search Console for "build on your lot" yet.
@@ -102,9 +89,9 @@ Found in good order, so do not re-audit: compression and HTTPS on the live site,
 
 ## A6. The exact next three steps
 
-1. **Start the way the last two sessions did.** List every open pull request and every branch that holds commits `main` lacks (`git fetch origin`, then `git cherry origin/main origin/<branch>` for each). Four branches show when nothing is wrong: the two September upload branches in question 8, and `claude/cool-rubin-ipc0c4` and `claude/wonderful-cray-7odgsh`, whose notes are already in `main` (see `CLAUDE.md`, "How changes are made"). If #64 is still open, it waits on Kyle's "merge": he reviews the Netlify deploy preview. Once merged, bring the branch level with `main` and confirm on buildleavitt.com with `curl` (never a browser without Google's tag hosts blocked): the homepage's `<title>` reads "Harford County, Maryland Custom Home Builder | Leavitt Building Group"; `/plans/` contains "surrounding counties in Maryland"; the homepage contains "Southern Pennsylvania" and not "Southern PA"; then `node scripts/watch-site.mjs --only site` finds no differences. Then check that the latest scheduled "Site watch" run is green (A5) and that no issue labelled `site-watch` is open. `node scripts/watch-site.mjs` runs the same watch by hand in about a minute and opens no browser.
-2. **Ask Kyle which of the remaining items he wants next**, by number. Two need only his say-so and no facts: **12** (a menu on phones away from the homepage; it touches the menu, so describe it and wait), **7** (the old number at the end of the video; needs his answer to questions 3 and 7). The rest wait on his facts: 2(b), 3, 9, 10. Item 16 is deferred.
-3. **For anything that changes words** (more of item 2, or a change to item 8's wording): put the proposed words to him in full first, with the current words beside them, and edit only after he chooses. Titles are at most 70 characters, descriptions 70 to 155, each repeated in the `og:` and `twitter:` tags, and a service page's description is repeated in its `Service` data (`markup.test.js`, `seo.test.js`). One commit per item, each with a check seen failing first and a before-and-after picture of anything visible. Merge only when he says "merge".
+1. **Start the way the last sessions did.** List every open pull request and every branch that holds commits `main` lacks (`git fetch origin`, then `git cherry origin/main origin/<branch>` for each). Four branches show when nothing is wrong: the two September upload branches in question 8, and `claude/cool-rubin-ipc0c4` and `claude/wonderful-cray-7odgsh`, whose notes are already in `main` (see `CLAUDE.md`, "How changes are made"). If #65 is still open, it waits on Kyle's "merge": he reviews the Netlify deploy preview on a phone. Once merged, bring the branch level with `main` and confirm on buildleavitt.com with `curl` (never a browser without Google's tag hosts blocked): `https://buildleavitt.com/custom-homes.html` and `https://buildleavitt.com/plans/the-poet.html` each contain `id="site-menu"`; then `node scripts/watch-site.mjs --only site` finds no differences. Then check that the latest scheduled "Site watch" run is green (A5) and that no issue labelled `site-watch` is open.
+2. **Ask Kyle which of the remaining items he wants next**, by number. One needs only his say-so and no facts: **7** (the old number at the end of the video; needs his answer to questions 3 and 7). Question 9 (the desktop bar away from the homepage) also needs only a yes or no. The rest wait on his facts: 2(b), 3, 9, 10. Item 16 is deferred.
+3. **For anything that changes words** (more of item 2, or a change to item 8's wording): put the proposed words to him in full first, with the current words beside them, and edit only after he chooses. For anything that changes the look (as item 12 did): show him a mock-up picture built outside the repository and wait. Titles are at most 70 characters, descriptions 70 to 155, each repeated in the `og:` and `twitter:` tags, and a service page's description is repeated in its `Service` data (`markup.test.js`, `seo.test.js`). One commit per item, each with a check seen failing first and a before-and-after picture of anything visible. Merge only when he says "merge".
 
 ---
 
