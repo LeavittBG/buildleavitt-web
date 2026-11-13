@@ -9,7 +9,7 @@
 //    replacement video cannot leave either one out of date;
 //  - each "See it in the video" button starts the tour at its own moment.
 // Headless Chromium has no H.264 decoder, so the jump check plays a blank
-// 108-second WebM in its place, served with byte ranges as Netlify serves the
+// 104-second WebM in its place, served with byte ranges as Netlify serves the
 // real file. Without ranges a browser cannot skip ahead at all.
 const { ROOT, launch, serveRepo } = require('./lib/env');
 const path = require('path');
@@ -68,7 +68,10 @@ const plain = (s) => s.replace(/[\u2018\u2019]/g, "'").replace(/\s+/g, ' ').trim
   ok(order.indexOf('moov') > -1 && order.indexOf('moov') < order.indexOf('mdat'),
      `its index comes first, so it starts before it has fully downloaded (${order.join(', ')})`);
   const length = mp4Seconds(mp4);
-  ok(Math.abs(length - 108) < 2, `it runs 1:48 (${length.toFixed(1)}s)`);
+  // 1:44 since November 2026, when the ending that gave the old phone number
+  // was re-cut (it ran 1:48). A different length means a different video: the
+  // captions, the transcript, the buttons and the blank fixture all follow it.
+  ok(Math.abs(length - 104) < 1, `it runs 1:44 (${length.toFixed(1)}s)`);
 
   console.log('\n== what Google is told about it ==');
   // Search Console flagged the homepage's VideoObject in October 2026: its
@@ -105,7 +108,7 @@ const plain = (s) => s.replace(/[\u2018\u2019]/g, "'").replace(/\s+/g, ' ').trim
   ok(missing.length === 0, 'the transcript has every caption, word for word' + (missing.length ? ' - missing: ' + missing.map((c) => c.text).join(' | ') : ''));
 
   console.log('\n== in the browser ==');
-  const blank = fs.readFileSync(path.join(__dirname, 'fixtures', 'blank-108s.webm'));
+  const blank = fs.readFileSync(path.join(__dirname, 'fixtures', 'blank-104s.webm'));
   const b = await launch();
   const site = await serveRepo();
   const page = await b.newPage({ viewport: { width: 1280, height: 800 } });

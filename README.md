@@ -533,6 +533,7 @@ request; it was checked against the site and added here on November 11, 2026.
 | Oct 31 | #51 | The homepage sections were reordered. Leavitt Connect stayed directly after the process steps. |
 | Nov 9 | #57 | The office line changed to (443) 613-9750 everywhere, the section's own call link included. The video still says and shows the old (866) number at its end, so that caption and transcript sentence keep it. |
 | Nov 10 | #58 | The phone number went into every header, above or beside Client Login. |
+| Nov 13 | #66 | The video's ending was re-cut: the closing card shows (443) 613-9750, the sentence that spoke the old number is gone, and it runs 1:44 (see "The ending, re-cut" below). The old number is no longer anywhere on the site. |
 
 ### Wording rule
 
@@ -570,7 +571,9 @@ question answer are not scanned, so keep them to the same facts by hand.
 
 - **Source.** The source files are in Kyle's Google Drive, under
   `Builder Pro App/Tutorial videos`:
-  - `Leavitt Connect - Homebuyers.mp4`: 1:48, 1920×1080, 38 MB;
+  - `Leavitt Connect - Homebuyers.mp4`: 1:48, 1920×1080, 38 MB. It still
+    ends on the old (866) number: the site's copy was corrected, the source
+    was not (see "The ending, re-cut");
   - `Leavitt Connect - Homebuyers (captions).srt`;
   - `Chapters for YouTube.txt`;
   - the narration scripts.
@@ -583,7 +586,7 @@ question answer are not scanned, so keep them to the same facts by hand.
   Viewers without YouTube Premium would see them, and a new channel cannot
   switch them off.
 - **Files in `media/`:**
-  - `leavitt-connect-homebuyers.mp4`, the 5.3 MB web copy;
+  - `leavitt-connect-homebuyers.mp4`, the web copy: 6.2 MB, 1:44;
   - `leavitt-connect-homebuyers.vtt`, the captions;
   - `leavitt-connect-poster.webp`, the cover still.
 
@@ -604,9 +607,39 @@ question answer are not scanned, so keep them to the same facts by hand.
   numbers aren't real." Kyle kept it short on October 8, 2026. Someone watching
   without sound never hears the narration say the same thing at 0:11.
 - **Structured data.** A `VideoObject` in the homepage's JSON-LD names the
-  file, poster, 1:48 duration and
+  file, poster, 1:44 duration and
   `uploadDate` `2026-10-08T15:19:04-04:00`. Google needs a full date and time
-  with a timezone.
+  with a timezone. The date is when the video was first published; the
+  November re-cut of its ending did not change it.
+
+#### The ending, re-cut (November 13, 2026; audit item 7)
+
+The source video ends on a closing card, "Let's talk about your home", that
+shows the old (866) number from 1:36, and the narrator's last sentence says it
+(1:39.9 to 1:45.6). Kyle chose to correct the site's copy and not re-record:
+
+- **The card shows (443) 613-9750** for the whole time it is on screen. The
+  line was set again in the card's own lettering (Inter 500 at 29.66px, colour
+  `rgb(216,224,244)`, centred on the frame, ink from row 675) on a patch of the
+  card's background, and blended into each of the 18 frames of the fade-in by
+  that frame's share of the card, so the old number never shows through. The
+  corrected card is kept as `assets-src/leavitt-connect-closing-card.png`.
+- **The last sentence is cut.** The sound stops at 1:39.9, in the pause after
+  "one more way building with Leavitt is different", and the card holds in
+  silence to 1:44. The sound was copied, not encoded again.
+- **The picture was encoded again from the site's copy**, not from the 38 MB
+  original, at CRF 23 with the settings in step 2 below. Against the copy it
+  replaced, the first 95 seconds measure SSIM 0.999 (51.6 dB): no visible
+  difference in the smallest text. If the original is ever used again, its
+  ending needs the same correction.
+- **The narrator now says no phone number.** The number is on the card only.
+- The last caption and the last transcript sentence went with the audio, the
+  `VideoObject` says `PT1M44S`, and the exemption `markup.test.js` made for the
+  old number is gone: it now fails any other number on any page or in the
+  captions.
+
+A returning visitor's browser may keep the old video for up to a week
+(`/media/` is cached for seven days).
 
 #### Replacing the video
 
@@ -628,31 +661,32 @@ question answer are not scanned, so keep them to the same facts by hand.
 6. **Run `node tests/connect-video.test.js`.** It checks:
    - nothing downloads before play;
    - the file is under 8 MB, with its index (`moov`) before the data;
-   - it runs 1:48;
+   - it runs 1:44;
    - the captions fit the video, and the transcript has every caption;
    - every button starts on a caption and plays from its moment;
    - the `VideoObject` matches the files.
 
    Headless Chromium cannot decode H.264, so the button check plays the blank
-   WebM in `tests/fixtures/blank-108s.webm`, served with byte ranges as
+   WebM in `tests/fixtures/blank-104s.webm`, served with byte ranges as
    Netlify serves the real file. A different length means changing the
-   1:48 checks and that fixture.
+   1:44 check and that fixture
+   (`ffmpeg -f lavfi -i color=c=black:s=64x36:r=5 -t <seconds> -c:v libvpx-vp9 -b:v 0 -crf 60 -an blank-<seconds>s.webm`).
 
-   `markup.test.js` also knows the one transcript sentence that keeps the old
-   (866) number; once the video no longer says it, that exception goes.
+   `markup.test.js` fails any phone number but the real one, on every page
+   and in the captions. A new recording must not say or show another.
 
 ### Open items
 
 - **A demo markup figure in the video.** At about 0:55 the sample change order
   shows an overhead-and-profit percentage. The video and the line under it say
   the numbers aren't real, but a viewer who pauses could read it as Leavitt's
-  markup. It was pointed out to Kyle on October 8, 2026 and he has not decided.
-  The fix is re-recording that screen. The figure itself is left out of these
-  notes on purpose.
-- **The old phone number at the end of the video** (audit item 7): the closing
-  card shows (866) 832-6524 and the narrator says it, from 1:39.9 to 1:45.6.
-  Trim the ending or re-record; one re-recording would settle this and the
-  item above together.
+  markup. It was pointed out to Kyle on October 8, 2026. On November 13, 2026,
+  with the ending being re-cut, he chose to leave that screen alone. It
+  scrolls, so covering the figure would look patched; the clean fix is
+  re-recording that part, if he ever wants it. The figure itself is left out
+  of these notes on purpose.
+- **The narrator gives no phone number** since the ending was re-cut; the
+  number is on the closing card only. A new recording could say it again.
 - **Unreviewed wording.** Kyle has not reviewed the service pages' wording,
   the Leavitt Connect paragraph included (see "Service pages").
 - **The wording check covers the homepage section only.** Extending it in

@@ -223,15 +223,27 @@ console.log("\n== contact details are real ==");
   // 555-01xx is the reserved fictional range; example.com/.org likewise.
   const fake = all.match(/\(?\d{3}\)?[ -]?555-01\d\d|example\.(com|org|net)/g) || [];
   ok(fake.length === 0, "no fictional 555 numbers or example.com addresses" + (fake.length ? ": " + [...new Set(fake)].join(", ") : ""));
-  // The Leavitt Connect transcript repeats the video's captions word for word
-  // (connect-video.test.js checks that), and the narrator gives the old (866)
-  // number at 1:39. That sentence quotes the audio, so it is not a contact
-  // detail and is left out here; every other printed number must be the real one.
-  const transcript = /<details[^>]*>\s*<summary[^>]*>Read the transcript<\/summary>[\s\S]*?<\/details>/;
-  ok(transcript.test(all), "the Leavitt Connect transcript is found (its spoken number is the one exemption)");
-  const nums = [...new Set(all.replace(transcript, "").match(/\(\d{3}\)\s?\d{3}-\d{4}/g) || [])];
-  ok(nums.every(x => x.replace(/\D/g, "") === "4436139750"),
-     "every displayed phone number is the real one: " + nums.join(", "));
+  // Every phone number a visitor can read or hear is the real one, on every page
+  // and in the video's captions. Until November 2026 there was one exemption:
+  // the Leavitt Connect video still gave the old (866) number, on its closing
+  // card from 1:36 and in the narrator's last sentence, and since the transcript
+  // repeats the captions word for word that sentence stayed on the homepage.
+  // The ending was re-cut (audit item 7): the card shows the real number and the
+  // sentence is gone from the sound, the captions and the transcript. Nothing is
+  // exempt any more.
+  const everyPage = ["index.html", "custom-homes.html", "semi-custom-homes.html", "renovations.html", "privacy.html", "terms.html", "success.html", "404.html",
+    ...fs.readdirSync(path.join(ROOT, "plans")).filter((f) => f.endsWith(".html")).map((f) => "plans/" + f)];
+  const captions = fs.readdirSync(path.join(ROOT, "media")).filter((f) => f.endsWith(".vtt")).map((f) => "media/" + f);
+  const wrong = [];
+  for (const f of [...everyPage, ...captions]) {
+    const text = fs.readFileSync(path.join(ROOT, f), "utf8");
+    const shown = [...new Set(text.match(/\(\d{3}\)\s?\d{3}-\d{4}/g) || [])].filter((x) => x.replace(/\D/g, "") !== "4436139750");
+    const dialled = [...new Set(text.match(/tel:\+?[\d-]+/g) || [])].filter((x) => x !== "tel:+14436139750");
+    const old = /832[-. ]?6524/.test(text) ? ["the old 866 number"] : [];
+    if (shown.length || dialled.length || old.length) wrong.push(`${f}: ${[...shown, ...dialled, ...old].join(", ")}`);
+  }
+  ok(captions.length > 0 && wrong.length === 0,
+     `every phone number on all ${everyPage.length} pages and in the video's captions is the real one` + (wrong.length ? " - " + wrong.join(" | ") : ""));
 }
 
 // --- no italic-serif flourishes ---
