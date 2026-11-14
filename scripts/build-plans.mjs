@@ -198,12 +198,22 @@ const head = ({ title, description, canonical, image, jsonLd = [] }) => `<!DOCTY
             <a href="/" class="inline-block" aria-label="Leavitt Building Group - back to home">
                 <picture class="contents"><source srcset="/Gold-656.webp 656w, /Gold.webp 1200w" sizes="(min-width: 768px) 229px, 197px" type="image/webp"><img src="/Gold.png" srcset="/Gold-656.png 656w, /Gold.png 1200w" sizes="(min-width: 768px) 229px, 197px" alt="Leavitt Building Group" width="1200" height="293" class="h-12 md:h-14 w-auto object-contain"></picture>
             </a>
-            <nav aria-label="Main" class="flex items-center gap-3 md:gap-8 text-xs md:text-sm uppercase tracking-widest font-semibold">
+            <nav aria-label="Main" class="flex items-center gap-3 md:gap-8 lg:gap-5 xl:gap-8 text-xs md:text-sm uppercase tracking-widest font-semibold">
+                <!-- From laptop width up the bar repeats the homepage's desktop bar, in
+                     its order: Services, Plans, About, Process, Get a Quote, then the
+                     number and Client Login (November 2026). Services, About and Process
+                     lead to those sections of the homepage. Tablets keep Plans and Get a
+                     Quote; phones get the menu button below. The gaps tighten between lg
+                     and xl, as the homepage's do, so all of it fits at 1024px.
+                     tests/phone-menu.test.js compares this bar with the homepage's. -->
+                <a href="/#services" class="hidden lg:inline-block py-2 text-gray-300 hover:text-white transition-colors">Services</a>
                 <a href="/plans/" class="hidden md:inline-block py-2 text-gray-300 hover:text-white transition-colors">Plans</a>
+                <a href="/#about" class="hidden lg:inline-block py-2 text-gray-300 hover:text-white transition-colors">About</a>
+                <a href="/#process" class="hidden lg:inline-block py-2 text-gray-300 hover:text-white transition-colors">Process</a>
                 <a href="/#contact" class="bg-[#c2a67a] text-[#0f172a] px-5 py-3 hover:bg-white transition-colors">Get a Quote</a>
                 <!-- The phone number, and under it Client Login, after a fine rule: the
                      same pair, in the same place, as the homepage's menu bar. -->
-                <div class="hidden md:flex flex-col items-start border-l border-white/20 pl-6 md:pl-8">
+                <div class="hidden md:flex flex-col items-start border-l border-white/20 pl-6 md:pl-8 lg:pl-5 xl:pl-8">
                     <a href="tel:+14436139750" class="flex items-center gap-2 py-1 text-xs xl:text-sm text-white hover:text-[#c2a67a] transition-colors whitespace-nowrap">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="w-4 h-4"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                         (443) 613-9750

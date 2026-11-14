@@ -10,8 +10,14 @@
  * Kyle approved this on November 13, 2026, from a picture: on a phone a menu
  * button takes the place of the word "Plans"; "Get a Quote" and the "Call"
  * line stay where they were; the menu holds the homepage phone menu's six
- * entries, same words, same order. Tablets and desktops are unchanged, and so
- * are privacy.html and terms.html, by his choice.
+ * entries, same words, same order. Tablets are unchanged, and so are
+ * privacy.html and terms.html, by his choice.
+ *
+ * The desktop bar had the same gap: Plans and Get a Quote, but not Services,
+ * About or Process. Kyle said yes to adding them the same day. From laptop
+ * width up the bar on these pages now repeats the homepage's desktop bar,
+ * same words, same order; the last section checks that against the homepage
+ * itself, that the bar stays on one row, and that the logo is not squeezed.
  *
  * The menu is a <details>, like the questions on the homepage, so it opens
  * with no script at all. Script only adds the ways people expect to close one:
@@ -58,6 +64,10 @@ const read = () => {
       belowBar: box(a).top >= box(summary).bottom,
     })),
     barLinks: bar.filter(shown).map(text),
+    bar: bar.filter(shown).filter((a) => text(a)).map((a) => ({
+      text: text(a), href: a.getAttribute('href'),
+      mid: Math.round(box(a).top + box(a).height / 2), h: Math.round(box(a).height), right: Math.round(box(a).right),
+    })),
     logo: Math.round(box(header.querySelector('a img')).width),
     sideways: document.documentElement.scrollWidth > innerWidth,
   };
@@ -166,14 +176,56 @@ const read = () => {
     await p.context().close();
   }
 
-  // From tablet width up nothing changed: no menu button, "Plans" in the bar.
-  console.log('\n== tablets and desktops keep the bar they had ==');
+  // Tablets: nothing changed. No menu button, and the bar they always had.
+  console.log('\n== tablets keep the bar they had ==');
   for (const url of [MAIN[0], MAIN[3], PLANS[0]]) {
-    for (const w of [768, 1280]) {
+    const p = await open(url, 768);
+    const r = await p.evaluate(read);
+    ok(!r.button && r.entries.length === 0 && r.barLinks.filter(Boolean).join('|') === 'Plans|Get a Quote|(443) 613-9750|Client Login',
+      `${url} 768px: no menu button; Plans, Get a Quote, the number and Client Login in the bar (${r.barLinks.filter(Boolean).join(', ')})`);
+    await p.context().close();
+  }
+
+  // Desktops: the bar repeats the homepage's own desktop bar. The words and
+  // their order are read from the homepage at the same width, so the two
+  // cannot drift apart.
+  console.log('\n== from laptop width up the bar repeats the homepage\'s desktop bar ==');
+  const DESTINATIONS = { ...TARGETS, '(443) 613-9750': 'tel:+14436139750' };
+  for (const w of [1024, 1280, 1440]) {
+    const hp = await open('/', w);
+    const homeBar = await hp.evaluate(() => [...document.querySelectorAll('#main-nav a')]
+      .filter((a) => a.getBoundingClientRect().width > 0 && a.checkVisibility({ checkVisibilityCSS: true }))
+      .map((a) => a.textContent.replace(/\s+/g, ' ').trim()).filter(Boolean));
+    await hp.context().close();
+    ok(homeBar.join('|') === 'Services|Plans|About|Process|Get a Quote|(443) 613-9750|Client Login',
+      `homepage ${w}px: its desktop bar is read (${homeBar.join(', ')})`);
+    for (const url of [...MAIN, PLANS[0]]) {
       const p = await open(url, w);
       const r = await p.evaluate(read);
-      ok(!r.button && r.entries.length === 0 && r.barLinks.includes('Plans') && r.barLinks.includes('Get a Quote') && r.barLinks.includes('Client Login'),
-        `${url} ${w}px: no menu button; Plans, Get a Quote and Client Login in the bar (${r.barLinks.join(', ')})`);
+      // The logo with the three new links taken out of the layout: it must be
+      // no wider than it is with them in. Comparing two states of the same
+      // page, not a pixel figure one machine measured.
+      const logoWithout = await p.evaluate(() => {
+        const added = [...document.querySelectorAll('header nav > a')].filter((a) => ['/#services', '/#about', '/#process'].includes(a.getAttribute('href')));
+        added.forEach((a) => { a.style.display = 'none'; });
+        const width = Math.round(document.querySelector('header a img').getBoundingClientRect().width);
+        added.forEach((a) => { a.style.display = ''; });
+        return width;
+      });
+      const wrong = [];
+      if (r.button || r.entries.length) wrong.push('the phone menu button shows');
+      if (r.bar.map((a) => a.text).join('|') !== homeBar.join('|')) wrong.push(`the bar reads "${r.bar.map((a) => a.text).join(', ')}"`);
+      const badHref = r.bar.filter((a) => DESTINATIONS[a.text] !== a.href).map((a) => `${a.text} -> ${a.href}`);
+      if (badHref.length) wrong.push(`wrong destinations: ${badHref.join(', ')}`);
+      // One row: the first five share a centre line; the number and Client
+      // Login are stacked at the end, as on the homepage.
+      const row = r.bar.slice(0, 5).map((a) => a.mid);
+      if (row.length && Math.max(...row) - Math.min(...row) > 1) wrong.push('the links are not on one row');
+      if (r.bar.some((a) => a.h > 60)) wrong.push('a link wraps onto two lines');
+      if (r.bar.some((a) => a.right > w - 16)) wrong.push('the bar runs off the right of the screen');
+      if (r.logo < logoWithout - 1) wrong.push(`the logo is squeezed to ${r.logo}px (it is ${logoWithout}px without the new links)`);
+      if (r.sideways) wrong.push('the page scrolls sideways');
+      ok(wrong.length === 0, `${url} ${w}px: the homepage's seven entries, one row, logo at full width` + (wrong.length ? ' - ' + wrong.join('; ') : ''));
       await p.context().close();
     }
   }
