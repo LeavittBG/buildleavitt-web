@@ -10,7 +10,7 @@ Marketing site for Leavitt Building Group, a custom home builder in Forest Hill,
 npm install
 npm run build              # src/styles.css -> dist/styles.css (Tailwind, minified)
 npm run dev                # same, watching
-npm test                   # every tests/*.test.js in headless Chromium, ~4 min
+npm test                   # every tests/*.test.js in headless Chromium, ~5 min
 npm test -- hero           # only test files whose name contains "hero"
 node tests/layout.test.js  # one file on its own (each test is a plain script)
 npm run plans              # plans:images (PDFs -> plans/img, plans/pdf) then plans:build

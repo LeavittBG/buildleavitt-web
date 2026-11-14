@@ -22,7 +22,7 @@ to look.
 
 ```
 npx playwright install chromium   # once per machine
-npm test                          # everything, ~3 minutes
+npm test                          # everything, ~5 minutes
 npm test -- hero                  # only files with "hero" in the name
 node tests/hero-wrap.test.js      # any one file on its own
 ```
@@ -480,7 +480,30 @@ breadcrumb), a Service whose provider is the business, and the compact business
 node described under Business details. Each has a "Where we build" section that
 names the towns in the five counties, and links to the other services and to
 the plans. Every footer on the site, the plan pages' included, has a Services
-row linking the three pages; the menu bar is Kyle's and does not change.
+row linking the three pages. The menu's "Services" leads to the homepage's
+services section, not to the three pages; the menu's words and order are Kyle's.
+
+**The menu on these pages and the plan pages (November 13 and 14, 2026; pull
+requests #65 and #67).** The three service pages, `/plans/` and the seventeen
+plan pages share one header, written in four places: the three service pages
+and the header in `scripts/build-plans.mjs`. It repeats the homepage's menu:
+
+- **On a phone** a menu button opens the homepage phone menu's six entries in
+  the same words and order: Services, Plans, About, Process, Client Login, Get
+  a Quote. It is a `<details>`, so it opens with no script; the script at the
+  end of each page only adds the Escape key, a tap elsewhere and the Back
+  button as ways to close it. "Get a Quote" and the "Call (443) 613-9750" line
+  stay in view beside and under the bar.
+- **On a tablet** (768 to 1023px) the bar shows Plans and Get a Quote, with the
+  phone number and Client Login.
+- **From laptop width up** the bar repeats the homepage's desktop bar:
+  Services, Plans, About, Process, Get a Quote, then the phone number above
+  Client Login.
+
+`privacy.html` and `terms.html` have no menu. `tests/phone-menu.test.js` reads
+the homepage's phone menu and its desktop bar and fails any of these 21 pages
+whose menu differs, so a change to the homepage's menu has to be made in these
+four places as well.
 
 ## Leavitt Connect
 
@@ -499,7 +522,7 @@ request; it was checked against the site and added here on November 11, 2026.
     under the phone number;
   - in the header of the plan pages and the three service pages, from tablet
     width up, beside the phone number;
-  - in the phone menu;
+  - in the phone menu, on the homepage and on the service and plan pages;
   - in the footer of every page.
 
   On the homepage it is white while the menu bar is transparent over the hero
